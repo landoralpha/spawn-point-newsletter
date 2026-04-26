@@ -273,6 +273,98 @@ Transferring to Pokemon HOME opens a Mystery Box (60-minute Meltan spawns, 3-day
 
 - Example: "Steeled Resolve event activates Shiny Meltan and reduces Mystery Box cooldown. Open your box during the event. At ~1/125 shiny rate with 60 minutes of spawns, you have a solid shot."
 
+### 26. Raid Catch Optimization
+Circle-lock technique: hold the ball, wait for the attack animation, release during a small circle window. Maximizes Excellent throw rate on Legendaries.
+
+Catch probability stacking:
+- Golden Razz Berry: highest catch rate multiplier
+- Excellent Curve Throw: ~2x catch rate
+- Gold Type Medal: +4 catch bonus for that type
+- All three combined gives the best possible catch odds per ball
+
+Type medals matter. If a new Legendary raid boss arrives and you don't have a Gold medal for its type, flag the gap.
+- Example: "Tapu Koko is Electric/Fairy. Your Electric and Fairy type medals directly boost your catch rate. If either is below Gold, prioritize catching those types this week."
+
+### 27. GO Pass & Ticket Value Assessment
+For every ticketed event or monthly GO Pass, evaluate:
+- What does the free tier give? (Always list this first)
+- What does the paid tier add? (Exclusive encounters, items, bonuses)
+- Is the paid version worth it for casual players? Hardcore?
+- GO Pass deadlines: when do rewards expire?
+
+- Example: "The free GO Pass gives an Entei encounter and basic tasks. The Deluxe Pass ($4.99) adds a Lucky Trinket, extra Rare Candy, and a second encounter. If you raid regularly, the Rare Candy alone covers the value."
+
+### 28. Special Evolution Methods
+Many Pokemon have non-standard evolution paths. Flag these when featured Pokemon have them:
+- **Trade evolutions** (0 Candy after trading): Machoke, Haunter, Kadabra, Boldore, Gurdurr, Phantump, Pumpkaboo, Shelmet/Karrablast
+- **Lure evolutions**: Glacial Lure (Glaceon), Mossy Lure (Leafeon), Magnetic Lure (Magnezone, Probopass), Rainy Lure (Sliggoo to Goodra)
+- **Walking evolutions**: Feebas (20km + 100 Candy), Eevee (10km for Espeon/Umbreon)
+- **Eevee naming tricks**: one-time-use name trick for each Eeveelution
+
+- Example: "Machop spawns boosted this event. Trade your Machokes with friends before evolving. Traded Machokes evolve to Machamp for 0 Candy instead of 100."
+
+### 29. Photobomb Encounters
+GO Snapshot during events can trigger photobomb encounters with featured Pokemon:
+- Some events give 5+ photobombs per day with shiny chance
+- Daily Smeargle photobomb (1 per day outside events)
+- Takes 10 seconds per attempt. Free encounters.
+
+- Example: "During GO Fest, open GO Snapshot 5 times for bonus encounters with event Pokemon. Each one can be shiny. Ten seconds per photobomb, so there's no reason to skip it."
+
+### 30. Elite TM Priority
+Elite Fast TMs and Elite Charged TMs unlock legacy or Community Day moves. These are rare (1-2 per season from GBL). Don't waste them.
+- **Worth an Elite TM**: Metagross (Meteor Mash), Swampert (Hydro Cannon), Mewtwo (Psystrike or Shadow Ball), Salamence (Outrage)
+- **Not worth an Elite TM**: Anything not in the PvP or PvE top tier, or anything returning to raids/events soon
+- If a Community Day move was missed, check whether the Pokemon is meta-relevant before using an Elite TM
+
+- Example: "Missed Hydro Cannon on your Swampert during Community Day? Swampert is a top-5 Great League pick. That's one of the few Pokemon worth an Elite Charged TM."
+
+### 31. Raid Lobby Strategy
+Splitting into smaller groups by team color earns more Premier Balls:
+- Team Damage Bonus: +1 to +3 balls based on your team's % of total damage
+- Gym Control Bonus: +2 balls if your team controls the gym
+- More balls = more catch attempts = more Candy per raid
+
+Triggers during Raid Hour, Raid Day, and any event with bonus raids.
+- Example: "During Raid Hour, split lobbies by team color. A 6-person Valor group deals more team damage than 18 mixed players, earning you 2-3 extra Premier Balls per raid."
+
+### 32. Gym Coin & Berry Strategy
+50 coins/day max from gym defenders. Passive Stardust and Candy from feeding berries:
+- Feed a berry to a gym defender: 20 Stardust per berry, ~1/85 chance of Candy for that species
+- Burn excess Nanab and Razz berries here
+- Golden Razz fully restores motivation (save for defending during EX Raid invites or contests)
+- Gym badge progress: higher badge level = more items from spinning that gym
+
+- Example: "Sitting on 200 Nanab Berries? Feed them to gym defenders for 4,000 Stardust and a chance at rare Candy drops. It clears bag space and earns passive rewards."
+
+### 33. Remote Raid Coordination
+- Poke Genie, Campfire, and community Discords connect you with raid groups worldwide
+- Remote Raid daily limit: 10 (doubles to 20 during some events)
+- Prioritize remote passes for Legendaries leaving soon over ones staying another week
+- Remote raids deal slightly less damage than in-person, so groups need to be slightly larger
+
+- Example: "Tapu Koko leaves raids Tuesday. If you still need a shiny or high-IV catch, use Poke Genie to join remote raids this weekend before the rotation."
+
+### 34. Lure Module Types
+Different lure types attract different spawns and enable specific evolutions:
+- **Standard Lure**: general spawns, 30 minutes (60 on Double-Time Sunday)
+- **Glacial Lure**: Ice-types + Glaceon evolution
+- **Mossy Lure**: Grass/Bug-types + Leafeon evolution
+- **Magnetic Lure**: Electric/Steel-types + Magnezone, Probopass evolution
+- **Rainy Lure**: Water/Bug-types + Goodra evolution (Sliggoo)
+- **Golden Lure**: rarer spawns + chance for Coin Bag (Gimmighoul)
+
+Double-Time Sunday doubles lure duration. Stack event bonuses with the right lure type.
+- Example: "Double-Time Sunday + Glacial Lure = 60 minutes of boosted Ice-type spawns. If you need Glaceon, evolve your Eevee near the lure instead of spending 25 Candy on a random Eeveelution."
+
+### 35. Breakpoints & Power-Up Efficiency
+A breakpoint is the level where a fast move deals +1 extra damage to a specific raid boss. Powering up past the breakpoint wastes Stardust for zero extra damage.
+- Most Pokemon hit a key breakpoint around L30-35 (about 75% of max damage for 25% of the cost)
+- L40 is the soft cap. L40 to L50 costs more Stardust/Candy than L1 to L40 combined.
+- For raid counters, L30 is usually "good enough." L35 for frequent raiders. L40+ for short-person or solo attempts.
+
+- Example: "Powering up Shadow Machamp to L30 costs roughly 120,000 Stardust. Going from L30 to L40 costs another 150,000 for only ~10% more damage. For most players, L30 is the sweet spot."
+
 ## How to Apply
 
 For each newsletter section:
