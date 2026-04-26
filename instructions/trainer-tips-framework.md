@@ -142,11 +142,143 @@ For big upcoming events, remind readers to:
 - Save Rare Candy for incoming Legendary raid boss
 - Open gifts to get close to friendship level-ups (but don't trigger them until Lucky Egg is ready)
 
+### 11. Shiny Hunting Efficiency
+Know the shiny rate tiers and recommend accordingly:
+- Community Day: ~1/25
+- Raid Day: ~1/10
+- Legendary raids: ~1/20
+- Permaboosted species (Onix, Scyther, etc.): ~1/64
+- Standard wild: ~1/500
+
+**Quick-catch technique** nearly doubles encounters per hour by skipping the catch animation. Recommend it for time-limited events like Community Day or Raid Day.
+- Example: "Community Day is 3 hours. Use quick-catch to hit 300+ encounters instead of 150. That's roughly 12 shinies at the 1/25 rate."
+
+### 12. Mega Evolution Candy Bonus
+Having the right Mega active while catching gives:
+- +1 bonus Candy for same-type catches (all Mega Levels)
+- Increased XL Candy chance at Mega Level 2+
+- +100 bonus XP per same-type catch
+
+Mega lasts 8 hours. Time it around event windows.
+- Example: "Grass-type event? Mega Evolve Venusaur before your catching session. You earn +1 Candy on every Grass-type catch for 8 hours."
+
+### 13. Candy XL Farming
+296 XL Candy needed to max a Pokemon from L40 to L50. Key sources:
+- Catching L31+ Pokemon (weather-boosted spawns guaranteed L31+)
+- Trading gives a passive XL chance (higher at greater distance)
+- Walking buddy earns XL at 1 per walk distance at L31+
+- Converting 100 regular Candy = 1 XL Candy
+- Mega Evolution bonus increases XL drop rate on same-type catches
+
+- Example: "Weather-boosted Machop spawns at L31+, giving passive XL drops. Mega Evolve a Fighting-type and trade extras before transferring for max XL yield."
+
+### 14. Weather Boost Awareness
+Weather-boosted Pokemon:
+- Spawn at L25-35 (vs normal L1-30)
+- Have a 4/4/4 IV floor
+- Give 25% more Stardust per catch
+- Give passive XL Candy chance at L31+
+
+Check which event spawns align with local weather. Weather-boosted catches during a Stardust event with Star Piece = massive returns.
+- Example: "Rainy weather during the Water Festival? Water-types spawn at higher levels with better IVs and 25% bonus Stardust. Prioritize those over non-boosted spawns."
+
+### 15. PvP IV Optimization (Stat Product)
+For Great League and Ultra League, ideal IVs are LOW Attack / HIGH Defense / HIGH HP (e.g., 0/15/15). Attack inflates CP faster, so low-attack Pokemon fit more total stats under the CP cap.
+- Wild catches: 0/0/0 IV floor (best for PvP IVs)
+- Trades: 0/0/0 floor for Good Friends, up to 5/5/5 for Best Friends
+- Research: 10/10/10 floor (bad for PvP IVs)
+- Raids/eggs: 10/10/10 floor (bad for PvP IVs)
+
+- Example: "Stunfisk in event research has a 10/10/10 IV floor, too high for good PvP IVs. Trade your extras with a friend instead. Trades re-roll from 0/0/0 and give a real shot at rank 1."
+
+### 16. Trading Strategy & Lucky Coordination
+- Lucky Friends: ~1.1% per daily Best Friend interaction. Guaranteed 12/12/12 IVs, half Stardust to power up.
+- Lucky guarantee: Trade a Pokemon caught before August 2016 (45 lifetime limit)
+- Special Trades: 1/day normally, 2-3 during events or Friendship Friday
+- Distance trades: bonus Candy based on catch distance + Pilot Medal progress
+
+- Example: "Dialga leaves raids next week. Coordinate Lucky trades with Best Friends now. A Lucky Dialga costs half the Stardust to max and is guaranteed 12/12/12 IVs."
+
+### 17. Egg Pool & Hatch Strategy
+Event-specific egg pools change what hatches from 2km, 5km, 7km, and 10km eggs. Key tactics:
+- Clear egg slots the night before an event to fill with event eggs
+- Super Incubators (1.5x speed) only on 10km/12km eggs. Regular incubators on 2km.
+- Adventure Sync 50km reward eggs have an exclusive pool (Riolu, Goomy, Dreepy)
+- Keep 2 egg slots open before Monday 9am for Adventure Sync rewards
+
+- Example: "New 7km egg pool drops Tuesday with Frigibax. Clear your egg slots Monday night. Pick up 7km eggs from gifts during the event window."
+
+### 18. Research Encounter Stacking
+Complete Field Research tasks but flee the encounter to "stack" rewards (up to 100). Claim them during bonus Stardust/Candy/XP events for amplified rewards.
+- High-value stack targets: Audino (2,100 Stardust), Chansey, Combee (750 Stardust)
+- Stack throughout the week, claim during weekend events with Star Piece running
+
+- Example: "Double Stardust event starts Saturday. Stack Audino and Combee research encounters this week, then claim them all Saturday with a Star Piece running."
+
+### 19. Collection Challenges & Dex Completion
+Events often include Collection Challenges with deadlines and rewards (Elite Collector medal, Stardust, Rare Candy). Also watch for:
+- Region-locked Pokemon appearing globally during GO Fest or special events
+- New shiny releases (first day = highest community excitement and trading value)
+- Pokedex-first catches that should be prioritized before the event window closes
+
+- Example: "Torkoal and Pachirisu spawn globally during GO Fest. These are normally region-locked. Catch multiples and stock Candy now."
+
+### 20. Buddy & Best Buddy Optimization
+- Best Buddy gives a +1 level CP boost (can hit critical PvP breakpoints)
+- Poffin doubles hearts earned and halves walking distance for 6 hours
+- Match your buddy to the current event type for Mega Energy via walking
+- Excited mood (feed, play, snapshot, battle, walk) doubles hearts for the day
+
+- Example: "Your PvP Medicham is 2 hearts from Best Buddy. The CP boost pushes it past a key Ultra League breakpoint. Prioritize buddy activities today."
+
+### 21. Dynamax & Max Particle Management
+- Max Particle daily soft cap: 800. Storage cap: 1,500.
+- Walking: 300 per 2km. Power Spot visits: daily bonus.
+- Battle costs: higher tiers cost more particles. Budget for big events.
+- Team roles: Attacker (Max Overgrowth/Flare/etc.), Defender (Max Guard), Healer (Max Spirit)
+- Know which Gigantamax forms are worth investing in (Rillaboom, Cinderace, Inteleon outclass Venusaur, Charizard, Blastoise)
+
+- Example: "Gigantamax Gengar this weekend. Farm particles all week (walk + Power Spot visits) to enter 3-4 battles on event day."
+
+### 22. Shadow Pokemon Triage (Keep vs. Purify)
+Shadow Pokemon deal 20% more damage but take 20% more damage. Decision tree:
+- **Keep Shadow**: Top raid attackers (Shadow Mewtwo, Shadow Machamp, Shadow Metagross). The 20% attack bonus outweighs any IV improvement from purifying.
+- **Purify**: Species with Mega Evolutions (Shadow can't Mega Evolve). Pokemon with 13/13/13+ IVs that become hundos when purified (+2 to each stat). Pokemon you want for PvP where bulk matters more than attack (Return is a solid PvP charge move).
+
+- Example: "Shadow Mewtwo from Giovanni research? Keep it Shadow even with bad IVs. The 20% attack bonus is worth more than perfect IVs. But that 14/14/14 Shadow Beedrill? Purify it for a hundo and Mega eligibility."
+
+### 23. Post-Event Transfer Timing
+Don't mass-transfer immediately after events. Hold catches for:
+- 2x Transfer Candy events (often tied to Spotlight Hours or special events)
+- Tag catches during events for easy sorting later
+- Use `@special` search filter before transferring to avoid deleting exclusive-move Pokemon
+- Evolve before transferring when you need Candy for later evolutions
+
+- Example: "Caught 400 Tepig on Community Day? Tag them and wait for next week's 2x Transfer Candy window. You'll double your Candy return on every transfer."
+
+### 24. Adventure Sync Weekly Rewards
+Hitting walking thresholds before Monday 9am:
+- 25km: 3,000 Stardust, 500 XP, assorted items
+- 50km: 10,000 Stardust, 1,500 XP, exclusive 10km egg pool (Riolu, Goomy, Dreepy)
+- Keep 2 egg slots open before Monday morning to receive reward eggs
+- Disable battery saver / low power mode if steps aren't counting
+
+- Example: "Walk 50km this week for the exclusive egg pool. Make sure you have 2 open egg slots before Monday 9am or you'll miss the reward eggs."
+
+### 25. Mystery Box / Meltan Timing
+Transferring to Pokemon HOME opens a Mystery Box (60-minute Meltan spawns, 3-day cooldown).
+- Shiny Meltan only available during specific limited events
+- Melmetal is a top Master League pick. XL grinding during shiny windows is efficient.
+- Reduced cooldown during special events (can open more frequently)
+
+- Example: "Steeled Resolve event activates Shiny Meltan and reduces Mystery Box cooldown. Open your box during the event. At ~1/125 shiny rate with 60 minutes of spawns, you have a solid shot."
+
 ## How to Apply
 
 For each newsletter section:
 1. Scan this checklist against the event/feature
-2. Pick the 1-2 most impactful angles
+2. Pick the 1-2 most impactful angles (don't overwhelm readers with every possible tip)
 3. Write the tip in 1-2 sentences
-4. Be specific with numbers (multipliers, CP thresholds, medal counts)
+4. Be specific with numbers (multipliers, CP thresholds, medal counts, shiny rates)
 5. If a tip involves stacking bonuses, show the math or the multiplier chain
+6. Prioritize tips that are time-sensitive or event-exclusive over general knowledge
