@@ -221,6 +221,6 @@ One or two sentences. [Link text](URL)
 - Never use em dashes
 - Raids rotate Wednesdays at start of day
 - Always check for raid rotations. Don't assume raids last the whole week
-- Trainer Tips should provide NEW strategic insights, not restate event info
+- Trainer Tips should provide NEW strategic insights, not restate event info. Use `instructions/trainer-tips-framework.md` as a checklist for every tip.
 - NO DUPLICATION across sections
 - Suggest 5 titles, 5 subtitles, and 5 opening paragraphs for Joel to choose from
