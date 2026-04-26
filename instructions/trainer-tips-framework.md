@@ -196,6 +196,7 @@ For Great League and Ultra League, ideal IVs are LOW Attack / HIGH Defense / HIG
 - Lucky guarantee: Trade a Pokemon caught before August 2016 (45 lifetime limit)
 - Special Trades: 1/day normally, 2-3 during events or Friendship Friday
 - Distance trades: bonus Candy based on catch distance + Pilot Medal progress
+- **Shadow Pokemon CANNOT be traded.** Only Purified Pokemon can be traded. Never suggest trading Shadow Pokemon.
 
 - Example: "Dialga leaves raids next week. Coordinate Lucky trades with Best Friends now. A Lucky Dialga costs half the Stardust to max and is guaranteed 12/12/12 IVs."
 
@@ -244,6 +245,7 @@ Events often include Collection Challenges with deadlines and rewards (Elite Col
 Shadow Pokemon deal 20% more damage but take 20% more damage. Decision tree:
 - **Keep Shadow**: Top raid attackers (Shadow Mewtwo, Shadow Machamp, Shadow Metagross). The 20% attack bonus outweighs any IV improvement from purifying.
 - **Purify**: Species with Mega Evolutions (Shadow can't Mega Evolve). Pokemon with 13/13/13+ IVs that become hundos when purified (+2 to each stat). Pokemon you want for PvP where bulk matters more than attack (Return is a solid PvP charge move).
+- **Shadow Pokemon CANNOT be traded.** Only Purified Pokemon can be traded. If you want to trade a Shadow Pokemon, you must purify it first.
 
 - Example: "Shadow Mewtwo from Giovanni research? Keep it Shadow even with bad IVs. The 20% attack bonus is worth more than perfect IVs. But that 14/14/14 Shadow Beedrill? Purify it for a hundo and Mega eligibility."
 
@@ -368,9 +370,10 @@ A breakpoint is the level where a fast move deals +1 extra damage to a specific 
 ## How to Apply
 
 For each newsletter section:
-1. Scan this checklist against the event/feature
-2. Pick the 1-2 most impactful angles (don't overwhelm readers with every possible tip)
-3. Write the tip in 1-2 sentences
-4. Be specific with numbers (multipliers, CP thresholds, medal counts, shiny rates)
-5. If a tip involves stacking bonuses, show the math or the multiplier chain
-6. Prioritize tips that are time-sensitive or event-exclusive over general knowledge
+1. **The tip MUST be directly about the section's content.** A Max Monday tip must be about the featured Dynamax Pokemon (counters, type strategy, tier ranking). A Raid Boss tip must be about that specific boss. Do NOT attach a generic game tip to a section just because it happens on the same day. If the tip works equally well pasted into any other section, it's not specific enough.
+2. Scan this checklist against the event/feature
+3. Pick the 1-2 most impactful angles (don't overwhelm readers with every possible tip)
+4. Write the tip in 1-2 sentences
+5. Be specific with numbers (multipliers, CP thresholds, medal counts, shiny rates)
+6. If a tip involves stacking bonuses, show the math or the multiplier chain
+7. Prioritize tips that are time-sensitive or event-exclusive over general knowledge

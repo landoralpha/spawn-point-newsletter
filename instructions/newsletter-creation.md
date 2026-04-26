@@ -280,5 +280,6 @@ Sources: [LeekDuck](https://leekduck.com/events/) | [Pokemon GO Hub](https://pok
 - Raids rotate Wednesdays at start of day
 - Always check for raid rotations. Don't assume raids last the whole week
 - Trainer Tips should provide NEW strategic insights, not restate event info. Use `instructions/trainer-tips-framework.md` as a checklist for every tip.
+- Trainer Tips MUST be directly about the section's content. A Max Monday tip must be about the featured Dynamax Pokemon. A Raid Boss tip must be about that raid boss. Do NOT attach generic tips to a section just because they share a day of the week.
 - NO DUPLICATION across sections
 - Suggest 5 titles, 5 subtitles, and 5 opening paragraphs for Joel to choose from
