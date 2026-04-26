@@ -194,7 +194,45 @@ Daily bonuses active throughout the week. Only include ones with significant val
 - Thursday: GO Battle Thursday (4x Stardust, 10 battle sets)
 - Friday: Friendship Friday (trade bonuses)
 
-### 10. Don't Miss
+### 10. Trending Topic
+A deeper write-up on one community story, controversy, discovery, or meta shift from the past week. This is the newsletter's editorial voice, where you go beyond event listings and cover something the community is actively talking about.
+
+**What belongs:**
+- Reddit investigations or discoveries (r/TheSilphRoad, r/PokemonGO)
+- Community frustrations or controversies with Niantic decisions
+- Datamined findings or game mechanic discoveries
+- Meta shifts (new Pokemon or move rebalances shaking up PvP/PvE)
+- Niantic responses to community feedback
+- Notable community-created tools, maps, or resources
+
+**Guidelines:**
+- 2-4 paragraphs of prose
+- Tell the story: what happened, why it matters, what the community response has been
+- Link to primary sources (Reddit threads, news articles, official responses)
+- If Niantic responded, include their statement
+- Tone: informative and fair. Present the facts, don't editorialize excessively.
+- End with a "Sources:" line listing the key links
+
+**Research process:**
+- WebSearch: "Pokemon GO controversy [month] [year]", "Pokemon GO reddit [month] [year]", "site:reddit.com/r/TheSilphRoad top this week"
+- Check content creators for trending topics
+- Look for posts with high engagement (upvotes, comments, impressions)
+
+**Example (from Spawn Point #11):**
+```
+**Silicobra's Spawn Problem**
+
+Sustainability Week runs through Monday, but finding Silicobra has been the loudest 
+frustration of the event. All players were told was that it would appear in "desert-like 
+areas," which turned out to be far more restrictive than most expected...
+
+[2-3 more paragraphs covering the community investigation, Niantic's response, 
+and practical advice]
+
+Sources: Dexerto | The Gamer | One More Catch
+```
+
+### 11. Don't Miss
 Three short callouts surfacing things NOT covered elsewhere in the newsletter.
 
 **What belongs:** Tools/trackers, meta picks, upcoming teasers, community stories, Reddit discoveries, fan resources
@@ -209,6 +247,26 @@ Three short callouts surfacing things NOT covered elsewhere in the newsletter.
 **🔍 [Short label]**
 One or two sentences. [Link text](URL)
 ```
+
+---
+
+## Source Attribution
+
+Every section of the newsletter must include source links at the end. This tells Joel who to attribute information to and lets readers verify claims.
+
+**Format:** After each section's content, add a "Sources:" line with linked references.
+
+**Example:**
+```
+Sources: [LeekDuck](https://leekduck.com/events/) | [Pokemon GO Hub](https://pokemongohub.net) | [Official Blog](https://pokemongo.com/news)
+```
+
+**Rules:**
+- List every source used for that section's data
+- Use the site name as link text, not the full URL
+- Separate sources with pipes (|)
+- If a specific article was referenced, link to that article, not just the homepage
+- Primary sources (official blog, LeekDuck) listed first, community sources after
 
 ---
 
