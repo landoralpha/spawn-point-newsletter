@@ -183,6 +183,8 @@ Cover active leagues, cups, rotation dates, and notable meta picks.
 
 Max Monday runs 6:00 AM to 9:00 PM local time. Include featured Dynamax Pokémon, whether it's a debut or continuation, type weaknesses, and a Trainer Tip.
 
+**CRITICAL:** When suggesting attackers, defenders, or healers for Max Battles, only recommend Dynamax-capable Pokémon. Not every Pokémon in the game can Dynamax. Shadow Pokémon cannot Dynamax. Verify each recommended Pokémon is actually Dynamax-eligible before including it.
+
 ### 9. Daily Discoveries
 **Standalone section.** Do NOT duplicate in Events.
 

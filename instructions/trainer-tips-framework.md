@@ -256,6 +256,12 @@ Events often include Collection Challenges with deadlines and rewards (Elite Col
 - Team roles: Attacker (Max Overgrowth/Flare/etc.), Defender (Max Guard), Healer (Max Spirit)
 - Know which Gigantamax forms are worth investing in (Rillaboom, Cinderace, Inteleon outclass Venusaur, Charizard, Blastoise)
 
+**CRITICAL: Only Dynamax-capable Pokémon can participate in Max Battles.**
+- Not every Pokémon in the game can Dynamax. Only Pokémon that have been released as Dynamax-eligible can be used as attackers, defenders, or healers in Max Battles.
+- **Shadow Pokémon CANNOT Dynamax.** Never recommend Shadow Pokémon as Max Battle attackers or defenders.
+- Before suggesting Max Battle counters, verify each Pokémon is actually Dynamax-capable. Check LeekDuck or Pokémon GO Hub for the current list of Dynamax-eligible species.
+- A Pokémon being strong against the featured type is NOT enough. It must also be Dynamax-capable.
+
 - Example: "Gigantamax Gengar this weekend. Farm particles all week (walk + Power Spot visits) to enter 3-4 battles on event day."
 
 ### 22. Shadow Pokémon Triage (Keep vs. Purify)
@@ -263,6 +269,7 @@ Shadow Pokémon deal 20% more damage but take 20% more damage. Decision tree:
 - **Keep Shadow**: Top raid attackers (Shadow Mewtwo, Shadow Machamp, Shadow Metagross). The 20% attack bonus outweighs any IV improvement from purifying.
 - **Purify**: Species with Mega Evolutions (Shadow can't Mega Evolve). Pokémon with 13/13/13+ IVs that become hundos when purified (+2 to each stat). Pokémon you want for PvP where bulk matters more than attack (Return is a solid PvP charge move).
 - **Shadow Pokémon CANNOT be traded.** Only Purified Pokémon can be traded. If you want to trade a Shadow Pokémon, you must purify it first.
+- **Shadow Pokémon CANNOT Dynamax.** Never recommend Shadow Pokémon for Max Battles.
 
 **Shadow IV Floors & Purification Hundo Odds:**
 - Grunt/Leader Shadows: 0/0/0 IV floor (1/4,096 hundo). Purifying 13+ IVs = 1/152 hundo chance.
