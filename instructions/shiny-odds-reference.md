@@ -15,29 +15,29 @@ Niantic standardized shiny odds by encounter method instead of by species. The k
 
 ## Current Shiny Rate Tiers
 
-### Event Rates
+### Rates Safe to Cite (well-established community data)
 
-| Encounter Type | Shiny Rate |
-|---|---|
-| Community Day | ~1/25 |
-| Raid Day | ~1/10 |
-| Research Day | ~1/10 |
-| Hatch Day | ~1/10 |
-| GO Fest / Safari Zone (ticketed) | ~1/128 |
-| Standard event boost (featured spawns) | ~1/128 |
-| Catch Mastery Events | ~1/256 |
-
-### Encounter Method Rates (Non-Event)
-
-| Encounter Type | Shiny Rate | Notes |
+| Encounter Type | Shiny Rate | Cite in Newsletter? |
 |---|---|---|
-| Legendary / Mythical / Ultra Beast raids (Five-Star) | 1/20 | Unchanged |
-| Mega raids | 1/64 | |
-| Non-Five-Star raids (1-4 Star) | 1/64 | Boosted from 1/512 for common species |
-| Egg hatches (all) | 1/64 | Boosted from 1/512 for common species |
-| Rocket Leaders / Giovanni | 1/64 | |
-| Rocket Grunts | 1/256 | |
-| Wild (all species) | 1/512 | Flattened. No more perma-boost. |
+| Community Day | ~1/25 | Yes, cite the number |
+| Raid Day / Research Day / Hatch Day | ~1/10 | Yes, cite the number |
+| Legendary / Mythical / Ultra Beast raids (Five-Star) | 1/20 | Yes, cite the number |
+| Non-Five-Star raids (1-4 Star) | 1/64 | Yes, cite the number |
+| Egg hatches (all) | 1/64 | Yes, cite the number |
+| Wild (all species) | 1/512 | Yes, cite the number |
+
+### Rates NOT to Cite (community-estimated, Niantic could vary)
+
+For these tiers, say "boosted shiny odds" without a specific number.
+
+| Encounter Type | Estimated Rate | Newsletter Language |
+|---|---|---|
+| GO Fest / Safari Zone (ticketed) | ~1/128 | "boosted shiny odds for ticket holders" |
+| Standard event boost (featured spawns) | ~1/128 | "boosted shiny odds during the event" |
+| Catch Mastery Events | ~1/256 | "boosted shiny odds" |
+| Rocket Leaders / Giovanni | ~1/64 | "higher shiny odds than Grunts" |
+| Rocket Grunts | ~1/256 | "lower shiny odds" |
+| Mega raids | ~1/64 | "boosted shiny odds" |
 
 ### Paid Event Impact
 
@@ -55,8 +55,10 @@ Initial data confirmed the Lake Trio (Uxie, Mesprit, Azelf) were flattened to 1/
 
 ## How to Use in Newsletter Tips
 
-- **Never say a wild Pokemon has "boosted" shiny odds** unless it's during a specific event with confirmed boosted rates.
+- **Only cite specific shiny rates from the "Safe to Cite" table above.** For everything else, use "boosted shiny odds" without a number.
+- **Never say a wild Pokemon has "boosted" shiny odds** unless it's during a confirmed boosted event.
 - **Raids are now the clear best method** for shiny hunting rare species (1/64 vs 1/512 wild).
 - **Lucky trades don't affect shiny odds.** Shiny is determined at encounter, not at trade. But trading for a shiny you missed is valid strategy.
 - **When recommending shiny hunting methods**, compare encounter rates: 20 raids at 1/20 = ~64% cumulative chance. 512 wild encounters at 1/512 = ~63% cumulative chance. Raids are far more time-efficient for Legendaries.
-- **At paid events**, note that formerly perma-boosted species now get the same ~1/128 rate as everything else, not their old premium 1/64.
+- **At paid events**, note that formerly perma-boosted species no longer carry their old premium rate. Say "boosted shiny odds for ticket holders" without citing a number.
+- **When an event says "increased shiny odds" for featured spawns**, write "boosted shiny odds during the event." Do not guess a rate.

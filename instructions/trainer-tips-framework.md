@@ -145,27 +145,25 @@ For big upcoming events, remind readers to:
 ### 11. Shiny Hunting Efficiency
 Know the current shiny rate tiers (post-Memories in Motion flattening, March 2026). See `instructions/shiny-odds-reference.md` for the full table.
 
-**Event Rates:**
+**Rates safe to cite (well-established data):**
 - Community Day: ~1/25
 - Raid Day / Research Day / Hatch Day: ~1/10
-- GO Fest / Safari Zone (ticketed): ~1/128
-- Standard event boost (featured spawns): ~1/128
-- Catch Mastery Events: ~1/256
-
-**Encounter Method Rates:**
 - Legendary/Mythical/Ultra Beast raids (Five-Star): 1/20
 - Non-Five-Star raids (1-4 Star): 1/64
 - Egg hatches: 1/64
-- Rocket Leaders / Giovanni: 1/64
-- Rocket Grunts: 1/256
 - Wild (all species): 1/512
+
+**Rates NOT to cite (say "boosted shiny odds" instead):**
+- GO Fest / Safari Zone, standard event boosts, Catch Mastery, Rocket Leaders, Mega raids
+- These rates are community-estimated. Niantic could vary them. Never guess a number.
 
 **Critical change:** As of March 3, 2026, all wild shiny rates were flattened to 1/512. The old perma-boost system (1/64 for species like Onix, Scyther, Rockruff, Sandile, etc.) no longer applies to wild encounters. Raids and eggs were standardized to 1/64, which only mattered for common species (rare species were already 1/64). Previously raid/egg-locked species no longer carry their boosted rate into the wild during events.
 
 **Tip implications:**
 - Stop recommending wild shiny hunting for formerly perma-boosted species as if they have better odds. They don't.
 - Raids and eggs are now the best non-event shiny hunting methods for rare species (1/64 vs 1/512 wild).
-- At paid events (GO Fest, Safari Zone), previously perma-boosted species likely get the generic 1/128 ticket rate, not their old 1/64.
+- At paid events, previously perma-boosted species no longer carry their old premium rate. Say "boosted shiny odds for ticket holders" without citing a number.
+- When an event says "increased shiny odds," write "boosted shiny odds during the event." Do not guess a rate.
 
 **Quick-catch technique** nearly doubles encounters per hour by skipping the catch animation. Recommend it for time-limited events like Community Day or Raid Day.
 - Example: "Community Day is 3 hours. Use quick-catch to hit 300+ encounters instead of 150. That's roughly 12 shinies at the 1/25 rate."
