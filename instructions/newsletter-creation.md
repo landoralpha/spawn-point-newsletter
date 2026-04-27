@@ -274,6 +274,7 @@ Sources: [LeekDuck](https://leekduck.com/events/) | [Pokemon GO Hub](https://pok
 - Always include times in **local time** as found in source data. DO NOT convert time zones
 - Explain acronyms the first time (e.g., "Great League (GBL)")
 - If shiny chances exist, say "with a chance to be shiny" (not "shiny available")
+- Never describe a wild Pokemon as having "boosted" shiny odds unless it's during a confirmed boosted event. All wild shinies are 1/512 since March 2026. See `instructions/shiny-odds-reference.md` for current rates.
 - Focus on helping casual Trainers, not just hardcore
 - Double-check dates and times
 - Never use em dashes
