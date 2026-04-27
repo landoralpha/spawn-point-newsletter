@@ -2,7 +2,7 @@
 
 Source: TofuVicGaming (updated August 16, 2025)
 
-Use this data when writing Trainer Tips about IVs, hundo hunting, trading strategy, or Shadow Pokemon triage.
+Use this data when writing Trainer Tips about IVs, hundo hunting, trading strategy, or Shadow Pokémon triage.
 
 ## Quick Reference Table
 
@@ -10,7 +10,7 @@ Use this data when writing Trainer Tips about IVs, hundo hunting, trading strate
 |---|---|---|
 | Wild Catch | 1/4,096 | 0/0/0 |
 | Wild (Weather Boost) | 1/1,728 | 4/4/4 |
-| Mighty Pokemon | 1/27 | 13/13/13 |
+| Mighty Pokémon | 1/27 | 13/13/13 |
 | Field Research | 1/216 | 10/10/10 |
 | Special/Timed Research | 1/216 | 10/10/10 |
 | All Egg Hatches | 1/216 | 10/10/10 |
@@ -19,7 +19,7 @@ Use this data when writing Trainer Tips about IVs, hundo hunting, trading strate
 | GBL Reward | 1/216 | 10/10/10 |
 | GBL Day/Week/Weekend Reward | 1/4,096 | 0/0/0 |
 
-## Shadow Pokemon (Team Rocket)
+## Shadow Pokémon (Team Rocket)
 
 | Source | Hundo Odds | IV Floor |
 |---|---|---|

@@ -198,10 +198,10 @@ Daily bonuses active throughout the week. Only include ones with significant val
 A deeper write-up on one community story, controversy, discovery, or meta shift from the past week. This is the newsletter's editorial voice, where you go beyond event listings and cover something the community is actively talking about.
 
 **What belongs:**
-- Reddit investigations or discoveries (r/TheSilphRoad, r/PokemonGO)
+- Reddit investigations or discoveries (r/TheSilphRoad, r/PokémonGO)
 - Community frustrations or controversies with Niantic decisions
 - Datamined findings or game mechanic discoveries
-- Meta shifts (new Pokemon or move rebalances shaking up PvP/PvE)
+- Meta shifts (new Pokémon or move rebalances shaking up PvP/PvE)
 - Niantic responses to community feedback
 - Notable community-created tools, maps, or resources
 
@@ -214,7 +214,7 @@ A deeper write-up on one community story, controversy, discovery, or meta shift 
 - End with a "Sources:" line listing the key links
 
 **Research process:**
-- WebSearch: "Pokemon GO controversy [month] [year]", "Pokemon GO reddit [month] [year]", "site:reddit.com/r/TheSilphRoad top this week"
+- WebSearch: "Pokémon GO controversy [month] [year]", "Pokémon GO reddit [month] [year]", "site:reddit.com/r/TheSilphRoad top this week"
 - Check content creators for trending topics
 - Look for posts with high engagement (upvotes, comments, impressions)
 
@@ -258,7 +258,7 @@ Every section of the newsletter must include source links at the end. This tells
 
 **Example:**
 ```
-Sources: [LeekDuck](https://leekduck.com/events/) | [Pokemon GO Hub](https://pokemongohub.net) | [Official Blog](https://pokemongo.com/news)
+Sources: [LeekDuck](https://leekduck.com/events/) | [Pokémon GO Hub](https://pokemongohub.net) | [Official Blog](https://pokemongo.com/news)
 ```
 
 **Rules:**
@@ -274,13 +274,13 @@ Sources: [LeekDuck](https://leekduck.com/events/) | [Pokemon GO Hub](https://pok
 - Always include times in **local time** as found in source data. DO NOT convert time zones
 - Explain acronyms the first time (e.g., "Great League (GBL)")
 - If shiny chances exist, say "with a chance to be shiny" (not "shiny available")
-- Never describe a wild Pokemon as having "boosted" shiny odds unless it's during a confirmed boosted event. All wild shinies are 1/512 since March 2026. See `instructions/shiny-odds-reference.md` for current rates.
+- Never describe a wild Pokémon as having "boosted" shiny odds unless it's during a confirmed boosted event. All wild shinies are 1/512 since March 2026. See `instructions/shiny-odds-reference.md` for current rates.
 - Focus on helping casual Trainers, not just hardcore
 - Double-check dates and times
 - Never use em dashes
 - Raids rotate Wednesdays at start of day
 - Always check for raid rotations. Don't assume raids last the whole week
 - Trainer Tips should provide NEW strategic insights, not restate event info. Use `instructions/trainer-tips-framework.md` as a checklist for every tip.
-- Trainer Tips MUST be directly about the section's content. A Max Monday tip must be about the featured Dynamax Pokemon. A Raid Boss tip must be about that raid boss. Do NOT attach generic tips to a section just because they share a day of the week.
+- Trainer Tips MUST be directly about the section's content. A Max Monday tip must be about the featured Dynamax Pokémon. A Raid Boss tip must be about that raid boss. Do NOT attach generic tips to a section just because they share a day of the week.
 - NO DUPLICATION across sections
 - Suggest 5 titles, 5 subtitles, and 5 opening paragraphs for Joel to choose from

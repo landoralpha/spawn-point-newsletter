@@ -8,7 +8,7 @@ Sources: Bulbapedia, Fandom Wiki, community research (100k+ sample sizes)
 
 Niantic standardized shiny odds by encounter method instead of by species. The key changes:
 
-1. **All wild Pokemon are now 1/512.** The old three-tier system (1/512 standard, 1/128 Mega-eligible, 1/64 perma-boosted) no longer exists in the wild.
+1. **All wild Pokémon are now 1/512.** The old three-tier system (1/512 standard, 1/128 Mega-eligible, 1/64 perma-boosted) no longer exists in the wild.
 2. **Perma-boost removed from wild.** Species like Onix, Scyther, Rockruff, Sandile, Mawile, Drampa, Turtonator, Duraludon, Honedge, Bombirdier, Dondozo, Pawniard, and Toxtricity are all 1/512 in the wild now.
 3. **Raids and eggs standardized to 1/64.** This only boosted common species. Rare egg/raid-locked species were already 1/64 before the change.
 4. **Raid/egg-locked species no longer carry their boosted rate into the wild during events.** Previously, species like Pawniard debuting in wild during an event would keep their 1/64 rate. Now they default to 1/512 (or ~1/128 at paid events with ticket boost).
@@ -56,7 +56,7 @@ Initial data confirmed the Lake Trio (Uxie, Mesprit, Azelf) were flattened to 1/
 ## How to Use in Newsletter Tips
 
 - **Only cite specific shiny rates from the "Safe to Cite" table above.** For everything else, use "boosted shiny odds" without a number.
-- **Never say a wild Pokemon has "boosted" shiny odds** unless it's during a confirmed boosted event.
+- **Never say a wild Pokémon has "boosted" shiny odds** unless it's during a confirmed boosted event.
 - **Raids are now the clear best method** for shiny hunting rare species (1/64 vs 1/512 wild).
 - **Lucky trades don't affect shiny odds.** Shiny is determined at encounter, not at trade. But trading for a shiny you missed is valid strategy.
 - **When recommending shiny hunting methods**, compare encounter rates: 20 raids at 1/20 = ~64% cumulative chance. 512 wild encounters at 1/512 = ~63% cumulative chance. Raids are far more time-efficient for Legendaries.

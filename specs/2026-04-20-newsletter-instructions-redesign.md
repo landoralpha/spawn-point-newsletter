@@ -131,11 +131,11 @@ Last resort = "Pause-and-prompt"? → Stop drafting, prompt Joel with what's mis
 
 ### Research Steps (in order)
 
-1. **Broad weekly overview** — search for all events in the newsletter date range using multiple sources. Start with LeekDuck events calendar and official Pokemon GO blog.
+1. **Broad weekly overview** — search for all events in the newsletter date range using multiple sources. Start with LeekDuck events calendar and official Pokémon GO blog.
 2. **Event details** — for each event found, fetch the official announcement. Cross-reference with community sources.
 3. **Raid boss rotation** — check if any raid bosses (Five-Star, Mega, Shadow) rotate during the week. If a new boss rotates in, pull counter data using the routing table.
 4. **GBL rotation** — check what leagues and cups are active or rotating during the week.
-5. **Max Monday** — check LeekDuck for the featured Dynamax Pokemon.
+5. **Max Monday** — check LeekDuck for the featured Dynamax Pokémon.
 6. **Weekly bonuses** — confirm Daily Discoveries schedule (recurring, but verify no changes).
 7. **Don't Miss research** — actively search Reddit, content creators, and community sources for tools, meta shifts, and community discoveries (see Don't Miss section below).
 
@@ -155,20 +155,20 @@ Each must be confirmed against 2+ sources:
 
 | Data Point | What to verify | Sources to cross-check |
 |---|---|---|
-| Shiny availability | Can this Pokemon be shiny in GO right now? | db.pokemongohub.net + LeekDuck shiny checklist |
+| Shiny availability | Can this Pokémon be shiny in GO right now? | db.pokemongohub.net + LeekDuck shiny checklist |
 | Event start/end times | Exact times in local time, no timezone conversion | Official announcement + LeekDuck |
 | Raid boss rotation dates | When does current boss leave, when does new boss start? | LeekDuck + official blog + pokemongohub.net |
 | Move names/movesets | Correct fast/charged move names for counters and PvP | db.pokemongohub.net + pvpoke.com |
-| Debut status | Is this Pokemon appearing in GO for the first time, or returning? | Official announcement + LeekDuck + db.pokemongohub.net |
+| Debut status | Is this Pokémon appearing in GO for the first time, or returning? | Official announcement + LeekDuck + db.pokemongohub.net |
 | Raid counter accuracy | Are these still the current top counters? | db.pokemongohub.net + pokebattler.com |
 
 ### Verification Rules
 
 - **Two sources agree** — data is verified, proceed
-- **Sources conflict** — check official Pokemon GO announcement as tiebreaker
+- **Sources conflict** — check official Pokémon GO announcement as tiebreaker
 - **Official doesn't cover it** — flag inline: `[UNCONFIRMED: Source A says X, Source B says Y — verify before publishing]`
 - **Data not posted yet** — flag inline: `[NOT YET ANNOUNCED: Check [source URL] closer to publication]`
-- **Wider net** — after checking established sources, search `"Pokemon GO [event/boss name] [month] [year]"` and check r/TheSilphRoad and @PokemonGoApp on X for last-minute changes, corrections, or details the primary sources haven't updated yet
+- **Wider net** — after checking established sources, search `"Pokémon GO [event/boss name] [month] [year]"` and check r/TheSilphRoad and @PokémonGoApp on X for last-minute changes, corrections, or details the primary sources haven't updated yet
 
 ### Verify Gate
 
@@ -208,7 +208,7 @@ Fun, creative subtitle expanding on the title or highlighting what makes the wee
 
 **Guidelines:**
 - 8-15 words
-- Reference specific Pokemon, events, or activities when possible
+- Reference specific Pokémon, events, or activities when possible
 - Match the energy of the week
 
 #### 3. Opening Paragraph
@@ -217,7 +217,7 @@ Sets the tone and emotional priority. Answers: what should Trainers care about m
 **Guidelines:**
 - 3 sentences max
 - Lead with the most important thing happening this week
-- Name the key Pokemon, event, or deadline
+- Name the key Pokémon, event, or deadline
 - Do NOT repeat times, dates, or bullet-point details (those go in Week at a Glance)
 - Do NOT start with a generic greeting
 - If it reads like a table of contents, rewrite it
@@ -269,7 +269,7 @@ Five-Star, Mega, and Shadow raids only. No one-star or three-star.
 **Trainer Tip:** Strategic insight (PvP/PvE investment value, optimal timing, type advantages).
 
 **Max Battle mechanics (never get these wrong):**
-- Mega Pokemon CANNOT boost ally attacks in Max Battles (only in standard Raids)
+- Mega Pokémon CANNOT boost ally attacks in Max Battles (only in standard Raids)
 - Eternatus' Dynamax Cannon adds bonus damage in Max Battles
 - Crowned Forme Zacian's Behemoth Blade strengthens attack in Raids and Max Battles
 - Crowned Forme Zamazenta's Behemoth Bash strengthens defense in Raids and Max Battles
@@ -280,19 +280,19 @@ Weekly league rotation and cup format.
 **Includes:**
 - What leagues/cups are active this week
 - Rotation date if it changes mid-week
-- One quick meta note when relevant (e.g., a featured event Pokemon that's strong in the current cup)
+- One quick meta note when relevant (e.g., a featured event Pokémon that's strong in the current cup)
 
 **Guidelines:**
 - Keep it brief unless a major rotation or new cup warrants more detail
 - Link to pvpoke.com for deeper meta analysis when relevant
 
 #### 8. Max Monday
-Featured Dynamax Pokemon for the week.
+Featured Dynamax Pokémon for the week.
 
 **Schedule:** 6:00 AM to 9:00 PM local time. Power Spots refresh more frequently with additional Power Spots active. Note that Power Spot availability is limited outside of Max Monday and Max Battle Day windows.
 
 **Per Max Monday:**
-- Featured Dynamax Pokemon, difficulty tier, shiny availability
+- Featured Dynamax Pokémon, difficulty tier, shiny availability
 - Type weaknesses
 - Whether it's a debut or continuation
 - Trainer Tip if strategic value exists
@@ -322,7 +322,7 @@ Three callouts surfacing things NOT covered elsewhere in the newsletter.
 
 | Category | What to look for | Where to search |
 |---|---|---|
-| Tools & Resources | Apps, websites, trackers, IV calculators, infographics the community is using | Reddit (r/TheSilphRoad, r/PokemonGO), X/Twitter creators, LeekDuck tools |
+| Tools & Resources | Apps, websites, trackers, IV calculators, infographics the community is using | Reddit (r/TheSilphRoad, r/PokémonGO), X/Twitter creators, LeekDuck tools |
 | Meta & Strategy | Rising/falling PvP picks, underrated raid attackers, niche builds, move update impacts | pvpoke.com meta, GO Hub analysis, content creators |
 | Community & Upcoming | Leaked/teased events, community discoveries, QoL changes in updates, datamine highlights | Pokeminers, r/TheSilphRoad, content creators, official social accounts |
 
@@ -375,7 +375,7 @@ Cross-reference all prose against existing project files before finalizing:
 
 **Gate 1: Anti-slop** — Run SKILL.md Quick Checks. Score on five dimensions. Rewrite anything below 35/50.
 
-**Gate 2: Accuracy** — Confirm every date, time, and Pokemon name was verified in Phase 2. Confirm all inline flags are still present.
+**Gate 2: Accuracy** — Confirm every date, time, and Pokémon name was verified in Phase 2. Confirm all inline flags are still present.
 
 **Gate 3: Structure** — No duplication across sections. Opening paragraph and Week at a Glance are complementary. Don't Miss is genuinely new. Trainer Tips add strategic value.
 
@@ -393,20 +393,20 @@ Draft delivered with:
 ## Information Sources
 
 ### Official Sources
-- Pokemon GO official website & Niantic blog (`pokemongo.com/news`)
-- @PokemonGoApp on X
+- Pokémon GO official website & Niantic blog (`pokemongo.com/news`)
+- @PokémonGoApp on X
 - @NianticHelp on X
 
 ### Community/Data Sources
 - LeekDuck (`leekduck.com`) — events, raid schedule, Max Monday, shiny checklist
-- Pokemon GO Hub (`pokemongohub.net`) — news, analysis, tier lists
-- Pokemon GO Hub Database (`db.pokemongohub.net`) — counters, CP charts, PvP tiers, moves, shiny status
+- Pokémon GO Hub (`pokemongohub.net`) — news, analysis, tier lists
+- Pokémon GO Hub Database (`db.pokemongohub.net`) — counters, CP charts, PvP tiers, moves, shiny status
 - PvPoke (`pvpoke.com`) — PvP rankings and movesets
 - Pokebattler (`pokebattler.com`) — raid counter simulations
 - PokeBase (`pokebase.app`) — overall Dynamax rankings
-- Serebii.net — Pokemon GO section
+- Serebii.net — Pokémon GO section
 - r/TheSilphRoad (Reddit)
-- r/PokemonGO (Reddit)
+- r/PokémonGO (Reddit)
 - Pokeminers — datamines and leaks
 
 ### Content Creators
