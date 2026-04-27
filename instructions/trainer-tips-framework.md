@@ -94,7 +94,7 @@ For every new raid boss or Max Monday Pokemon:
 ### 7. Medal & Badge Progress
 **Type Medals** - Catching Pokemon of a specific type contributes to that type's medal:
 - Bronze: 10, Silver: 50, Gold: 200, Platinum: 2,500
-- Type medals give catch bonus for that type (+1/+2/+3/+4 to catch rate)
+- Type medals give catch bonus for that type: Bronze +1, Silver +2, Gold +3, Platinum +4
 - If an event floods spawns of a specific type, mention the medal grind opportunity
 - Example: Steel-type event = good time to push the Steel medal, which helps catch future Steel-types
 
@@ -185,20 +185,22 @@ Check which event spawns align with local weather. Weather-boosted catches durin
 ### 15. PvP IV Optimization (Stat Product)
 For Great League and Ultra League, ideal IVs are LOW Attack / HIGH Defense / HIGH HP (e.g., 0/15/15). Attack inflates CP faster, so low-attack Pokemon fit more total stats under the CP cap.
 - Wild catches: 0/0/0 IV floor (best for PvP IVs)
-- Trades: 0/0/0 floor for Good Friends, up to 5/5/5 for Best Friends
-- Research: 10/10/10 floor (bad for PvP IVs)
-- Raids/eggs: 10/10/10 floor (bad for PvP IVs)
+- Trades by friendship level: No hearts 0/0/0, Good 1/1/1, Great 2/2/2, Ultra 3/3/3, Best 5/5/5
+- Research/raids/eggs: 10/10/10 floor (bad for PvP IVs)
+- Good/Great Friend trades give the lowest IV floors and best PvP IV odds
 
-- Example: "Stunfisk in event research has a 10/10/10 IV floor, too high for good PvP IVs. Trade your extras with a friend instead. Trades re-roll from 0/0/0 and give a real shot at rank 1."
+- Example: "Stunfisk in event research has a 10/10/10 IV floor, too high for good PvP IVs. Trade your extras with a Good Friend instead. Good Friend trades re-roll from 1/1/1, giving you a real shot at rank 1."
 
 ### 16. Trading Strategy & Lucky Coordination
-- Lucky Friends: ~1.1% per daily Best Friend interaction. Guaranteed 12/12/12 IVs, half Stardust to power up.
+- Lucky Friends: ~1.1% per daily Best Friend interaction. Guaranteed 12/12/12 IVs, half Stardust to power up. Hundo odds: 1/64.
+- Best Friend trades (non-Lucky): 5/5/5 IV floor, hundo odds 1/669 (with 5% Lucky chance factored in)
 - Lucky guarantee: Trade a Pokemon caught before August 2016 (45 lifetime limit)
 - Special Trades: 1/day normally, 2-3 during events or Friendship Friday
 - Distance trades: bonus Candy based on catch distance + Pilot Medal progress
 - **Shadow Pokemon CANNOT be traded.** Only Purified Pokemon can be traded. Never suggest trading Shadow Pokemon.
+- See `instructions/hundo-odds-reference.md` for complete hundo odds by trade friendship level.
 
-- Example: "Dialga leaves raids next week. Coordinate Lucky trades with Best Friends now. A Lucky Dialga costs half the Stardust to max and is guaranteed 12/12/12 IVs."
+- Example: "Dialga leaves raids next week. Lucky Friend trades give 1/64 hundo odds vs 1/216 from raids. Coordinate a Lucky trade before the rotation for your best shot at a perfect Dialga."
 
 ### 17. Egg Pool & Hatch Strategy
 Event-specific egg pools change what hatches from 2km, 5km, 7km, and 10km eggs. Key tactics:
@@ -247,7 +249,13 @@ Shadow Pokemon deal 20% more damage but take 20% more damage. Decision tree:
 - **Purify**: Species with Mega Evolutions (Shadow can't Mega Evolve). Pokemon with 13/13/13+ IVs that become hundos when purified (+2 to each stat). Pokemon you want for PvP where bulk matters more than attack (Return is a solid PvP charge move).
 - **Shadow Pokemon CANNOT be traded.** Only Purified Pokemon can be traded. If you want to trade a Shadow Pokemon, you must purify it first.
 
-- Example: "Shadow Mewtwo from Giovanni research? Keep it Shadow even with bad IVs. The 20% attack bonus is worth more than perfect IVs. But that 14/14/14 Shadow Beedrill? Purify it for a hundo and Mega eligibility."
+**Shadow IV Floors & Purification Hundo Odds:**
+- Grunt/Leader Shadows: 0/0/0 IV floor (1/4,096 hundo). Purifying 13+ IVs = 1/152 hundo chance.
+- Giovanni Shadows: 6/6/6 IV floor (1/1,000 hundo). Purifying 13+ IVs = 1/37 hundo chance.
+- Shadow Raids: 6/6/6 IV floor (1/1,000 hundo). With IV Boost: 7/7/7 (1/729 hundo).
+- Shadow Raid with IV Boost, purifying 13+ = 1/27 hundo chance (tied for best odds in the game).
+
+- Example: "Shadow Mewtwo from Giovanni has a 6/6/6 IV floor, so 1/1,000 hundo odds. Keep it Shadow even with bad IVs. The 20% attack bonus outweighs perfect IVs. But that 14/14/14 Shadow Beedrill from a Grunt? Purify it for a hundo and Mega eligibility."
 
 ### 23. Post-Event Transfer Timing
 Don't mass-transfer immediately after events. Hold catches for:
@@ -281,11 +289,11 @@ Circle-lock technique: hold the ball, wait for the attack animation, release dur
 Catch probability stacking:
 - Golden Razz Berry: highest catch rate multiplier
 - Excellent Curve Throw: ~2x catch rate
-- Gold Type Medal: +4 catch bonus for that type
+- Type Medal bonus: Bronze +1, Silver +2, Gold +3, Platinum +4
 - All three combined gives the best possible catch odds per ball
 
-Type medals matter. If a new Legendary raid boss arrives and you don't have a Gold medal for its type, flag the gap.
-- Example: "Tapu Koko is Electric/Fairy. Your Electric and Fairy type medals directly boost your catch rate. If either is below Gold, prioritize catching those types this week."
+Type medals matter. If a new Legendary raid boss arrives and you don't have a Platinum medal for its type, flag the gap.
+- Example: "Tapu Koko is Electric/Fairy. Your Electric and Fairy type medals directly boost your catch rate. Platinum gives +4 per throw. If either medal is below Gold, prioritize catching those types this week."
 
 ### 27. GO Pass & Ticket Value Assessment
 For every ticketed event or monthly GO Pass, evaluate:
@@ -366,6 +374,19 @@ A breakpoint is the level where a fast move deals +1 extra damage to a specific 
 - For raid counters, L30 is usually "good enough." L35 for frequent raiders. L40+ for short-person or solo attempts.
 
 - Example: "Powering up Shadow Machamp to L30 costs roughly 120,000 Stardust. Going from L30 to L40 costs another 150,000 for only ~10% more damage. For most players, L30 is the sweet spot."
+
+### 36. Hundo Hunting Strategy
+Know where to invest time based on hundo odds (see `instructions/hundo-odds-reference.md` for full table):
+- Mighty Pokemon: 1/27 (best odds in the game)
+- Lucky Friend trades: 1/64
+- Research/Raids/Eggs: 1/216
+- Best Friend trades: 1/669 (with 5% Lucky chance)
+- Weather-boosted wild: 1/1,728
+- Standard wild: 1/4,096
+
+When a rare Pokemon appears in raids AND is tradeable, compare: raid for 1/216 odds, or save Lucky trades for 1/64. For Pokemon you plan to max out (Legendaries, ML picks), Lucky trades also halve the power-up Stardust cost.
+
+- Example: "Rayquaza in Five-Star raids gives 1/216 hundo odds per catch. If you're sitting on a Lucky Friend trade, that's 1/64 odds and half the Stardust to power up. Save your Lucky trade for Rayquaza before it leaves."
 
 ## How to Apply
 
