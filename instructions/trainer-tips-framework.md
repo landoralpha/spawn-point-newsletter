@@ -410,6 +410,27 @@ When a rare Pokémon appears in raids AND is tradeable, compare: raid for 1/216 
 
 - Example: "Rayquaza in Five-Star raids gives 1/216 hundo odds per catch. If you're sitting on a Lucky Friend trade, that's 1/64 odds and half the Stardust to power up. Save your Lucky trade for Rayquaza before it leaves."
 
+### 37. Team GO Rocket Balloon Schedule
+Rocket balloons appear on a fixed schedule. The schedule changes during Takeover events.
+
+**Normal schedule (every 6 hours):**
+- 12:00 AM, 6:00 AM, 12:00 PM, 6:00 PM local time
+- Each balloon stays for ~20 minutes after spawning
+- Open the game during these windows or you'll miss the balloon
+
+**Takeover event schedule (every 2 hours):**
+- 12:00 AM, 2:00 AM, 4:00 AM, 6:00 AM, 8:00 AM, 10:00 AM
+- 12:00 PM, 2:00 PM, 4:00 PM, 6:00 PM, 8:00 PM, 10:00 PM
+- 12 balloons per day instead of the normal 4
+
+**When to flag this:**
+- Any Team Rocket Takeover event (balloons rotate every 2 hours)
+- Events featuring new Shadow Pokémon or Giovanni encounters
+- Frustration TM removal windows (always tied to Rocket events)
+- Shadow raid weekends
+
+- Example: "Taken Over runs through Sunday. Balloons appear every 2 hours instead of 6, giving you 12 chances per day to battle Leaders and farm Shadow Pokémon. Log in at 12:00, 2:00, 4:00, 6:00, 8:00, and 10:00 (AM and PM) for each balloon."
+
 ## How to Apply
 
 For each newsletter section:
