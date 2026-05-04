@@ -174,15 +174,36 @@ Search the draft for hyphenated move names and de-hyphenate.
 These are easy to fix and significantly raise the perceived quality of the newsletter:
 
 ### Date formatting
-- Use commas after weekday names: "Saturday, May 9" not "Saturday May 9"
-- Use en-dash for date ranges: "May 4–May 10" not "May 4-May 10" (en-dash is `–`, not regular hyphen)
-- Times include AM/PM on both ends: "6:00 PM to 7:00 PM" not "6:00 to 7:00 PM"
+- **Always include a comma after weekday names:** "Saturday, May 9" not "Saturday May 9"
+- **Date ranges use en-dash (–):** "May 4–May 10" not "May 4-May 10" (en-dash is `–`, not regular hyphen)
+- **Times include AM/PM on both ends:** "6:00 PM to 7:00 PM" not "6:00 to 7:00 PM"
 
-### Time formatting consistency
-Pick one and use throughout:
-- All capitals: "6:00 AM to 9:00 PM"
-- Lowercase with periods: "6:00 a.m. to 9:00 p.m."
-Don't mix within the same newsletter.
+### Time formatting standard: AM/PM (caps, no periods)
+
+The newsletter standard is **AM/PM** (capital letters, no periods). Apply this throughout every section:
+- ✓ "6:00 AM to 9:00 PM"
+- ✓ "Raid Hour is Wednesday, May 6 from 6:00 PM to 7:00 PM"
+- ✗ "6:00 a.m. to 9:00 p.m." (don't use lowercase with periods)
+- ✗ "6:00 am to 9:00 pm" (always capitalize)
+
+Common drift point: Daily Discoveries section often gets written with lowercase a.m./p.m. — verify it matches the rest of the newsletter.
+
+### Comma audit (date constructions)
+
+Search the draft for these patterns and verify a comma follows the weekday:
+- "Monday May" → "Monday, May"
+- "Tuesday May" → "Tuesday, May"
+- "Wednesday May" → "Wednesday, May"
+- "Thursday May" → "Thursday, May"
+- "Friday May" → "Friday, May"
+- "Saturday May" → "Saturday, May"
+- "Sunday May" → "Sunday, May"
+
+(Adjust month names per the current newsletter's date range.)
+
+When date includes a year, also add a comma before the year:
+- ✓ "Saturday, May 9, 2026"
+- ✗ "Saturday May 9 2026"
 
 ### Fractions
 Pick one and use throughout:

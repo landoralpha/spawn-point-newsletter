@@ -310,6 +310,13 @@ Sources: [LeekDuck](https://leekduck.com/events/) | [Pokémon GO Hub](https://po
 
 ## Important Reminders
 - Always include times in **local time** as found in source data. DO NOT convert time zones
+- **Time format: use AM/PM (caps, no periods) throughout.** Never mix "AM/PM" with "a.m./p.m." in the same newsletter. Examples: "6:00 AM to 9:00 PM" ✓, not "6:00 a.m. to 9:00 p.m." Apply consistently across all sections including Daily Discoveries.
+- **Date commas: always include a comma after the weekday name.** Examples:
+  - "Saturday, May 9 from 2:00 PM to 5:00 PM" ✓
+  - "Wednesday, May 6 at 6:00 AM" ✓
+  - "Monday, May 4 from 6:00 AM to 9:00 PM" ✓
+  - NOT "Saturday May 9..." (missing comma)
+- **Date ranges in titles or running text use en-dash (–), not hyphen (-).** Example: "May 4–May 10, 2026" ✓, not "May 4-May 10".
 - Explain acronyms the first time (e.g., "Great League (GBL)")
 - If shiny chances exist, say "with a chance to be shiny" (not "shiny available")
 - Never describe a wild Pokémon as having "boosted" shiny odds unless it's during a confirmed boosted event. All wild shinies are 1/512 since March 2026. See `instructions/shiny-odds-reference.md` for current rates.
