@@ -163,6 +163,10 @@ List each special/limited-time event in chronological order (Monday through Sund
 
 Cover Five-Star, Mega, and Shadow raids. Raids rotate on Wednesdays at the start of the day. Always check if any bosses end during the week and what rotates in.
 
+**Shadow Raid notes:**
+- Shadow Raids can be done remotely (Remote Raid Passes work). They are no longer in-person only.
+- The monthly featured Legendary Shadow Pokémon raids EVERY DAY during its window, not just weekends. 1-Star and 3-Star Shadow Raids follow the standard weekend-only schedule.
+
 When raids rotate mid-week:
 ```
 **Five-Star Raids:**
@@ -224,11 +228,11 @@ A deeper write-up on one community story, controversy, discovery, or meta shift 
 ```
 **Silicobra's Spawn Problem**
 
-Sustainability Week runs through Monday, but finding Silicobra has been the loudest 
-frustration of the event. All players were told was that it would appear in "desert-like 
+Sustainability Week runs through Monday, but finding Silicobra has been the loudest
+frustration of the event. All players were told was that it would appear in "desert-like
 areas," which turned out to be far more restrictive than most expected...
 
-[2-3 more paragraphs covering the community investigation, Niantic's response, 
+[2-3 more paragraphs covering the community investigation, Niantic's response,
 and practical advice]
 
 Sources: Dexerto | The Gamer | One More Catch
