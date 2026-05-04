@@ -158,13 +158,17 @@ PvPoke and Pokebattler are authoritative. Articles are secondary. If they disagr
 
 ## When to Fall Back to Articles
 
-Only use articles for:
+**Default:** PvPoke JSON and Pokebattler JSON are the authoritative source for PvP rankings and raid counters. Always try them first.
+
+**Fallback to articles if:**
+- The JSON endpoint returns an error (4xx, 5xx)
+- The Pokémon isn't found in the JSON (e.g., a brand-new species not yet in PvPoke's data)
+- The data appears stale or doesn't reflect a recent rebalance
+- You need context the data can't provide (community sentiment, narrative around a meta shift)
+
+When falling back to articles, flag it: note `[fallback: source]` in the research brief so Joel can verify.
+
+**Always use articles for:**
 - **Event details** (LeekDuck, official blog) - times, dates, featured Pokémon, bonuses
 - **Recent meta shifts** (Reddit, content creators) for the Trending Topic section
 - **Community sentiment** that PvPoke/Pokebattler can't capture (which Pokémon "feels" overpowered, etc.)
-
-NEVER use articles for:
-- Specific PvP rankings (use PvPoke)
-- Specific raid counter recommendations (use Pokebattler)
-- Tier scores or stat products (use PvPoke)
-- Counter movesets (use Pokebattler)
