@@ -375,7 +375,8 @@ Triggers during Raid Hour, Raid Day, and any event with bonus raids.
 - Prioritize remote passes for Legendaries leaving soon over ones staying another week
 - Remote raids deal slightly less damage than in-person, so groups need to be slightly larger
 - **Shadow Raids can now be done remotely.** They are no longer in-person only. Remote Raid Passes work for Shadow Raids.
-- **The monthly featured Legendary Shadow Pokémon raids EVERY DAY during its window**, not just on weekends. Other Shadow Raids (1-Star, 3-Star) follow the standard weekend-only schedule unless an event changes it.
+- **The monthly featured Legendary Shadow Pokémon raids EVERY DAY during its window**, not just on weekends.
+- **1-Star and 3-Star Shadow Raids can also appear during the week**, not just weekends. Always check the current rotation for active Shadow Raids on any tier.
 
 - Example: "Tapu Koko leaves raids Tuesday. If you still need a shiny or high-IV catch, use Poke Genie to join remote raids this weekend before the rotation."
 

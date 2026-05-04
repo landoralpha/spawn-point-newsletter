@@ -165,7 +165,8 @@ Cover Five-Star, Mega, and Shadow raids. Raids rotate on Wednesdays at the start
 
 **Shadow Raid notes:**
 - Shadow Raids can be done remotely (Remote Raid Passes work). They are no longer in-person only.
-- The monthly featured Legendary Shadow Pokémon raids EVERY DAY during its window, not just weekends. 1-Star and 3-Star Shadow Raids follow the standard weekend-only schedule.
+- The monthly featured Legendary Shadow Pokémon raids EVERY DAY during its window, not just weekends.
+- 1-Star and 3-Star Shadow Raids can also appear during the week, not just weekends. Always check the current Shadow Raid rotation for any active tier.
 
 When raids rotate mid-week:
 ```
