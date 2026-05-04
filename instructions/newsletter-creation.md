@@ -97,6 +97,37 @@ Before finalizing any section, check the prose against the anti-slop reference f
 
 ---
 
+## Event Images
+
+Every section in the newsletter should include an image when available. Images come from external sources via URL embed (no download required).
+
+**Image source priority (use the first available):**
+1. **LeekDuck event page** - Each event has a banner image. URL pattern: `https://leekduck.com/assets/img/events/[event-slug]/[image].jpg` (visit the event page and grab the hero/banner image URL)
+2. **Official Pokémon GO blog** - Hero image at top of each blog post
+3. **Pokémon GO Hub** - Article hero images
+4. **db.pokemongohub.net Pokémon images** - For specific Pokémon, format: `https://db.pokemongohub.net/img/pokemon/[number].png` (e.g., 25 for Pikachu)
+
+**Image rules:**
+- One image per major section (Events, each Raid Boss subsection, Max Monday, Trending Topic)
+- Place image at the TOP of its section
+- Use the markdown format: `![Alt text describing the image](URL)`
+- Alt text should briefly describe the image content for accessibility
+- If no image is available from any source, omit the image rather than using a placeholder
+- Use the original-resolution image URL when possible (not thumbnails)
+
+**Sections that should have images:**
+- Each Event in Section 5
+- Each new raid boss in Section 6
+- The featured Dynamax Pokémon in Section 8 (Max Monday)
+- The Trending Topic in Section 10 (if a relevant image exists)
+
+**Sections that do NOT need images:**
+- Title/Subtitle/Opening
+- Week at a Glance
+- GO Battle League (unless a specific featured cup has imagery)
+- Daily Discoveries
+- Don't Miss
+
 ## Newsletter Structure
 
 ### 1. Title and Date Range
