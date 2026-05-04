@@ -2,6 +2,33 @@
 
 When citing PvP rankings or raid counter info, ALWAYS pull from PvPoke and Pokebattler directly. Do NOT lean on outdated articles. Articles often lag the current meta by months.
 
+## CRITICAL: PvP Cup Bans Are NOT in PvPoke JSON
+
+**PvPoke's cup-specific JSON includes Pokémon that are officially banned from that cup.** PvPoke ranks them by theoretical performance regardless of ban status.
+
+**Example (verified May 2026):** Jungle Cup officially bans Galarian Stunfisk and Gligar (per Niantic's announcement). But PvPoke's `jungle/overall/rankings-1500.json` lists Galarian Stunfisk at rank 6 (score 93) and Gligar at rank 31 (score 88.8). If the agent cites PvPoke without checking bans, it will recommend Pokémon that aren't legal for the cup.
+
+### Required workflow for cup-specific PvP
+
+1. **Fetch the official ban list FIRST** from one of these sources:
+   - Official Pokémon GO Twitter/X account (`@PokemonGoApp`) when the cup is announced
+   - LeekDuck event page for the cup
+   - pokemongo.com/news for the season/cup announcement
+   - Pokémon GO Hub "Nifty or Thrifty" meta analysis (`pokemongohub.net/post/pvp/nifty-or-thrifty-...`) - usually states the ban list explicitly
+2. **Fetch PvPoke JSON** for the cup
+3. **Filter the rankings**: skip any entry whose `speciesId` matches a banned species (account for Shadow variants too — if Gligar is banned, Shadow Gligar is also banned)
+4. **Cite from the filtered list**: "Piloswine is the cup's top legal pick at #1 (PvPoke 96.4)..."
+
+### Common Jungle Cup bans
+- Galarian Stunfisk
+- Gligar (and by extension Shadow Gligar)
+
+### Cup ban patterns
+Cup bans typically target Pokémon that are oppressive in the format:
+- Open formats (`all`): no cup bans, only the standard "no Mythicals/Legendaries above CP cap" rules baked into the league
+- Themed cups (Jungle, Retro, Fantasy, Kingdom, Holiday): often have 1-3 banned Pokémon
+- Always verify against the current cup announcement — bans can change between iterations of the same cup name
+
 ## PvPoke (PvP Rankings)
 
 ### Direct JSON endpoints (preferred)
@@ -127,13 +154,17 @@ For Max Battle context, use this multi-role split:
 ### When writing PvP meta tips
 
 1. Identify which league(s) and cup(s) are active for the week
-2. Fetch the relevant PvPoke JSON
-3. Cite specific rank, score, and recommended moveset for the featured Pokémon
-4. Reference matchups and counters from the JSON, not from articles
+2. **For themed cups (Jungle, Retro, etc.): fetch the official ban list FIRST** from Niantic's announcement, LeekDuck, or Pokémon GO Hub's Nifty or Thrifty article
+3. Fetch the relevant PvPoke JSON
+4. **Filter rankings against the ban list** — PvPoke includes banned Pokémon
+5. Cite specific rank, score, and recommended moveset for the featured Pokémon (from the filtered list)
+6. Reference matchups and counters from the JSON, not from articles
 
 Example tip phrasing:
 - "Lechonk's evolved form Oinkologne sits at #14 in Great League with a Mud Slap / Body Slam / Play Rough moveset (PvPoke score: 87)."
+- "In Jungle Cup (G-Stunfisk and Gligar banned), Piloswine is the runaway #1 pick (PvPoke 96.4) with Powder Snow / Icicle Spear / Stone Edge."
 - NOT: "Lechonk is a top Great League pick this season."
+- NOT: Citing G-Stunfisk as a top Jungle Cup pick when it's banned.
 
 ### When writing raid counter tips
 
