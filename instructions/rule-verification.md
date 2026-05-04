@@ -167,6 +167,28 @@ At the top of the research brief, flag any rule changes detected:
 
 This lets Joel update the repo's reference files if a real change occurred.
 
+## Niantic vs Scopely — Who to Credit
+
+**Scopely officially acquired Niantic's games division on May 29, 2025** (announced March 12, 2025). The deal includes Pokémon GO, Pikmin Bloom, Monster Hunter Now, Campfire, and Wayfarer. Roughly 400 Niantic gamemakers joined Scopely. Niantic Spatial Inc. continues separately as a geospatial AI company (and still operates Ingress Prime and Peridot).
+
+### Convention for the newsletter
+
+| Context | Use |
+|---|---|
+| Corporate/business announcements (acquisitions, financials, future event releases) | **Scopely** |
+| Game development decisions, design choices, in-game events | **Niantic** (the game team retained leadership and branding) |
+| Direct quotes from press releases or PR | Match the source |
+| When in doubt | **Niantic** — community convention still defaults here for game-related coverage |
+
+### Examples
+- ✓ "Niantic announced a new Community Day move for Lechonk."
+- ✓ "Scopely's first-quarter Pokémon GO revenue figures..."
+- ✓ "Niantic hasn't announced a Shiny Volcanion event yet" (game decision)
+- ✗ "Scopely hasn't announced..." reads odd in game-development context even though technically true
+
+### Verification step
+The community still largely uses "Niantic" in game-related coverage. Check current articles before defaulting to Scopely — if Pokémon GO Hub, LeekDuck, and content creators are saying "Niantic," the newsletter should match that convention to feel native to readers.
+
 ## Anti-Hallucination Reminders
 
 - **Never paraphrase a "rule" from training data without verification.** Pokémon GO rules change frequently and your training data is months old.
