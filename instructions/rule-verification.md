@@ -189,6 +189,38 @@ This lets Joel update the repo's reference files if a real change occurred.
 ### Verification step
 The community still largely uses "Niantic" in game-related coverage. Check current articles before defaulting to Scopely — if Pokémon GO Hub, LeekDuck, and content creators are saying "Niantic," the newsletter should match that convention to feel native to readers.
 
+## Past-Iteration Inference Is Not Verification
+
+**The single most common failure mode in newsletter drafting:** treating last year's rules as this year's rules.
+
+When a recurring event (Jungle Cup, Retro Cup, Holiday Cup, Community Day Classic, etc.) returns, the agent's training data and past articles often describe a previous iteration. **This is not the same as the current iteration.** Niantic adjusts bans, eligibility, schedules, and bonuses between runs of the same-named event.
+
+### The rule
+
+If a claim is based on a past iteration of a recurring event:
+1. Treat it as `[UNVERIFIED]` until confirmed against THIS iteration's primary source
+2. Default to **omission** rather than assertion if the current source can't be located
+3. NEVER infer "it must still be the same" — it usually isn't, and when it is, you can verify in seconds
+
+### Examples of what NOT to do
+
+❌ "Galarian Stunfisk is banned from Jungle Cup" (based on October 2025 articles, not verified for May 2026)
+❌ "GO Battle Thursday gives 4x Stardust" (based on a past season; check the current season)
+❌ "Community Day move evolution window is 5 hours" (verify per event)
+❌ "Mystery Box cooldown is reduced this week" (a past event reduced it; check current)
+
+### Examples of what TO do
+
+✓ Fetch the current iteration's official announcement, blog post, or LeekDuck event page
+✓ If no source confirms, write around the claim or omit it
+✓ Flag in research brief: `[UNVERIFIED: claim about X — needs source for current iteration]`
+
+## This Policy Applies to the Verifier Too
+
+When reviewing or correcting the agent's work, the same rules apply. Don't assert facts based on training data, past iterations, or community knowledge without primary-source verification. If you can't cite a specific URL for a claim, you don't have grounds to assert it as fact.
+
+This is especially important during back-and-forth corrections: the verifier might "fix" something to a wrong value if working from stale data.
+
 ## Anti-Hallucination Reminders
 
 - **Never paraphrase a "rule" from training data without verification.** Pokémon GO rules change frequently and your training data is months old.
