@@ -119,6 +119,94 @@ Include audit results in the Step 7 email to Joel:
 - Any `[UNVERIFIED]` flags that remain in the draft (so he can resolve manually)
 - Any `[STALE REFERENCE]` flags pointing to repo files that need updating
 
+## Section Header Audit (CRITICAL — high-impact, easy to miss)
+
+After writing each section, verify the **section header** matches the **section body**. Section-by-section writing makes it easy to leave a previous newsletter's header in place when reusing structure. Examples of this failure:
+
+- Header says "Shadow Entei Raid Day" but body is about Lechonk Community Day
+- Header says "Max Monday featuring Dynamax Shuckle" but body and image are Cottonee
+- "Rotating in Wednesday April 29" carried from previous newsletter when actual rotation is May 6
+
+### How to check
+1. Read each section header out loud
+2. Confirm the Pokémon/event named in the header matches the body content
+3. Confirm any dates in the header match the actual newsletter week
+
+Common failure points:
+- Weekend Event header (the featured event name)
+- Max Monday header (the featured Dynamax Pokémon)
+- Raid Bosses subsection rotation date headers (the "Rotating in [Day, Date]" line)
+- Trending Topic header (the topic name)
+
+This is a top-priority check because a wrong header undermines reader trust immediately and is highly visible in tables of contents and previews.
+
+## Required Sections Audit
+
+Before publishing, verify every required section from `newsletter-creation.md` is present:
+
+1. Title + Subtitle
+2. Opening Paragraph
+3. Week at a Glance
+4. Events (Section 5 — for special/limited-time events; can be omitted if no qualifying events)
+5. Raid Bosses (Section 6)
+6. GO Battle League (Section 7)
+7. Max Monday (Section 8)
+8. Daily Discoveries (Section 9)
+9. Trending Topic (Section 10)
+10. **Don't Miss (Section 11)** — exactly 3 callouts. Often forgotten.
+11. Sign-off
+
+If a section is intentionally omitted (e.g., no Events for a slow week), note it in the research brief so it's a deliberate choice.
+
+## Move Name Formatting Rules
+
+Pokémon GO move names are NEVER hyphenated, even when they're two words:
+- ✓ "Mud Slap" — ✗ "Mud-Slap"
+- ✓ "Power Gem" — ✗ "Power-Gem"
+- ✓ "Body Slam" — ✗ "Body-Slam"
+- ✓ "Stone Edge" — ✗ "Stone-Edge"
+- ✓ "Hydro Pump" — ✗ "Hydro-Pump"
+
+Search the draft for hyphenated move names and de-hyphenate.
+
+## Style and Grammar Polish
+
+These are easy to fix and significantly raise the perceived quality of the newsletter:
+
+### Date formatting
+- Use commas after weekday names: "Saturday, May 9" not "Saturday May 9"
+- Use en-dash for date ranges: "May 4–May 10" not "May 4-May 10" (en-dash is `–`, not regular hyphen)
+- Times include AM/PM on both ends: "6:00 PM to 7:00 PM" not "6:00 to 7:00 PM"
+
+### Time formatting consistency
+Pick one and use throughout:
+- All capitals: "6:00 AM to 9:00 PM"
+- Lowercase with periods: "6:00 a.m. to 9:00 p.m."
+Don't mix within the same newsletter.
+
+### Fractions
+Pick one and use throughout:
+- Symbol form: "¼ Egg Hatch Distance"
+- Numeric form: "1/4 Egg Hatch Distance"
+Recommend symbol form for cleaner display.
+
+### Quotation marks
+Curly vs straight should be consistent throughout. If using curly quotes (typographic), apply everywhere; same for straight.
+
+## Lucky Friend vs Lucky Trade Distinction
+
+**These are two distinct mechanics** and should be cited precisely:
+
+- **Lucky Friend** — a *status* between two Best Friends, rolled at ~1.1% per first-of-day Best Friend interaction. The status guarantees the next trade between you produces Lucky Pokémon.
+- **Lucky Trade** — a trade outcome that produces Lucky Pokémon. Triggered by Lucky Friend status, by trading pre-2017 catches (1.1% otherwise), or via Lucky Trinket (during specific events).
+
+The properties **1/64 hundo odds** and **half Stardust to power up** are properties of Lucky Pokémon, not properties of "Lucky Friend trades."
+
+### Phrasing
+- ✓ "A Lucky Trade (guaranteed when trading with a Lucky Friend) gives 1/64 hundo odds and halves the power-up Stardust."
+- ✓ "Trading with your Lucky Friend produces a Lucky Trade — both Pokémon become Lucky."
+- ✗ "A Lucky Friend trade gives 1/64 hundo odds" (conflates the mechanics)
+
 ## Anti-Patterns Captured From Real Newsletter Tests
 
 These specific errors have appeared in past newsletter tests and should be specifically watched for:
