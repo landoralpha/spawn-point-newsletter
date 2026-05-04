@@ -57,32 +57,42 @@ For every event, raid rotation, or feature in the newsletter, run through this c
 - Elite TMs: only use on confirmed meta picks, never speculative.
 
 ### 4. PvP Meta Relevance
-For any Pokémon featured in events, raids, or spawns, check:
+For any Pokémon featured in events, raids, or spawns, pull data from PvPoke directly. See `instructions/meta-data-sources.md` for the JSON endpoints. Do NOT rely on articles for rankings - they go stale fast.
+
+**Data source:** `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/{cup}/overall/rankings-{cap}.json`
 
 **Is it relevant in Great League (1500 CP)?**
-- Check pvpoke.com rankings. Top 50 = worth mentioning.
-- Note: many Pokémon need to be caught at low level or as a specific evolution stage for GL.
+- Pull PvPoke JSON, find by `speciesId`. Top 50 = worth mentioning.
+- Cite specific rank, score, and recommended moveset
 - IV priority for GL: 0/15/15 or similar (low attack, high defense/HP)
 
 **Is it relevant in Ultra League (2500 CP)?**
-- Fewer Pokémon qualify. Top 30 = worth mentioning.
+- Top 30 = worth mentioning
 - IV priority: 0/15/15 for most, 15/15/15 for some Legendaries that max below 2500
 
 **Is it relevant in Master League (no CP cap)?**
-- Legendaries and pseudo-Legendaries dominate.
+- Legendaries and pseudo-Legendaries dominate
 - IV priority: 15/15/15 (hundos matter here)
 - Mention if the raid boss is a ML pick
 
 **Current Cup/Special Format:**
-- If a special cup is running (Fantasy Cup, Retro Cup, etc.), check if featured Pokémon qualify
+- If a special cup is running (Fantasy Cup, Retro Cup, Jungle Cup, etc.), swap the cup slug into the JSON URL
 - Note type restrictions and which featured spawns fit
 
+**Tip phrasing rule:** Cite specifics from PvPoke. "Oinkologne sits at #14 in Great League with a Mud Slap / Body Slam / Play Rough moveset (PvPoke score: 87)" beats "Lechonk is a top GL pick."
+
 ### 5. Raid & PvE Meta Relevance
+Pull counter data from Pokebattler directly. See `instructions/meta-data-sources.md` for JSON endpoint patterns. Do NOT rely on articles for counter recommendations.
+
+**Data source:** `https://fight.pokebattler.com/raids/defenders/{POKEMON_ID}/levels/{TIER}/...`
+
 For raid bosses and event Pokémon, check:
-- **Raid attacker ranking**: Is it top 10 for its type? (db.pokemongohub.net)
-- **Shadow variant**: Is the Shadow version a top-tier attacker?
+- **Raid attacker ranking**: Pull Pokebattler JSON, sort by `total.estimator` (lower = better). Top 10 attackers from `data.attackers[0].randomMove.defenders`.
+- **Shadow variant**: Is the Shadow version a top-tier attacker? (Skip Frustration/Return movesets)
 - **Mega evolution**: Does Mega energy drop from Mega raids this week?
 - **Future relevance**: Will this Pokémon get a Community Day move or signature move later? (flag "might be worth holding candy")
+
+**Tip phrasing rule:** Cite specifics from Pokebattler. "Top counters: Shadow Salamence (Dragon Tail / Outrage), Shadow Garchomp (Dragon Tail / Outrage)" beats "Use strong Dragon-types."
 
 ### 6. Type Effectiveness for Raids/Max Battles
 For every new raid boss or Max Monday Pokémon:

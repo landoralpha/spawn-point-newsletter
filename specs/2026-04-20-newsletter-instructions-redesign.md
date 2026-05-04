@@ -49,10 +49,11 @@ Every data type maps to a primary source, URL pattern, fallback, and last resort
 |---|---|---|---|---|
 | Event calendar/schedule | LeekDuck | `leekduck.com/events/` | Official blog (`pokemongo.com/news`) | Flag inline |
 | Raid boss schedule | LeekDuck | `leekduck.com/events/` | pokemongohub.net | Flag inline |
-| Raid counters (new boss) | db.pokemongohub.net | `db.pokemongohub.net/pokemon/[pokedexnumber]/counters` | Pokebattler (see URL patterns below) | Pause-and-prompt |
-| PvP rankings — Great League | pvpoke.com | `pvpoke.com/rankings/all/1500/overall/[name]/` or `[name_forme_name]/` | db.pokemongohub.net | Pause-and-prompt |
-| PvP rankings — Ultra League | pvpoke.com | `pvpoke.com/rankings/all/2500/overall/[name]/` or `[name_forme_name]/` | db.pokemongohub.net | Pause-and-prompt |
-| PvP rankings — Master League | pvpoke.com | `pvpoke.com/rankings/all/10000/overall/[name]/` or `[name_forme_name]/` | db.pokemongohub.net | Pause-and-prompt |
+| Raid counters (new boss) | **Pokebattler JSON API** | `https://fight.pokebattler.com/raids/defenders/[POKEMON_ID]/levels/[TIER]/...` (see meta-data-sources.md) | db.pokemongohub.net | Pause-and-prompt |
+| PvP rankings — Great League | **PvPoke JSON** | `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/all/overall/rankings-1500.json` | db.pokemongohub.net | Pause-and-prompt |
+| PvP rankings — Ultra League | **PvPoke JSON** | `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/all/overall/rankings-2500.json` | db.pokemongohub.net | Pause-and-prompt |
+| PvP rankings — Master League | **PvPoke JSON** | `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/all/overall/rankings-10000.json` | db.pokemongohub.net | Pause-and-prompt |
+| PvP rankings — Specific Cup (Jungle, Retro, etc.) | **PvPoke JSON** | `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/[cup]/overall/rankings-[cap].json` | pvpoke.com web | Pause-and-prompt |
 | Max Battle tier lists — Attack | pokemongohub.net | `pokemongohub.net/post/guide/max-attackers-tier-list/` | pokebase.app (overall only) | Pause-and-prompt |
 | Max Battle tier lists — Defense | pokemongohub.net | `pokemongohub.net/post/guide/max-defenders-tier-list/` | pokebase.app (overall only) | Pause-and-prompt |
 | Max Battle tier lists — Healers | pokemongohub.net | `pokemongohub.net/post/guide/max-healers-tier-list-june-2025/` (if 404, search `site:pokemongohub.net max healers tier list` for updated URL) | pokebase.app (overall only) | Pause-and-prompt |
@@ -76,8 +77,13 @@ Counters page: append `/counters` to any of the above (e.g., `/pokemon/381-Shado
 
 ### Pokebattler URL Patterns
 
-All Pokebattler URLs share a common base and query string:
+**PREFERRED: Direct JSON API endpoint** (returns counter data as JSON):
 
+**JSON Base:** `https://fight.pokebattler.com/raids/defenders/`
+
+The JSON API at `fight.pokebattler.com` returns the same data as the website but as parseable JSON. Use this for programmatic access. The `data.attackers[0].randomMove.defenders` array contains all attackers; sort by `total.estimator` (lower = better).
+
+**Website base** (for newsletter linking, not data fetching):
 **Base:** `https://www.pokebattler.com/raids/defenders/`
 **Query string (appended after the path):** `?sort=ESTIMATOR&weatherCondition=NO_WEATHER&dodgeStrategy=DODGE_REACTION_TIME&aggregation=AVERAGE&includeLegendary=true&includeShadow=true&includeMegas=true&attackerTypes=POKEMON_TYPE_ALL&primalAssistants=&numParty=1`
 
@@ -94,11 +100,23 @@ All Pokebattler URLs share a common base and query string:
 
 ### pvpoke.com URL Patterns
 
-| League | URL Pattern |
+**PREFERRED: Direct JSON endpoints** (raw GitHub, returns ranking data as JSON):
+
+| League | JSON URL |
 |---|---|
-| Great League (1500 CP) | `pvpoke.com/rankings/all/1500/overall/[name]/` or `pvpoke.com/rankings/all/1500/overall/[name_forme_name]/` |
-| Ultra League (2500 CP) | `pvpoke.com/rankings/all/2500/overall/[name]/` or `pvpoke.com/rankings/all/2500/overall/[name_forme_name]/` |
-| Master League (10000 CP) | `pvpoke.com/rankings/all/10000/overall/[name]/` or `pvpoke.com/rankings/all/10000/overall/[name_forme_name]/` |
+| Great League (1500 CP) | `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/all/overall/rankings-1500.json` |
+| Ultra League (2500 CP) | `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/all/overall/rankings-2500.json` |
+| Master League (10000 CP) | `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/all/overall/rankings-10000.json` |
+
+For specific cups, replace `all` with the cup slug (`jungle`, `retro`, `fantasy`, `kingdom`, `holiday`, `remix`, etc.):
+- Example: `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/jungle/overall/rankings-1500.json`
+
+The JSON returns an array sorted by rank. Each entry has `speciesId`, `speciesName`, `score`, `moveset`, `matchups`, `counters`, `stats`. Index + 1 = rank.
+
+**Human-facing URL** (for newsletter linking, not data fetching):
+- `https://pvpoke.com/rankings/{cup}/{cap}/overall/` (e.g., `pvpoke.com/rankings/jungle/1500/overall/`)
+
+**See `instructions/meta-data-sources.md` for detailed parsing guidance, score-to-tier mapping, and Pokebattler patterns.**
 
 ### Raid Counter Depth
 
