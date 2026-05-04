@@ -434,6 +434,162 @@ Rocket balloons appear on a fixed schedule. The schedule changes during Takeover
 
 - Example: "Taken Over runs through Sunday. Balloons appear every 2 hours instead of 6, giving you 12 chances per day to battle Leaders and farm Shadow Pokémon. Log in at 12:00, 2:00, 4:00, 6:00, 8:00, and 10:00 (AM and PM) for each balloon."
 
+### 38. Pokédex Search Operators
+Power-user search strings for cleanup, evolves, and PvP triage. See `instructions/community-tips.md` section 1 for the full list.
+
+Key operators:
+- `&` (AND), `,` (OR), `!` (NOT)
+- IV stars: `0*` (trash), `4*` (hundo), `3*` (93%+)
+- `@special` finds untradeable move sets - run BEFORE bulk-TMing
+- `@2dragon` finds every Dragon-type charged attacker
+- `cp-1500&3*&!legacy` = high-IV GL candidates excluding Pokémon with legacy moves
+- Tag filters: `legendary`, `lucky`, `shiny`, `shadow`, `purified`, `xxs`, `xxl`
+
+Mass evolve speedup: rename evolve candidates to `a` or `1` so they cluster at the top of the list. Saves 8-12 evolves per Lucky Egg.
+
+- Example: "Before mass-TMing your Charizards, run `dragon&@special` to filter out anything with Dragon Breath you might want to keep. Legacy moves are gone forever once TM'd over."
+
+### 39. Friend, Gift & Postcard Strategy
+- 30 gifts opened/day cap. 1 sent/friend/day. No receive cap.
+- Friend list cap: 650 (raised from 450 in 2026)
+- Postcard Book holds 350. Pinned postcards from international friends are the only path to Vivillon's 18 patterns.
+- Bag capacity unlocks: L43/53/63/73 add +5 gift bag capacity each (max 40)
+
+Strategy:
+- Stockpile gifts on weekends, open 30/day during friendship XP boost events
+- Use international friends specifically for Vivillon postcard patterns
+- L31+ players (Memories in Motion 2026): in-person trades give 1 guaranteed XL Candy + 1 regular candy
+
+- Example: "Friendship Friday this week. Stockpile gifts now and open 30 Friday with a Lucky Egg active to compound the friendship XP boost."
+
+### 40. Daily Streak Bonuses
+**7-day PokéStop streak:** 2,500 XP + bonus items, day 7 guaranteed Evolution Item
+**7-day catch streak:** 2,500 XP + 3,000 Stardust, plus 500 XP / 600 Stardust on first daily catch
+
+Mechanics:
+- Multiple spins/catches in same day count as one streak day
+- Day rolls over at 12:00 AM local
+- Missing a day breaks streak
+
+Stack with Lucky Egg before day 7 catch to double the streak XP.
+
+- Example: "Hit a Lucky Egg before your 7th-day catch tomorrow. The 2,500 XP streak bonus doubles to 5,000, plus you get the 600 Stardust first-catch bonus."
+
+### 41. PokéCoin & Gym Defender Optimization
+- 1 coin per 10 minutes, 50 coin daily cap
+- 8 hours 20 minutes is the threshold for the full 50 coins
+- Multiple gyms don't stack the cap - 6 gyms ≠ 300 coins
+- Pokémon must return defeated to claim coins
+
+Strategy:
+- Place defenders in evening so they flip overnight = full 50 coins next morning
+- Coordinate timing: let one return, place in next
+- Variety bonus: different species in same gym drain motivation slower
+
+S-tier defenders (2026): Blissey, Chansey, Snorlax, Metagross. Place Blissey + Snorlax for the "fat wall" combo.
+
+- Example: "Drop a Blissey in your local gym tonight before bed. By morning you'll have flipped through 8+ hours of defending and earned the full 50 coins."
+
+### 42. AR Power-Up PokéStops
+Tier system based on AR scans contributed by the community:
+- 5 scans = Level 1
+- 10 scans = Level 2
+- 25 scans = Level 3
+
+Higher tier = more items per spin AND longer powered-up duration.
+
+AR Mapping tasks live in their own slot (don't take regular Field Research slots). Reward: typically Stardust + Rare Candy.
+
+- Example: "Your local park has 3 stops sitting at Level 1. Coordinate a community scan day to push them to Level 3 - everyone benefits from the boosted item drops."
+
+### 43. PokéStop Showcase Tactics
+Showcase scoring formula: Score = (Scaled Height × 800/Max) + (Scaled Weight × 150/Max) + (IV Sum × 50/45) + Bonus
+
+Height carries the most weight. **XXL Pokémon dominate size showcases.** A 0% XXL beats a hundo XS.
+
+- Furfrou Trim swaps: 25 candy + 10K dust per swap, 9 trims total. Each trim = separate Showcase eligibility.
+- Vivillon: 18 patterns via international postcard pins (only path).
+- One Pokémon, one active Showcase - have multiple high-IV/XXL specimens of the same species ready.
+
+Pokédex search `xxs&!shiny` finds every micro-form for size-XS Showcases.
+
+- Example: "Showcase Tuesday features XXL [species] this week. Filter your storage for `xxl&[species]` and enter your largest. Pure size beats IVs in size showcases."
+
+### 44. Memories in Motion Season Changes (2026)
+The Spring 2026 season (Mar 3 - Jun 2) introduced major structural changes. Key shifts:
+
+- **Spotlight Hours retired** - replaced by Daily Discoveries day-of-week structure
+- **Wild evolved Pokémon can be shiny** - new shiny pool to hunt for any species with shiny base form released
+- **L31+ in-person trades give 1 guaranteed XL Candy + 1 regular candy** - reframes trading from "lucky chase" to "candy guarantee"
+- **GO Battle Thursday: 4x Stardust win rewards, daily set cap raised from 5 to 10 (50 battles)** - the dust farming day
+- **Weekend events shift to Saturdays** - plan Saturday play sessions
+- **Event GO Passes replace paid tickets** - stack pass tasks on Mondays (2x GO Points)
+
+Volcanion Special Research "Pressure Rising" is free for all trainers since Mar 3, 2026. Many returning players don't know it's free.
+
+- Example: "GO Battle Thursday gives 50 battles at 4x Stardust this season. With Star Piece running, that's the highest dust-per-hour activity in the game. Schedule your grind for Thursday."
+
+### 45. Necrozma Fusion (New Mechanic)
+Fusion costs:
+- **Dusk Mane Necrozma:** 1,000 Solar Fusion Energy + 30 Necrozma Candy + 30 Cosmog Candy + Solgaleo
+- **Dawn Wings Necrozma:** 1,000 Lunar Fusion Energy + 30 Necrozma Candy + 30 Cosmog Candy + Lunala
+
+Energy from raids during fusion events. Stockpile during the event window.
+
+Important: Necrozma Dusk Mane is NOT Dynamax-capable (it never may be). Reference for Trainer Tips when Necrozma raids appear.
+
+- Example: "Solgaleo raids return this week. If you have an Ultra Necrozma in storage, save 1,000 Solar Fusion Energy from the Cosmog raids to fuse Dusk Mane Necrozma later."
+
+### 46. GO Plus+ Auto-Catch
+- Auto-Throw ball selection (2026): choose Poké Ball, Great Ball, or Ultra Ball
+- Set Ultra for high-CP zones
+- Auto-catches work during raid lobbies (background spawns)
+
+Sleep tracking integration:
+- 1,700 Stardust + 2 Buddy Hearts daily (basic)
+- 2,500 Stardust if you sleep 7+ hours
+- Automatic Best Buddy progress while you sleep
+
+- Example: "Your GO Plus+ auto-catches background spawns while you're in raid lobbies. Set ball preference to Ultra for raid hour - you'll catch the Pokémon that spawn under your foot during the 5-minute lobby waits."
+
+### 47. Special Evolution Methods (Hisuian/Paldean)
+Beyond Pokédex completion, these often lock unique strategic value behind specific evolution requirements:
+
+- **Sneasler:** Hisuian Sneasel + 100 Candy + 7 km buddy walking + DAYTIME (easy to miss)
+- **Ursaluna:** Ursaring + 100 Candy + real-world full moon (once a month only)
+- **Wyrdeer / Kleavor / Hisuian Samurott:** NOT evolvable in Pokémon GO - only via 3-star raids
+- **Annihilape:** Primeape + 100 Candy + defeat 30 Ghost/Psychic Pokémon as buddy. Rage Fist locked to Mankey CD evolutions.
+- **Gholdengo:** Roaming Gimmighoul + 999 Gimmighoul Coins (consumed). Lucky Trade Gimmighoul to skip months of grind.
+
+Track moon phase calendar for Ursaluna events. Plan walking routes for Sneasler around daytime hours.
+
+- Example: "Full moon falls on Wednesday. If you've been walking Hisuian Ursaring, evolve Wednesday night for Ursaluna. The full moon window is 3 hours either side of peak."
+
+### 48. Niantic Wayfarer & S2 Cell Logic
+- 1 Upgrade per 100 Agreements (Upgrades fast-track your nominations)
+- Agreement = your nomination decision matched the consensus
+
+S2 cell mechanics determine spawns and gyms:
+- Level 17 cells = spawn points
+- Level 14 cells = gym/PokéStop assignment
+- One Wayspot in an empty L14 cell becomes a gym; later additions don't displace it
+
+For local communities pushing for new gyms or stops, getting first nomination in an empty L14 cell is high-leverage.
+
+- Example: "Your local park has stops but no gym. Check the S2 cell map - if a stop sits alone in its L14 cell, nominating an additional Wayspot in the same cell will likely promote it to a gym."
+
+### 49. Steel Box Strategy & XL Trade Bonus (2026)
+The Memories in Motion season's L31+ in-person trade bonus is significant:
+- 1 guaranteed XL Candy on every in-person trade
+- +1 regular candy
+- Stacks with Lucky chance and trade re-roll IVs
+
+Strategy: Trade meetups for grinding XL Candy on level-50 power-up targets. 100 trades = 100 XL Candy (more than walking buddy 100 km).
+
+For Mystery Box / Meltan grinding: standard 7-day cooldown, but events reduce it. Stack openings around event windows. Shiny Meltan ~1/125 in events.
+
+- Example: "Need XL Candy for Garchomp's L50 grind? Plan an in-person Garchomp trade meetup with 5 friends. Five trades = 5 XL Candy + 5 regular Candy + IV re-roll chances. Faster than walking 5 km × 5 = 25 km of buddy walking."
+
 ## How to Apply
 
 For each newsletter section:
