@@ -94,6 +94,39 @@ Examples:
 - `https://pvpoke.com/rankings/all/1500/overall/` (GL open)
 - `https://pvpoke.com/rankings/jungle/1500/overall/` (Jungle GL)
 
+## Pokémon GO Hub Max Battle Tier Lists
+
+For Max Battle (Dynamax/Gigantamax) attacker, defender, and healer recommendations — and for verifying whether a Pokémon is even Dynamax-capable — use the Pokémon GO Hub tier lists. These are updated monthly by community contributors.
+
+### Current URLs (verify each iteration)
+
+| Role | URL Pattern | Notes |
+|---|---|---|
+| Max Attackers | `https://pokemongohub.net/post/guide/max-attackers-tier-list/` | S/A/B/C/D/E tiers; Gigantamax forms cluster at top |
+| Max Defenders | `https://pokemongohub.net/post/guide/max-defenders-tier-list/` | S through F tiers; F tier = "no 0.5s fast move" (unusable) |
+| Max Healers | `https://pokemongohub.net/post/guide/max-healers-tier-list-june-2025/` (URL versions monthly — search if 404) | S Tier is Blissey alone; A tier includes Wailord, Snorlax, Lapras, etc. |
+
+If the static URL 404s, search `site:pokemongohub.net max [attackers|defenders|healers] tier list` for the current iteration.
+
+### Tier interpretation
+
+- **Attackers:** S = Gigantamax forms with super-effective coverage. A = strong Gigantamax + top Dynamax. B-C = solid options. D = niche. E = essentially unviable.
+- **Defenders:** S-A = Steel-types with Lock-On / Metal Claw resistances. B-C = situational. D-E = poor stats. F = no 0.5s fast move (cannot generate Max Energy fast enough).
+- **Healers:** Blissey is alone at S due to massive HP. A tier = high-HP picks. B-C-D ranked by HP and longevity.
+
+### Citation rules
+
+When recommending Max Battle counters:
+1. Verify the suggested Pokémon appears in the relevant tier list (Attacker / Defender / Healer)
+2. Cite specific tier when relevant: "Gigantamax Inteleon (S Tier Attacker per Pokémon GO Hub)"
+3. **Do NOT recommend any Pokémon in F Tier as a defender** — they are mechanically incapable of the role
+4. **Skip Shadow Pokémon entirely** — they cannot Dynamax; they are not in any of these tier lists
+5. If a Pokémon is absent from all three lists, it is likely not Dynamax-eligible. Verify before recommending.
+
+### Negative claims (worth citing)
+
+For Trainer Tips that note a Pokémon is NOT a strong Max Battle pick, citing the tier lists adds credibility. Example: "Whimsicott sits in E Tier (Attacker), F Tier (Defender), D Tier (Healer) per Pokémon GO Hub — not worth investing for Max Battles, but its Whimsicott form has GL play."
+
 ## Pokebattler (Raid Counters)
 
 ### Direct JSON endpoint
