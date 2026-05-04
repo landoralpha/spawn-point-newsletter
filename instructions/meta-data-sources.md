@@ -19,15 +19,20 @@ When citing PvP rankings or raid counter info, ALWAYS pull from PvPoke and Pokeb
 3. **Filter the rankings**: skip any entry whose `speciesId` matches a banned species (account for Shadow variants too — if Gligar is banned, Shadow Gligar is also banned)
 4. **Cite from the filtered list**: "Piloswine is the cup's top legal pick at #1 (PvPoke 96.4)..."
 
-### Common Jungle Cup bans
-- Galarian Stunfisk
-- Gligar (and by extension Shadow Gligar)
+### Cup bans CHANGE between iterations
+**Do NOT cache or trust historical ban lists.** Niantic adjusts bans between iterations of the same cup name. A Pokémon banned in last year's Jungle Cup may be allowed in this year's. Always re-verify each newsletter run.
+
+**Historical reference (NOT to be trusted as current):**
+- October 2025 Jungle Cup banned Galarian Stunfisk and Gligar
+- May 2026 Jungle Cup banned Galarian Stunfisk and Gligar (per @PokemonGoApp announcement)
+
+These are examples of past iterations. The current iteration's bans MUST be verified against the current Niantic announcement before each newsletter.
 
 ### Cup ban patterns
 Cup bans typically target Pokémon that are oppressive in the format:
 - Open formats (`all`): no cup bans, only the standard "no Mythicals/Legendaries above CP cap" rules baked into the league
-- Themed cups (Jungle, Retro, Fantasy, Kingdom, Holiday): often have 1-3 banned Pokémon
-- Always verify against the current cup announcement — bans can change between iterations of the same cup name
+- Themed cups (Jungle, Retro, Fantasy, Kingdom, Holiday, Willpower, Love, etc.): often have 1-3 banned Pokémon
+- See `instructions/rule-verification.md` for the broader policy on rule changes over time
 
 ## PvPoke (PvP Rankings)
 
