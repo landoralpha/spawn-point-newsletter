@@ -32,9 +32,11 @@ This file complements `instructions/trainer-tips-framework.md` and `instructions
 - Clusters them at the top during Lucky Egg run
 - Saves ~2 seconds per evolve = 8-12 extra evolves per egg
 
-## 2. Account-Level (L41-L50)
+## 2. Account-Level (L41-L80)
 
-### Level 50 task list
+**Trainer level cap is now 80** (raised from 50 on October 15, 2025). Levels 41-80 require XP + Level-Up Research tasks. Total XP to L80: ~203,353,000.
+
+### Level 50 task list (gateway requirements)
 - 30 Platinum medals (longest grind)
 - 300 Gifts sent
 - 20 Best Friends
@@ -43,13 +45,20 @@ This file complements `instructions/trainer-tips-framework.md` and `instructions
 - 1,000 Rocket grunts defeated
 - GBL Rank 24
 
+### Levels 51-80 (added October 2025)
+- Each level requires XP + Level-Up Research tasks
+- Research is immediately unlocked at each level past 70
+- Rewards at L80 milestone: +200 Pokémon Storage, +100 Item Bag, +5 Gift Storage, +100 Postcard Pages
+
 ### Friend list capacity
-- 2026 update: Friend list cap raised from 450 to 650
+- **Current cap: 650** (raised in stages from 200 → 300 → 400 → 450 → 550 → 650 over 2024-2026)
+- Niantic help center may still show 550; the news posts and patch notes show 650
 - More slots = more daily gift opens and senders for the 999-Excellent grind
 
 ### Bag capacity unlocks
 - L43/53/63/73: +5 gift bag capacity at each milestone (max 40)
 - Plan storage purchases around level milestones
+- L80 grants additional +5 Gift Storage on top of milestones
 
 ## 3. Buddy & Best Buddy Optimization
 

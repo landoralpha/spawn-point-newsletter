@@ -189,6 +189,21 @@ This lets Joel update the repo's reference files if a real change occurred.
 ### Verification step
 The community still largely uses "Niantic" in game-related coverage. Check current articles before defaulting to Scopely — if Pokémon GO Hub, LeekDuck, and content creators are saying "Niantic," the newsletter should match that convention to feel native to readers.
 
+## Niantic Help Center Pages Are Often Stale
+
+**The Niantic help center FAQ pages are routinely 6+ months stale.** They are useful for canonical mechanics descriptions but unreliable for any value that has been changed in the last ~6 months.
+
+When a help center FAQ disagrees with an official Niantic news post (`pokemongo.com/news/...`) or a recent patch announcement, **trust the news post**.
+
+Examples of stale help center values surfaced in May 2026:
+- Help center says friend cap is 550. Actual cap is **650** (raised late 2025).
+- Help center references levels 70-80 ambiguously. Actual cap is **80** (raised Oct 15, 2025).
+- Help center for Spotlight Hour still active. Spotlight Hours **retired March 3, 2026**.
+- Help center says Mega Energy storage 9,999. Actual cap **10,000** (raised Feb 20, 2026).
+- Help center lists 8 Adventure Effects. Actual count is **9** (Eternatus Dynamax Cannon added Aug 2025).
+
+When researching Pokémon GO mechanics for the newsletter, treat the help center as a starting point, not the final word for current values. See `instructions/niantic-help-reference.md` for the full Niantic-confirmed reference with stale-value flags.
+
 ## Past-Iteration Inference Is Not Verification
 
 **The single most common failure mode in newsletter drafting:** treating last year's rules as this year's rules.
