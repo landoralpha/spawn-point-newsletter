@@ -270,7 +270,59 @@ and practical advice]
 Sources: Dexerto | The Gamer | One More Catch
 ```
 
-### 11. Don't Miss
+### 11. What's New This Month/Season (CONDITIONAL)
+
+This section appears ONLY when the newsletter's Mon-Sun window contains the start of a new calendar month, the start of a new GBL season, or both. Skip the section entirely when the window is mid-month and mid-season.
+
+**Detection rule:**
+- New month: `next_monday.month != next_sunday.month` (the 1st of a month falls in the window)
+- New season: a GBL season transition date falls in the window. Check Niantic's announcement for the upcoming season's start date and the current season's end date.
+- Both: combined section.
+
+**Three modes:**
+
+| Mode | When | Length | Bullets |
+|---|---|---|---|
+| Monthly only | New month, mid-season | 100-150 words | 4-6 |
+| Season only | New season, mid-month (rare) | 200-300 words | 5-8 |
+| Combined | New month AND new season | 200-300 words | 5-8 |
+
+**What belongs (monthly mode):**
+- Featured events for the month (Community Day pick if announced, raid storyline arc, themed events)
+- Special Research debut for the month, if any
+- Notable Legendary/Mythical debut or rotation
+- Dynamax / Gigantamax additions for the month
+- Daily Discoveries theme highlights, if announced
+
+**What belongs (season mode — adds to monthly):**
+- New season name and theme
+- Season-end date for the closing season + start date for the new one
+- GBL theme cup schedule for the season
+- Season-long bonuses (extra catch XP/Stardust, distance bonuses, etc.)
+- Move rebalances or new moves added (cite the @PokemonGoApp announcement)
+- Season-pass headline content (free track + paid Premium track highlights — don't list every reward, just the standout)
+- Special Research tied to the season's narrative
+- Mechanics changes (e.g., Daily Discoveries replacing Spotlight Hour was a season-change drop — flag major shifts like this)
+
+**Guidelines:**
+- Lead with reader value, not corporate hype. Brand voice still applies (re-read `instructions/brand-voice.md`).
+- Bullet format: short, scannable, each bullet starts with a verb or subject (not "Niantic announced...")
+- Cap the deep dive — this is a roundup, not the definitive article. Three to eight bullets max.
+- Always end with: *"Full details at [Niantic's monthly content post](URL)"* (and `[the season hub](URL)` if applicable).
+- If the announcement is light (e.g., Niantic posted a teaser without specifics), keep the section brief and acknowledge the gap: "Full month rundown comes Wednesday with the official content drop."
+
+**Position:** Between Trending Topic (#10) and Don't Miss (#12). Don't Miss handles deadline-focused callouts; this section is forward-looking. The sequence reads naturally.
+
+**Image:** A relevant hero from Niantic's monthly post (`pokemongo.com/news/[article-slug]` hero) or season hub. Skip if none available.
+
+**Sources line:** Always cite Niantic's monthly content post and the season hub when applicable. Add LeekDuck monthly recap or @PokemonGoApp announcement thread if they add specifics the official post doesn't.
+
+**Example title format:**
+- Monthly only: "May at a Glance" / "What May Brings"
+- Season only: "Memories in Motion: New Season Drops Wednesday"
+- Combined: "May Kicks Off a New Season"
+
+### 12. Don't Miss
 Three short callouts surfacing things NOT covered elsewhere in the newsletter.
 
 **What belongs:** Tools/trackers, meta picks, upcoming teasers, community stories, Reddit discoveries, fan resources
