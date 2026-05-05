@@ -2,6 +2,8 @@
 
 When citing PvP rankings or raid counter info, ALWAYS pull from PvPoke and Pokebattler directly. Do NOT lean on outdated articles. Articles often lag the current meta by months.
 
+For raid boss rotation and Pokémon base data (stats, types, movesets, form availability), the `pokemon-go-api.github.io` JSON endpoints replace HTML scraping. See the dedicated section near the bottom of this file.
+
 ## CRITICAL: PvP Cup Bans Are NOT in PvPoke JSON
 
 **PvPoke's cup-specific JSON includes Pokémon that are officially banned from that cup.** PvPoke ranks them by theoretical performance regardless of ban status.
@@ -238,6 +240,86 @@ PvPoke and Pokebattler are authoritative. Articles are secondary. If they disagr
 - PvPoke rankings update with seasons / patches. Re-fetch each newsletter run.
 - Pokebattler estimator data updates with game balance changes. Re-fetch each run.
 - Both sources are JSON, so WebFetch should work without 403s (raw GitHub for PvPoke, fight.pokebattler.com for Pokebattler).
+
+## pokemon-go-api JSON Endpoints (Community-Maintained)
+
+Two endpoints from `pokemon-go-api.github.io` provide JSON for data that previously required HTML scraping. Both are stable, free, and work reliably with WebFetch.
+
+### Raid boss rotation
+
+```
+https://pokemon-go-api.github.io/pokemon-go-api/api/raidboss.json
+```
+
+Returns the current raid lineup across all tiers (1-Star, 3-Star, 5-Star, Mega, Shadow, Gigantamax). Updates within minutes of in-game rotation changes. 5-minute cache recommended.
+
+**How to use:**
+- Authoritative for "what's currently spawning" — the agent's understanding of the active raid pool should match this source.
+- Cross-check against LeekDuck event pages for narrative context (event name, end times, special bonuses) — the JSON tells you the lineup, LeekDuck tells you the story.
+- If the trigger prompt says a raid boss is rotating in this week, verify against this JSON before drafting the section.
+
+### Pokémon pokedex (stats, types, moves, forms)
+
+```
+https://pokemon-go-api.github.io/pokemon-go-api/api/pokedex.json
+```
+
+Returns an array of every Pokémon. Each entry includes:
+- `id` (e.g., `TAPU_LELE`)
+- `dexNr` (e.g., 786)
+- `formId` (form key string)
+- `stats.attack`, `stats.defense`, `stats.stamina` (base stats)
+- `primaryType`, `secondaryType`
+- `quickMoves[]`, `cinematicMoves[]`, `eliteQuickMoves[]`, `eliteCinematicMoves[]`
+- Form data nested under: `megaEvolutions{}`, `regionForms{}`, `tempEvolutions{}` (each with own stats/moves/form key)
+
+**How to use:**
+- Verify base stats, available movesets, mega/region/temp form availability.
+- The form keys under `megaEvolutions{}` etc. become the `{FORM}` substring in the sprite URL pattern.
+- 1-hour cache recommended.
+
+### Hundo CP computation from base stats
+
+For published L20/L25/L40/L50 hundo CPs, `db.pokemongohub.net/pokemon/[number]` is still primary because the values are pre-computed.
+
+If the agent needs to verify or compute a hundo CP from base stats (e.g., hub-db is unavailable, or a brand-new Pokémon isn't yet listed), use the standard GO CP formula:
+
+```
+CP = floor((Atk * sqrt(Def) * sqrt(Sta) * cpm^2) / 10)
+```
+
+With CP multipliers (cpm):
+- L20 hundo: 0.5974
+- L25 hundo (weather-boosted L20): 0.6679
+- L40 hundo: 0.7903
+- L50 hundo (XL Candy max): 0.8403
+
+Atk/Def/Sta = `base + 15` (for hundo IVs of 15/15/15).
+
+### Pokémon sprite CDN
+
+```
+https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm{dexNr}.icon.png            # base form
+https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm{dexNr}.s.icon.png          # base form, shiny
+https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm{dexNr}.f{FORM}.icon.png    # form-specific
+https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm{dexNr}.f{FORM}.s.icon.png  # form-specific, shiny
+```
+
+**Form suffixes:** `MEGA`, `MEGA_X`, `MEGA_Y`, `PRIMAL`, `DAWN_WINGS`, `DUSK_MANE`, `ULTRA`, `ORIGIN`, `BLACK`, `WHITE`, `CROWNED_SWORD`, `CROWNED_SHIELD`, `THERIAN`, `HERO`, plus regional form keys from pokedex.json's `regionForms{}` (e.g., `ALOLA`, `GALARIAN`, `HISUIAN`, `PALDEAN`).
+
+**Why this is the canonical Pokémon image source:**
+- GitHub raw has no hotlink protection (unlike LeekDuck / pokemongohub).
+- Stable URLs (the assets repo doesn't get reorganized).
+- Form-aware out of the box — no separate URL pattern per form.
+- Free, no rate limits.
+
+**Use this CDN for Pokémon-specific sprites** (raid boss images, featured Pokémon images, counter sprites in Trainer Tips, etc.). For event banners and event hero art (Community Day banner, special event keyart), continue using LeekDuck / official blog / Pokémon GO Hub URLs.
+
+**Examples:**
+- Tapu Lele (#786): `pm786.icon.png`
+- Mega Camerupt (#323, mega): `pm323.fMEGA.icon.png`
+- Necrozma Dusk Mane (#800): `pm800.fDUSK_MANE.icon.png`
+- Shiny Lechonk (#915): `pm915.s.icon.png`
 
 ## When to Fall Back to Articles
 
