@@ -94,6 +94,20 @@ Examples:
 - `https://pvpoke.com/rankings/all/1500/overall/` (GL open)
 - `https://pvpoke.com/rankings/jungle/1500/overall/` (Jungle GL)
 
+## Adventure Effects, Mega/Primal, Dynamax References
+
+For mechanics-heavy questions about these systems, consult the dedicated reference files:
+
+- `instructions/adventure-effects-reference.md` — Adventure Effects (the 9 confirmed Charged-Attack-based outside-battle abilities)
+- `instructions/mega-evolution-reference.md` — Mega Evolution and Primal Reversion mechanics, levels, costs, auras, 2026 changes
+- `instructions/dynamax-reference.md` — Dynamax/Gigantamax mechanics, Max Particles, tier costs, G-Max roster, role composition
+
+These three references replace the older condensed coverage in framework angles 12 (Mega) and 21 (Dynamax). The framework angles point to these files for full detail.
+
+**Critical distinction repeated for emphasis:**
+- Mega/Primal Pokémon do NOT have Adventure Effects. Adventure Effects are a separate mechanic tied to Charged Attacks on a small Legendary roster.
+- The only Adventure Effect that interacts with Dynamax/Gigantamax is Eternatus's Dynamax Cannon.
+
 ## Pokémon GO Hub Max Battle Tier Lists
 
 For Max Battle (Dynamax/Gigantamax) attacker, defender, and healer recommendations — and for verifying whether a Pokémon is even Dynamax-capable — use the Pokémon GO Hub tier lists. These are updated monthly by community contributors.

@@ -1,0 +1,257 @@
+# Mega Evolution & Primal Reversion Reference
+
+**Last verified:** May 2026 (after Pokémon GO Tour: Kalos Feb 28 – March 1, 2026 changes)
+
+## Mega Evolution — Complete System
+
+### Activation Mechanics
+
+- **Mega Energy required:** Specific to each Pokémon's species. Charizard Mega Energy can power either Charizard X or Y.
+- **First Mega:** Most expensive (typically 100–400 Mega Energy depending on species tier)
+- **Subsequent Megas:** Costs reduce dramatically per individual Pokémon. After registering a species in the Mega & Primal Pokédex, you can also walk that species as buddy to earn Mega Energy.
+- **Active duration:** **8 hours** (Niantic-confirmed)
+- **One Mega/Primal active at a time per trainer** (Niantic-confirmed)
+
+### Mega Levels (4 levels total as of Feb 20, 2026)
+
+| Level | Required Mega Evolutions | Notes |
+|---|---|---|
+| Base | 1 | First Mega Evolution unlocks this |
+| High (Level 2) | 7 total (including initial) | |
+| Max (Level 3) | 30 total | |
+| **Super Max** | Reach Max + spend 5,000 Mega Energy on that individual | New Feb 20, 2026 |
+
+**Critical rule:** Only ONE Mega Evolution per individual Pokémon per day counts toward leveling up. Subsequent same-day Megas still grant catch/damage bonuses but don't progress the level. Reaching Max takes a minimum of **30 days**.
+
+### Rest Period / Cooldown by Mega Level
+
+After the 8-hour active window ends, the Pokémon enters a "rest period" before it can Mega Evolve again for free.
+
+| Mega Level | Rest Period | Source confidence |
+|---|---|---|
+| Base | ~7 days | Community-documented |
+| High (Lvl 2) | ~5 days | Community-documented |
+| Max (Lvl 3) | ~3 days | Community-documented |
+| **Super Max** | **24 hours** | Community-documented |
+
+**Key behaviors:**
+- During rest, you can pay reduced Mega Energy to skip the wait. Cost decreases linearly as the rest timer ticks down.
+- Once rest ends, Mega Evolving that individual is **free**.
+
+### Same Pokémon, Multiple Mega Forms
+
+- **Charizard, Mewtwo** (and historically X/Y variants) share **one Mega Energy pool**
+- Trainer chooses X or Y at the moment of evolution
+- Energy reduction tracks **per-form**: Mega-Evolving Charizard X reduces only future Charizard X costs; the first Charizard Y still costs full price
+
+### Active-Mega Catch Bonuses
+
+While a Pokémon is actively Mega-Evolved as your active Mega:
+
+| Bonus | Detail | Source |
+|---|---|---|
+| Catch Candy on raid bosses | +1 Candy per catch | Niantic-confirmed |
+| Catch Candy on same-type wild | +1 / +2 / +3 / +greater (Base / High / Max / Super Max) | Niantic + community-confirmed |
+| Catch XP on same-type | Increased at higher levels (community: +50 XP at High, +100 at Max) | Community datamine |
+| Candy XL chance on same-type | Base: none. High: +10%. Max: +25%. Super Max: greater. | Niantic + community |
+
+**Tip phrasing rule:** Use specific values for Candy (+1/+2/+3) since Niantic confirms the scaling. Use "increased" for XP since exact integers are community-derived.
+
+### Mega Aura in Raids (and Max Battles)
+
+While at least one Mega-Evolved Pokémon is on the battlefield in a raid:
+- Other trainers' attacks deal **1.1x damage** (+10%) for non-matching types
+- Attacks matching the Mega's type(s) deal **1.3x damage** (+30%)
+
+**Critical aura rules:**
+- Aura applies to **OTHER trainers** in the raid, not the trainer who brought the Mega
+- For the bringer to get the boost, **another trainer in the lobby must also have an active Mega/Primal**
+- **Auras DO NOT stack.** Multiple Megas in one raid = only the highest applicable boost applies per attack type.
+- Active while the Mega is alive on the battlefield. (Note: "persists after fainting" is community folklore for Primals; for Megas, the boost ends when the Mega is removed/fainted.)
+
+### Mega Energy Sources
+
+- **Mega Raids** — primary source, ~50–90 Mega Energy per win depending on completion time
+- **Super Mega Raids** (new Feb 2026) — significantly higher Mega Energy rewards
+- **Walking buddy** — only after that species' Mega is registered. **5 Mega Energy per 1 km** walked (regardless of buddy distance tier). Excited buddy halves the distance threshold.
+- **Special / Timed Research** — periodic free Mega Energy
+- **Field Research breakthroughs** during Mega-themed events
+
+**Storage cap raised to 10,000** per species on Feb 20, 2026 (from 9,999).
+
+### 2026 Mega Updates (Niantic-confirmed)
+
+#### Pokémon GO Tour: Kalos – Global (Feb 28 – March 1, 2026)
+- Introduced **Super Mega Raids** — require ≥7 trainers; Mega-Evolved Pokémon auto-deploy; bosses use shields each trainer can break once for a powered-up attack
+- Introduced **Super Max** Mega Level
+- Introduced **Link Charges** (new energy resource) and **Link Holder** (key item, non-removable). Required for entering Mega Raids including Super Mega Raids.
+  - Local: Link Charges OR Premium Battle Pass
+  - Remote: Remote Raid Pass + Link Charges
+- Debut Pokémon: Mega Victreebel, Mega Malamar, Mega Dragonite
+- Link Charge sources: weekly challenges, gifts, Campfire community meetups, in-game shop
+
+#### Pokémon GO Fest 2026: Global (July 11–12, 2026, free worldwide for the 10-year anniversary)
+- **Mega Mewtwo X and Mega Mewtwo Y** debut in Super Mega Raids
+- Special: Mega Mewtwo caught from Super Mega Raids comes pre-loaded with at least one Mega Level and can be Mega Evolved without paying initial energy
+
+### Mega Roster Size
+
+Approximately **49+ Mega forms** in game (counting Charizard X/Y, Mewtwo X/Y separately). Recent additions through May 2026: Mega Victreebel, Mega Malamar, Mega Dragonite. Mega Mewtwo X/Y arriving July 2026.
+
+### Restrictions
+
+- Cannot defend gyms
+- Cannot be used in standard GO Battle League (Great/Ultra/Master)
+- **Master League: Mega Edition** is the only ranked PvP format that allows Megas (one Mega per team, no CP cap)
+- Cannot be powered up while in Mega form
+- Trading a Pokémon that has been Mega Evolved **resets its Mega Level to zero** on the receiving end
+- Mega Evolved Pokémon cannot be traded while currently in Mega form
+
+---
+
+## Primal Reversion — Complete System
+
+### Currently Available
+
+- **Primal Groudon and Primal Kyogre only** (released Feb 18, 2023, Pokémon GO Tour: Hoenn)
+- **No other Primal forms exist in the franchise canon** — roster is hard-capped at two
+- Primal forms use **Primal Energy**, a separate resource per species (parallel to Mega Energy)
+
+### Mechanics
+
+- **Initial cost:** 400 Primal Energy for the first reversion of either Kyogre or Groudon
+- **Subsequent cost:** scales down with each reversion of that individual; matches Mega Energy reduction model
+- **Active duration:** 8 hours (matches Mega's timer)
+- **Storage cap:** 9,999 Primal Energy per species (NOT raised to 10,000 like Mega Energy)
+- **Primal Levels:** exist and progress identically to Mega Levels (once-per-day contribution, multiple tiers, rest period shortens at higher levels)
+- **Cannot be used in GO Battle League** in Primal form. Cannot defend gyms.
+- **Cannot also Mega Evolve** — Primal Reversion is mutually exclusive with Mega Evolution
+
+### Primal Energy Sources
+
+- **Primal Raids** featuring Primal Kyogre or Primal Groudon (5-star tier, periodically rotated)
+- **Special / Timed Research** during themed events
+- **NOT earned from buddy walking** (Niantic-confirmed: walking yields Mega Energy but not Primal Energy)
+
+### Active-Primal Aura in Raids
+
+| Bonus | Primal Groudon | Primal Kyogre |
+|---|---|---|
+| Boosted types (+30%) | Fire, Grass, Ground | Water, Electric, Bug |
+| All other types | +10% | +10% |
+
+**Aura rules:**
+- Boost applies to **OTHER trainers** in the raid, not the bringer
+- Does NOT stack with Mega auras or other Primal auras — only highest applicable bonus applies per attack type
+- "Aura persists after fainting" — **community folklore, NOT Niantic-confirmed**. Niantic's official text says "while a Primal-Reverted Pokémon is on the battlefield." Safer phrasing: "while the Primal is on the field."
+
+### Active-Primal Catch Bonuses
+
+- Bonus Candy and XP when catching Pokémon that share types with the Primal:
+  - Primal Kyogre: bonus on Water/Electric/Bug catches
+  - Primal Groudon: bonus on Fire/Grass/Ground catches
+- Bonus Candy/XP also applies to **any Pokémon caught from a Raid Battle** while a Primal is your active form (regardless of type)
+- Higher Primal Level = greater bonuses (parallels Mega system)
+- Candy XL chance increases at higher Primal Levels
+
+### Primal Signature Moves
+
+Both Primals, when caught from raids, can learn exclusive signature charged attacks at **130 base power** in all battle formats:
+
+- **Primal Groudon:** Precipice Blades (Ground)
+- **Primal Kyogre:** Origin Pulse (Water)
+
+---
+
+## Mega/Primal vs. Adventure Effects — Confirmed Distinction
+
+| Mechanic | What it is | Resource | Duration |
+|---|---|---|---|
+| **Mega Evolution** | Temporary form change with raid aura, catch bonuses, and modified stats | Mega Energy | 8 hours active |
+| **Primal Reversion** | Same as Mega but for Groudon/Kyogre with different aura math | Primal Energy | 8 hours active |
+| **Adventure Effects** | Out-of-battle map abilities tied to specific Charged Attacks | Stardust + Candy | 6 min – 24 hours |
+
+**Mega and Primal Pokémon do NOT have Adventure Effects.** Adventure Effects are tied to specific Charged Attacks on a small Legendary roster (Origin Formes, Fusions, Crowned Forms, Necrozma forms, Eternatus). See `instructions/adventure-effects-reference.md` for the full list.
+
+---
+
+## Strategic Notes
+
+### When to Mega Evolve
+
+- **Before catch sequences during type-matching Community Days** (Mega Tyranitar before a Larvitar CD for +1 Rock Candy)
+- **Before Raid Hours of a same-type boss** (the +30% aura helps your raid party — coordinate so multiple trainers bring Megas)
+- **Before walking long distances with same-type buddies** (Candy XL grind acceleration at High/Max/Super Max)
+- **At the start of an 8-hour window**, ideally early in the play session
+
+### Pre-Leveling Megas
+
+- Mega Levels only progress **once per day per individual Pokémon**
+- Reach Max = 30 days minimum
+- Super Max requires Max + 5,000 ME spent on that individual (additional weeks of grinding)
+- For known upcoming Community Days, start Mega-Evolving the relevant Mega weeks ahead
+- Buddy walking during off-days (5 ME/km) lets you bank energy without raid investment
+
+### Best Dual-Type Megas (for catch coverage)
+
+| Mega | Types | Best for |
+|---|---|---|
+| Mega Charizard Y | Fire/Flying | Fire and Flying CDs |
+| Mega Charizard X | Fire/Dragon | Fire/Dragon coverage |
+| Mega Salamence | Dragon/Flying | Dragon/Flying CDs |
+| Mega Garchomp | Dragon/Ground | Dragon/Ground CDs |
+| Mega Latios/Latias | Dragon/Psychic | Dragon/Psychic raids |
+| Mega Gardevoir | Psychic/Fairy | Psychic/Fairy CDs |
+| Mega Houndoom | Dark/Fire | Dark/Fire coverage |
+| Mega Tyranitar | Rock/Dark | Rock/Dark CDs |
+| Mega Manectric | Electric (single) | Premier Electric aura |
+| Mega Lucario | Fighting/Steel | Fighting/Steel coverage |
+| Primal Groudon | Ground/Fire (boosts Grass too) | Massive 3-type catch coverage |
+| Primal Kyogre | Water (boosts Electric/Bug) | Water/Electric/Bug events |
+
+### Raid Hour Mega Rotation Strategy
+
+- Coordinate with raid groups: 1–2 trainers bring same-type Megas for the +30% aura on the raid boss's counter type
+- Don't all bring the same Mega — auras don't stack, second same-type Mega is wasted utility
+- The Mega-bringer doesn't get aura unless another trainer also brings a Mega/Primal — pair up
+
+### Primal Strategy
+
+- **Primal Groudon** in raids vs anything weak to Fire/Grass/Ground (Steel, Ice, Bug, Grass, Rock raid bosses)
+- **Primal Kyogre** in raids vs anything weak to Water/Electric/Bug (Fire, Rock, Ground, Flying)
+- **Primal aura is strictly stronger than any Mega aura** for its three boosted types — always preferred when available
+- Save Primal Energy for raid weeks (Primal Raids are the only Primal Energy source besides research)
+- Bring Mega Rayquaza or top Dragon Megas alongside Primal Kyogre for combined DPS
+
+---
+
+## Source Confidence Map
+
+**Niantic-confirmed (official help center / pokemongo.com posts):**
+- 8-hour duration, one Mega/Primal active at a time, +30%/+10% raid aura math, aura applies to other trainers, no stacking, Primal types per species, Mega Levels exist with bonuses, Super Max introduced Feb 20 2026, Super Mega Raids require 7+ trainers, Mega Energy storage 10,000, Mewtwo Mega debut at GO Fest 2026 Global (free), trade resets Mega Level, restricted from standard GBL, Link Charges/Link Holder mechanics, daily once-per-day level contribution, signature attacks 130 power.
+
+**Community-derived but well-documented (GamePress, Pokémon GO Hub, Serebii, LeekDuck):**
+- Specific initial Mega Energy costs (100/200/300/400 by tier), exact rest period durations (7/5/3/1 days), exact Mega Level requirements (1/7/30 evolutions), Super Max requires 5,000 ME, +1/+2/+3 catch candy at Base/High/Max scaling, +50/+100 catch XP at High/Max, +10%/+25% Candy XL at High/Max, 5 Mega Energy per 1 km buddy walk.
+
+**Unverified / community folklore — flag carefully:**
+- "Primal aura persists after the Primal faints" — Niantic text says "while on the battlefield." Phrase as: "the aura is active while the Primal is on the field."
+- Exact Catch XP integers (+50 / +100) — datamine-based, not in official docs.
+
+---
+
+## Sources
+
+- [Niantic: Mega Evolution 2026 Update](https://pokemongo.com/news/mega-evolution-2026-update)
+- [Niantic: Mewtwo Mega Evolves and more exciting GO Fest updates](https://pokemongo.com/en/news/mega-mewtwo-gofest-2026)
+- [Niantic Help: How can I Mega Evolve my Pokémon?](https://niantic.helpshift.com/hc/en/6-pokemon-go/faq/3332-how-can-i-mega-evolve-my-pokemon/)
+- [Niantic Help: Using a Mega-Evolved Pokémon](https://niantic.helpshift.com/hc/en/6-pokemon-go/faq/3334-using-a-mega-evolved-pokemon/)
+- [Niantic Help: Increase a Pokémon's Mega Level](https://niantic.helpshift.com/hc/en/6-pokemon-go/faq/3331-how-can-i-increase-a-pokemon-s-mega-level/)
+- [Niantic Help: Primal Reversion](https://niantic.helpshift.com/hc/en/6-pokemon-go/faq/3774-primal-reversion/)
+- [Pokémon GO Hub: Updated Mega Evolution Guide](https://pokemongohub.net/post/guide/new-and-improved-complete-guide-to-the-updated-mega-evolution-system/)
+- [Pokémon GO Hub: Primal Reversion Guide](https://pokemongohub.net/post/guide/pokemon-go-primal-reversion/)
+- [LeekDuck: Mega Evolution Update / Super Mega Raids](https://leekduck.com/posts/mega-evolution-update-super-mega-raids-super-max/)
+- [LeekDuck: Pokémon GO Fest 2026 Global](https://leekduck.com/events/pokemon-go-fest-2026-global/)
+- [GamePress: Mega Evolution Mechanics](https://pogo.gamepress.gg/mega-evolution-mechanics)
+- [GamePress: Primal Reversion Meta Impact](https://pogo.gamepress.gg/primal-reversion-and-their-signature-moves-meta-impact)
+- [Serebii: Mega Evolution](https://www.serebii.net/pokemongo/megaevolution.shtml)
+- [Bulbapedia: Mega Evolution (GO)](https://bulbapedia.bulbagarden.net/wiki/Mega_Evolution_(GO))

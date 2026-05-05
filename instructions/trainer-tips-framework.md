@@ -178,14 +178,34 @@ Know the current shiny rate tiers (post-Memories in Motion flattening, March 202
 **Quick-catch technique** nearly doubles encounters per hour by skipping the catch animation. Recommend it for time-limited events like Community Day or Raid Day.
 - Example: "Community Day is 3 hours. Use quick-catch to hit 300+ encounters instead of 150. That's roughly 12 shinies at the 1/25 rate."
 
-### 12. Mega Evolution Candy Bonus
-Having the right Mega active while catching gives:
-- +1 bonus Candy for same-type catches (all Mega Levels)
-- Increased XL Candy chance at Mega Level 2+
-- +100 bonus XP per same-type catch
+### 12. Mega Evolution & Primal Reversion
 
-Mega lasts 8 hours. Time it around event windows.
-- Example: "Grass-type event? Mega Evolve Venusaur before your catching session. You earn +1 Candy on every Grass-type catch for 8 hours."
+For complete mechanics, Mega Levels (Base / High / Max / Super Max), rest periods, Mega Energy sources, raid auras, and Primal Reversion details, see `instructions/mega-evolution-reference.md`.
+
+Quick reference:
+- Mega active duration: 8 hours
+- One Mega/Primal active per trainer at a time
+- Same-type catch Candy: +1 (Base) / +2 (High) / +3 (Max) / greater (Super Max)
+- XL Candy chance on same-type catches: none (Base), +10% (High), +25% (Max)
+- Increased catch XP at higher Mega Levels
+- Mega aura in raids: +30% same-type / +10% other to OTHER trainers in lobby (auras don't stack — only highest applies)
+- Mega Levels progress only ONCE per individual per day. Reaching Max = 30+ days minimum.
+
+**Primal Reversion (Groudon and Kyogre only):**
+- Same 8-hour duration, separate Primal Energy resource
+- Primal Groudon boosts Fire/Grass/Ground at +30% (other types +10%)
+- Primal Kyogre boosts Water/Electric/Bug at +30% (other types +10%)
+- Primal Energy NOT earned from buddy walking (only Mega Energy is)
+- Primal aura is strictly stronger than Mega aura for its boosted types
+
+**2026 changes (Pokémon GO Tour: Kalos, Feb 28 – March 1, 2026):**
+- New Super Max Mega Level
+- Super Mega Raids (require ≥7 trainers)
+- Link Charges + Link Holder system
+- Mega Energy storage cap raised to 10,000 (Primal still 9,999)
+- Mega Mewtwo X/Y debut at GO Fest 2026 Global (July 11–12, 2026, free)
+
+- Example: "Grass-type event? Mega Evolve Venusaur (or Primal Groudon if you have one) before your catching session. Mega gets +1/+2/+3 Candy on Grass catches at Base/High/Max levels. Primal Groudon goes harder, boosting Fire/Grass/Ground catches with both Candy AND XL chance — best for the long-term level grind."
 
 ### 13. Candy XL Farming
 296 XL Candy needed to max a Pokémon from L40 to L50. Key sources:
@@ -260,19 +280,26 @@ Events often include Collection Challenges with deadlines and rewards (Elite Col
 - Example: "Your PvP Medicham is 2 hearts from Best Buddy. The CP boost pushes it past a key Ultra League breakpoint. Prioritize buddy activities today."
 
 ### 21. Dynamax & Max Particle Management
-- Max Particle daily soft cap: 800. Storage cap: 1,500.
-- Walking: 300 per 2km. Power Spot visits: daily bonus.
-- Battle costs: higher tiers cost more particles. Budget for big events.
-- Team roles: Attacker (Max Overgrowth/Flare/etc.), Defender (Max Guard), Healer (Max Spirit)
-- Know which Gigantamax forms are worth investing in (Rillaboom, Cinderace, Inteleon outclass Venusaur, Charizard, Blastoise)
+
+For complete mechanics, particle math, Max Move tier costs, and Gigantamax roster, see `instructions/dynamax-reference.md`.
+
+Quick reference:
+- Max Particle daily soft cap: 800 (resets 5:00 AM local). Storage cap: 1,500.
+- Walking: 300 MP per 2 km. Power Spots: 120 MP first interaction, 100 MP/spot/day after.
+- Battle costs: 250 MP (1-star), 400 MP (3-star), 800 MP (5-star, 6-star Gigantamax). Particles consumed only on victory.
+- Team roles: Attacker (typed Max Move), Defender (Max Guard), Healer (Max Spirit). Niantic-recommended 4-player split: 2/1/1 (attackers/healer/tank).
+- 17 Gigantamax species in Pokémon GO as of May 2026. G-Max moves outclass standard Max Moves; prioritize G-Max forms.
+- Eternatus Dynamax Cannon Adventure Effect can push Max Moves to Lvl 4 (above the normal cap of 3).
 
 **CRITICAL: Only Dynamax-capable Pokémon can participate in Max Battles.**
-- Not every Pokémon in the game can Dynamax. Only Pokémon that have been released as Dynamax-eligible can be used as attackers, defenders, or healers in Max Battles.
-- **Shadow Pokémon CANNOT be brought into Max Battles at all.** They cannot Dynamax, and they cannot fill any team slot (attacker, defender, or healer). Do not consider Shadow Pokémon when suggesting Max Battle teams. Period.
-- Before suggesting Max Battle counters, verify each Pokémon is actually Dynamax-capable. Check LeekDuck or Pokémon GO Hub for the current list of Dynamax-eligible species.
-- A Pokémon being strong against the featured type is NOT enough. It must also be Dynamax-capable AND non-Shadow.
+- Not every Pokémon in the game can Dynamax. Only Pokémon released as Dynamax-eligible can fill any team slot (attacker, defender, or healer).
+- **Shadow Pokémon CANNOT be brought into Max Battles at all.** They cannot Dynamax and cannot fill any team slot. Do not consider Shadow Pokémon when suggesting Max Battle teams.
+- Before suggesting Max Battle counters, verify against current Pokémon GO Hub Max Battle tier lists (Attackers, Defenders, Healers).
+- A Pokémon being strong against the featured type is NOT enough. It must be Dynamax-capable AND non-Shadow.
 
-- Example: "Gigantamax Gengar this weekend. Farm particles all week (walk + Power Spot visits) to enter 3-4 battles on event day."
+**Note on Adventure Effects:** Adventure Effects are a SEPARATE mechanic from Dynamax. They are tied to specific Charged Attacks on a small Legendary roster (Origin Formes, Fusions, Crowned Forms, Necrozma, Eternatus). Mega and Primal Pokémon do NOT have Adventure Effects. The only Adventure Effect that interacts with Dynamax is Eternatus's Dynamax Cannon. See `instructions/adventure-effects-reference.md` for the full list.
+
+- Example: "Gigantamax Gengar this weekend. Farm particles all week (walk + Power Spot visits) to enter 3-4 battles on event day. If you have Eternatus, run Dynamax Cannon (5,000 Stardust + 30 Candy) before entering to push your Max Moves to Lvl 4."
 
 ### 22. Shadow Pokémon Triage (Keep vs. Purify)
 Shadow Pokémon deal 20% more damage but take 20% more damage. Decision tree:
