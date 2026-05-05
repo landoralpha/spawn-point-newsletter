@@ -245,18 +245,31 @@ PvPoke and Pokebattler are authoritative. Articles are secondary. If they disagr
 
 Two endpoints from `pokemon-go-api.github.io` provide JSON for data that previously required HTML scraping. Both are stable, free, and work reliably with WebFetch.
 
-### Raid boss rotation
+### Raid boss rotation (CURRENT ONLY — not a schedule)
 
 ```
 https://pokemon-go-api.github.io/pokemon-go-api/api/raidboss.json
 ```
 
-Returns the current raid lineup across all tiers (1-Star, 3-Star, 5-Star, Mega, Shadow, Gigantamax). Updates within minutes of in-game rotation changes. 5-minute cache recommended.
+Returns the lineup spawning RIGHT NOW across all tiers (1-Star, 3-Star, 5-Star, Mega, Shadow, Gigantamax). Updates within minutes of in-game rotation changes. **It is a snapshot of live state, not a forward schedule. It cannot tell you what rotates in next week.**
 
-**How to use:**
-- Authoritative for "what's currently spawning" — the agent's understanding of the active raid pool should match this source.
-- Cross-check against LeekDuck event pages for narrative context (event name, end times, special bonuses) — the JSON tells you the lineup, LeekDuck tells you the story.
-- If the trigger prompt says a raid boss is rotating in this week, verify against this JSON before drafting the section.
+**The newsletter covers a future Monday-Sunday window.** When the trigger fires on Monday and the agent drafts for the following Mon-Sun, raidboss.json shows THIS week's lineup, not the newsletter's week. So treat this endpoint carefully:
+
+**Correct uses:**
+- **"Ending soon" Don't Miss callouts.** If raidboss.json shows Tornadus is currently spawning AND a Niantic announcement says Tornadus rotates out Wednesday, the agent flags Tornadus as a deadline in the Don't Miss section ("Catch your last Tornadus before Wednesday's rotation swap").
+- **Cross-validation against announcements.** If LeekDuck or Niantic announced "Lechonk raids return Saturday May 9" but raidboss.json on the trigger run day already shows Lechonk in the live rotation, that contradicts the announcement. Flag as `[ROTATION CONFLICT: ...]`.
+- **Filling gaps when announcements are vague.** If Niantic says "new Mega rotates in mid-week" without naming the species, raidboss.json a few days later (manual re-run or the next cycle) is the source of truth.
+
+**Wrong uses:**
+- Drafting next week's raid section using only this JSON. The live state on trigger-run-day is THIS week's lineup, not next week's.
+
+**Where the FUTURE rotation actually comes from:**
+- Niantic news posts (`pokemongo.com/news/...`) — the canonical source for upcoming rotation announcements
+- LeekDuck event pages and season previews
+- @PokemonGoApp Twitter/X
+- Pokémon GO Hub previews
+
+These primary sources publish the rotation schedule before it goes live. raidboss.json is the verification layer — it confirms the rotation is in fact what was announced, once it goes live.
 
 ### Pokémon pokedex (stats, types, moves, forms)
 
