@@ -82,23 +82,27 @@ This file complements `instructions/trainer-tips-framework.md` and `instructions
 
 ## 4. Friend Gift & Postcard Mechanics
 
-### Daily caps
-- 30 gifts opened per day (hard cap)
+### Daily caps (Niantic-confirmed)
+- **20 gifts opened per day** (Niantic FAQ/85; was 30 in older community sources, now confirmed 20)
+- **20 gifts in bag** (don't take inventory space)
 - 1 gift sent per friend per day
-- Receiving has no cap (good for L50's 300 Gifts Sent grind)
+- **Buddy can bring up to 10 Gifts/day** from PokéStops/Gyms
+- Receiving has no cap (good for L80's grind)
 
 ### Gift hoarding strategy
 - Stockpile gifts on weekends
 - Open 30/day during friendship-XP-boost events for compounded effect
 
 ### Postcard Book
-- Holds 350 postcards
-- Pin postcards to build region collections
+- Holds 350 postcards (expandable)
+- Pin postcards BEFORE sending the gift (cannot pin after)
 - Pinned postcards from international friends = the only path to all 18 Vivillon patterns
+- **Vivillon Collector Medal sub-tier thresholds:** 3 → 9 → 15 postcards from same region trigger Scatterbug encounters
 
-### Stickers
-- 25 cap per type, consumed on use
-- Cosmetic only, but build community
+### Stickers (Niantic-confirmed)
+- **25 cap per single sticker design** in inventory
+- Single-use, consumed when applied to a gift
+- **Sources:** Opening Gifts, PokéStop spins, Buddy presents, defeating Rocket Leaders, Special/Timed Research, Shop, GO Plus + sleep tracking sessions
 
 ## 5. Spinning, Coins, Streaks
 

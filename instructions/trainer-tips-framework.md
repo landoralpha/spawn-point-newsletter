@@ -103,8 +103,10 @@ For every new raid boss or Max Monday Pokémon:
 
 ### 7. Medal & Badge Progress
 **Type Medals** - Catching Pokémon of a specific type contributes to that type's medal:
-- Bronze: 10, Silver: 50, Gold: 200, Platinum: 2,500
-- Type medals give catch bonus for that type: Bronze +1, Silver +2, Gold +3, Platinum +4
+- Catch thresholds: Bronze: 10, Silver: 50, Gold: 200, Platinum: 2,500
+- **Catch rate multiplier (community-derived from datamining; Niantic doesn't publish exact values):** Bronze 1.1x, Silver 1.2x, Gold 1.3x, Platinum 1.4x
+- **Dual-type Pokémon:** Average of the two medal multipliers (e.g., Bronze Water + Platinum Ground on Quagsire = 1.25x)
+- The "+1/+2/+3/+4" community shorthand approximates these multiplier-based bonuses; cite "multiplier" framing for accuracy
 - If an event floods spawns of a specific type, mention the medal grind opportunity
 - Example: Steel-type event = good time to push the Steel medal, which helps catch future Steel-types
 
@@ -348,7 +350,7 @@ Circle-lock technique: hold the ball, wait for the attack animation, release dur
 Catch probability stacking:
 - Golden Razz Berry: highest catch rate multiplier
 - Excellent Curve Throw: ~2x catch rate
-- Type Medal bonus: Bronze +1, Silver +2, Gold +3, Platinum +4
+- Type Medal multiplier (community-derived): Bronze 1.1x, Silver 1.2x, Gold 1.3x, Platinum 1.4x
 - All three combined gives the best possible catch odds per ball
 
 Type medals matter. If a new Legendary raid boss arrives and you don't have a Platinum medal for its type, flag the gap.

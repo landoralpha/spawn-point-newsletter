@@ -31,7 +31,7 @@ When agent research finds an apparent conflict, default to the more recent autho
 - **Primal Raids:** Award Primal Energy
 - **Shadow Raids:** In-person ONLY, no Remote Raid Passes
 - **Elite Raids:** Egg appears 24h before boss; only **30 minutes** to challenge once hatched; in-person only
-- **EX Raids:** Special earned passes; can invite 1 Ultra/Best Friend
+- **EX Raids: DEPRECATED.** Suspended March 14, 2020 (COVID); all EX Raid Battle data removed from the game in January 2024. Niantic help center FAQs still reference EX Raid Passes — these are stale. Old EX Raid–eligible gyms appear to have been functionally replaced by Elite Raid–eligible gyms (community-implied, not officially confirmed). Do NOT reference EX Raids as an active mechanic in newsletter content. Use "Elite Raid–eligible gym" as the modern term.
 
 ### Remote Raids (faq/2487)
 - **Daily cap:** 10 remote raids per day (some events double to 20)
@@ -232,6 +232,21 @@ Quick reference (Niantic-confirmed):
 - **Expandable:** +50 per Shop upgrade
 - **Don't count toward cap:** Gifts, Stickers
 - **Max Particles cap:** 1,500 (separate from item bag)
+- **Current expanded caps (per Niantic news posts, Feb 22, 2026):** Pokémon Storage 11,650, Item Bag 11,000 (raised periodically; help center is stale)
+
+### Stickers (faq/2553)
+- **Cap: 25 of any single sticker design** in inventory
+- **Single-use** — consumed when applied to a gift
+- **Sources:** Opening Gifts, PokéStop spins, Buddy presents, defeating Rocket Leaders, Special/Timed Research, Shop, GO Plus + sleep tracking sessions
+
+### Postcards & Gifts (faq/85)
+- **Gift cap:** 20 in bag (don't take inventory space)
+- **Daily cap:** 20 Gifts opened per day
+- **Buddy gift drop:** Up to **10 Gifts/day** from PokéStops/Gyms
+- **Postcards must be pinned BEFORE sending** the gift (cannot pin after sending)
+- **Vivillon Collector Medal** (faq/2553-related): 18 patterns recognized
+  - Sub-medal thresholds per region: **3 → 9 → 15** Postcards from same region for Scatterbug encounters
+  - Pinning postcards from gifts unlocks regional Scatterbug spawns (counts twice daily)
 
 ## Friends, Gifting & Trading
 
@@ -443,12 +458,30 @@ Niantic FAQ lists 8 Pokémon (Origin Forme Dialga, Origin Forme Palkia, Black Ky
 - **Buddy walking required:** Some Pokémon (e.g., Feebas)
 - **Lure Module evolutions:** Some Pokémon evolve near specific lures
 
-## Routes (faq/4175)
+## Routes (faq/4175, faq/4178, faq/4184)
 
 - **Path types:** Niantic-created, partner-created, trainer-created
-- **Reward on completion:** Route badge with custom photo
-- **Mateo:** NPC near PokéStops/Gyms for global gift exchange
-- **Zygarde Cells:** Collectibles found along Routes
+- **Length:** 0.5 km – 20 km (recommended ≤2 km)
+- **Following Routes:** Trainer Level 7+
+- **Creating Routes:** Trainer Level 30+
+- **Start/end:** Must be PokéStops or Gyms (not event/sponsored)
+- **Path:** Must be continuous
+- **Following:** Tap "Follow" at the blue flag start point. Pause creates marker; must return to it to resume.
+- **Manual completion:** Routes don't auto-complete — manual "Complete Route" lets you collect any missed Zygarde Cells.
+- **Reward on completion:** Route Badge per Route; level up by re-completing
+- **1-time star rating:** Private feedback on the Route
+
+### Mateo (Route NPC)
+- Appears at end of your **first Route of the day only**
+- Once-daily Gift Exchange — random worldwide player
+- **Gifts NOT taken from your bag** — generated from surrounding PokéStops/Gyms
+- **Rewards:** Postcard + Poké Balls, Potions, other items
+- Mateo's exchange does NOT affect Zygarde Cell spawns
+
+### Zygarde Cells
+- Collectibles found along Routes
+- Routes don't auto-complete to give you the chance to collect missed cells
+- Zygarde evolution requires accumulated cells (community-tracked numbers)
 
 ## Party Play (faq/4310)
 
@@ -456,6 +489,83 @@ Niantic FAQ lists 8 Pokémon (Origin Forme Dialga, Origin Forme Palkia, Black Ky
 - **Requirement:** Trainer Level 21+
 - **Physical proximity required**
 - **Activities:** Various tasks, special bonuses, rewards
+
+## Weekly Challenges (faq/5256)
+
+- **Reset:** Tuesdays at 00:00 UTC
+- **Group size:** Up to 4 trainers
+- **Group invitations:** Expire after 24 hours
+- **Requirement:** Trainer Level 13+
+- **Friendship rewards:**
+  - Up to 7 friendship points per friend in group
+  - 1 Lucky Friends chance per friend, stackable with daily interaction
+  - On completion day: max 8 friendship points + 2 Lucky Friend chances per friend
+
+## Stamp Rally (faq/5041)
+
+- Region-limited rollout (not yet global)
+- Press-duration affects ink density (cosmetic)
+- Locations once stamped function as regular PokéStops afterward
+- Gifted stamps (blue border) vs. self-collected (yellow border)
+- Gifted stamps don't count for reward encounters
+
+## Niantic Wayfarer (faq/2161, faq/2162)
+
+- **Level requirement:** 35 in Pokémon GO for all Wayfarer features (nominate, edit, review)
+- Reviewing also requires completing Wayfarer onboarding beyond level requirement
+- Website: `wayfarer.nianticlabs.com`
+- Not available for child accounts
+- **Help center does NOT publish:** Agreements/Upgrades thresholds, S2 cell mechanics, voting thresholds (these are community-derived)
+
+### Pokémon GO Map / Wayspot Nominations (faq/41)
+- 8-step nomination flow (Settings → Uploads → "New PokéStop")
+- Processing takes "several weeks or months"
+- Eligible nominations may not appear in Pokémon GO specifically (may go to other Niantic games)
+
+## GO Plus / Poké Ball Plus / GO Plus + (faq/77, faq/4161, faq/4163)
+
+Three official devices: **Pokémon GO Plus**, **Poké Ball Plus**, **Pokémon GO Plus +**.
+
+- All three: Bluetooth, vibrate/light alerts, work even with phone asleep
+- Catches use **regular Poké Balls only** by default
+- **Auto-Spin:** Poké Ball Plus + GO Plus + only
+- **Auto-Throw / Auto-catch previously-encountered Pokémon:** GO Plus + only
+- **Customizable Poké Ball type selection:** GO Plus + only
+- **Quick-Reconnect Mode:** GO Plus + only
+
+### Pokémon Sleep Integration (GO Plus + only)
+- Hold main button until light flashes blue + lullaby = sleep tracking starts
+- Device must be paired but NOT actively connected to Pokémon GO
+- Hold again until multicolor flash to end
+- Red flash = session not recorded or under 90 minutes
+- **Sleep sessions must exceed 90 minutes to register**
+- Rewards must be manually claimed daily
+- Sleep data deleted from Niantic servers after 1 week
+- Can earn stickers per sleep session
+
+## Pokémon HOME Transfer Rules (faq/2787)
+
+**Cannot transfer to HOME:**
+- Spinda (all variants)
+- Favorited Pokémon
+- Buddy Pokémon
+- Pokémon defending Gyms
+- Costumed Pokémon
+- Shadow Pokémon
+- Mega-Evolved Pokémon
+- **Gigantamax Pokémon** (explicitly listed)
+- Pokémon caught with special Poké Balls (e.g., GO Safari Balls)
+- **Hyper Trained Pokémon** (faq/5103)
+- **Fused Pokémon** (Necrozma fusion forms)
+
+**Form changes on transfer:**
+- Origin Forme Giratina → Altered Forme
+- Sunshine Cherrim → Overcast
+- Castform variants → standard
+
+**Lost on transfer:** Lucky status, Purified status
+
+**One-way only:** Pokémon GO → HOME, never reverse
 
 ## Source Confidence Map
 
