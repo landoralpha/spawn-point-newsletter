@@ -326,7 +326,12 @@ https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm{dexNr}.f
 - Form-aware out of the box — no separate URL pattern per form.
 - Free, no rate limits.
 
-**Use this CDN for Pokémon-specific sprites** (raid boss images, featured Pokémon images, counter sprites in Trainer Tips, etc.). For event banners and event hero art (Community Day banner, special event keyart), continue using LeekDuck / official blog / Pokémon GO Hub URLs.
+**Use this CDN for Pokémon-specific sprites** (raid boss images, featured Pokémon images, counter sprites in Trainer Tips, etc.). For event banners and event hero art (Community Day banner, special event keyart), the priority order is:
+
+1. **Official Pokémon GO blog** (`pokemongo.com/news/[article-slug]` hero) — primary source for event-specific imagery; Niantic's official banner is canonical for the event.
+2. **LeekDuck event page banner** — use when the official blog hasn't published yet (LeekDuck often previews 1–2 days early) or when the official blog doesn't have a usable hero.
+3. **Pokémon GO Hub article hero** — third-line fallback.
+4. **Pokémon sprite from this CDN** — final fallback when no event banner exists from any source. Every newsletter section gets an image; if no banner, use the featured Pokémon's sprite.
 
 **Examples:**
 - Tapu Lele (#786): `pm786.icon.png`

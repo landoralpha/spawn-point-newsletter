@@ -102,10 +102,10 @@ Before finalizing any section, check the prose against the anti-slop reference f
 Every section in the newsletter should include an image when available. Images come from external sources via URL embed (no download required).
 
 **Image source priority (use the first available):**
-1. **LeekDuck event page** - Each event has a banner image. URL pattern: `https://leekduck.com/assets/img/events/[event-slug]/[image].jpg` (visit the event page and grab the hero/banner image URL)
-2. **Official Pokémon GO blog** - Hero image at top of each blog post
-3. **Pokémon GO Hub** - Article hero images
-4. **db.pokemongohub.net Pokémon images** - For specific Pokémon, format: `https://db.pokemongohub.net/img/pokemon/[number].png` (e.g., 25 for Pikachu)
+1. **Official Pokémon GO blog** — Hero image at top of `pokemongo.com/news/[article-slug]`. **This is the primary source for event-specific banners and hero art** — Niantic's official imagery is canonical for the event. Always check here first.
+2. **LeekDuck event page** — Banner image at `https://leekduck.com/assets/img/events/[event-slug]/[image].jpg`. Use when the official blog hasn't published yet (LeekDuck often previews events 1–2 days before Niantic's official drop) or when the official blog doesn't have a usable hero.
+3. **Pokémon GO Hub** — Article hero at `pokemongohub.net/post/[article-slug]`.
+4. **Pokémon-specific sprite (final fallback)** — The pokemon-go-api sprite CDN, form-aware: `https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm[dexNr].icon.png` (or `pm[dexNr].f[FORM].icon.png` for Mega/regional/etc.). Use this when no event banner exists from any source — every section gets an image.
 
 **Image rules:**
 - One image per major section (Events, each Raid Boss subsection, Max Monday, Trending Topic)
@@ -145,6 +145,20 @@ Spawn Point: [Creative Title]
 - Keep it 3-7 words
 - Can be playful, punny, or thematic
 
+**Subject Line A/B Options (REQUIRED):** the agent must generate **3 subject-line alternatives** at the top of the draft (above the title). Beehiiv supports A/B testing natively, and 3 options gives Joel real comparison material. Each alternative should pull from a different headline pattern (subject-led, action-led, theme-led, hook — see `instructions/brand-voice.md`).
+
+Format the alternatives as:
+```
+**Subject Line A/B Options:**
+1. [Subject-led]: e.g., "Lechonk's Big Day"
+2. [Action-led]: e.g., "Three Raids Arrive Wednesday"
+3. [Theme-led or hook]: e.g., "Will You Catch the Shiny?"
+
+**Selected for draft:** Option [1|2|3] — [reason for default pick]
+```
+
+The "Selected for draft" line tells Joel which one will appear in the title block below if he doesn't pick a different one. The agent's default pick should be the option most aligned with the week's marquee event.
+
 ### 2. Subtitle
 Write a fun, creative subtitle that expands on the title or highlights what makes this week special.
 
@@ -152,6 +166,26 @@ Write a fun, creative subtitle that expands on the title or highlights what make
 - Keep it 8-15 words
 - Can be playful, enthusiastic, or build anticipation
 - Reference specific Pokémon, events, or activities when possible
+
+### Notion Database Properties (Auto-Populate)
+
+When pushing to Notion (Step 6), populate these database properties on the newsletter page beyond Title + Status:
+
+- **Issue Number** (integer) — sequence number, auto-increments from `instructions/newsletter-archive.md` (read the highest existing issue number, add 1)
+- **Date Range** (text or date range) — e.g., "May 11 – May 17, 2026"
+- **Featured Community Day** (text) — name of the CD Pokémon, or "None" if no CD that week
+- **Trending Topic** (text) — short title of the Trending Topic section
+- **GBL Cup** (text) — active themed cup name, or "Open formats only"
+- **Mega Raid** (text) — featured Mega(s) for the week, comma-separated if multiple
+- **5-Star Raid** (text) — featured Five-Star boss(es)
+- **Shadow Raid** (text) — monthly Shadow Legendary
+- **Max Monday** (text) — featured Dynamax/Gigantamax Pokémon
+- **Subject A/B Options** (text) — the 3 subject lines, semicolon-separated
+- **Has Month/Season Transition** (checkbox) — true if Section 11 (What's New) is included
+
+If a property doesn't exist on the database yet, the Notion MCP will surface an error — note it in the email summary so Joel can add the property manually. Don't fail the whole run on missing properties.
+
+This metadata makes the newsletter database queryable: Joel can filter by Featured CD, sort by Date Range, etc.
 
 ### 3. Opening Paragraph
 Set the tone and emotional priority for the week. This is NOT a summary of every event. It answers one question: what should Trainers care about most, and why?

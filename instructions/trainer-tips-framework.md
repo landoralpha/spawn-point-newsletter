@@ -639,3 +639,30 @@ For each newsletter section:
 5. Be specific with numbers (multipliers, CP thresholds, medal counts, shiny rates)
 6. If a tip involves stacking bonuses, show the math or the multiplier chain
 7. Prioritize tips that are time-sensitive or event-exclusive over general knowledge
+
+## Angle Drift Tracking (Variety Surveillance)
+
+Variety matters. The same 4–5 angles get over-used while 30+ remain dormant. Each newsletter run, the agent should:
+
+1. **Cross-reference `instructions/newsletter-archive.md` "Trainer Tip Angles Used" fields** for the past 8 issues.
+2. **Surface underused angles** in the research brief: list 3–5 angles that haven't appeared in 8+ issues but COULD fit the upcoming week's content.
+3. **Flag heavily-reused angles** in the research brief: list angles used in 4+ of the past 8 issues. Default AWAY from these unless the week's content makes them the obvious right call.
+
+Heavily-reused (as of May 2026, per archive analysis):
+- XP/Stardust farming combos
+- Lucky Egg / Star Piece / Pinap stacking
+- Mega synergy auras
+- Raid counter recommendations
+
+Underused (rotate in when content allows):
+- Field Research stacking (multiple research tasks for the same target)
+- TM cycling (re-roll bad movesets during free-TM events)
+- Buddy Adventure hearts (efficient heart-stacking for candy/walk distance)
+- Routes / Zygarde Cells (path strategy)
+- Gym defending Stardust (50 Stardust per 10 min coin)
+- Party play multipliers (group-bonus efficiency)
+- Shadow purification math (Stardust/candy break-even calc)
+- Postcard book bonuses (gift-related XP/items)
+- Adventure Sync milestones (weekly distance rewards)
+
+This tracking is informational — the goal is variety, not strict rotation. If the week's content makes a heavily-reused angle the obvious right call, use it.

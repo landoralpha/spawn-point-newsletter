@@ -122,6 +122,22 @@ The most dangerous claims are the ones that *feel* obvious:
 
 These are the claims most likely to be wrong because they bypass verification. If a claim feels obvious, that's a flag to verify it anyway.
 
+### 11. Subject Line A/B Audit
+
+Verify the draft begins with the **Subject Line A/B Options** block per `newsletter-creation.md` Section 1. Check:
+- Exactly 3 alternatives, each from a different headline pattern (subject-led, action-led, theme-led, hook)
+- A "Selected for draft:" line naming one of the three
+- None of the three pattern-matches the banned headline list ("This Week in Pokémon GO" / "Weekly Roundup" / "Updates: [date range]")
+
+### 12. Notion Property Coverage Audit
+
+Verify the agent populated these database properties (or noted any missing in the email summary):
+- Issue Number, Date Range, Featured Community Day, Trending Topic, GBL Cup
+- Mega Raid, 5-Star Raid, Shadow Raid, Max Monday
+- Subject A/B Options, Has Month/Season Transition
+
+If any property doesn't exist on the database, log to the email summary so Joel can add it.
+
 ## When to Run This Audit
 
 Run after Step 5 (newsletter draft complete) but BEFORE Step 6 (push to Notion).
@@ -137,6 +153,12 @@ Include audit results in the Step 7 email to Joel:
 - Number of consistency issues found and resolved
 - Any `[UNVERIFIED]` flags that remain in the draft (so he can resolve manually)
 - Any `[STALE REFERENCE]` flags pointing to repo files that need updating
+- Any `[ROTATION CONFLICT]` flags from raidboss.json cross-validation
+- Any `[PENDING]` flags (e.g., monthly content post not yet published)
+- **Audit-check failure history** — which checks fired this run and what was caught (running this surfaces which audits earn their keep)
+- **Data source health** — flag any silent fallback (Pokebattler 502 → article fallback, db.pokemongohub.net 403 → computed CP, raidboss.json unavailable → ignored cross-validation)
+- **Missing Notion properties** — if the agent tried to populate a property that doesn't exist on the database
+- **Underused Trainer Tip angles surfaced in this run** — informational, helps Joel see variety drift over time
 
 ## Section Header Audit (CRITICAL — high-impact, easy to miss)
 
