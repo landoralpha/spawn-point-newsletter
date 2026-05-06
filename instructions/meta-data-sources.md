@@ -4,6 +4,50 @@ When citing PvP rankings or raid counter info, ALWAYS pull from PvPoke and Pokeb
 
 For raid boss rotation and Pokémon base data (stats, types, movesets, form availability), the `pokemon-go-api.github.io` JSON endpoints replace HTML scraping. See the dedicated section near the bottom of this file.
 
+## Fetcher Hierarchy (CRITICAL — reduces silent fallbacks)
+
+WebFetch sends a minimal request that anti-bot/hotlink-protection systems flag as automated. For sources that return 403 on WebFetch (e.g., `db.pokemongohub.net`), use this hierarchy in order:
+
+| Tier | Tool | When to use |
+|---|---|---|
+| 1 | **JSON/RSS endpoint** | Always preferred when available. PvPoke, Pokebattler, pokemon-go-api JSONs. RSS feeds for blog content (`pokemongo.com/news/feed`, `leekduck.com/rss.xml`, `pokemongohub.net/feed` — try these before scraping HTML). |
+| 2 | **Reddit `.json` URLs** | Append `.json` to ANY Reddit URL (post or thread) for clean JSON. Bypasses Reddit's HTML rendering and reads reliably. |
+| 3 | **Bash curl with browser headers** | When WebFetch returns 403 on HTML pages. The User-Agent + Referer combo is what unlocks `db.pokemongohub.net` and similar hotlink-protected sites. See exact recipe below. |
+| 4 | **WebFetch** | Default for HTML pages that aren't blocked. |
+| 5 | **WebSearch snippets** | Last resort — excerpt-only, but enough for triage when nothing else works. |
+
+### The curl recipe that bypasses 403s
+
+```bash
+curl -sL \
+  -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
+  -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+  -H "Accept-Language: en-US,en;q=0.5" \
+  -H "Referer: https://www.google.com/" \
+  "<URL>"
+```
+
+The Referer claims you arrived from Google, which most sites whitelist. The User-Agent claims a real Chrome session.
+
+**Use curl FIRST (not after WebFetch fails)** for these known-blocked domains:
+- `db.pokemongohub.net` (Pokémon database pages — CP/hundo, shiny, base stats)
+- `pokemongohub.net/post/...` (longer articles, Nifty or Thrifty)
+
+For these, attempting WebFetch wastes a round-trip; go straight to curl.
+
+### Twitter/X (no good public access)
+
+Twitter killed its public API. Nitter mirrors are unreliable. Best path:
+- `WebSearch` with `site:twitter.com @PokemonGoApp [keyword]`
+- Read the snippet, mark `[fallback: source]` if the snippet is incomplete
+- Don't try to fetch the page directly; it will fail or return JS-only content
+
+### Flagging fallbacks
+
+When the agent uses tier 3, 4, or 5 (anything below the JSON/RSS tier), flag the citation in the research brief / Notion entry as `[fallback: <tier>]`. This surfaces silent-fallback patterns in the email summary so weekly drift is visible.
+
+
+
 ## CRITICAL: PvP Cup Bans Are NOT in PvPoke JSON
 
 **PvPoke's cup-specific JSON includes Pokémon that are officially banned from that cup.** PvPoke ranks them by theoretical performance regardless of ban status.
