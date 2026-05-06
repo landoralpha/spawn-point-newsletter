@@ -171,6 +171,35 @@ These work but get tired fast — use them once per issue at most:
 - "It's that time again..."
 - Em dashes (use periods, commas, parentheses)
 
+## Don't Mention Widely-Known Defaults
+
+The Everyday Trainer has been playing for years and reads multiple Pokémon GO content sources. Stating widely-known defaults makes the writing feel AI-generated — it pads the word count without informing.
+
+**Do NOT include in newsletter copy:**
+- "Remote Raid Passes work" / "can be done remotely" / "available remotely" — that's the default for raids. Only mention remote eligibility when something is **in-person only** (6-Star Gigantamax, ticketed Raid Day events).
+- "Shadow [boss] raids are available every day, not just weekends" — readers know the monthly Shadow Legendary spawns daily during its window.
+- "Don't forget your Remote Raid Pass" / "Bring friends!" — empty exhortation.
+- "Pokémon GO is a great way to get outside" — reader-condescending obvious statement.
+
+**DO mention exceptions** (where the default doesn't apply):
+- ✓ "This raid is in-person only — no Remote Passes."
+- ✓ "Premium Battle Pass required for this Raid Day."
+- ✓ "Ticketed event — separate ticket purchase needed before participating."
+
+**General test:** if a sentence could be deleted without the reader losing any information they didn't already have, delete it.
+
+## Acknowledge Gaps Honestly
+
+When recommending counters, costs, or strategies, acknowledge that not every reader has the top picks. The "knowledgeable friend" voice tells you what works AND what's realistic to actually own.
+
+- ✓ "Don't have Primal Groudon? Most trainers don't either — Garchomp, Rhyperior, and Landorus Therian all duo this comfortably."
+- ✓ "If your Honchkrow is still Shadow with Frustration, TM it before Wednesday."
+- ✓ "It's not the strongest counter, but it's what most players already have."
+- ✗ "Use Mega Rayquaza." (assumes everyone has it powered up)
+- ✗ Listing only Legendaries and Megas without budget alternatives.
+
+For raid sections specifically: every boss needs BOTH a premium counter team AND a budget counter team. See `newsletter-creation.md` Section 6.
+
 ## Authenticity Markers
 
 Spawn Point's voice signals come through in:

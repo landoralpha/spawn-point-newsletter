@@ -196,10 +196,9 @@ List each special/limited-time event in chronological order (Monday through Sund
 
 Cover Five-Star, Mega, and Shadow raids. Raids rotate on Wednesdays at the start of the day. Always check if any bosses end during the week and what rotates in.
 
-**Shadow Raid notes:**
-- Shadow Raids can be done remotely (Remote Raid Passes work). They are no longer in-person only.
-- The monthly featured Legendary Shadow Pokémon raids EVERY DAY during its window, not just weekends.
-- 1-Star and 3-Star Shadow Raids can also appear during the week, not just weekends. Always check the current Shadow Raid rotation for any active tier.
+**Shadow Raid notes (agent-facing, NOT to be repeated in newsletter copy):**
+- Shadow Raids can be done remotely. The monthly featured Legendary Shadow Pokémon raids every day during its window, not just weekends. 1-Star and 3-Star Shadow Raids can also appear during the week.
+- These are facts the agent needs to know to plan correctly. **Do NOT write them into the newsletter** — readers know. See "What NOT to Mention" below.
 
 When raids rotate mid-week:
 ```
@@ -209,12 +208,36 @@ When raids rotate mid-week:
 **Rotating In [day/time]:** [New boss] arrives! [Brief description]
 ```
 
-**REQUIRED for every featured raid boss (Five-Star, Mega, Shadow):** include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted). Players screen-check post-raid to identify hundos — these two numbers are the deliverable.
+#### REQUIRED: Hundo CPs
+
+Include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted) for every featured raid boss (Five-Star, Mega base-form catch, Shadow). Players screen-check post-raid to identify hundos — these two numbers are the deliverable.
 
 Format example (phrasing flexible per brand voice, but both values required):
-> Hundo check: **1996 CP** at L20, or **2496 CP** if weather-boosted (L25).
+> Hundo check: **1996 CP** at L20, or **2496 CP** if weather-boosted.
 
 Source: `db.pokemongohub.net/pokemon/[dexNr]` lists both pre-computed. If unavailable, compute from `pokedex.json` base stats using the GO CP formula (see `instructions/meta-data-sources.md`).
+
+#### REQUIRED: Premium AND Budget Counters Per Boss
+
+Every featured raid boss must have BOTH:
+1. **Premium counter team** — top-tier picks (Legendaries, Mythicals, Megas, Shadows, top 6 by Pokebattler estimator).
+2. **Budget counter team** — non-Legendary, non-Shadow alternatives that an Everyday Trainer is likely to actually have powered up. 3-4 options with movesets cited.
+
+Don't shortcut with "same counters as the previous boss." If two bosses share typing (e.g., Buzzwole and Pheromosa both Bug/Fighting), restate both tiers in each section — readers may scan one section and not the other.
+
+Acknowledge gaps in plain language: *"Don't have Primal Groudon? Most trainers don't either — Garchomp, Rhyperior, and Landorus Therian all duo this comfortably."* Brand voice (per `instructions/brand-voice.md`) applies — knowledgeable-friend asides, not data-dump bullet lists.
+
+#### What NOT to Mention (filler that pads without informing)
+
+These are widely understood defaults. **Do not write them into raid sections** — they take up space and read like AI-generated boilerplate:
+
+- ❌ "Remote Raid Passes work" / "can be done remotely" — that's the default. Only flag it as an EXCEPTION when the raid is **in-person only** (e.g., 6-Star Gigantamax raids, ticketed Raid Day events that override the default).
+- ❌ "Shadow [boss] raids are available every day, not just weekends" — readers know how monthly Shadow Legendary windows work.
+- ❌ "Don't forget your Remote Raid Pass" / "Bring friends!" — empty exhortation.
+
+When a default IS broken (in-person-only, ticket required, Premium Battle Pass only), call that out clearly.
+
+#### Trainer Tips
 
 Include Trainer Tips for counter strategies, PvP/PvE value, and shiny priorities.
 
