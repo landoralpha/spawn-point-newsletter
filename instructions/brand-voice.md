@@ -8,6 +8,8 @@ For full brand identity (visual, logo, color, typography), see the brand deck at
 
 **Landoralpha tagline:** Catch More. Miss Nothing.
 
+**Publish day:** Saturdays. If the publish day is ever referenced in copy (newsletter, social, email), say **Saturday** — e.g., "Spawn Point drops Saturday" / "Out this Saturday at landoralpha.beehiiv.com." The trigger fires Monday for research/writing time, but the public ship day is Saturday.
+
 **For:** Casual to mid-core Pokémon GO players, ages 18–34, who play on TikTok/YouTube/Instagram and want digestible guidance without feeling talked down to.
 
 **Versus:** Poké Daxi (entertainment-first), Dittobase (data-first), pogotrnr (community-first). Spawn Point's edge is **IRL authenticity + visual creativity + zero gatekeeping** — written by someone actually playing the game alongside the reader.

@@ -11,6 +11,8 @@ Each weekly run produces a "social pack" with four pieces:
 
 Brand voice rules from `instructions/brand-voice.md`, the no-default-filler rule, and the gap-acknowledgment principle all apply across every platform.
 
+**Publish day:** Spawn Point ships Saturday. When social copy references when readers will see the new issue, say **Saturday** — e.g., "Out this Saturday" / "New Spawn Point hits Saturday." Don't say "Monday" or any other day. The cron fires Monday for the agent's research/writing window; that's internal, not reader-facing.
+
 ## Brand voice still applies
 
 The social copy uses Spawn Point's voice (`brand-voice.md`), the no-default-filler rule (don't say "Remote Raid Passes work" — readers know), and the gap-acknowledgment principle. Stop-slop quick checks apply: cut adverbs, no passive voice, no em dashes, vary sentence rhythm, trust the reader.
