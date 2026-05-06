@@ -2,7 +2,7 @@
 
 **Date:** 2026-04-20
 **Status:** Draft
-**Author:** Joel + Claude (brainstorm session)
+**Author:** Joe + Claude (brainstorm session)
 
 ---
 
@@ -144,7 +144,7 @@ Fallback returns data? → YES → Use it
     NO
     v
 Last resort = "Flag inline"? → Flag: [UNCONFIRMED: ...]
-Last resort = "Pause-and-prompt"? → Stop drafting, prompt Joel with what's missing and where you looked
+Last resort = "Pause-and-prompt"? → Stop drafting, prompt Joe with what's missing and where you looked
 ```
 
 ### Research Steps (in order)
@@ -203,7 +203,7 @@ Before drafting the full newsletter, present:
 - **5 subtitle options** — can mix and match with any title
 - **5 opening paragraph options** — each leading with a different priority or framing
 
-Present all options together. Joel picks or requests revisions. The model drafts the remaining sections only after the title/subtitle/opening combination is selected.
+Present all options together. Joe picks or requests revisions. The model drafts the remaining sections only after the title/subtitle/opening combination is selected.
 
 ### Newsletter Structure (10 Sections)
 
@@ -404,7 +404,7 @@ Cross-reference all prose against existing project files before finalizing:
 Draft delivered with:
 - All `[UNCONFIRMED]` and `[NOT YET ANNOUNCED]` flags visible
 - Source citations at the end of each section
-- Summary at the top listing items needing Joel's attention (unconfirmed data, missing sources, pause-and-prompt items)
+- Summary at the top listing items needing Joe's attention (unconfirmed data, missing sources, pause-and-prompt items)
 
 ---
 

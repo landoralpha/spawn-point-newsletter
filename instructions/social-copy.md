@@ -171,7 +171,7 @@ Write to `output/social-pack-[YYYY-MM-DD].md` with this structure:
 [Any creative latitude flags, e.g., "Used Twitter thread because four standout items this week" or "Skipped Facebook hashtags — busier post"]
 ```
 
-This file gets pushed to Notion as a child page under the newsletter (Step 6 Phase 3). Each section becomes a Notion code block so Joel can copy-paste verbatim with formatting intact.
+This file gets pushed to Notion as a child page under the newsletter (Step 6 Phase 3). Each section becomes a Notion code block so Joe can copy-paste verbatim with formatting intact.
 
 ## Pre-Publish Audit (social-specific)
 

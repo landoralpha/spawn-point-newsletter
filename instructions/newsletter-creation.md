@@ -145,7 +145,7 @@ Spawn Point: [Creative Title]
 - Keep it 3-7 words
 - Can be playful, punny, or thematic
 
-**Subject Line A/B Options (REQUIRED):** the agent must generate **3 subject-line alternatives** at the top of the draft (above the title). Beehiiv supports A/B testing natively, and 3 options gives Joel real comparison material. Each alternative should pull from a different headline pattern (subject-led, action-led, theme-led, hook — see `instructions/brand-voice.md`).
+**Subject Line A/B Options (REQUIRED):** the agent must generate **3 subject-line alternatives** at the top of the draft (above the title). Beehiiv supports A/B testing natively, and 3 options gives Joe real comparison material. Each alternative should pull from a different headline pattern (subject-led, action-led, theme-led, hook — see `instructions/brand-voice.md`).
 
 Format the alternatives as:
 ```
@@ -157,7 +157,7 @@ Format the alternatives as:
 **Selected for draft:** Option [1|2|3] — [reason for default pick]
 ```
 
-The "Selected for draft" line tells Joel which one will appear in the title block below if he doesn't pick a different one. The agent's default pick should be the option most aligned with the week's marquee event.
+The "Selected for draft" line tells Joe which one will appear in the title block below if he doesn't pick a different one. The agent's default pick should be the option most aligned with the week's marquee event.
 
 ### 2. Subtitle
 Write a fun, creative subtitle that expands on the title or highlights what makes this week special.
@@ -183,9 +183,9 @@ When pushing to Notion (Step 6), populate these database properties on the newsl
 - **Subject A/B Options** (text) — the 3 subject lines, semicolon-separated
 - **Has Month/Season Transition** (checkbox) — true if Section 11 (What's New) is included
 
-If a property doesn't exist on the database yet, the Notion MCP will surface an error — note it in the email summary so Joel can add the property manually. Don't fail the whole run on missing properties.
+If a property doesn't exist on the database yet, the Notion MCP will surface an error — note it in the email summary so Joe can add the property manually. Don't fail the whole run on missing properties.
 
-This metadata makes the newsletter database queryable: Joel can filter by Featured CD, sort by Date Range, etc.
+This metadata makes the newsletter database queryable: Joe can filter by Featured CD, sort by Date Range, etc.
 
 ### 3. Opening Paragraph
 Set the tone and emotional priority for the week. This is NOT a summary of every event. It answers one question: what should Trainers care about most, and why?
@@ -410,7 +410,7 @@ One or two sentences. [Link text](URL)
 
 ## Source Attribution
 
-Every section of the newsletter must include source links at the end. This tells Joel who to attribute information to and lets readers verify claims.
+Every section of the newsletter must include source links at the end. This tells Joe who to attribute information to and lets readers verify claims.
 
 **Format:** After each section's content, add a "Sources:" line with linked references.
 
@@ -448,4 +448,4 @@ Sources: [LeekDuck](https://leekduck.com/events/) | [Pokémon GO Hub](https://po
 - Trainer Tips should provide NEW strategic insights, not restate event info. Use `instructions/trainer-tips-framework.md` as a checklist for every tip.
 - Trainer Tips MUST be directly about the section's content. A Max Monday tip must be about the featured Dynamax Pokémon. A Raid Boss tip must be about that raid boss. Do NOT attach generic tips to a section just because they share a day of the week.
 - NO DUPLICATION across sections
-- Suggest 5 titles, 5 subtitles, and 5 opening paragraphs for Joel to choose from
+- Suggest 5 titles, 5 subtitles, and 5 opening paragraphs for Joe to choose from

@@ -349,7 +349,7 @@ https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm{dexNr}.f
 - The data appears stale or doesn't reflect a recent rebalance
 - You need context the data can't provide (community sentiment, narrative around a meta shift)
 
-When falling back to articles, flag it: note `[fallback: source]` in the research brief so Joel can verify.
+When falling back to articles, flag it: note `[fallback: source]` in the research brief so Joe can verify.
 
 **Always use articles for:**
 - **Event details** (LeekDuck, official blog) - times, dates, featured Pokémon, bonuses

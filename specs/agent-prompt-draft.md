@@ -108,7 +108,7 @@ Write a structured research brief to `output/research-brief-[YYYY-MM-DD].md` wit
 ## Generated: [today's date]
 
 ### Attention Items
-[List any UNCONFIRMED flags, NOT YET ANNOUNCED flags, or data gaps that need Joel's attention]
+[List any UNCONFIRMED flags, NOT YET ANNOUNCED flags, or data gaps that need Joe's attention]
 
 ### Events
 [Each event with: name, dates/times, key details, featured Pokémon, bonuses, shiny info, source URLs]
@@ -132,7 +132,7 @@ Write a structured research brief to `output/research-brief-[YYYY-MM-DD].md` wit
 [Source URLs]
 
 ### Don't Miss Candidates
-[5-6 candidates for the 3 Don't Miss slots — more than needed so Joel can pick]
+[5-6 candidates for the 3 Don't Miss slots — more than needed so Joe can pick]
 [Each with: short description, source URL, which category (Tools/Resources, Meta/Strategy, Community/Upcoming)]
 
 ### Sources Used
@@ -151,5 +151,5 @@ After writing the research brief:
 - Times are always in local time as found in source data. Never convert time zones.
 - For shiny availability, say "with a chance to be shiny" not "shiny available"
 - Raid counters only for NEW rotations, not continuing bosses
-- Provide MORE Don't Miss candidates than needed (5-6) so Joel can choose the best 3
+- Provide MORE Don't Miss candidates than needed (5-6) so Joe can choose the best 3
 - Every data point must have a source URL

@@ -155,7 +155,7 @@ When this repo's reference files conflict with current sources:
 1. Trust the current authoritative source
 2. Flag in the research brief: `[STALE REFERENCE: instructions/X.md says Y but current source says Z]`
 3. Continue with the current information for the newsletter
-4. Joel can update the reference file based on the flag
+4. Joe can update the reference file based on the flag
 
 ### What to flag in the Attention Items
 
@@ -165,7 +165,7 @@ At the top of the research brief, flag any rule changes detected:
 - `[RULE CHANGE: New season started: [name], schedule changes affect Daily Discoveries section]`
 - `[POSSIBLE RULE CHANGE: shiny rate for X seems different from reference, needs verification]`
 
-This lets Joel update the repo's reference files if a real change occurred.
+This lets Joe update the repo's reference files if a real change occurred.
 
 ## Niantic vs Scopely — Who to Credit
 
