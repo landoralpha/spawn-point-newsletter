@@ -4,57 +4,38 @@ When citing PvP rankings or raid counter info, ALWAYS pull from PvPoke and Pokeb
 
 For raid boss rotation and Pokémon base data (stats, types, movesets, form availability), the `pokemon-go-api.github.io` JSON endpoints replace HTML scraping. See the dedicated section near the bottom of this file.
 
-## Fetcher Hierarchy (CRITICAL — reduces silent fallbacks)
+## Fetcher Hierarchy (CRITICAL — cloud sandbox constraints)
 
-WebFetch sends a minimal request that anti-bot/hotlink-protection systems flag as automated. For sources that return 403 on WebFetch (e.g., `db.pokemongohub.net`), use this hierarchy in order:
+The cloud agent runs in a sandbox that **blocks all outbound curl/wget to external hosts.** WebFetch and WebSearch are the only outbound network primitives available. Any "use curl with browser headers" trick that works on a local Mac does NOT work in the cloud agent — don't put curl recipes in the agent's instructions, they'll fail silently.
+
+Effective hierarchy in order:
 
 | Tier | Tool | When to use |
 |---|---|---|
-| 1 | **JSON/RSS endpoint** | Always preferred when available. PvPoke, Pokebattler, pokemon-go-api JSONs. RSS feeds for blog content (`pokemongo.com/news/feed`, `leekduck.com/rss.xml`, `pokemongohub.net/feed` — try these before scraping HTML). |
-| 2 | **Reddit `.json` URLs** | Append `.json` to ANY Reddit URL (post or thread) for clean JSON. Bypasses Reddit's HTML rendering and reads reliably. |
-| 3 | **Bash curl with browser headers** | When WebFetch returns 403 on HTML pages. The User-Agent + Referer combo is what unlocks `db.pokemongohub.net` and similar hotlink-protected sites. See exact recipe below. |
-| 4 | **WebFetch** | Default for HTML pages that aren't blocked. |
-| 5 | **WebSearch snippets** | Last resort — excerpt-only, but enough for triage when nothing else works. |
+| 1 | **JSON/RSS endpoint via WebFetch** | Always preferred when one exists. PvPoke, Pokebattler, pokemon-go-api JSONs. RSS feeds where they exist (see verified table below). WebFetch handles JSON/RSS reliably. |
+| 2 | **Reddit `.json` URLs via WebFetch** | Append `.json` to ANY Reddit URL (post or thread) for clean JSON. WebFetch handles this fine. |
+| 3 | **WebFetch** | Default for HTML pages. Confirmed working for `leekduck.com/events/`, `pokemongo.com/news`, individual event/blog posts. |
+| 4 | **WebSearch snippets** | When WebFetch returns 403 (e.g., `db.pokemongohub.net`) or the source requires JS rendering. Excerpt-only — accept that the result is incomplete, mark as `[fallback: search-snippet]`. |
+| 5 | **Compute / derive** | When no fetch path works for a specific value: derive from a different source. Hundo CPs from base stats (pokedex.json + GO CP formula) when hub-db is unreachable. |
 
-### Known site-fetch behavior (verified May 2026)
+### Verified site-fetch behavior (May 2026)
 
-| Site | WebFetch | curl with browser headers | RSS feed |
-|---|---|---|---|
-| `leekduck.com/events/` | ✅ Works | ✅ Works | ❌ No RSS exists (`/rss.xml`, `/feed/`, `/feed.xml` all 404) |
-| `pokemongo.com/news` | Test required | Test required | Test required |
-| `pokemongohub.net/feed` | Test required | Test required | Test required (likely exists) |
-| `db.pokemongohub.net/pokemon/[N]` | ❌ 403 | ✅ Works with the recipe below | N/A |
-| `pokemongohub.net/post/...` | ❌ 403 (assumed) | ✅ Should work with recipe | N/A |
+| Site | Working tier | Notes |
+|---|---|---|
+| `leekduck.com/events/` and event pages | Tier 3 (WebFetch) | NO RSS feed exists. WebFetch returns 200. |
+| `pokemongo.com/news` | Tier 1 (RSS) at `pokemongo.com/feed` (NOT `/news/feed`); Tier 3 fallback | RSS works (`application/rss+xml`). News index also fetchable directly. |
+| `pokemongohub.net/feed` | Tier 1 (RSS) — likely | Test on first encounter. Hub typically has WordPress-style feed. |
+| `pokemongohub.net/post/...` | Likely Tier 4 (WebSearch snippet) | WebFetch may 403; the cloud sandbox can't curl-around it. Settle for snippet or skip. |
+| `db.pokemongohub.net/pokemon/[N]` | Tier 5 (compute) for CPs / Tier 4 (snippet) for narrative | WebFetch 403s. Cannot curl-around in sandbox. Use pokedex.json + CP formula for hundo CPs; use WebSearch snippet for shiny availability narrative. |
+| Reddit posts/threads | Tier 2 (`.json` URL via WebFetch) | Fast, structured, no anti-bot. |
+| Twitter/X | Tier 4 (WebSearch snippet) | Public API gone. Mark Description `[from search snippet — incomplete]`. |
 
-**Implications:**
-- LeekDuck: fetch directly via WebFetch (or curl). Skip RSS attempts entirely — there is no feed.
-- db.pokemongohub.net + pokemongohub.net/post: go straight to curl with browser headers; don't try WebFetch.
+**Practical implications for the cloud agent:**
+- For `db.pokemongohub.net`: don't try WebFetch (wasted 403 round-trip). Go directly to: pokedex.json compute for CPs, WebSearch snippet for other claims.
+- For `pokemongohub.net/post/...`: try WebFetch once; if 403, fall to WebSearch snippet. Don't pretend curl will save you.
+- For `pokemongo.com/news`: prefer RSS at `pokemongo.com/feed` for low-overhead daily polling.
 
-### The curl recipe that bypasses 403s
-
-```bash
-curl -sL \
-  -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
-  -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
-  -H "Accept-Language: en-US,en;q=0.5" \
-  -H "Referer: https://www.google.com/" \
-  "<URL>"
-```
-
-The Referer claims you arrived from Google, which most sites whitelist. The User-Agent claims a real Chrome session.
-
-**Use curl FIRST (not after WebFetch fails)** for these known-blocked domains:
-- `db.pokemongohub.net` (Pokémon database pages — CP/hundo, shiny, base stats)
-- `pokemongohub.net/post/...` (longer articles, Nifty or Thrifty)
-
-For these, attempting WebFetch wastes a round-trip; go straight to curl.
-
-### Twitter/X (no good public access)
-
-Twitter killed its public API. Nitter mirrors are unreliable. Best path:
-- `WebSearch` with `site:twitter.com @PokemonGoApp [keyword]`
-- Read the snippet, mark `[fallback: source]` if the snippet is incomplete
-- Don't try to fetch the page directly; it will fail or return JS-only content
+### Flagging fallbacks
 
 ### Flagging fallbacks
 
