@@ -13,7 +13,7 @@ Effective hierarchy in order:
 | Tier | Tool | When to use |
 |---|---|---|
 | 1 | **JSON/RSS endpoint via WebFetch** | Always preferred when one exists. PvPoke, Pokebattler, pokemon-go-api JSONs. RSS feeds where they exist (see verified table below). WebFetch handles JSON/RSS reliably. |
-| 2 | **Reddit `.json` URLs via WebFetch** | Append `.json` to ANY Reddit URL (post or thread) for clean JSON. WebFetch handles this fine. |
+| 2 | **Reddit (WebSearch snippets only — direct fetch blocked)** | The cloud sandbox blocks all Reddit subdomains (`www.reddit.com`, `reddit.com`, `old.reddit.com`) at the WebFetch layer. Both `.json` and `.rss` URLs return "Claude Code is unable to fetch." Use `WebSearch site:reddit.com/r/[subreddit] [keywords]` to surface indexed snippets — that's the only path. |
 | 3 | **WebFetch** | Default for HTML pages. Confirmed working for `leekduck.com/events/`, `pokemongo.com/news`, individual event/blog posts. |
 | 4 | **WebSearch snippets** | When WebFetch returns 403 (e.g., `db.pokemongohub.net`) or the source requires JS rendering. Excerpt-only — accept that the result is incomplete, mark as `[fallback: search-snippet]`. |
 | 5 | **Compute / derive** | When no fetch path works for a specific value: derive from a different source. Hundo CPs from base stats (pokedex.json + GO CP formula) when hub-db is unreachable. |
@@ -27,7 +27,7 @@ Effective hierarchy in order:
 | `pokemongohub.net/feed/` (trailing slash) | Tier 1 (RSS) — VERIFIED working | Valid RSS 2.0, hourly update, news + datamines + guides. Use this URL exactly (with trailing slash). |
 | `pokemongohub.net/post/...` | Likely Tier 4 (WebSearch snippet) | WebFetch may 403; the cloud sandbox can't curl-around it. Settle for snippet or skip. |
 | `db.pokemongohub.net/pokemon/[N]` | Tier 5 (compute) for CPs / Tier 4 (snippet) for narrative | WebFetch 403s. Cannot curl-around in sandbox. Use pokedex.json + CP formula for hundo CPs; use WebSearch snippet for shiny availability narrative. |
-| Reddit posts/threads | Tier 2 (`.json` URL via WebFetch) | Fast, structured, no anti-bot. |
+| Reddit (any subdomain) | Tier 4 (WebSearch snippet only) | **Sandbox-blocked.** Verified May 2026: `www.reddit.com`, `reddit.com`, `old.reddit.com` all 403 at WebFetch. Both `.json` and `.rss` blocked. |
 | Twitter/X | Tier 4 (WebSearch snippet) | Public API gone. Mark Description `[from search snippet — incomplete]`. |
 
 **Practical implications for the cloud agent:**
