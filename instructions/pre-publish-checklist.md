@@ -92,7 +92,26 @@ Specifically check:
 - Mega Evolution roster
 - Friendship Friday / event-specific bonuses
 
-### 9. The "I Might Be Wrong" Check
+### 9. Hundo CP Audit (REQUIRED)
+
+For every featured catchable Pokémon — every Five-Star raid boss, Mega raid boss, Shadow raid boss, the featured Max Monday Dynamax/Gigantamax Pokémon, and any Community Day featured Pokémon — verify the section includes BOTH:
+
+1. **L20 hundo catch CP** (15/15/15 IVs, normal weather)
+2. **L25 hundo catch CP** (15/15/15 IVs, weather-boosted)
+
+For Community Day, these values are for the EVOLVED form (the form players evolve into during the bonus window).
+
+**Why this matters:** trainers screen-check catch CPs immediately after raids and Max Battles. Knowing the exact hundo CP lets them identify a perfect IV catch on sight. A newsletter without these numbers fails its most practical function.
+
+**Source:** `db.pokemongohub.net/pokemon/[dexNr]` lists pre-computed values. If hub-db is unavailable or the species isn't yet listed, compute from `pokedex.json` base stats using the GO CP formula (see `instructions/meta-data-sources.md`).
+
+**Failure modes to fix:**
+- Section names a raid boss but omits hundo CPs → ADD both L20 and L25 values.
+- Only L20 is listed → ADD L25 weather-boosted.
+- Wrong form (e.g., Tapu Lele's hundo CP cited for the Mega Banette section) → FIX to the section's actual featured Pokémon.
+- Computed value differs from hub-db → trust hub-db unless hub-db is clearly stale.
+
+### 10. The "I Might Be Wrong" Check
 
 Before publishing, scan the draft and ask: "Which claims am I most confident about that I haven't actually verified this run?"
 

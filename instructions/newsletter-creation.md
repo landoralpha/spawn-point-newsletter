@@ -186,6 +186,8 @@ List each special/limited-time event in chronological order (Monday through Sund
 - 1-2 paragraphs explaining what's happening
 - **Trainer Tip** at the end (1-2 sentences of strategic value)
 
+**Community Day specific:** when an event is a Community Day, include the **L20 hundo CP of the EVOLVED form** (15/15/15 IVs, the value players check after evolving during the bonus window) and the **L25 hundo CP of the evolved form** (weather-boosted). The featured species often gets a Showcase or wild-spawn boost; the catch-CP screen-check is what trainers want.
+
 **Include:** Special themed events, limited-time events, debut events, seasonal launches
 **Do NOT include:** Max Monday (Section 8), Daily Discoveries (Section 9), Raid Bosses (Section 6)
 
@@ -207,6 +209,13 @@ When raids rotate mid-week:
 **Rotating In [day/time]:** [New boss] arrives! [Brief description]
 ```
 
+**REQUIRED for every featured raid boss (Five-Star, Mega, Shadow):** include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted). Players screen-check post-raid to identify hundos — these two numbers are the deliverable.
+
+Format example (phrasing flexible per brand voice, but both values required):
+> Hundo check: **1996 CP** at L20, or **2496 CP** if weather-boosted (L25).
+
+Source: `db.pokemongohub.net/pokemon/[dexNr]` lists both pre-computed. If unavailable, compute from `pokedex.json` base stats using the GO CP formula (see `instructions/meta-data-sources.md`).
+
 Include Trainer Tips for counter strategies, PvP/PvE value, and shiny priorities.
 
 Do NOT include one-star or three-star raids.
@@ -218,6 +227,8 @@ Cover active leagues, cups, rotation dates, and notable meta picks.
 **Standalone section.** Do NOT duplicate in Events.
 
 Max Monday runs 6:00 AM to 9:00 PM local time. Include featured Dynamax Pokémon, whether it's a debut or continuation, type weaknesses, and a Trainer Tip.
+
+**REQUIRED for the featured Dynamax Pokémon:** include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted). Same rationale as raid bosses — players screen-check post-Max-Battle.
 
 **CRITICAL:** When suggesting attackers, defenders, or healers for Max Battles, only recommend Dynamax-capable Pokémon. Not every Pokémon in the game can Dynamax. Shadow Pokémon CANNOT be brought into Max Battles at all (they cannot Dynamax and cannot fill any team slot). Verify each recommended Pokémon is actually Dynamax-eligible AND non-Shadow before including it.
 
