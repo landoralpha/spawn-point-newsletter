@@ -222,7 +222,16 @@ List each special/limited-time event in chronological order (Monday through Sund
 
 **Community Day specific:** when an event is a Community Day, include the **L20 hundo CP of the EVOLVED form** (15/15/15 IVs, the value players check after evolving during the bonus window) and the **L25 hundo CP of the evolved form** (weather-boosted). The featured species often gets a Showcase or wild-spawn boost; the catch-CP screen-check is what trainers want.
 
-**Include:** Special themed events, limited-time events, debut events, seasonal launches
+**Special Research / Master Research / Timed Research tracking (REQUIRED when applicable):** these are multi-step quest lines that span days or weeks (Pressure Rising's Volcanion arc, season-tie-in research, monthly Special Research, GO Pass premium track, Mythical debut research). When an active research quest has a step that completes during the newsletter's window OR a step that requires an event taking place in the window, include a brief callout in the relevant Event section:
+
+- **Quest line name** + brief context (e.g., "Pressure Rising Special Research — final step")
+- **What's needed this week** (e.g., "Catch 30 Water-types — pair with Tuesday's Showcase Tuesday wild spawns")
+- **Reward** (Pokémon encounter, item bundle, exclusive move) — high level, not exhaustive
+- **Deadline if any** (Mythical research often expires when the season ends)
+
+If multiple research quests are active and intersect with the week, list them all with brief callouts. Source: Niantic's Special Research announcement post + LeekDuck's research guide page for that quest.
+
+**Include:** Special themed events, limited-time events, debut events, seasonal launches, Special/Master/Timed Research quests with steps in the window
 **Do NOT include:** Max Monday (Section 8), Daily Discoveries (Section 9), Raid Bosses (Section 6)
 
 ### 6. Raid Bosses

@@ -167,6 +167,55 @@ At the top of the research brief, flag any rule changes detected:
 
 This lets Joe update the repo's reference files if a real change occurred.
 
+## Quarterly Reference-File Verification (Drift Detection)
+
+The repo's reference files are static snapshots. When pricing, mechanics, or eligibility values change in-game, the files don't auto-update — they go stale, and the agent confidently cites old values until someone notices.
+
+**The riskiest files for drift:**
+
+| File | What drifts | Detection cadence |
+|---|---|---|
+| `instructions/cost-reference.md` | PokéCoin shop pricing, Stardust costs at L48-50, Mega Energy initial costs, Link Charge bundles | Quarterly |
+| `instructions/niantic-help-reference.md` | Friend cap, level cap, Mega Energy storage cap, feature retirements (Spotlight Hour-style) | Quarterly |
+| `instructions/shiny-odds-reference.md` | Boosted shiny rates for events, Lucky odds | Per relevant event run |
+| `instructions/dynamax-reference.md` | MP soft cap, storage cap, Gigantamax species count | Per Niantic patch |
+| `instructions/mega-evolution-reference.md` | Mega Levels, aura percentages, eligible species | Per Niantic patch |
+
+**Quarterly check (every ~13 issues, or trigger run on the first Monday of Feb / May / Aug / Nov):**
+
+The agent does a special pre-research pass:
+1. Spot-check 5 high-traffic values from `cost-reference.md` against the in-app shop or recent Niantic news. Examples: 100 PokéCoins → 0.99 USD, 600,000 Stardust to power up L40→50, 200 Mega Energy first-time Mega.
+2. Spot-check 5 high-traffic values from `niantic-help-reference.md` against current Niantic news/help center. Examples: friend cap (650), level cap (80), Mega Energy storage cap (10,000), Spotlight Hour status (retired).
+3. For each value that has changed: flag `[REFERENCE DRIFT: instructions/X.md value Y should be Z per [source URL]]` in the email summary.
+4. The agent does NOT auto-update the reference files (that's a human review step). Joe sees the drift report and updates files as needed.
+
+**Trigger:** the agent checks the date in Step 0; if `today.day <= 7` AND `today.month in [2, 5, 8, 11]`, run the quarterly verification before Step 4. Otherwise skip.
+
+## Spec Authority (Canonical Sources for Each Rule)
+
+The trigger prompt and the repo files have grown to overlap on many rules. To avoid drift between them, this is the authority order:
+
+| Rule category | Canonical source (single source of truth) |
+|---|---|
+| Newsletter section structure (sections 1–13, what's required, formatting) | `instructions/newsletter-creation.md` |
+| Voice, tone, banned phrases, sign-off, headline patterns, default-filler rule, gap-acknowledgment, reader-segment asides | `instructions/brand-voice.md` |
+| Source routing (where to fetch data) | `instructions/meta-data-sources.md` (and source routing table in trigger prompt mirrors it) |
+| Trainer Tip angles + drift tracking | `instructions/trainer-tips-framework.md` |
+| Audit checklist | `instructions/pre-publish-checklist.md` |
+| Volatile rules + verification policy | `instructions/rule-verification.md` (this file) |
+| Costs (PokéCoins, Stardust, Candy, Mega Energy, etc.) | `instructions/cost-reference.md` |
+| Niantic-confirmed mechanics + stale-help-center flags | `instructions/niantic-help-reference.md` |
+| Shiny + hundo odds | `instructions/shiny-odds-reference.md` + `instructions/hundo-odds-reference.md` |
+| Adventure Effects / Mega+Primal / Dynamax mechanics | three dedicated reference files |
+| Past Spawn Point issues (dedup, drift) | `instructions/newsletter-archive.md` |
+| Social copy structure (IG / Twitter / TikTok / Facebook) | `instructions/social-copy.md` |
+
+**Trigger prompt's role:** orchestrate the steps and keep CRITICAL constraints visible at runtime. The trigger should NOT re-encode the full spec for each rule — it should reference the canonical file. When a rule changes, update the canonical file; the trigger picks it up automatically because the agent reads the file in Step 1.
+
+**When the trigger inlines a rule** (e.g., "Hundo CPs required for raid bosses"), it's a runtime reminder, NOT the source of truth. If the inline reminder contradicts the canonical file, **trust the canonical file**.
+
+**Drift audit:** quarterly (during the Quarterly Reference-File Verification check above), the agent should also flag CRITICAL rules in the trigger prompt that contradict their canonical file. Format: `[SPEC DRIFT: trigger says X but instructions/Y.md says Z]`. Joe consolidates by editing whichever is wrong.
+
 ## Niantic vs Scopely — Who to Credit
 
 **Scopely officially acquired Niantic's games division on May 29, 2025** (announced March 12, 2025). The deal includes Pokémon GO, Pikmin Bloom, Monster Hunter Now, Campfire, and Wayfarer. Roughly 400 Niantic gamemakers joined Scopely. Niantic Spatial Inc. continues separately as a geospatial AI company (and still operates Ingress Prime and Peridot).

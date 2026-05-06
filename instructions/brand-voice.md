@@ -190,6 +190,27 @@ The Everyday Trainer has been playing for years and reads multiple Pokémon GO c
 
 **General test:** if a sentence could be deleted without the reader losing any information they didn't already have, delete it.
 
+## Reader-Segment Asides
+
+The "Everyday Trainer" persona is one bucket, but readers fall into three rough segments:
+
+- **New players** — just downloaded, still learning systems (raid mechanics, friend trades, GBL basics)
+- **Returning players** — came back after a break, familiar with old systems but missing recent additions (Daily Discoveries, Routes, Mega Levels, Adventure Effects, Dynamax/Gigantamax)
+- **Veteran/grinder players** — long-time daily players, optimizing for hundos, max stats, leaderboard placement
+
+Most paragraphs land cleanly across all three. When a tip is materially different for one segment, surface it with a short prefixed aside — don't write a separate paragraph, just tag the sentence:
+
+- ✓ "**[New:]** Skip the Mega for now if you don't have one — base Garchomp duos this fine."
+- ✓ "**[Veteran:]** XL Candy farm window — pop Pinap on every catch since the boost stacks with the event multiplier."
+- ✓ "**[Returning:]** If you haven't logged in since Spotlight Hours retired, Daily Discoveries replaced them — Tuesday is now Showcase Tuesday."
+
+**Rules:**
+- Use sparingly (1-2 per issue, not every section)
+- Keep the bracketed prefix bold, the rest plain
+- Don't pile on multiple segments per sentence — pick one
+- Don't over-explain — the prefix signals the audience; the sentence is the value
+- These asides are for content that genuinely matters MORE to one segment, not for inclusivity theater
+
 ## Acknowledge Gaps Honestly
 
 When recommending counters, costs, or strategies, acknowledge that not every reader has the top picks. The "knowledgeable friend" voice tells you what works AND what's realistic to actually own.
