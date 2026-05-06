@@ -24,7 +24,7 @@ Effective hierarchy in order:
 |---|---|---|
 | `leekduck.com/events/` and event pages | Tier 3 (WebFetch) | NO RSS feed exists. WebFetch returns 200. |
 | `pokemongo.com/news` | Tier 1 (RSS) at `pokemongo.com/feed` (NOT `/news/feed`); Tier 3 fallback | RSS works (`application/rss+xml`). News index also fetchable directly. |
-| `pokemongohub.net/feed` | Tier 1 (RSS) — likely | Test on first encounter. Hub typically has WordPress-style feed. |
+| `pokemongohub.net/feed/` (trailing slash) | Tier 1 (RSS) — VERIFIED working | Valid RSS 2.0, hourly update, news + datamines + guides. Use this URL exactly (with trailing slash). |
 | `pokemongohub.net/post/...` | Likely Tier 4 (WebSearch snippet) | WebFetch may 403; the cloud sandbox can't curl-around it. Settle for snippet or skip. |
 | `db.pokemongohub.net/pokemon/[N]` | Tier 5 (compute) for CPs / Tier 4 (snippet) for narrative | WebFetch 403s. Cannot curl-around in sandbox. Use pokedex.json + CP formula for hundo CPs; use WebSearch snippet for shiny availability narrative. |
 | Reddit posts/threads | Tier 2 (`.json` URL via WebFetch) | Fast, structured, no anti-bot. |
