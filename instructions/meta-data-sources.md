@@ -8,21 +8,24 @@ For raid boss rotation and Pokémon base data (stats, types, movesets, form avai
 
 The cloud agent runs in a sandbox that **blocks all outbound curl/wget to external hosts.** WebFetch and WebSearch are the only outbound network primitives available. Any "use curl with browser headers" trick that works on a local Mac does NOT work in the cloud agent — don't put curl recipes in the agent's instructions, they'll fail silently.
 
+**Important sandbox quirk (verified May 2026):** the cloud sandbox's WebFetch is more restricted than a local Mac's. URLs that return 200 from a local session (`pokemongo.com/feed`, `leekduck.com/events/`, `pokemongohub.net/feed/`) routinely return 403 from the cloud sandbox — anti-bot services categorize the sandbox's outbound IPs as datacenter traffic. **The single best workaround is `news.google.com/rss/search`** (Google News RSS), which IS reachable and aggregates content from all the otherwise-blocked sources. See Tier 0 below.
+
 Effective hierarchy in order:
 
 | Tier | Tool | When to use |
 |---|---|---|
-| 1 | **JSON/RSS endpoint via WebFetch** | Always preferred when one exists. PvPoke, Pokebattler, pokemon-go-api JSONs. RSS feeds where they exist (see verified table below). WebFetch handles JSON/RSS reliably. |
-| 2 | **Reddit (WebSearch snippets only — direct fetch blocked)** | The cloud sandbox blocks all Reddit subdomains (`www.reddit.com`, `reddit.com`, `old.reddit.com`) at the WebFetch layer. Both `.json` and `.rss` URLs return "Claude Code is unable to fetch." Use `WebSearch site:reddit.com/r/[subreddit] [keywords]` to surface indexed snippets — that's the only path. |
-| 3 | **WebFetch** | Default for HTML pages. Confirmed working for `leekduck.com/events/`, `pokemongo.com/news`, individual event/blog posts. |
-| 4 | **WebSearch snippets** | When WebFetch returns 403 (e.g., `db.pokemongohub.net`) or the source requires JS rendering. Excerpt-only — accept that the result is incomplete, mark as `[fallback: search-snippet]`. |
-| 5 | **Compute / derive** | When no fetch path works for a specific value: derive from a different source. Hundo CPs from base stats (pokedex.json + GO CP formula) when hub-db is unreachable. |
+| **0** | **Google News RSS via WebFetch** (PRIMARY discovery for cloud agent) | `https://news.google.com/rss/search?q=[query]&hl=en-US`. Aggregates news from Niantic blog (pokemon.com), Pokémon GO Hub, Polygon, Eurogamer, GameRant, etc. **Reachable from the sandbox** even when those source sites 403 directly. Use this as the FIRST source-discovery step every monitor run. Headlines + sources + dates + links are reliable; article bodies still need per-article fetch (and may 403). |
+| 1 | **JSON/RSS endpoint via WebFetch** (other) | PvPoke, Pokebattler, pokemon-go-api JSONs (always reachable — github.io). Site-specific RSS feeds (`pokemongo.com/feed`, `pokemongohub.net/feed/`) work locally but routinely 403 from the cloud sandbox — try them but expect failure. |
+| 2 | **WebFetch HTML** | Default for direct article fetches. Often 403s from the cloud sandbox for Niantic/LeekDuck/Hub. Try once per article; on 403, fall to Tier 0 metadata + Tier 3 snippet. |
+| 3 | **WebSearch snippets** | When WebFetch 403s. For Reddit specifically (sandbox-blocked entirely), this is the ONLY path. Mark `[fallback: search-snippet]`. |
+| 4 | **Compute / derive** | Hundo CPs from base stats (pokedex.json + GO CP formula) when hub-db is unreachable. |
 
 ### Verified site-fetch behavior (May 2026)
 
 | Site | Working tier | Notes |
 |---|---|---|
-| `leekduck.com/events/` and event pages | Tier 3 (WebFetch) | NO RSS feed exists. WebFetch returns 200. |
+| **`news.google.com/rss/search?q=[query]&hl=en-US`** | **Tier 0 (PRIMARY discovery)** | **Reachable from cloud sandbox.** Aggregates Niantic blog, Hub, Polygon, Eurogamer, GameRant, etc. Use this when direct site fetches 403. Suggested queries: `pokemon+go`, `pokemon+go+niantic`, `pokemon+go+datamine`, `pokemon+go+community+day`, `pokemon+go+raid`. Add `&when=1d` for last-24h filter. |
+| `leekduck.com/events/` and event pages | Tier 2 (WebFetch); often 403 from cloud sandbox | NO RSS feed exists. WebFetch works locally but cloud sandbox 403s frequently — fall to Google News RSS for headlines. |
 | `pokemongo.com/news` | Tier 1 (RSS) at `pokemongo.com/feed` (NOT `/news/feed`); Tier 3 fallback | RSS works (`application/rss+xml`). News index also fetchable directly. |
 | `pokemongohub.net/feed/` (trailing slash) | Tier 1 (RSS) — VERIFIED working | Valid RSS 2.0, hourly update, news + datamines + guides. Use this URL exactly (with trailing slash). |
 | `pokemongohub.net/post/...` | Likely Tier 4 (WebSearch snippet) | WebFetch may 403; the cloud sandbox can't curl-around it. Settle for snippet or skip. |
