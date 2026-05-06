@@ -16,6 +16,20 @@ WebFetch sends a minimal request that anti-bot/hotlink-protection systems flag a
 | 4 | **WebFetch** | Default for HTML pages that aren't blocked. |
 | 5 | **WebSearch snippets** | Last resort — excerpt-only, but enough for triage when nothing else works. |
 
+### Known site-fetch behavior (verified May 2026)
+
+| Site | WebFetch | curl with browser headers | RSS feed |
+|---|---|---|---|
+| `leekduck.com/events/` | ✅ Works | ✅ Works | ❌ No RSS exists (`/rss.xml`, `/feed/`, `/feed.xml` all 404) |
+| `pokemongo.com/news` | Test required | Test required | Test required |
+| `pokemongohub.net/feed` | Test required | Test required | Test required (likely exists) |
+| `db.pokemongohub.net/pokemon/[N]` | ❌ 403 | ✅ Works with the recipe below | N/A |
+| `pokemongohub.net/post/...` | ❌ 403 (assumed) | ✅ Should work with recipe | N/A |
+
+**Implications:**
+- LeekDuck: fetch directly via WebFetch (or curl). Skip RSS attempts entirely — there is no feed.
+- db.pokemongohub.net + pokemongohub.net/post: go straight to curl with browser headers; don't try WebFetch.
+
 ### The curl recipe that bypasses 403s
 
 ```bash
