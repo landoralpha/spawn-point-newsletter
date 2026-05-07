@@ -119,24 +119,39 @@ Specifically check:
 - Mega Evolution roster
 - Friendship Friday / event-specific bonuses
 
-### 9. Hundo CP Audit (REQUIRED)
+### 9. Hundo CP Provenance & Verification Audit (HARD FAIL)
 
-For every featured catchable Pokémon — every Five-Star raid boss, Mega raid boss, Shadow raid boss, the featured Max Monday Dynamax/Gigantamax Pokémon, and any Community Day featured Pokémon — verify the section includes BOTH:
+For every featured catchable Pokémon — every Five-Star raid boss, Mega raid boss, Shadow raid boss, the featured Max Monday Dynamax/Gigantamax Pokémon, the Community Day featured Pokémon (evolved form), AND any debut species reachable via raid/egg-hatch/wild during the newsletter window — the section MUST include:
 
-1. **L20 hundo catch CP** (15/15/15 IVs, normal weather)
+1. **L20 hundo catch CP** (15/15/15 IVs, normal weather / unboosted)
 2. **L25 hundo catch CP** (15/15/15 IVs, weather-boosted)
 
-For Community Day, these values are for the EVOLVED form (the form players evolve into during the bonus window).
+**Provenance requirement (HARD FAIL):** every CP value in the draft must trace to a `## Hundo CP Provenance` list maintained in `output/research-brief-[YYYY-MM-DD].md`. For each species, the list records ONE of:
 
-**Why this matters:** trainers screen-check catch CPs immediately after raids and Max Battles. Knowing the exact hundo CP lets them identify a perfect IV catch on sight. A newsletter without these numbers fails its most practical function.
+- **Fetched:** the URL fetched via fetch_url MCP (e.g., `db.pokemongohub.net/pokemon/955` for Flittle) and the rendered L20 / L25 values copied verbatim from the page.
+- **Computed:** the base stats used (atk/def/sta from `pokedex.json`) AND the CPM applied. Example row: `Flittle | 955 | pokedex.json computed | 105/60/102 | L20=401 | L25=501`.
 
-**Source:** `db.pokemongohub.net/pokemon/[dexNr]` lists pre-computed values. If hub-db is unavailable or the species isn't yet listed, compute from `pokedex.json` base stats using the GO CP formula (see `instructions/meta-data-sources.md`).
+**Self-verify (HARD FAIL):** before pushing to Notion, the agent re-runs the formula on every CP value cited in the draft:
 
-**Failure modes to fix:**
+```
+floor((Atk+15) × sqrt(Def+15) × sqrt(Sta+15) × cpm² / 10)
+```
+
+with cpm = 0.5974 (L20) or 0.6679 (L25). The recomputed value MUST equal the drafted value. Any mismatch is a hard fail — fix the draft using the recomputed (or freshly-fetched) value before pushing.
+
+**Cross-check (HARD FAIL):** for any value claimed as "fetched", the agent re-fetches the URL during Step 5.5 and confirms the page still renders that value. If the page differs, HARD FAIL — replace with the page's current value.
+
+**Why this is HARD FAIL, not WARNING:** a May 7, 2026 newsletter test cited Flittle hundo CP as 556 / 696 (correct: 401 / 501) and Espathra as 1673 / 2092 (correct: 1415 / 1769). Neither value reconciled with a clean formula derivation from pokedex.json or with Hub-DB's published values. They were hallucinated. The provenance + self-verify gates exist so that's never repeated. Bare CP numbers without provenance — even if they look plausible — are not allowed in the final draft.
+
+**Source priority:**
+1. `db.pokemongohub.net/pokemon/[dexNr]` via fetch_url MCP (primary; renders L20 and L25 directly)
+2. Compute from `pokemon-go-api/pokedex.json` base stats using the GO CP formula (fallback for species not yet listed in Hub-DB OR sanity check against fetched values)
+
+**Other failure modes to also fix (existing):**
 - Section names a raid boss but omits hundo CPs → ADD both L20 and L25 values.
 - Only L20 is listed → ADD L25 weather-boosted.
 - Wrong form (e.g., Tapu Lele's hundo CP cited for the Mega Banette section) → FIX to the section's actual featured Pokémon.
-- Computed value differs from hub-db → trust hub-db unless hub-db is clearly stale.
+- Fetched value differs from computed value → trust the fetched value if Hub-DB is current; trust the computed value if Hub-DB hasn't added the species yet.
 
 ### 10. The "I Might Be Wrong" Check
 
