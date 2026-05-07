@@ -58,7 +58,7 @@ Comprehensive cost reference for newsletter Trainer Tips and "is this worth it?"
 | Item | 1 pack | 3 pack | 10 pack | Notes |
 |---|---|---|---|---|
 | Premium Battle Pass | 100 | 250 | 800 | Used for raids + GBL premium track |
-| Remote Raid Pass | 195 | 525 | — | **Daily limit: 5 remote raids/day** [Niantic, since 2023] |
+| Remote Raid Pass | 195 | 525 | — | **Daily limit: 10 remote raids/day** [original 5/day cap was raised; verify against current Niantic help center if a tip hinges on this] |
 
 ### Lure Modules
 
@@ -433,7 +433,7 @@ Adventure Effects are activated via specific Charged Attacks **outside of battle
 
 - **Entry cost:** 1 raid pass (Premium Battle Pass, Remote Raid Pass, or Free Daily Pass — daily pass works on Mega tier)
 - **Free Daily Pass:** 1 per day from gym spin (does NOT roll over)
-- **Remote Raid Pass:** 195 coins each; **5 remote raids/day** cap [Niantic, 2023]
+- **Remote Raid Pass:** 195 coins each; **10 remote raids/day** cap (raised from the original 5/day cap)
 
 ### Super Mega Raid [2026]
 
@@ -518,6 +518,7 @@ Mega Raid raw economics for a typical newsletter reader:
 | Date | Change | Source |
 |---|---|---|
 | April 2023 | Remote Raid Pass increased to 195 coins; daily limit of 5 added | Niantic |
+| Later 2023 | Remote Raid daily limit raised from 5 → 10 per day | Niantic |
 | Feb 2024 | Routes XP/Stardust adjustments | Niantic |
 | Feb 20, 2026 | Mega Energy storage cap raised to 10,000; Super Max Mega level added; Super Mega Raids introduced | Niantic |
 | Feb 2026 | Link Charges introduced as Super Mega Raid currency | Niantic |
