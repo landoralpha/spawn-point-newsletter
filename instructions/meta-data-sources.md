@@ -14,7 +14,7 @@ Effective hierarchy in order:
 
 | Tier | Tool | When to use |
 |---|---|---|
-| **0** | **Google News RSS via WebFetch** (PRIMARY discovery for cloud agent) | `https://news.google.com/rss/search?q=[query]&hl=en-US`. Aggregates news from Niantic blog (pokemon.com), Pokémon GO Hub, Polygon, Eurogamer, GameRant, etc. **Reachable from the sandbox** even when those source sites 403 directly. Use this as the FIRST source-discovery step every monitor run. Headlines + sources + dates + links are reliable; article bodies still need per-article fetch (and may 403). |
+| **0** | **News-aggregator RSS via WebFetch** (try ALL THREE in parallel) | Aggregators reach otherwise-blocked sources. Update May 7, 2026: even Google News RSS sometimes 403s from the sandbox — hence the multi-aggregator approach. **Try all three each run; whichever returns 200 wins.** (a) `https://news.google.com/rss/search?q=[query]&hl=en-US`, (b) `https://www.bing.com/news/search?q=[query]&format=rss`, (c) `https://feeds.feedburner.com/PokemonGoHub`. |
 | 1 | **JSON/RSS endpoint via WebFetch** (other) | PvPoke, Pokebattler, pokemon-go-api JSONs (always reachable — github.io). Site-specific RSS feeds (`pokemongo.com/feed`, `pokemongohub.net/feed/`) work locally but routinely 403 from the cloud sandbox — try them but expect failure. |
 | 2 | **WebFetch HTML** | Default for direct article fetches. Often 403s from the cloud sandbox for Niantic/LeekDuck/Hub. Try once per article; on 403, fall to Tier 0 metadata + Tier 3 snippet. |
 | 3 | **WebSearch snippets** | When WebFetch 403s. For Reddit specifically (sandbox-blocked entirely), this is the ONLY path. Mark `[fallback: search-snippet]`. |
