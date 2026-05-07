@@ -4,6 +4,33 @@ After completing all section drafts but before pushing to Notion, run this audit
 
 ## Audit Pass: Run These Checks in Order
 
+### 0. Source Presence Audit (HARD FAIL — run FIRST)
+
+**Every section MUST end with a `Sources: [Site](URL) | [Site](URL)` line. No exceptions.**
+
+Sections to verify (each requires its own Sources line):
+- Section 5: Events
+- Section 6: Raid Bosses (each subsection — Mega, 5-Star, Shadow — gets its own Sources line)
+- Section 7: GO Battle League
+- Section 8: Max Monday
+- Section 9: Daily Discoveries
+- Section 10: Trending Topic
+- Section 11: What's New This Month/Season (if included)
+- Section 12: Don't Miss (one line covers all 3 callouts)
+
+How to source each section:
+- JSON-API-sourced sections (PvP rankings, raid counters, raid lineup): cite the JSON URL OR the article wrapper that contextualizes it.
+- WebFetch-sourced sections: cite the article URL (`pokemongo.com/news/[slug]`, `leekduck.com/events/[slug]`, etc.).
+- Snippet-sourced sections (`[fallback: search-snippet]`): cite the URL the WebSearch snippet was drawn from. WebSearch always returns URLs in its result objects — never claim "no source."
+- Computed sections (`[fallback: computed]`): write `Sources: pokemon-go-api pokedex.json (computed L20/L25 hundo CPs from base stats)` so the derivation is transparent.
+- Sections with no external citation possible (rare — usually only stylistic intros that make no factual claims): write `Sources: [no external citation — internal/computed data]` rather than omitting the line. Explicit acknowledgment is required.
+
+**Hard fail behavior:**
+- If the audit finds ANY section missing a Sources line, **do NOT push to Notion**. Add the missing Sources lines first.
+- If a Sources line exists but the URLs are homepage links or `/wiki/` indexes, that's a Quality issue — fix per Audit #5 below, but it doesn't hard-fail the section.
+
+**Why this is check #0:** a May 7, 2026 newsletter test was published to Notion with **zero** source citations across the entire draft. Source Attribution is in the prompt as CRITICAL but the prior audit didn't enforce its presence. This check exists so that's never repeated.
+
 ### 1. Cross-Section Consistency
 
 Search the assembled draft for the following and verify every instance is consistent:
