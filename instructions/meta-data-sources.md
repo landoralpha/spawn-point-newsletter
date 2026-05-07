@@ -6,43 +6,61 @@ For raid boss rotation and Pokémon base data (stats, types, movesets, form avai
 
 ## Fetcher Hierarchy (CRITICAL — cloud sandbox constraints)
 
-The cloud agent runs in a sandbox that **blocks all outbound curl/wget to external hosts.** WebFetch and WebSearch are the only outbound network primitives available. Any "use curl with browser headers" trick that works on a local Mac does NOT work in the cloud agent — don't put curl recipes in the agent's instructions, they'll fail silently.
+The cloud agent has three outbound network primitives:
+1. **WebFetch** — built-in. Cheap, but the sandbox's outbound IPs are flagged as datacenter traffic by many anti-bot services (Cloudflare, etc.), so it 403s on roughly half the sites we care about.
+2. **WebSearch** — built-in. Returns search-result snippets, never full bodies.
+3. **`fetch_url` from the Spawn Point Fetcher MCP** (custom connector) — a tiny FastMCP server hosted on Vercel that performs the GET with browser-like headers (Chrome UA + Google referer). Vercel's serverless IPs are datacenter-class like the sandbox, so the win comes from (a) the browser-style header set and (b) a different IP allocation than Anthropic's sandbox, which together get past header-based anti-bot rules. It does NOT defeat Cloudflare's interactive JS challenge ("Just a moment…" page), which gates `pokemongohub.net` and `db.pokemongohub.net`.
 
-**Important sandbox quirk (verified May 2026):** the cloud sandbox's WebFetch is more restricted than a local Mac's. URLs that return 200 from a local session (`pokemongo.com/feed`, `leekduck.com/events/`, `pokemongohub.net/feed/`) routinely return 403 from the cloud sandbox — anti-bot services categorize the sandbox's outbound IPs as datacenter traffic. **The single best workaround is `news.google.com/rss/search`** (Google News RSS), which IS reachable and aggregates content from all the otherwise-blocked sources. See Tier 0 below.
+**Curl/wget are blocked outright at the sandbox boundary.** Don't put curl recipes in agent instructions — they fail silently regardless of headers.
+
+**What the MCP unlocks (verified May 2026, against the local server before deploy):**
+- Niantic Labs newsroom (`nianticlabs.com/news`) — was 403, now 200.
+- `pokemongo.com/en/news` — was flaky, now reliably 200.
+- `leekduck.com/events/` — was sometimes 403, now 200.
+- Google News RSS, Bing News RSS — were 403 from the sandbox during the May 7 monitor run; now 200.
+
+**What the MCP does NOT unlock:**
+- `pokemongohub.net/` (any path) — Cloudflare interactive challenge. Header spoofing can't beat it; would need a real headless browser. **Don't waste a fetch_url call on Hub URLs** — fall straight to WebSearch snippet.
+- `db.pokemongohub.net/...` — same Cloudflare gate. For hundo CPs, compute from pokedex.json + GO CP formula. For shiny availability or narrative, use WebSearch snippet.
 
 Effective hierarchy in order:
 
 | Tier | Tool | When to use |
 |---|---|---|
-| **0** | **News-aggregator RSS via WebFetch** (try ALL THREE in parallel) | Aggregators reach otherwise-blocked sources. Update May 7, 2026: even Google News RSS sometimes 403s from the sandbox — hence the multi-aggregator approach. **Try all three each run; whichever returns 200 wins.** (a) `https://news.google.com/rss/search?q=[query]&hl=en-US`, (b) `https://www.bing.com/news/search?q=[query]&format=rss`, (c) `https://feeds.feedburner.com/PokemonGoHub`. |
-| 1 | **JSON/RSS endpoint via WebFetch** (other) | PvPoke, Pokebattler, pokemon-go-api JSONs (always reachable — github.io). Site-specific RSS feeds (`pokemongo.com/feed`, `pokemongohub.net/feed/`) work locally but routinely 403 from the cloud sandbox — try them but expect failure. |
-| 2 | **WebFetch HTML** | Default for direct article fetches. Often 403s from the cloud sandbox for Niantic/LeekDuck/Hub. Try once per article; on 403, fall to Tier 0 metadata + Tier 3 snippet. |
-| 3 | **WebSearch snippets** | When WebFetch 403s. For Reddit specifically (sandbox-blocked entirely), this is the ONLY path. Mark `[fallback: search-snippet]`. |
+| **0** | **News-aggregator RSS via fetch_url MCP** (preferred) or WebFetch (fallback) | Discovery layer. Try `news.google.com/rss/search?q=pokemon+go`, `bing.com/news/search?q=pokemon+go&format=rss`, `feeds.feedburner.com/PokemonGoHub` via the MCP — all three returned 200 against the local MCP. Add `&when=1d` to Google News URL for last-24h filter. |
+| 1 | **JSON/RSS endpoint via WebFetch** | PvPoke, Pokebattler, pokemon-go-api JSONs (always reachable — github.io). Site-specific RSS (`pokemongo.com/feed`, `pokemongohub.net/feed/`) — try via WebFetch first; on 403, retry via fetch_url MCP. |
+| 2 | **WebFetch HTML** | Default first attempt for direct article fetches. Cheap, no connector overhead. On 403, escalate to Tier 2.5. |
+| **2.5** | **`fetch_url` MCP** | When WebFetch returns 403 on a non-Hub site (Niantic, pokemongo.com, LeekDuck). Solves header-based 403s. Skip this tier entirely for any `pokemongohub.net` or `db.pokemongohub.net` URL — Cloudflare's JS challenge defeats it. |
+| 3 | **WebSearch snippets** | When both WebFetch AND fetch_url return 403, OR for Cloudflare-challenged sites (Hub, db.pokemongohub.net), OR Reddit (sandbox-blocked entirely). Mark `[fallback: search-snippet]`. |
 | 4 | **Compute / derive** | Hundo CPs from base stats (pokedex.json + GO CP formula) when hub-db is unreachable. |
 
 ### Verified site-fetch behavior (May 2026)
 
-| Site | Working tier | Notes |
-|---|---|---|
-| **`news.google.com/rss/search?q=[query]&hl=en-US`** | **Tier 0 (PRIMARY discovery)** | **Reachable from cloud sandbox.** Aggregates Niantic blog, Hub, Polygon, Eurogamer, GameRant, etc. Use this when direct site fetches 403. Suggested queries: `pokemon+go`, `pokemon+go+niantic`, `pokemon+go+datamine`, `pokemon+go+community+day`, `pokemon+go+raid`. Add `&when=1d` for last-24h filter. |
-| `leekduck.com/events/` and event pages | Tier 2 (WebFetch); often 403 from cloud sandbox | NO RSS feed exists. WebFetch works locally but cloud sandbox 403s frequently — fall to Google News RSS for headlines. |
-| `pokemongo.com/news` | Tier 1 (RSS) at `pokemongo.com/feed` (NOT `/news/feed`); Tier 3 fallback | RSS works (`application/rss+xml`). News index also fetchable directly. |
-| `pokemongohub.net/feed/` (trailing slash) | Tier 1 (RSS) — VERIFIED working | Valid RSS 2.0, hourly update, news + datamines + guides. Use this URL exactly (with trailing slash). |
-| `pokemongohub.net/post/...` | Likely Tier 4 (WebSearch snippet) | WebFetch may 403; the cloud sandbox can't curl-around it. Settle for snippet or skip. |
-| `db.pokemongohub.net/pokemon/[N]` | Tier 5 (compute) for CPs / Tier 4 (snippet) for narrative | WebFetch 403s. Cannot curl-around in sandbox. Use pokedex.json + CP formula for hundo CPs; use WebSearch snippet for shiny availability narrative. |
-| Reddit (any subdomain) | Tier 4 (WebSearch snippet only) | **Sandbox-blocked.** Verified May 2026: `www.reddit.com`, `reddit.com`, `old.reddit.com` all 403 at WebFetch. Both `.json` and `.rss` blocked. |
-| Twitter/X | Tier 4 (WebSearch snippet) | Public API gone. Mark Description `[from search snippet — incomplete]`. |
+| Site | WebFetch | fetch_url MCP | WebSearch | Recommended path |
+|---|---|---|---|---|
+| `news.google.com/rss/search?q=[q]&hl=en-US` | flaky (403'd May 7) | ✅ 200 | n/a | **Tier 0 — primary discovery via MCP** |
+| `bing.com/news/search?q=[q]&format=rss` | flaky | ✅ 200 | n/a | **Tier 0 fallback via MCP** |
+| `feeds.feedburner.com/PokemonGoHub` | flaky | ✅ 200 | n/a | **Tier 0 backup via MCP** |
+| `nianticlabs.com/news` | 403 | ✅ 200 | n/a | WebFetch → fetch_url on 403 |
+| `pokemongo.com/en/news` | flaky | ✅ 200 | n/a | WebFetch → fetch_url on 403 |
+| `pokemongo.com/feed` (RSS) | works locally, sometimes 403 in sandbox | ✅ 200 | n/a | WebFetch → fetch_url on 403 |
+| `leekduck.com/events/` and event pages | sometimes 403 | ✅ 200 | n/a | WebFetch → fetch_url on 403 |
+| **`pokemongohub.net/feed/`** (RSS) | works locally, often 403 in sandbox | ❌ likely CF-gated (whole domain returned CF challenge in MCP test; feed not separately tested) | n/a | **Try MCP once if needed; on CF response, fall back to Google News RSS for Hub headlines** |
+| **`pokemongohub.net/post/...`** | 403 | ❌ Cloudflare challenge (verified — MCP returns "Just a moment…" page) | n/a | **Skip MCP — WebSearch snippet only** |
+| **`pokemongohub.net/`** (root) | 403 | ❌ Cloudflare challenge (verified) | n/a | **Skip MCP — WebSearch snippet only** |
+| **`db.pokemongohub.net/pokemon/[N]`** | 403 | ❌ likely CF-gated (same Cloudflare account as `pokemongohub.net`; not separately tested) | n/a | **Skip MCP — compute CPs from pokedex.json; WebSearch snippet for narrative** |
+| Reddit (any subdomain, `.json` and `.rss` included) | sandbox-blocked | not tested via MCP (Reddit also bot-screens at the request layer; testing is low-priority) | n/a | **WebSearch snippet only** |
+| Twitter/X | sandbox-blocked | n/a | n/a | **WebSearch snippet only**; mark `[from search snippet — incomplete]` |
 
 **Practical implications for the cloud agent:**
-- For `db.pokemongohub.net`: don't try WebFetch (wasted 403 round-trip). Go directly to: pokedex.json compute for CPs, WebSearch snippet for other claims.
-- For `pokemongohub.net/post/...`: try WebFetch once; if 403, fall to WebSearch snippet. Don't pretend curl will save you.
-- For `pokemongo.com/news`: prefer RSS at `pokemongo.com/feed` for low-overhead daily polling.
+- **For Hub URLs** (`pokemongohub.net/*`, `db.pokemongohub.net/*`): don't bother with WebFetch OR fetch_url — Cloudflare's interactive challenge defeats both. Compute hundo CPs from pokedex.json. For Hub article narrative, WebSearch snippet.
+- **For Niantic / pokemongo.com / LeekDuck**: WebFetch first; if 403, retry the same URL through `fetch_url` MCP. The MCP turns most of these into 200s.
+- **For news discovery**: prefer `fetch_url` against Google News RSS / Bing News RSS — these were the fail points of the May 7 monitor run, and the MCP fixes them.
+- **Don't escalate every 403 to MCP blindly.** The Hub family is a known Cloudflare wall — escalating wastes a connector round-trip.
 
 ### Flagging fallbacks
 
-### Flagging fallbacks
-
-When the agent uses tier 3, 4, or 5 (anything below the JSON/RSS tier), flag the citation in the research brief / Notion entry as `[fallback: <tier>]`. This surfaces silent-fallback patterns in the email summary so weekly drift is visible.
+When the agent escalates beyond Tier 1 — i.e., uses Tier 2.5 (`fetch_url` MCP), Tier 3 (WebSearch snippet), or Tier 4 (compute) — flag the citation in the research brief / Notion entry as `[fallback: <tier-or-tool>]`. Examples: `[fallback: fetch_url]` when the MCP rescues a WebFetch 403, `[fallback: search-snippet]` for WebSearch-only sources, `[fallback: computed-cp]` for derived hundo CPs. This surfaces silent-fallback patterns in the email summary so weekly drift is visible.
 
 
 
