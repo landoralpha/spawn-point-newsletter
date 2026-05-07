@@ -13,15 +13,24 @@ The cloud agent has three outbound network primitives:
 
 **Curl/wget are blocked outright at the sandbox boundary.** Don't put curl recipes in agent instructions — they fail silently regardless of headers.
 
-**What the MCP unlocks (verified May 2026, against the local server before deploy):**
-- Niantic Labs newsroom (`nianticlabs.com/news`) — was 403, now 200.
-- `pokemongo.com/en/news` — was flaky, now reliably 200.
-- `leekduck.com/events/` — was sometimes 403, now 200.
-- Google News RSS, Bing News RSS — were 403 from the sandbox during the May 7 monitor run; now 200.
+**What the MCP unlocks (verified against the deployed Vercel MCP, May 7, 2026):**
+- News-aggregator RSS — Google News, Bing News, Feedburner-Hub, all 200.
+- Niantic Labs newsroom (`nianticlabs.com/news`).
+- `pokemongo.com/en/news`, `pokemongo.com/feed`.
+- `leekduck.com/events/` and event pages.
+- **Pokémon GO Hub** — `pokemongohub.net/*` (articles, tier lists, RSS feed). The earlier "Cloudflare wall" verdict was based on local-Mac IP tests; Vercel's IP space does NOT trigger Hub's anti-bot. Verified live with article URLs, the Max Attackers tier list, the Max Defenders tier list, and `pokemongohub.net/feed/`.
+- **`db.pokemongohub.net/pokemon/[N]`** — hundo CP pages reachable directly. No more need to compute from pokedex.json as a primary path (still useful as redundancy / for not-yet-listed Pokémon).
+- Reddit subreddit `.rss` feeds (`/r/<sub>/.rss`) — Atom feeds, real entries.
+- `web.archive.org` Wayback Machine.
+- `pokebase.app` (raid guides, Dynamax rankings).
+- `pokeminers.com` (datamine Tumblr).
+- IGN game/wiki pages.
 
-**What the MCP does NOT unlock:**
-- `pokemongohub.net/` (any path) — Cloudflare interactive challenge. Header spoofing can't beat it; would need a real headless browser. **Don't waste a fetch_url call on Hub URLs** — fall straight to WebSearch snippet.
-- `db.pokemongohub.net/...` — same Cloudflare gate. For hundo CPs, compute from pokedex.json + GO CP formula. For shiny availability or narrative, use WebSearch snippet.
+**What the MCP does NOT unlock (confirmed via direct Vercel-prod tests):**
+- Reddit `.json` URLs (any subdomain) — bot screen specifically on `.json`. Use `.rss` instead — same content, different format.
+- `rsshub.app` — Cloudflare true wall (even from Vercel IP).
+- Twitter/X — returns 200 but only the "JavaScript required" gate page; no usable content. WebSearch snippet only.
+- `archive.ph` — 429 rate limited. Use Wayback instead.
 
 Effective hierarchy in order:
 
@@ -32,31 +41,42 @@ Effective hierarchy in order:
 | 2 | **WebFetch HTML** | Default first attempt for direct article fetches. Cheap, no connector overhead. On 403, escalate to Tier 2.5. |
 | **2.5** | **`fetch_url` MCP** | When WebFetch returns 403 on a non-Hub site (Niantic, pokemongo.com, LeekDuck). Solves header-based 403s. Skip this tier entirely for any `pokemongohub.net` or `db.pokemongohub.net` URL — Cloudflare's JS challenge defeats it. |
 | 3 | **WebSearch snippets** | When both WebFetch AND fetch_url return 403, OR for Cloudflare-challenged sites (Hub, db.pokemongohub.net), OR Reddit (sandbox-blocked entirely). Mark `[fallback: search-snippet]`. |
-| 4 | **Compute / derive** | Hundo CPs from base stats (pokedex.json + GO CP formula) when hub-db is unreachable. |
+| 4 | **Compute / derive** | Hundo CPs from base stats (pokedex.json + GO CP formula) for Pokémon not yet listed in `db.pokemongohub.net`, OR as a sanity-check against the published values, OR if hub-db ever regresses. |
 
-### Verified site-fetch behavior (May 2026)
+### Verified site-fetch behavior (re-tested May 7, 2026 against deployed Vercel MCP)
 
-| Site | WebFetch | fetch_url MCP | WebSearch | Recommended path |
-|---|---|---|---|---|
-| `news.google.com/rss/search?q=[q]&hl=en-US` | flaky (403'd May 7) | ✅ 200 | n/a | **Tier 0 — primary discovery via MCP** |
-| `bing.com/news/search?q=[q]&format=rss` | flaky | ✅ 200 | n/a | **Tier 0 fallback via MCP** |
-| `feeds.feedburner.com/PokemonGoHub` | flaky | ✅ 200 | n/a | **Tier 0 backup via MCP** |
-| `nianticlabs.com/news` | 403 | ✅ 200 | n/a | WebFetch → fetch_url on 403 |
-| `pokemongo.com/en/news` | flaky | ✅ 200 | n/a | WebFetch → fetch_url on 403 |
-| `pokemongo.com/feed` (RSS) | works locally, sometimes 403 in sandbox | ✅ 200 | n/a | WebFetch → fetch_url on 403 |
-| `leekduck.com/events/` and event pages | sometimes 403 | ✅ 200 | n/a | WebFetch → fetch_url on 403 |
-| **`pokemongohub.net/feed/`** (RSS) | works locally, often 403 in sandbox | ❌ likely CF-gated (whole domain returned CF challenge in MCP test; feed not separately tested) | n/a | **Try MCP once if needed; on CF response, fall back to Google News RSS for Hub headlines** |
-| **`pokemongohub.net/post/...`** | 403 | ❌ Cloudflare challenge (verified — MCP returns "Just a moment…" page) | n/a | **Skip MCP — WebSearch snippet only** |
-| **`pokemongohub.net/`** (root) | 403 | ❌ Cloudflare challenge (verified) | n/a | **Skip MCP — WebSearch snippet only** |
-| **`db.pokemongohub.net/pokemon/[N]`** | 403 | ❌ likely CF-gated (same Cloudflare account as `pokemongohub.net`; not separately tested) | n/a | **Skip MCP — compute CPs from pokedex.json; WebSearch snippet for narrative** |
-| Reddit (any subdomain, `.json` and `.rss` included) | sandbox-blocked | not tested via MCP (Reddit also bot-screens at the request layer; testing is low-priority) | n/a | **WebSearch snippet only** |
-| Twitter/X | sandbox-blocked | n/a | n/a | **WebSearch snippet only**; mark `[from search snippet — incomplete]` |
+| Site | WebFetch (cloud sandbox) | fetch_url MCP (Vercel) | Recommended path |
+|---|---|---|---|
+| `news.google.com/rss/search?q=[q]&hl=en-US` | flaky (403'd May 7) | ✅ 200 | **Tier 0 — fetch_url primary** |
+| `bing.com/news/search?q=[q]&format=rss` | flaky | ✅ 200 | **Tier 0 fallback — fetch_url** |
+| `feeds.feedburner.com/PokemonGoHub` | flaky | ✅ 200 | **Tier 0 backup — fetch_url** |
+| `nianticlabs.com/news` | 403 | ✅ 200 | WebFetch → fetch_url on 403 |
+| `pokemongo.com/en/news`, `pokemongo.com/feed` | sometimes 403 | ✅ 200 | WebFetch → fetch_url on 403 |
+| `leekduck.com/events/` and event pages | sometimes 403 | ✅ 200 | WebFetch → fetch_url on 403 |
+| **`pokemongohub.net/`** (root + `/post/...`) | 403 | ✅ **200** (verified — Vercel IP not on Hub's CF blocklist) | **WebFetch → fetch_url on 403.** The earlier "Cloudflare wall" finding was from local-Mac tests; Vercel-deployed MCP gets through. |
+| **`pokemongohub.net/feed/`** (RSS) | often 403 in sandbox | ✅ 200 | WebFetch → fetch_url on 403 |
+| **`pokemongohub.net/post/guide/max-attackers-tier-list/`**, `max-defenders-tier-list/` | 403 | ✅ 200 | WebFetch → fetch_url on 403 |
+| **`db.pokemongohub.net/pokemon/[N]`** | 403 | ✅ **200** (verified — Mewtwo page returned full title + Next.js content) | **Use as primary for hundo CPs.** Compute from pokedex.json remains useful as redundancy / for unlisted Pokémon. |
+| `pokemon-go-api.github.io/api/...` | ✅ 200 | n/a | Tier 1 — WebFetch (github.io always reachable) |
+| `raw.githubusercontent.com/pvpoke/...` | ✅ 200 | n/a | Tier 1 — WebFetch |
+| **Reddit `/r/<sub>/.rss`** (Atom feed) | sandbox-blocked | ✅ 200 (25 entries, real titles) | **fetch_url — RSS is the way to read Reddit programmatically.** |
+| Reddit `*.json` (any subdomain) | sandbox-blocked | ❌ 403 (bot screen on `.json` specifically) | Use `.rss` instead — same content. |
+| `web.archive.org` Wayback | sandbox-blocked | ✅ 200 | fetch_url for historical recovery |
+| `pokebase.app` (raid guides, Dynamax rankings) | sandbox-blocked | ✅ 200 | fetch_url |
+| `pokeminers.com` (Tumblr datamine) | sandbox-blocked | ✅ 200 | fetch_url |
+| `www.ign.com/games/pokemon-go`, `/wikis/pokemon-go` | flaky | ✅ 200 | fetch_url |
+| `rsshub.app` | sandbox-blocked | ❌ Cloudflare wall (even from Vercel) | **Skip — true wall.** Direct sources cover what we'd ask rsshub for. |
+| Twitter/X (`twitter.com`, `x.com`) | sandbox-blocked | ⚠️ 200 but JS-gate page only (no usable content) | **WebSearch snippet only**; mark `[from search snippet — incomplete]` |
+| `archive.ph` | sandbox-blocked | ⚠️ 429 rate limited | Use Wayback instead. |
 
-**Practical implications for the cloud agent:**
-- **For Hub URLs** (`pokemongohub.net/*`, `db.pokemongohub.net/*`): don't bother with WebFetch OR fetch_url — Cloudflare's interactive challenge defeats both. Compute hundo CPs from pokedex.json. For Hub article narrative, WebSearch snippet.
-- **For Niantic / pokemongo.com / LeekDuck**: WebFetch first; if 403, retry the same URL through `fetch_url` MCP. The MCP turns most of these into 200s.
-- **For news discovery**: prefer `fetch_url` against Google News RSS / Bing News RSS — these were the fail points of the May 7 monitor run, and the MCP fixes them.
-- **Don't escalate every 403 to MCP blindly.** The Hub family is a known Cloudflare wall — escalating wastes a connector round-trip.
+**Practical implications for the cloud agent (post-retest):**
+- **Default escalation for ANY 403:** WebFetch → fetch_url MCP → WebSearch snippet. The previous "skip MCP for Hub" rule no longer applies — the Hub family is reachable through Vercel.
+- **News discovery (Tier 0):** prefer `fetch_url` against Google News RSS / Bing News RSS / Feedburner-Hub. These all 403 from the cloud sandbox but 200 through Vercel.
+- **Hub-DB hundo CPs:** `db.pokemongohub.net/pokemon/[N]` via fetch_url is the new primary. Computing from pokedex.json is the fallback for unlisted Pokémon and a sanity-check.
+- **Hub Max Battle tier lists:** the static `pokemongohub.net/post/guide/max-attackers-tier-list/` and `max-defenders-tier-list/` URLs return real content via fetch_url. (URL versions may rotate monthly — search `site:pokemongohub.net max [attackers|defenders] tier list` if a specific URL 404s.)
+- **Reddit reading:** `/r/<sub>/.rss` (Atom feed) instead of `/r/<sub>/.json`. Same data, the feed format isn't bot-screened.
+- **Twitter/X:** still snippet-only. Don't try fetch_url — the response is technically 200 but is the JS-gate page.
+- **Watch for regressions:** Hub's Cloudflare ruleset could be tuned to block Vercel IP space at any time. If you start seeing CF-challenge bodies (`"Just a moment…"`) from `fetch_url` calls to Hub, fall back to WebSearch snippet and note it for re-verification.
 
 ### Flagging fallbacks
 
