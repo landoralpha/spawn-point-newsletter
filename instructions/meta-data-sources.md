@@ -53,7 +53,8 @@ Effective hierarchy in order:
 | `nianticlabs.com/news` | 403 | ✅ 200 | WebFetch → fetch_url on 403 |
 | `pokemongo.com/en/news`, `pokemongo.com/feed` | sometimes 403 | ✅ 200 | WebFetch → fetch_url on 403 |
 | `leekduck.com/events/` and event pages | sometimes 403 | ✅ 200 | WebFetch → fetch_url on 403 |
-| **`pokemongohub.net/`** (root + `/post/...`) | 403 | ✅ **200** (verified — Vercel IP not on Hub's CF blocklist) | **WebFetch → fetch_url on 403.** The earlier "Cloudflare wall" finding was from local-Mac tests; Vercel-deployed MCP gets through. |
+| **`pokemongohub.net/`** (root + `/post/...`) | 403 | ✅ **200** (verified — Vercel IP not on Hub's CF blocklist) | **For full article body, prefer the WordPress REST API (see section below).** For headlines / quick context, fetch_url against the article URL works. The earlier "Next.js client-side rendered" finding was wrong — Hub is WordPress 6.9.x. |
+| **`pokemongohub.net/wp-json/wp/v2/posts/...`** (WP REST API) | n/a | ✅ **200** (verified May 8, 2026 — open, no auth) | **Primary source for full Hub article body.** Returns clean JSON with rendered HTML content, no SPA rendering / OCR / screenshot needed. See dedicated section below. |
 | **`pokemongohub.net/feed/`** (RSS) | often 403 in sandbox | ✅ 200 | WebFetch → fetch_url on 403 |
 | **`pokemongohub.net/post/guide/max-attackers-tier-list/`**, `max-defenders-tier-list/` | 403 | ✅ 200 | WebFetch → fetch_url on 403 |
 | **`db.pokemongohub.net/pokemon/[N]`** | 403 | ✅ **200** (verified — Mewtwo page returned full title + Next.js content) | **Use as primary for hundo CPs.** Compute from pokedex.json remains useful as redundancy / for unlisted Pokémon. |
@@ -77,6 +78,44 @@ Effective hierarchy in order:
 - **Reddit reading:** `/r/<sub>/.rss` (Atom feed) instead of `/r/<sub>/.json`. Same data, the feed format isn't bot-screened.
 - **Twitter/X:** still snippet-only. Don't try fetch_url — the response is technically 200 but is the JS-gate page.
 - **Watch for regressions:** Hub's Cloudflare ruleset could be tuned to block Vercel IP space at any time. If you start seeing CF-challenge bodies (`"Just a moment…"`) from `fetch_url` calls to Hub, fall back to WebSearch snippet and note it for re-verification.
+
+### Hub Article Body via WordPress REST API (verified May 8, 2026)
+
+**Pokémon GO Hub runs on WordPress 6.9.x** (confirmed via the `<meta name="generator">` tag) and exposes the **standard WordPress REST API at `pokemongohub.net/wp-json/wp/v2/posts/...`, no auth required.** Tested via fetch_url MCP: returns clean JSON with the full rendered article HTML and metadata (title, slug, dates, featured media URL, categories, tags). No SPA rendering, no OCR, no screenshot dance.
+
+**Endpoints to know:**
+
+| Use case | URL pattern |
+|---|---|
+| Latest N posts (any category) | `pokemongohub.net/wp-json/wp/v2/posts?per_page=10&_fields=id,title,link,date,slug,excerpt` |
+| Specific post by ID | `pokemongohub.net/wp-json/wp/v2/posts/<id>` |
+| Specific post by slug | `pokemongohub.net/wp-json/wp/v2/posts?slug=<slug>` (returns array; take `[0]`) |
+| Search posts by query | `pokemongohub.net/wp-json/wp/v2/posts?search=<urlencoded-query>&per_page=10` |
+| Trim payload (recommended) | append `&_fields=id,title,link,date,slug,content,featured_media,_links` |
+
+**Response shape (single post):**
+```json
+{
+  "id": 139350,
+  "date": "2026-05-08T...",
+  "slug": "lechonk-community-day-pve-analysis-...",
+  "link": "https://pokemongohub.net/post/guide/...",
+  "title": { "rendered": "Lechonk Community Day PvE Analysis..." },
+  "content": { "rendered": "<p>Trainers, prepare for...</p>" },
+  "excerpt": { "rendered": "<p>Short summary...</p>" }
+}
+```
+
+The `content.rendered` field is full article HTML — strip tags for plain text or pass through to Notion as-is. Field is typically 5–20 KB of HTML per article, well under the fetch_url 100 KB cap.
+
+**When to use this vs the article URL directly:**
+- Need full body text (Trending Topic, datamine writeups, Nifty or Thrifty meta analysis): **WP REST API is primary** — gets the actual content payload, not the SPA shell.
+- Just need headline / metadata for dedup or "is this newsworthy" decision: fetch_url against the article URL is fine; the static HTML has the JSON-LD `NewsArticle` block with headline + description.
+- Tier list pages (`/post/guide/max-attackers-tier-list/` etc.): try WP REST first; falls back to article URL fetch_url if the slug doesn't match (some tier-list pages might use a different post type).
+
+**Why this matters:** an earlier May 2026 newsletter test got the static HTML of a Hub article and concluded "Hub is Next.js, body not extractable, must use WebSearch snippet." That diagnosis was wrong — the static HTML truncated before the article body, but WP REST returns the full content directly. WP REST should be the agent's first move for any Hub article body need.
+
+**Don't use** WP REST for `db.pokemongohub.net` — that's a separate Pokédex subdomain on a different stack, not WordPress. Hub-DB hundo CPs come from the rendered HTML there (Mewtwo etc.) per the existing rule.
 
 ### Flagging fallbacks
 
