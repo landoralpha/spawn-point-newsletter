@@ -57,7 +57,7 @@ Effective hierarchy in order:
 | **`pokemongohub.net/wp-json/wp/v2/posts/...`** (WP REST API) | n/a | ✅ **200** (verified May 8, 2026 — open, no auth) | **Primary source for full Hub article body.** Returns clean JSON with rendered HTML content, no SPA rendering / OCR / screenshot needed. See dedicated section below. |
 | **`pokemongohub.net/feed/`** (RSS) | often 403 in sandbox | ✅ 200 | WebFetch → fetch_url on 403 |
 | **`pokemongohub.net/post/guide/max-attackers-tier-list/`**, `max-defenders-tier-list/` | 403 | ✅ 200 | WebFetch → fetch_url on 403 |
-| **`db.pokemongohub.net/pokemon/[N]`** | 403 | ✅ **200** (verified — Mewtwo page returned full title + Next.js content) | **Use as primary for hundo CPs.** Compute from pokedex.json remains useful as redundancy / for unlisted Pokémon. |
+| **`db.pokemongohub.net/pokemon/[N]`** | 403 | ✅ **200** (Next.js with SSR; CP values are in the static HTML — see extraction note below) | **Use as primary for hundo CPs (paired with pokedex.json compute as cross-check).** |
 | `pokemon-go-api.github.io/api/...` | ✅ 200 | n/a | Tier 1 — WebFetch (github.io always reachable) |
 | `raw.githubusercontent.com/pvpoke/...` | ✅ 200 | n/a | Tier 1 — WebFetch |
 | **Reddit `/r/<sub>/.rss`** (Atom feed) | sandbox-blocked | ✅ 200 (25 entries, real titles) | **fetch_url — RSS is the way to read Reddit programmatically.** |
@@ -115,7 +115,29 @@ The `content.rendered` field is full article HTML — strip tags for plain text 
 
 **Why this matters:** an earlier May 2026 newsletter test got the static HTML of a Hub article and concluded "Hub is Next.js, body not extractable, must use WebSearch snippet." That diagnosis was wrong — the static HTML truncated before the article body, but WP REST returns the full content directly. WP REST should be the agent's first move for any Hub article body need.
 
-**Don't use** WP REST for `db.pokemongohub.net` — that's a separate Pokédex subdomain on a different stack, not WordPress. Hub-DB hundo CPs come from the rendered HTML there (Mewtwo etc.) per the existing rule.
+**Don't use** WP REST for `db.pokemongohub.net` — that's a separate Pokédex subdomain on a different stack (Next.js with SSR, not WordPress). See the Hub-DB extraction note below.
+
+### Hub-DB Hundo CP Extraction (verified May 8, 2026)
+
+`db.pokemongohub.net` is **Next.js with server-side rendering** — different stack from the main Hub (which is WordPress). It does NOT expose `__NEXT_DATA__`, a `/_next/data/...` JSON endpoint, OR a WP REST API. **But the CP values ARE in the static HTML** that fetch_url returns. The earlier impression that Hub-DB was "client-side rendered" was wrong.
+
+**Extraction quirk:** the CP `<span>` elements use CSS-modules-hashed class names like `PokemonStat_amount__cNQwJ` — the hash changes on every Hub-DB redeploy, so don't pattern-match on the class. The reliable pattern is the structural marker:
+
+```
+<strong>(\d+)<!-- --> <!-- -->CP</strong>
+```
+
+Or, more permissively: `<strong>(\d+)[^<]*?CP</strong>`.
+
+**Verified for Flittle (#955):** the page contains `<strong>401<!-- --> <!-- -->CP</strong>` (L20 hundo) and `<strong>501<!-- --> <!-- -->CP</strong>` (L25 weather-boosted). These match exactly what `pokedex.json + GO CP formula` produces (base 105/60/102 → 401/501).
+
+**The Step 5.5 Check #9 cross-check pattern:** the agent should ALWAYS do both paths and compare:
+
+1. **Fetch path:** `fetch_url MCP → db.pokemongohub.net/pokemon/[N]` → extract CP values via the structural regex above. Take the lowest two CP values rendered in the page's stat block — those are typically L20 hundo and L25 weather-boosted (the page renders L20/L25/L40/L50 in ascending order).
+2. **Compute path:** look up base atk/def/sta in `pokemon-go-api/pokedex.json` → apply the GO CP formula with cpm 0.5974 (L20) and 0.6679 (L25) → get expected values.
+3. **Cross-check:** the two should match exactly. If they do, draft confidently. If they disagree, FLAG — likely either the species in pokedex.json has stale stats OR Hub-DB extracted the wrong number from a different stat block. Do not draft a CP value until the discrepancy is resolved.
+
+This dual-path verification is the strongest defense against the Flittle/Espathra hallucination class of failure.
 
 ### Flagging fallbacks
 
