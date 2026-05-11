@@ -355,7 +355,7 @@ Quick reference (Niantic-confirmed):
 
 ### Community Days (faq/1770)
 - **Featured Pokémon spawns increased** during specific time per timezone
-- **Exclusive move:** Earned by evolving featured Pokémon during or **up to 5 hours after** the event
+- **Exclusive move evolution window:** **4 hours after event end** is the current 2026 standard for BOTH Regular Community Day AND Community Day Classic. Niantic's help-center FAQ (faq/1770) still says "up to 5 hours" but is STALE — every event-specific news article on `pokemongo.com/news/communityday-*` and `pokemongo.com/news/communitydayclassic-*` from Jan–May 2026 states "evolve during the event or up to four hours afterwards." Verified across: Piplup CD Classic (Jan 2026), Vulpix CD (Feb 2026), Scorbunny CD (Mar 2026), Tinkatink CD (Apr 2026), Lechonk CD (May 2026), Deino CD Classic (May 2026) — all 4 hours. ALWAYS verify per-event via the Niantic news article; multi-day specials (e.g., Dec 2025's two-day event) use extended windows.
 - **Post-event move access:** Elite TM
 - **Bonus examples:** Increased Stardust, increased Catch XP, increased Lure duration, decreased Egg hatch distance
 
