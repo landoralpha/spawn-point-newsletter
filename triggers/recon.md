@@ -295,7 +295,7 @@ In any skip case, log in Step 7 Run Log Notes: `Step 5.5 skipped — <reason>: <
 
 ## Step 5.7: Auto-patch Notion content for fixable FLAGs
 
-Beehiiv MCP v1 is READ-ONLY, so the recon trigger cannot fix issues at Beehiiv directly. But Notion IS writable, and Joe drafts in Notion before pasting into Beehiiv across iterations. Apply mechanical, low-risk corrections directly to the matched Notion entry's page content so Joe can either re-paste the corrected Notion blocks into Beehiiv or use them to update the Beehiiv draft inline. The recon email tells Joe exactly which FLAGs were auto-patched in Notion (ready to copy over) and which require manual judgment.
+Beehiiv MCP v1 is READ-ONLY, and bypassing the MCP with the Beehiiv REST API doesn't help either — Beehiiv gates POST/PUT post operations behind their Enterprise plan (`SEND_API_NOT_ENTERPRISE_PLAN` returned on empirical test 2026-05-18). So the recon trigger cannot fix issues at Beehiiv directly through any path on Spawn Point's current Beehiiv plan tier. But Notion IS writable, and Joe drafts in Notion before pasting into Beehiiv across iterations. Apply mechanical, low-risk corrections directly to the matched Notion entry's page content so Joe can either re-paste the corrected Notion blocks into Beehiiv or use them to update the Beehiiv draft inline. The recon email tells Joe exactly which FLAGs were auto-patched in Notion (ready to copy over) and which require manual judgment.
 
 This step ONLY runs when ALL of the following are true:
 - `matched_notion_page_id` is non-null (Step 5.5 matching contract passed).
