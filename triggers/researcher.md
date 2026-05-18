@@ -516,83 +516,161 @@ The agent has NO git push credentials AND the sandbox blocks curl. Step 6.5 prod
 - **Trainer Tip Angles Used (per-slot specifics):** [list 3-5 specific tip framings, comma-separated]
 ```
 
-## Step 7: Send Email Notification
+## Step 7: Send Email Notification (LOCKED HTML FORMAT)
 
-Send via Spawn-Point-Fetcher MCP `send_email` tool. Args: `to="joelandor@gmail.com"`, `subject="Spawn Point Draft Ready - [Newsletter Monday] – [Newsletter Sunday]"`, `body`:
+Send via Spawn-Point-Fetcher MCP `send_email` tool with `body_format="html"`. Args: `to="joelandor@gmail.com"`, `body_format="html"`, `subject="[Spawn Point] Issue #[N+1] Pipeline Complete — [Title] ([Publish Date Saturday])"`, `body` rendered per the locked template below.
+
+**Why locked**: Joe approved this email layout — every research run uses the EXACT structure (header banner → Notion Pages → Subject Lines → Pre-Publish Audit → Hundo CP Provenance → Data Source Health → Trending Topic Candidates → Trainer Tip Angle Candidates → Archive Diff → Remaining Flags → footer). Do not invent alternate structures or reorder sections.
+
+### Subject line
 ```
-Spawn Point #[N+1] is drafted and pushed to Notion.
-
-* Newsletter (Notion): [URL]
-* Social Pack (Notion child page): [URL]
-* Trending Topic Drafts (Notion child page): [URL]
-* Run log: https://www.notion.so/e57321c855844e22b41285873853e26c (this run's row will be at the top, filtered to Trigger = Research Agent)
-
-Key decisions:
-* Subject A/B: [3 options listed]
-* Default selected: Option [N] — [reason]
-* Featured Community Day: [name]
-* Headline raid swap: [boss → boss]
-
-**Trending Topic candidates (4):**
-1. [Title] — [DEFAULT, written in draft] — [1-line angle]
-2. [Title] — alternative — [1-line angle]
-3. [Title] — alternative — [1-line angle]
-4. [Title] — alternative — [1-line angle]
-
-**Trainer Tip angle candidates (4):**
-1. [Angle name] — [DEFAULT, used across draft tips] — [1-line]
-2. [Angle name] — alternative — [1-line]
-3. [Angle name] — alternative — [1-line]
-4. [Angle name] — alternative — [1-line]
-
-To swap a default: read the full mini-drafts in the Trending Topic Drafts child page; copy the preferred one's body into the main draft's Trending Topic section.
-
-Flags raised this run:
-* [RULE CHANGE / ROTATION CONFLICT / PENDING / UNVERIFIED / REFERENCE DRIFT items]
-
-Audit results:
-* **Source Presence Audit (Check #0): [N/[N] sections cited]** — [PASS or list failures]
-* **Hundo CP Provenance & Verification Audit (Check #9): [N/[N] CPs verified]** — [PASS or list discrepancies]
-* Newsletter audit (full checklist): [N/22 passed; failures listed]
-* Social audit: [N/9 passed; failures listed]
-
-Hundo CP provenance summary:
-* [Species] (dex# [N]) — source: [fetched URL or pokedex.json (computed)] — L20/L25: [val/val]
-* (one row per featured catchable Pokémon)
-
-Data source health:
-* PvPoke JSON: [ok / failed]
-* Pokebattler JSON via fetch_url MCP: [ok / failed]
-* pokemon-go-api JSON: [ok / failed]
-* db.pokemongohub.net via fetch_url: [ok / failed / CF-challenge]
-* Hub WP REST API: [ok / failed / count of articles fetched]
-* fetch_url MCP rescues: [N — list URLs]
-* Silent fallbacks used: [list]
-
-Notion property coverage:
-* Properties populated: [list]
-* Properties missing from database: [list, if any]
-
-Trainer Tip angle drift:
-* Default angle theme used: [name]
-* Underused angles surfaced as candidates: [list]
-* Heavily-reused angles avoided: [list]
-
-=== Archive entry to apply locally ===
-
-  cd ~/Documents/spawn-point
-  git pull
-  # paste the entries below into instructions/newsletter-archive.md
-  git add instructions/newsletter-archive.md
-  git commit -m "archive: add Spawn Point #[N+1] - [title]"
-  git push
-
---- Quick Reference Table row ---
-[Piece 1 from Step 6.5]
-
---- Detailed Issue Record ---
-[Piece 2 from Step 6.5]
+[Spawn Point] Issue #[N+1] Pipeline Complete — [Title] ([Publish Date Saturday, e.g., May 30, 2026])
 ```
+
+### Body (HTML — render with this exact section order and table structure)
+
+```html
+<h1>[event emoji per theme — 🌊 water / 🔥 fire / ⚡ electric / 🌳 grass etc.] Spawn Point #[N+1] — Pipeline Complete</h1>
+
+<p><strong>Issue:</strong> #[N+1] | <strong>Week:</strong> [Mon Date]–[Sun Date], 2026 | <strong>Publish:</strong> Saturday, [Publish Date], 2026<br>
+<strong>Title:</strong> [Title]<br>
+<strong>Pipeline Status:</strong> [COMPLETE / PARTIAL / FAILED] — [brief one-line summary of state, e.g., "3 Notion pages created, pre-publish audit passed, social copy audited, run log pending (below)"]</p>
+
+<h2>Notion Pages</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Page</th><th>URL</th></tr>
+  <tr><td>Newsletter #[N+1]</td><td><a href="[newsletter URL]">[URL]</a></td></tr>
+  <tr><td>Social Pack (child)</td><td><a href="[social pack URL]">[URL]</a></td></tr>
+  <tr><td>Trending Topic Drafts (child)</td><td><a href="[trending topic drafts URL]">[URL]</a></td></tr>
+</table>
+
+<h2>Subject Lines (for Beehiiv)</h2>
+<ul>
+  <li><strong>[Subject-led / DEFAULT]:</strong> [Option A]</li>
+  <li><strong>[Action-led]:</strong> [Option B]</li>
+  <li><strong>[Hook]:</strong> [Option C]</li>
+</ul>
+
+<h2>Pre-Publish Audit Results</h2>
+<p>Both HARD FAIL gates passed [after fixes / cleanly]. [Brief context — what was caught and corrected before Notion push, if anything].</p>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Check</th><th>Finding</th><th>Result</th></tr>
+  <tr><td>#0 Source Presence</td><td>[finding or "all sections cited cleanly"]</td><td>[PASSED / FIXED]</td></tr>
+  <tr><td>#9 Hundo CP Provenance</td><td>[all N CPs verified vs hub-db / formula]</td><td>[PASSED / FIXED]</td></tr>
+  <tr><td>#14 Trainer Tip Per-Section</td><td>[5/5 required sections have Trainer Tip blocks / list missing]</td><td>[PASSED / FIXED]</td></tr>
+  <tr><td>#15 Hundo CP Format</td><td>[all CP lines use locked format / list violations]</td><td>[PASSED / FIXED]</td></tr>
+  <tr><td>Brand Voice — Em Dashes</td><td>[N instances removed / 0 found]</td><td>[FIXED / PASSED]</td></tr>
+  <tr><td>Publish Date sanity</td><td>[Saturday confirmed / corrected from X to Y]</td><td>[PASSED / FIXED]</td></tr>
+  <tr><td>Section 11 (Month Transition)</td><td>[Included / Skipped — reason]</td><td>[N/A — CORRECT / INCLUDED]</td></tr>
+  <!-- Add additional rows for any other checks that produced findings or fixes -->
+</table>
+
+<h2>Hundo CP Provenance (Check #9)</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Species</th><th>Dex#</th><th>L20 Hundo</th><th>L25 WB</th><th>Source</th><th>Notes</th></tr>
+  <tr><td>[Species]</td><td>[N]</td><td>[value]</td><td>[value]</td><td>[fetched URL or "pokedex.json (computed)"]</td><td>[Clean match / cross-check flag with details]</td></tr>
+  <!-- One row per featured catchable Pokémon -->
+</table>
+<p>[Optional: any cross-check discrepancies + how resolved. E.g., "Tapu Bulu showed a small discrepancy between computed base-stat estimate and hub-db; hub-db re-fetched same-day and trusted."]</p>
+
+<h2>Data Source Health</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Source</th><th>Status</th></tr>
+  <tr><td>LeekDuck events</td><td>[✅ 200 via fetch_url MCP / ❌ status]</td></tr>
+  <tr><td>pokemongo.com/news</td><td>[✅ / ⚠️ / ❌ with note]</td></tr>
+  <tr><td>Hub WP REST API</td><td>[status, count of articles fetched]</td></tr>
+  <tr><td>db.pokemongohub.net (N Pokémon)</td><td>[status]</td></tr>
+  <tr><td>Pokebattler (N defenders)</td><td>[status]</td></tr>
+  <tr><td>PvPoke GL/UL/ML JSON</td><td>[status, note if a league was not fetched]</td></tr>
+  <tr><td>Reddit r/pokemongo RSS</td><td>[status; if 5xx, retry per meta-data-sources.md guidance]</td></tr>
+  <tr><td>pokemon-go-api pokedex.json</td><td>[status]</td></tr>
+</table>
+
+<h2>Trending Topic Candidates (4 options)</h2>
+<p><strong>✅ CANDIDATE 1 (SELECTED): "[Title]"</strong><br>
+[80–120 word mini-draft summary from the brief, with the "Why this works" baked in.]<br>
+<em>Sources:</em> [URL list]</p>
+
+<p><strong>CANDIDATE 2: "[Title]"</strong><br>
+[Mini-summary.]<br>
+<em>Sources:</em> [URL list]</p>
+
+<p><strong>CANDIDATE 3: "[Title]"</strong><br>
+[Mini-summary.]<br>
+<em>Sources:</em> [URL list]</p>
+
+<p><strong>CANDIDATE 4: "[Title]"</strong><br>
+[Mini-summary.]<br>
+<em>Sources:</em> [URL list]</p>
+
+<h2>Trainer Tip Angle Candidates (4 options)</h2>
+<p><strong>✅ CANDIDATE 1 (SELECTED): [Angle name]</strong><br>
+[2-sentence frame + why this is the strongest fit for this week.]</p>
+
+<p><strong>CANDIDATE 2: [Angle name]</strong><br>[2-sentence frame.]</p>
+<p><strong>CANDIDATE 3: [Angle name]</strong><br>[2-sentence frame.]</p>
+<p><strong>CANDIDATE 4: [Angle name]</strong><br>[2-sentence frame.]</p>
+
+<h2>Archive Diff — Apply Manually to instructions/newsletter-archive.md</h2>
+<p>[If archive is stale (Notion has issues beyond archive max), call it out: "⚠️ ARCHIVE STALE: newsletter-archive.md shows max issue #X. Notion DB has #Y. Before applying #[N+1] entry below, backfill #X+1 through #Y first — or add #[N+1] now and note the gap."]</p>
+
+<h3>Step 1 — Add to Quick Reference Table (after the #[N] row)</h3>
+<pre>| [N+1] | [Title] | [Date Range] | [CD or none] | [5-Star] | [Mega] | [Shadow] | [GBL Cup] | [Max Monday] | [Trending Topic title] |</pre>
+
+<h3>Step 2 — Add to Detailed Issue Records (after the #[N] record)</h3>
+<pre>### Spawn Point #[N+1]: [Title]
+- **Week:** [date range]
+- **URL:** [TBD until Beehiiv publish]
+- **Community Day:** [or none]
+- **Five-Star Raids:** [list with exit/debut dates]
+- **Mega Raids:** [list with exit/debut dates]
+- **Shadow Raids:** [list]
+- **GBL Cup:** [or "Open formats (GL/UL/ML)"]
+- **Max Monday:** [Dynamax Pokémon, including evolution gating if applicable]
+- **Trending Topic:** "[Title]" — [1-line description]
+- **Don't Miss:** [3 callouts; deadlines first]
+- **Trainer Tip Angles Used:** [default angle theme name + 1-line description]</pre>
+
+<h3>Step 3 — Update Pattern Analysis section</h3>
+<pre># In "Trending Topic categories used so far" — add:
+- **[Category name from this week's default]:** #[N+1] [topic]
+
+# In "Trainer Tip Angle Rotation" — update Recently Used line to add:
+[Angle name] (#[N+1])
+
+# In "Featured Pokémon Recurrence" — add to each list:
+- Five-Star: (add) [species]
+- Mega: (add) [Mega species]
+- Shadow Raid: [continues / new]
+- Max Monday: (add) [species]
+
+# Update top of file:
+**Last updated:** [today's date] (draft produced for #[N+1], publish [Saturday date])</pre>
+
+<h2>Remaining Flags</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Flag</th><th>Status</th></tr>
+  <tr><td>[Flag tag and short description]</td><td>[Status / non-blocking / needs action / etc.]</td></tr>
+  <!-- One row per remaining flag. If none, render: <tr><td colspan="2">No remaining flags.</td></tr> -->
+</table>
+
+<p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+Spawn Point Research Agent — Run date: [YYYY-MM-DD] | Issue #[N+1] | Publish [Saturday date]
+</p>
+```
+
+### Rules for the HTML body
+
+- **All `<` and `>` inside content must be HTML-escaped** (`&lt;` / `&gt;`) — they're rare in newsletter content but show up in code snippets / move regex patterns.
+- **All `&` inside content must be `&amp;`** unless it's already an entity.
+- **URLs in Notion Pages table cells must be wrapped in `<a href="...">`** so they're clickable.
+- **Use the green ✅ / red ❌ / yellow ⚠️ unicode icons** in the Data Source Health table — those scan visually.
+- **DO NOT include CSS classes or external stylesheets** — inline styles only (Gmail strips most CSS). The inline border/padding/style attributes shown above are safe.
+- **DO NOT use `<style>` blocks** — Gmail will strip them.
+- **Section order is locked.** Do not omit a section unless explicitly N/A (e.g., archive diff for a non-Notion-blocking run); if a section has no content, render a 1-line "None this run" instead of dropping the heading.
+
+### Plain-text fallback
+Some clients render HTML poorly. The MCP `send_email` tool handles plain-text auto-conversion. Do not author a separate plain-text body — the HTML structure is the source of truth.
 
 ## Step 8: Write Run Log Entry (ALWAYS RUN — last step before exit)
 
