@@ -331,29 +331,52 @@ See `mega-evolution-reference.md` for full mechanics.
 
 ## 7. Link Charges [2026, Niantic]
 
-**Introduced February 2026** as the gating currency for Mega Raid entry, replacing the unlimited Premium Battle Pass model for top-tier raids.
+**Introduced via the Pokémon GO Tour: Kalos rollout (rollout in progress as of May 2026)** as an energy-source item used to enter Mega Raids. Authoritative source: [Niantic Help Center — "What are Link Charges and how do I collect them?"](https://niantic.helpshift.com/hc/en/6-pokemon-go/faq/5380-what-are-link-charges-and-how-do-i-collect-them/) (last verified May 18, 2026).
 
-### Where Link Charges are required
+### Storage: the Link Holder key item
 
-- **Super Mega Raids** entry requires **1 Link Charge + 1 raid pass** (Premium Battle Pass or Remote Raid Pass)
-- **Standard Mega Raids** still use just a raid pass (NO Link Charge)
-- Link Charges are NOT consumed by 5-star Legendary raids, Shadow Raids, or Max Battles
+- Auto-added to Item Bag upon receiving your first Link Charge. **Non-removable.**
+- **Hard cap: 600 Link Charges.** If you're at or near 600, you will NOT receive additional Link Charges from rewards — spend down first. Source: [Niantic FAQ #5406](https://niantic.helpshift.com/hc/en/6-pokemon-go/faq/5406-why-am-i-not-receiving-link-charges-from-research-or-task-rewards/).
+- Tap the Link Holder in Item Bag to view current count.
 
-### Link Charge sources [Niantic]
+### Usage rules (the authoritative Niantic FAQ)
 
-| Source | Yield | Notes |
+Quote, verbatim: *"Link Charges are a newly discovered energy source that is used to enter Mega Raids. When challenging a Mega Raid in-person, Trainers will have the option to use Link Charges or Premium Battle Passes. If you have a free Raid Pass, the free Raid Pass will be used instead. Additionally, both Link Charges and a Remote Raid Pass are required when entering a Super Mega Raid remotely."*
+
+Translated to a decision table:
+
+| Raid type | In-person entry | Remote entry |
 |---|---|---|
-| Weekly Mega Challenge research | 1–3 per week | Free, requires completing Mega-themed tasks |
-| Gifts from Friends | Occasional drop | Random, low rate |
-| Campfire meet-ups | 1 per attended Campfire event (location-tagged) | Requires Campfire app |
-| In-game shop | Bundle pricing — see below | Paid |
-| Limited-time research / events | Variable | Free during Mega-themed events |
+| **Standard Mega Raid** | Free Raid Pass (auto-priority) → OR Link Charge → OR Premium Battle Pass (trainer's choice between the latter two) | Remote Raid Pass (Link Charge NOT required per FAQ wording — FAQ only specifies the AND requirement for **Super** Mega remote) |
+| **Super Mega Raid** | Free Raid Pass (auto-priority) → OR Link Charge → OR Premium Battle Pass | **BOTH** Link Charge AND Remote Raid Pass required |
+| 5-Star Legendary | Free Raid Pass or Premium / Remote | Remote Raid Pass |
+| Shadow Raid (any tier) | Free Raid Pass or Premium (cannot be done remote) | N/A — Shadow Raids are in-person only |
+| Max Battle (any tier) | Max Particles (not a raid pass system) | In-person only |
 
-### Link Charge Shop Pricing [Niantic, 2026]
+**Key reversal from earlier doc state:** Link Charges are **NOT** Super-Mega-exclusive. Per Niantic, in-person entry to ANY Mega Raid offers Link Charge as an option (with free Raid Pass auto-prioritized when available). The newsletter's "Standard Mega doesn't use Link Charges" framing is wrong — it's a player **choice** for in-person Standard Mega, and a **requirement** for remote Super Mega.
 
-[Verify current in-app pricing — values reflect launch tier]
+### Link Charge sources [Niantic FAQ #5380]
 
-| Bundle | PokéCoins | Per-charge cost |
+| Source | Guarantee | Notes |
+|---|---|---|
+| **Weekly Challenge research** | **Guaranteed** | Free, complete Mega-themed weekly tasks |
+| **Official Community Ambassador Meetups** (checked-in) | **Guaranteed** | Requires attending + checking in to a Niantic-sanctioned Meetup |
+| **Opening Gifts from Friends** | **Chance only** | Random low-rate drop |
+| **Kalos Tour Pass Deluxe** (ticket-holders) | Guaranteed (bundled) | Live-event purchase during Kalos Tour: Tainan or Kalos Tour: LA |
+| **In-game shop purchase** | Paid | **Gated:** ticket-holders only until Pokémon GO Tour: Kalos – Global launches in your region; opens to all trainers thereafter |
+| **Limited-time research / events** | Variable | Per-event basis during Mega-themed events |
+
+### Availability rollout (as of May 9, 2026 per Niantic FAQ)
+
+- **Currently:** only Kalos Tour: Tainan / LA ticket-holders can earn or buy Link Charges.
+- **When "Road to Kalos" begins** (upcoming, exact date TBD): social-action earning (Weekly Challenge, Meetups, Gifts) opens to ALL trainers.
+- **When Pokémon GO Tour: Kalos – Global launches in your region** (upcoming): in-game shop purchase opens to all trainers.
+
+### Link Charge Shop Pricing [STALE REFERENCE — verify in-app]
+
+The bundle prices below were estimates from launch-window reporting and are NOT confirmed via current FAQ. Niantic does not publish shop pricing on the help center. **Re-verify in-app before citing in newsletter copy.**
+
+| Bundle | PokéCoins (estimate) | Per-charge cost (estimate) |
 |---|---|---|
 | 1 Link Charge | ~150 | 150 |
 | 3 Link Charges | ~400 | ~133 |
@@ -363,8 +386,10 @@ Typically also bundled with Mega Energy + Premium Pass packs in event boxes.
 
 ### Tip implications
 
-- **Newsletter reader assumption to flag:** "Mega Raids" without qualification could mean either Standard Mega or Super Mega. ALWAYS clarify which tier requires Link Charges.
-- For "is it worth it?" calls on Super Mega Raid passes: factor in the Link Charge as part of the entry cost.
+- **In-person Standard Mega Raid math:** if a trainer has free Raid Passes available, those auto-consume FIRST (no Link Charge spent). Only AFTER free passes are exhausted does the game prompt for Link Charge vs Premium Pass choice.
+- **Remote Super Mega Raid math:** the Link Charge is in ADDITION to the Remote Raid Pass — both are spent per raid. Factor BOTH into the "is it worth it?" call.
+- **Cap awareness:** at 600 Link Charges, the player is leaving rewards on the table if a Weekly Challenge or Meetup would push them over. Spend first when near cap.
+- **Newsletter reader assumption to flag:** "Mega Raids" without qualification — clarify whether you mean in-person (Link Charge optional, free pass priority) or remote (Standard = Remote Pass only; Super Mega = Link Charge + Remote Pass).
 
 ---
 

@@ -84,11 +84,11 @@ While at least one Mega-Evolved Pokémon is on the battlefield in a raid:
 #### Pokémon GO Tour: Kalos – Global (Feb 28 – March 1, 2026)
 - Introduced **Super Mega Raids** — require ≥7 trainers; Mega-Evolved Pokémon auto-deploy; bosses use shields each trainer can break once for a powered-up attack
 - Introduced **Super Max** Mega Level
-- Introduced **Link Charges** (new energy resource) and **Link Holder** (key item, non-removable). Required for entering Mega Raids including Super Mega Raids.
-  - Local: Link Charges OR Premium Battle Pass
-  - Remote: Remote Raid Pass + Link Charges
+- Introduced **Link Charges** (new energy resource) and **Link Holder** (key item, non-removable, **600-Link-Charge cap**). Used for entering Mega Raids.
+  - **In-person (any Mega tier):** free Raid Pass auto-priority → otherwise trainer's choice of Link Charge OR Premium Battle Pass
+  - **Remote Super Mega Raid:** BOTH Link Charge AND Remote Raid Pass required (the FAQ is silent on remote Standard Mega — treat as Remote Raid Pass only unless verified otherwise)
 - Debut Pokémon: Mega Victreebel, Mega Malamar, Mega Dragonite
-- Link Charge sources: weekly challenges, gifts, Campfire community meetups, in-game shop
+- Link Charge sources (per Niantic FAQ #5380): Weekly Challenges (guaranteed), official Community Ambassador Meetups checked in (guaranteed), Gifts (chance), Kalos Tour Pass Deluxe / Tour-ticket-holder shop, broader social-action + shop rollout tied to Road to Kalos and Kalos Tour: Global launches. **Authoritative source:** [Niantic Help Center FAQ #5380](https://niantic.helpshift.com/hc/en/6-pokemon-go/faq/5380-what-are-link-charges-and-how-do-i-collect-them/). Full decision table + 600 cap detail lives in `instructions/cost-reference.md` §7.
 
 #### Pokémon GO Fest 2026: Global (July 11–12, 2026, free worldwide for the 10-year anniversary)
 - **Mega Mewtwo X and Mega Mewtwo Y** debut in Super Mega Raids
