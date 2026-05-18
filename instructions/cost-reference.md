@@ -305,7 +305,23 @@ After the first Mega Evolution of a species, subsequent costs **drop dramaticall
 - **Special / Timed Research:** event-tied free amounts
 - **Field Research breakthroughs** during Mega events
 
-See `mega-evolution-reference.md` for full mechanics.
+### Mega Energy spend-to-level mechanic [Niantic, effective May 23, 2026]
+
+Live with the Falinks Super Mega Raid Day rollout. Verbatim from [Niantic — Falinks Super Mega Raid Day](https://pokemongo.com/news/falinks-super-mega-raid-day-2026):
+
+> "You will be able to use Mega Energy to quickly increase your Pokémon's Mega Level for all levels! The amount of Mega Energy required to level up will depend on how many times you've Mega Evolved that Pokémon — the more times you've Mega Evolved it, the less Mega Energy it will cost!"
+
+**What it means for Mega Energy economy:**
+- BEFORE May 23: Mega Energy was REQUIRED to spend only at the Max → Super Max step. Earlier Mega Level progression (Base → High → Max) was free, gated by the once-per-day-per-Pokémon Mega Evolution contribution.
+- AFTER May 23: Mega Energy can ALSO be spent to push Mega Levels at ANY level. Cost scales DOWN with prior Mega Evolution count for that species — heavy investors pay less per level.
+- The free daily-contribution path is NOT removed; spend-to-level is an alternative fast lane.
+
+**Newsletter economy implications:**
+- Banking Mega Energy (via buddy walk, Mega Raids, Research) now serves TWO purposes: enabling Mega Evolution AND enabling fast Mega Level progression.
+- Trainers planning for a known upcoming CD or Raid Day can spend-to-level shortly before the event, skipping the multi-week daily-contribution wait.
+- **Specific per-species + per-Mega-Evolution-count costs are NOT published by Niantic.** Cite the mechanic, not specific numbers, until in-game data is observable.
+
+See `mega-evolution-reference.md` Falinks Super Mega Raid Day section for full mechanic detail.
 
 ---
 

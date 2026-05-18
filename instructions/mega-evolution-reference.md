@@ -1,6 +1,6 @@
 # Mega Evolution & Primal Reversion Reference
 
-**Last verified:** May 2026 (after Pokémon GO Tour: Kalos Feb 28 – March 1, 2026 changes)
+**Last verified:** May 18, 2026 (includes the Falinks Super Mega Raid Day Mega Energy spend-to-level rollout effective May 23, 2026)
 
 ## Mega Evolution — Complete System
 
@@ -90,9 +90,19 @@ While at least one Mega-Evolved Pokémon is on the battlefield in a raid:
 - Debut Pokémon: Mega Victreebel, Mega Malamar, Mega Dragonite
 - Link Charge sources (per Niantic FAQ #5380): Weekly Challenges (guaranteed), official Community Ambassador Meetups checked in (guaranteed), Gifts (chance), Kalos Tour Pass Deluxe / Tour-ticket-holder shop, broader social-action + shop rollout tied to Road to Kalos and Kalos Tour: Global launches. **Authoritative source:** [Niantic Help Center FAQ #5380](https://niantic.helpshift.com/hc/en/6-pokemon-go/faq/5380-what-are-link-charges-and-how-do-i-collect-them/). Full decision table + 600 cap detail lives in `instructions/cost-reference.md` §7.
 
+#### Falinks Super Mega Raid Day (Saturday, May 23, 2026, 2:00 PM – 5:00 PM local) — Mega Energy spend-to-level mechanic ships
+- **Mega Falinks** debuts in Super Mega Raids (Shiny Falinks possible from these raids)
+- **System-level Mega Energy change rolls out alongside this event** — previously listed as a "Future Update" in the Mega Evolution 2026 hub, now confirmed live with the May 23 event. Verbatim from [Niantic — Falinks Super Mega Raid Day announcement](https://pokemongo.com/news/falinks-super-mega-raid-day-2026):
+  > "As part of this update, you will be able to use Mega Energy to quickly increase your Pokémon's Mega Level for all levels! The amount of Mega Energy required to level up will depend on how many times you've Mega Evolved that Pokémon — the more times you've Mega Evolved it, the less Mega Energy it will cost!"
+- **What it changes:** Before May 23, Mega Energy was REQUIRED to spend only at the Max → Super Max step. The Base/High/Max ladder relied on the daily once-per-Pokémon free-Mega-Evolve contribution. Starting May 23, trainers can ALSO spend Mega Energy to push Mega Levels at ANY level (Base → High, High → Max, AND Max → Super Max), with the cost scaling DOWN based on prior Mega Evolution count for that species. The daily once-per-Pokémon free-contribution path remains available; spend-to-level is an alternative fast lane.
+- **Editorial implication for newsletter copy:** "Mega Level only progresses once per day" is no longer the full picture starting May 23. It's now "free progression is gated to once per day per Pokémon; trainers who've already invested can spend Mega Energy to push past that cap, with discount based on Mega Evolution count."
+- **Specific spend costs per species + Mega Evolution count: not published by Niantic.** Cite the mechanic, not specific numbers, until in-game data is observable.
+- Event bonuses (May 22 5:00 PM – May 23 8:00 PM PDT): Remote Raid Pass limit increased to 20; up to six free Raid Passes from Photo Discs; increased Shiny Falinks chance from Super Mega Raids.
+
 #### Pokémon GO Fest 2026: Global (July 11–12, 2026, free worldwide for the 10-year anniversary)
 - **Mega Mewtwo X and Mega Mewtwo Y** debut in Super Mega Raids
 - Special: Mega Mewtwo caught from Super Mega Raids comes pre-loaded with at least one Mega Level and can be Mega Evolved without paying initial energy
+- **Multi-Mega tracking:** for species with multiple Mega Evolutions (Charizard X/Y, Mewtwo X/Y), Mega Level progression and Mega Energy are tracked SEPARATELY per form. Source: [LeekDuck GO Fest 2026 Global event page](https://leekduck.com/events/pokemon-go-fest-2026-global/). (Aggregator reports also suggest this could roll out earlier than GO Fest — verify against official Niantic news before citing an earlier date.)
 
 ### Mega Roster Size
 
@@ -186,11 +196,12 @@ Both Primals, when caught from raids, can learn exclusive signature charged atta
 
 ### Pre-Leveling Megas
 
-- Mega Levels only progress **once per day per individual Pokémon**
-- Reach Max = 30 days minimum
-- Super Max requires Max + 5,000 ME spent on that individual (additional weeks of grinding)
-- For known upcoming Community Days, start Mega-Evolving the relevant Mega weeks ahead
-- Buddy walking during off-days (5 ME/km) lets you bank energy without raid investment
+- **Free path:** Mega Levels progress **once per day per individual Pokémon** via Mega Evolving — capped at one contribution per Pokémon per day.
+- **Spend-to-level path (live May 23, 2026):** Spend that species' Mega Energy directly to push the Mega Level at ANY level (Base → High, High → Max, Max → Super Max). Cost scales DOWN with prior Mega Evolution count — the more times you've already Mega Evolved that Pokémon, the cheaper each level becomes. Useful when you've already invested in a species but want to skip waiting out the daily contribution windows.
+- Reach Max via free path alone = 30 days minimum; spend-to-level can shortcut this if you have the Mega Energy stockpile.
+- Super Max still requires Max first, then additional Mega Energy spend (community-reported at ~5,000 ME, but the May 23 update changes this to a scaled cost — re-verify numbers in-app).
+- For known upcoming Community Days, start Mega-Evolving the relevant Mega weeks ahead, OR stockpile Mega Energy and spend-to-level when ready.
+- Buddy walking during off-days (5 ME/km) lets you bank energy without raid investment.
 
 ### Best Dual-Type Megas (for catch coverage)
 
@@ -228,7 +239,7 @@ Both Primals, when caught from raids, can learn exclusive signature charged atta
 ## Source Confidence Map
 
 **Niantic-confirmed (official help center / pokemongo.com posts):**
-- 8-hour duration, one Mega/Primal active at a time, +30%/+10% raid aura math, aura applies to other trainers, no stacking, Primal types per species, Mega Levels exist with bonuses, Super Max introduced Feb 20 2026, Super Mega Raids require 7+ trainers, Mega Energy storage 10,000, Mewtwo Mega debut at GO Fest 2026 Global (free), trade resets Mega Level, restricted from standard GBL, Link Charges/Link Holder mechanics, daily once-per-day level contribution, signature attacks 130 power.
+- 8-hour duration, one Mega/Primal active at a time, +30%/+10% raid aura math, aura applies to other trainers, no stacking, Primal types per species, Mega Levels exist with bonuses, Super Max introduced Feb 20 2026, Super Mega Raids require 7+ trainers, Mega Energy storage 10,000, Mewtwo Mega debut at GO Fest 2026 Global (free), trade resets Mega Level, restricted from standard GBL, Link Charges/Link Holder mechanics, daily once-per-day level contribution, signature attacks 130 power, **Mega Energy spend-to-level at ALL levels effective May 23, 2026 with cost scaling down by prior Mega Evolution count (Falinks Super Mega Raid Day announcement)**.
 
 **Community-derived but well-documented (GamePress, Pokémon GO Hub, Serebii, LeekDuck):**
 - Specific initial Mega Energy costs (100/200/300/400 by tier), exact rest period durations (7/5/3/1 days), exact Mega Level requirements (1/7/30 evolutions), Super Max requires 5,000 ME, +1/+2/+3 catch candy at Base/High/Max scaling, +50/+100 catch XP at High/Max, +10%/+25% Candy XL at High/Max, 5 Mega Energy per 1 km buddy walk.
