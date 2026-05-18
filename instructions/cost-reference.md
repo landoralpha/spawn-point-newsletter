@@ -316,9 +316,12 @@ Live with the Falinks Super Mega Raid Day rollout. Verbatim from [Niantic — Fa
 - AFTER May 23: Mega Energy can ALSO be spent to push Mega Levels at ANY level. Cost scales DOWN with prior Mega Evolution count for that species — heavy investors pay less per level.
 - The free daily-contribution path is NOT removed; spend-to-level is an alternative fast lane.
 
+**CRITICAL: Mega Energy is strictly per-species.** Beedrill Mega Energy spends on Mega Beedrill leveling ONLY. There is NO conversion path between species, no generic Mega Energy pool, no "spillover" from one species to another. Mega Energy is not like Rare Candy. Never write copy implying a trainer can apply species-A Mega Energy toward species-B leveling — this has been a recurring drafting error.
+
 **Newsletter economy implications:**
-- Banking Mega Energy (via buddy walk, Mega Raids, Research) now serves TWO purposes: enabling Mega Evolution AND enabling fast Mega Level progression.
-- Trainers planning for a known upcoming CD or Raid Day can spend-to-level shortly before the event, skipping the multi-week daily-contribution wait.
+- Banking species-X Mega Energy (via buddy walk, Mega Raids, Research) serves TWO purposes for THAT species only: enabling Mega Evolution AND enabling fast Mega Level progression.
+- Trainers planning for a known upcoming CD or Raid Day can spend-to-level shortly before the event for the species they've stockpiled energy for, skipping the multi-week daily-contribution wait.
+- A Raid Day for one species only stockpiles energy for THAT species; it does NOT help the trainer's broader Mega roster. The system-wide value of the May 23 mechanic is that *previously banked* energy across species each unlocks for direct level upgrades on its own species — not that Raid Day energy becomes universal.
 - **Specific per-species + per-Mega-Evolution-count costs are NOT published by Niantic.** Cite the mechanic, not specific numbers, until in-game data is observable.
 
 See `mega-evolution-reference.md` Falinks Super Mega Raid Day section for full mechanic detail.
