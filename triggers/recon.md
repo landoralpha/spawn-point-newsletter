@@ -52,7 +52,37 @@ Check tool surface for:
 3. `fetch_url` from Spawn-Point-Fetcher MCP (must have — for Pokebattler / db.pokemongohub.net / LeekDuck verification)
 4. `send_email` from Spawn-Point-Fetcher MCP (must have — for result delivery)
 
-If (1), (2), or (3) is missing → email Joe via `send_email` with subject `[Spawn Point Recon] DEGRADED — <which> MCP unavailable`. Body: recovery checklist. Run Status = Failed. Run Log row written. Exit.
+If (1), (2), or (3) is missing → email Joe (render per `instructions/email-format.md`, `body_format="html"`). Subject: `[Spawn Point Recon] DEGRADED RUN — <which> MCP unavailable`. Body:
+```html
+<h1>🚨 DEGRADED RUN — <which> MCP unavailable</h1>
+
+<p><strong>Agent:</strong> Recon Agent | <strong>Run date:</strong> [YYYY-MM-DD] | <strong>Status:</strong> Aborted — Run Status set to Failed</p>
+
+<p>The Pre-Publish Recon Agent could not start a normal run because <code>&lt;which&gt;</code> MCP was not in this run's tool surface. Recon cannot proceed without it.</p>
+
+<h2>What's down</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>MCP</th><th>Status</th></tr>
+  <tr><td>Beehiiv</td><td>[✅ available / ❌ missing]</td></tr>
+  <tr><td>Notion</td><td>[✅ available / ❌ missing]</td></tr>
+  <tr><td>Spawn-Point-Fetcher (fetch_url)</td><td>[✅ available / ❌ missing]</td></tr>
+  <tr><td>Spawn-Point-Fetcher (send_email)</td><td>✅ available (you're reading this email)</td></tr>
+</table>
+
+<h2>Recovery checklist</h2>
+<ol>
+  <li>Open the Pre-Publish Recon trigger in claude.ai → Connectors section.</li>
+  <li>Confirm the missing connector is listed AND toggled ON.</li>
+  <li>If toggled on: toggle off → save → toggle on → save (cache refresh).</li>
+  <li>If missing or stale URL: remove + re-add.</li>
+  <li>Manually re-fire the trigger after fixing.</li>
+</ol>
+
+<p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+Spawn Point Recon Agent — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a> (filter Trigger = Monitor)
+</p>
+```
+Then set Run Status = Failed, write Run Log row, exit.
 
 If (4) is missing → write Run Log with Run Status = Failed and Notes = `DEGRADED: send_email unavailable — cannot email user. Recovery: verify Spawn-Point-Fetcher MCP is connected and redeployed with send_email tool.` Exit silently.
 
@@ -263,123 +293,108 @@ In any skip case, log in Step 7 Run Log Notes: `Step 5.5 skipped — <reason>: <
 **Error handling:**
 - If `notion-update-page` returns an error (permission, missing property, invalid value), continue to Step 6 anyway. Note the failure in Step 7 Run Log Notes: `Step 5.5 update failed: <error message>`. Do not retry mid-run; flag for next manual check.
 
-## Step 6: Send result email (HTML-formatted)
+## Step 6: Send result email (HTML — master format)
 
-Send via Spawn-Point-Fetcher MCP `send_email` tool. **ALWAYS use `body_format="html"`** with the structured template below. Args: `to="joelandor@gmail.com"`, `body_format="html"`, `subject` per mode, `body` rendered per template.
+Render per the master email format in `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject` per mode, `body` rendered per the locked template below.
 
-Subject prefixes (drive Gmail filter routing — preserve exactly):
-- Pre-publish PASS: `[Spawn Point Fact-Check] #N — CLEARED | N PASSES | Pre-Publish` (alternate accepted variant: `[Spawn Point Recon] PRE-PUBLISH cleared — Spawn Point #N ready to publish`)
-- Pre-publish FLAGGED: `[Spawn Point Fact-Check] #N — PARTIAL | N FLAGS | Pre-Publish` (alternate: `[Spawn Point Recon] PRE-PUBLISH issues — Spawn Point #N needs fixes`)
-- Post-publish FLAGGED: `[Spawn Point Fact-Check] #N — PARTIAL | N FLAGS | Post-Publish` (alternate: `[Spawn Point Recon] POST-PUBLISH issues — Spawn Point #N already shipped`)
-- Post-publish PASS: NO email sent. Silent. Run Log row only.
+**Why the unified format**: Spawn Point's editorial floor includes consistent reader experience. Every Spawn Point email (researcher / recon / monitor) shares the same banner + table style + footer skeleton. Do not invent alternate styles, color callouts, or card layouts — those drift across runs.
 
-### HTML template
+### Subject prefixes per mode
 
-Use this structure. Inline styles only (no `<style>` tags or CSS classes — Gmail strips them). Sections appear in the order shown; omit any section that has zero entries (e.g., if no UNVERIFIABLE items, drop that section entirely; if all PASS, drop FLAGS and UNVERIFIABLE).
+- **Pre-publish PASS:** `[Spawn Point Recon] PRE-PUBLISH cleared — Spawn Point #N ready to publish`
+- **Pre-publish FLAGGED:** `[Spawn Point Recon] PRE-PUBLISH issues — Spawn Point #N needs fixes (N FLAGS)`
+- **Post-publish FLAGGED:** `[Spawn Point Recon] POST-PUBLISH issues — Spawn Point #N already shipped (N FLAGS)`
+- **Post-publish PASS:** NO email sent. Silent. Run Log row only.
+
+### HTML body template
 
 ```html
-<!DOCTYPE html>
-<html><body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif; max-width: 720px; margin: 0 auto; padding: 16px; color: #212121; line-height: 1.5;">
+<h1>🔍 Spawn Point #N — Pre-Publish Fact-Check Report</h1>
 
-<h1 style="font-size: 22px; margin: 0 0 12px;">Spawn Point #N — Pre-Publish Fact-Check Report</h1>
+<p><strong>Issue:</strong> #N | <strong>Week:</strong> [Mon Date]–[Sun Date], 2026 | <strong>Mode:</strong> [Pre-publish / Post-publish] | <strong>Status:</strong> [SUCCESS / PARTIAL / FAILED] — N FLAGS, N UNVERIFIABLE, N PASSES</p>
 
-<!-- STATUS BANNER -->
-<div style="background: #fff8e1; border: 2px solid #f9a825; border-radius: 4px; padding: 14px 16px; margin: 12px 0;">
-  <div style="font-weight: 700; font-size: 14px; letter-spacing: 0.5px;">Run Status: PARTIAL  |  N FLAGS  |  N UNVERIFIABLE  |  N PASSES</div>
-  <div style="font-size: 13px; color: #5d4037; margin-top: 4px;">Issue: Spawn Point #N · <DATE_RANGE> · <MODE> detected in Beehiiv · Run: <RUN_DATE></div>
-</div>
+<h2>Top-line callout</h2>
+<p>[One-sentence summary of the run outcome. Examples:<br>
+  • Pre-publish PASS: "✅ All N claims verified across [categories]. Cleared to publish. Notion Status auto-set to 'Ready to Publish.'"<br>
+  • Pre-publish FLAGGED: "⚠️ N flags need fixing before publish. Notion Status held at 'In Review.'"<br>
+  • Post-publish FLAGGED: "⚠️ N flags found post-publish. Issue #N already shipped — fix forward via archive notes or next-issue corrigenda if reader-affecting."]</p>
 
-<!-- FLAGS SECTION — omit entire <h2> + cards if zero flags -->
-<h2 style="font-size: 18px; color: #c62828; margin: 24px 0 8px;">🚩 FLAGS — Fix Before Publishing (N)</h2>
-
-<!-- One card per flag. Border-left color #d84315. -->
-<div style="border-left: 4px solid #d84315; background: #fbe9e7; padding: 12px 14px; margin: 8px 0; border-radius: 0 4px 4px 0;">
-  <div style="font-weight: 700; color: #c62828; margin-bottom: 6px;">FLAG N · Category <X> (<Category Name>) · <Subject></div>
-  <div style="margin: 4px 0;"><strong>Claim:</strong> <Beehiiv claim verbatim></div>
-  <div style="margin: 4px 0;"><strong>Source says:</strong> <Authoritative value> (<a href="<URL>" style="color: #1565c0;">link text</a>)</div>
-  <div style="margin: 4px 0; font-style: italic; color: #4e342e;"><Discrepancy summary, e.g., "Off by −1 CP. Zero-tolerance rule applies → fix required."></div>
-</div>
-<!-- repeat per flag -->
-
-<!-- UNVERIFIABLE SECTION — omit if zero -->
-<h2 style="font-size: 18px; color: #6d4c41; margin: 24px 0 8px;">⚠️ UNVERIFIABLE — Source Unavailable (N items)</h2>
-
-<div style="background: #f5f5f5; border-left: 4px solid #9e9e9e; padding: 12px 14px; margin: 8px 0; border-radius: 0 4px 4px 0;">
-  <div style="font-weight: 700; color: #424242; margin-bottom: 6px;">UV-N · Category <X> · <Brief title></div>
-  <div style="font-size: 14px;"><Reason source unavailable, what was checked, what couldn't be verified.></div>
-</div>
-<!-- repeat per UV -->
-
-<!-- PASSES SECTION — omit if zero (unlikely) -->
-<h2 style="font-size: 18px; color: #2e7d32; margin: 24px 0 8px;">✅ PASSES — Verified Correct (N)</h2>
-
-<table style="border-collapse: collapse; width: 100%; font-size: 14px;">
-  <thead>
-    <tr style="background: #e8f5e9;">
-      <th style="text-align: left; padding: 8px 10px; border: 1px solid #c8e6c9;">Claim</th>
-      <th style="text-align: left; padding: 8px 10px; border: 1px solid #c8e6c9;">Verified Value</th>
-      <th style="text-align: left; padding: 8px 10px; border: 1px solid #c8e6c9;">Source</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td style="padding: 6px 10px; border: 1px solid #e0e0e0;"><Claim></td><td style="padding: 6px 10px; border: 1px solid #e0e0e0;"><Value> ✓</td><td style="padding: 6px 10px; border: 1px solid #e0e0e0;"><a href="<URL>" style="color: #1565c0;">link text</a></td></tr>
-    <!-- repeat per pass -->
-  </tbody>
+<!-- FLAGS SECTION — omit entirely if zero flags -->
+<h2>🚩 FLAGS — Fix Before Publishing (N)</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>#</th><th>Category</th><th>Claim</th><th>Source says</th><th>Discrepancy</th></tr>
+  <tr>
+    <td>1</td>
+    <td>[X — Category Name]</td>
+    <td>[Beehiiv claim verbatim]</td>
+    <td>[Authoritative value] (<a href="[URL]">source</a>)</td>
+    <td>[Discrepancy summary]</td>
+  </tr>
+  <!-- one row per flag -->
 </table>
 
-<!-- NOTION FYI SIDEBAR — always present -->
-<h2 style="font-size: 18px; color: #1565c0; margin: 24px 0 8px;">📋 Notion FYI Sidebar (Informational Only)</h2>
+<!-- UNVERIFIABLE SECTION — omit if zero -->
+<h2>⚠️ UNVERIFIABLE — Source Unavailable (N)</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>#</th><th>Category</th><th>Subject</th><th>Reason</th></tr>
+  <tr><td>UV-1</td><td>[X]</td><td>[Brief title]</td><td>[Reason source unavailable, what couldn't be verified]</td></tr>
+  <!-- one row per UV -->
+</table>
 
-<div style="background: #e3f2fd; border-left: 4px solid #1976d2; padding: 12px 14px; margin: 8px 0; border-radius: 0 4px 4px 0; font-size: 14px;">
-  <p style="margin: 0 0 8px;">These discrepancies exist between the Notion planning doc and the Beehiiv draft. Informational only — they do not affect run status or PASS/FAIL determination.</p>
-  <ul style="margin: 8px 0 0 0; padding-left: 22px;">
-    <li><strong><Field Name>:</strong> Notion = "<X>"; Beehiiv draft = "<Y>"</li>
-    <!-- additional bullets -->
-  </ul>
-</div>
+<!-- PASSES SECTION — always include unless zero (unlikely) -->
+<h2>✅ PASSES — Verified Correct (N)</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Claim</th><th>Verified Value</th><th>Source</th></tr>
+  <tr><td>[Claim]</td><td>[Value] ✓</td><td><a href="[URL]">link text</a></td></tr>
+  <!-- repeat per pass; if 40+ rows, show first 40 then a summary row "[remaining N PASSES omitted — see Run Log Notes]" -->
+</table>
 
-<!-- QUICK-FIX CHECKLIST — only if FLAGS present -->
-<h2 style="font-size: 18px; margin: 24px 0 8px;">Quick-Fix Checklist</h2>
+<h2>📋 Notion FYI Sidebar (Informational only)</h2>
+<p>These discrepancies exist between the Notion planning doc and the Beehiiv draft. Informational only — they do NOT affect run status or PASS/FAIL determination.</p>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Field</th><th>Notion</th><th>Beehiiv draft</th></tr>
+  <tr><td>[Field Name]</td><td>[X]</td><td>[Y]</td></tr>
+  <!-- one row per discrepancy; if none, render: <tr><td colspan="3">No discrepancies — Notion and Beehiiv aligned.</td></tr> -->
+</table>
 
-<ol style="padding-left: 22px; font-size: 14px;">
-  <li style="margin: 6px 0;"><Action description>: change <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px;">old value</code> → <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px;">new value</code></li>
+<!-- QUICK-FIX CHECKLIST — only if FLAGS present (omit entirely on PASS) -->
+<h2>Quick-Fix Checklist</h2>
+<ol>
+  <li>[Action description]: change <code>[old value]</code> → <code>[new value]</code></li>
   <!-- repeat per fix -->
 </ol>
 
-<!-- LINKS FOOTER — always present -->
-<hr style="border: none; border-top: 1px solid #e0e0e0; margin: 24px 0 12px;">
-<div style="font-size: 12px; color: #757575;">
-  <a href="<NOTION_DRAFT_URL>" style="color: #1565c0;">Notion draft</a> · <a href="<BEEHIIV_POST_URL>" style="color: #1565c0;">Beehiiv post</a> · <a href="<RUN_LOG_URL>" style="color: #1565c0;">Run log</a>
-</div>
+<h2>Links</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Resource</th><th>URL</th></tr>
+  <tr><td>Notion draft</td><td><a href="[NOTION_DRAFT_URL]">[URL]</a></td></tr>
+  <tr><td>Beehiiv post</td><td><a href="[BEEHIIV_POST_URL]">[URL]</a></td></tr>
+  <tr><td>Run log entry</td><td><a href="[RUN_LOG_URL]">[URL]</a></td></tr>
+</table>
 
-</body></html>
+<p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+Spawn Point Recon Agent — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a> (filter Trigger = Monitor)
+</p>
 ```
 
 ### Per-mode adaptations
 
 **Pre-publish PASS:**
-- Status banner: `background: #e8f5e9; border: 2px solid #2e7d32;` and text: `Run Status: SUCCESS  |  N PASSES  |  Cleared to Publish`
-- Omit FLAGS, UNVERIFIABLE, Quick-Fix Checklist sections
-- Keep PASSES table + Notion FYI Sidebar
-- Add a top callout: "✅ All N claims verified across [categories]. Cleared to publish."
-- Add a small line under the top callout (inside the success banner div, after the main status text): "Notion Status auto-set to 'Ready to Publish.'"
+- Top-line callout: `✅ All N claims verified across [categories]. Cleared to publish. Notion Status auto-set to 'Ready to Publish.'`
+- Omit FLAGS, UNVERIFIABLE, Quick-Fix Checklist sections entirely.
+- Keep PASSES table + Notion FYI Sidebar + Links.
 
-**Pre-publish FLAGGED:** as shown in the template above (with all sections rendered).
+**Pre-publish FLAGGED:** all sections rendered per the template above.
 
-**Post-publish FLAGGED:** same as pre-publish FLAGGED but:
-- Status banner: `Run Status: POST-PUBLISH PARTIAL  |  N FLAGS  |  Issue already shipped`
-- Top callout: "Issue #N already shipped. Fix forward via archive notes or next-issue corrigenda if reader-affecting."
-- Quick-Fix Checklist heading becomes "Corrigenda Checklist (post-publish)"
-- Note in the callout: "Notion entry auto-updated: Status = Published, Beehiiv URL captured, Publication Date set to <today>."
+**Post-publish FLAGGED:** as the pre-publish FLAGGED template, with these changes:
+- Top-line callout: `⚠️ N flags found post-publish. Issue #N already shipped — fix forward via archive notes or next-issue corrigenda if reader-affecting. Notion entry auto-updated: Status = Published, Beehiiv URL captured, Publication Date set to [today].`
+- Quick-Fix Checklist heading becomes `Corrigenda Checklist (post-publish)`.
 
 ### Important constraints
 
-- Inline styles ONLY. No `<style>` blocks, no class selectors — Gmail strips them.
-- All hex colors must be 6-character (`#1565c0` not `#15c`).
-- Use `<a href="..." style="color: #1565c0;">` for all links.
-- `<code>` tags get inline `background: #f5f5f5; padding: 2px 6px; border-radius: 3px;` for that monospace highlight effect.
-- Use real Unicode characters (✓, ✅, ⚠️, 🚩, 📋, —, →) directly — they render fine.
-- Total HTML body should stay under 100 KB (Gmail truncates beyond that). Cap PASSES table at ~40 rows; if more, group remaining as a count-only summary line.
+- Inline styles ONLY on the footer + tables (per the master spec); no `<style>` blocks, no class selectors, no colored callouts/cards. Gmail strips most CSS.
+- Use real Unicode characters (✓, ✅, ⚠️, 🚩, 📋, —, →) directly.
+- Total HTML body should stay under 100 KB (Gmail truncates beyond that). Cap PASSES table at ~40 rows; if more, show first 40 then a summary row.
 - Always set `body_format="html"` in the send_email call.
 
 ## Step 7: Write Run Log row (ALWAYS — last step before exit)

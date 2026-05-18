@@ -119,29 +119,43 @@ At run start, before Step 1, check whether `fetch_url` from the Spawn-Point-Fetc
 1. Mark the run as degraded. Track for Step 6 / Step 7.
 2. Skip Tier 0 aggregator RSS in Step 2 (Google News / Bing News / Feedburner all 403 from sandbox without MCP — confirmed). Discovery falls to WebSearch only.
 3. Continue Steps 1, 1.5, 3, 4, 5, 5b best-effort. Discovery will be shallower; that's expected.
-4. **At end of run, send the degraded-mode email regardless of news content** (this overrides Step 6c's "no major news = no email" rule). Send via Spawn-Point-Fetcher MCP `send_email` tool. Args: `to="joelandor@gmail.com"`, `subject="[Spawn Point Monitor] DEGRADED RUN — fetch_url MCP unavailable"`, `body` (under 200 words):
-     ```
-     The Pokémon GO News Monitor ran in DEGRADED MODE — `fetch_url` from Spawn-Point-Fetcher was not in this run's tool surface.
+4. **At end of run, send the degraded-mode email regardless of news content** (this overrides Step 6c's "no major news = no email" rule). Render per `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject="[Spawn Point Monitor] DEGRADED RUN — fetch_url MCP unavailable"`, `body`:
+     ```html
+     <h1>🚨 DEGRADED RUN — fetch_url MCP unavailable</h1>
 
-     What ran anyway (WebSearch-only discovery):
-     * New entries added: [N]
-     * Duplicates prevented: [N]
-     * Status flips applied: [N]
-     * Enrichments attempted: [N]
+     <p><strong>Agent:</strong> News Monitor | <strong>Run date:</strong> [YYYY-MM-DD] | <strong>Status:</strong> Partial (WebSearch-only discovery)</p>
 
-     What was lost:
-     * Tier 0 aggregator RSS (Google/Bing/Feedburner) — 403 from sandbox without MCP rescue.
-     * Hub WP REST API and Hub-DB CP extraction — unreachable.
-     * Per-article body fetches that hit 403 fell straight to snippet, no rescue tier.
+     <p>The Pokémon GO News Monitor ran in DEGRADED MODE — <code>fetch_url</code> from Spawn-Point-Fetcher was not in this run's tool surface.</p>
 
-     Recovery checklist:
-     1. Open the Pokémon GO News Monitor trigger in claude.ai → Connectors / MCP servers section.
-     2. Confirm `Spawn-Point-Fetcher` is listed AND toggled ON. URL: `https://fetcher-mcp.vercel.app/mcp/<token>`.
-     3. If toggled on already: toggle off → save → toggle on → save (forces dispatcher cache refresh).
-     4. If missing or showing an old URL: remove + re-add with current URL.
-     5. Manually fire trigger ("Run now") and confirm next run shows `fetch_url MCP Rescues > 0`.
+     <h2>What ran anyway (WebSearch-only discovery)</h2>
+     <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+       <tr><th>Counter</th><th>Value</th></tr>
+       <tr><td>New entries added</td><td>[N]</td></tr>
+       <tr><td>Duplicates prevented</td><td>[N]</td></tr>
+       <tr><td>Status flips applied</td><td>[N]</td></tr>
+       <tr><td>Enrichments attempted</td><td>[N]</td></tr>
+     </table>
 
-     Run log: https://www.notion.so/e57321c855844e22b41285873853e26c (this run's row at top, Run Status = Partial).
+     <h2>What was lost</h2>
+     <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+       <tr><th>Source</th><th>Status</th></tr>
+       <tr><td>Tier 0 aggregator RSS (Google / Bing / Feedburner)</td><td>❌ 403 from sandbox without MCP rescue</td></tr>
+       <tr><td>Hub WP REST API + Hub-DB CP extraction</td><td>❌ unreachable</td></tr>
+       <tr><td>Per-article body fetches that hit 403</td><td>⚠️ fell straight to snippet, no rescue tier</td></tr>
+     </table>
+
+     <h2>Recovery checklist</h2>
+     <ol>
+       <li>Open the Pokémon GO News Monitor trigger in claude.ai → Connectors / MCP servers section.</li>
+       <li>Confirm <strong>Spawn-Point-Fetcher</strong> is listed AND toggled ON. URL: <code>https://fetcher-mcp.vercel.app/mcp/&lt;token&gt;</code>.</li>
+       <li>If toggled on already: toggle off → save → toggle on → save (forces dispatcher cache refresh).</li>
+       <li>If missing or showing an old URL: remove + re-add with current URL.</li>
+       <li>Manually fire trigger ("Run now") and confirm next run shows <code>fetch_url MCP Rescues &gt; 0</code>.</li>
+     </ol>
+
+     <p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+     Spawn Point News Monitor — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a> (filter Trigger = Monitor)
+     </p>
      ```
 5. In Step 7 (Run Log), set Run Status = `Partial` and prepend the Notes field with: `DEGRADED RUN: fetch_url MCP unavailable. WebSearch-only discovery.`
 
@@ -304,45 +318,96 @@ If any: set Newsletter Treatment to `Major (alerted)` AND send the email.
 
 ## Step 6b: Send email (only if major news)
 
-Send via Spawn-Point-Fetcher MCP `send_email` tool. Args: `to="joelandor@gmail.com"`, `subject="[Spawn Point Monitor] Major Niantic news: [brief headline]"`, `body` (under 250 words):
-```
-Major Pokémon GO news in the last 24 hours that may affect the upcoming Spawn Point:
+Render per `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject="[Spawn Point Monitor] Major Niantic news: [brief headline]"`, `body`:
 
-* Headline: [the announcement]
-* Source: [URL + outlet name]
-* Published: [date + time]
-* Why this matters: [1-2 sentences]
-* Recommended Spawn Point action: [No action / Fire main trigger early / Affects already-published issue]
+```html
+<h1>📰 Major Niantic news — [brief headline]</h1>
 
-Logged to Notion: [Notion page URL]
+<p><strong>Agent:</strong> News Monitor | <strong>Run date:</strong> [YYYY-MM-DD] | <strong>Status:</strong> Major news flagged</p>
 
-Other notable items added today:
-* [shorter callout 1] — [Notion page URL]
+<h2>The announcement</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Field</th><th>Value</th></tr>
+  <tr><td>Headline</td><td>[the announcement]</td></tr>
+  <tr><td>Source</td><td><a href="[URL]">[outlet name]</a></td></tr>
+  <tr><td>Published</td><td>[date + time]</td></tr>
+  <tr><td>Why this matters</td><td>[1–2 sentences]</td></tr>
+  <tr><td>Recommended Spawn Point action</td><td>[No action / Fire main trigger early / Affects already-published issue]</td></tr>
+  <tr><td>Logged to Notion</td><td><a href="[Notion page URL]">[URL]</a></td></tr>
+</table>
 
-Database view: https://www.notion.so/b173baf260c4473e9dd9111c8820c0d3
-Run log: https://www.notion.so/e57321c855844e22b41285873853e26c (this run's row will be at the top)
+<h2>Other notable items added today</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Callout</th><th>Notion page</th></tr>
+  <tr><td>[shorter callout 1]</td><td><a href="[URL]">[URL]</a></td></tr>
+  <!-- One row per additional item; if none, render: <tr><td colspan="2">No other notable items this run.</td></tr> -->
+</table>
 
-Monitor health (today's run):
-* Aggregator tier (Google/Bing/Feedburner): [N successful / M total tried]
-* fetch_url MCP usage: [N rescued WebFetch 403s] / [N Tier 0 fetches] / [N Hub-family fetches]
-* CF-challenge regressions detected (if any): [list URLs]
-* New entries added: [count]
-* Duplicates prevented this run (semantic dedup): [N]
-* Dedup-as-enrichment promotions (existing entries upgraded by a richer dedup hit): [N]
-* Cross-run backfill duplicates marked for delete (Step 1.5): [N — list page URLs]
-* Status flips applied: [count]
-* Enrichments attempted: [count] / Enrichments succeeded: [count]
-* Hub-family backfill enrichments: [count]
-* Metadata-fill backfills: [count]
-* Fetcher tier mix: Aggregator RSS [N] / Direct WebFetch [N] / fetch_url MCP rescue [N] / WP REST API [N] / WebSearch snippet [N] / Stub [N]
-* Sources that 403'd through ALL paths: [list]
+<h2>Monitor health (today's run)</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Counter / Source</th><th>Value</th></tr>
+  <tr><td>Aggregator tier (Google / Bing / Feedburner)</td><td>[N successful / M total tried]</td></tr>
+  <tr><td>fetch_url MCP rescues (WebFetch 403 → MCP 200)</td><td>[N]</td></tr>
+  <tr><td>Tier 0 fetches via fetch_url MCP</td><td>[N]</td></tr>
+  <tr><td>Hub-family fetches via fetch_url MCP</td><td>[N]</td></tr>
+  <tr><td>CF-challenge regressions detected</td><td>[none / list URLs]</td></tr>
+  <tr><td>New entries added</td><td>[N]</td></tr>
+  <tr><td>Duplicates prevented (semantic dedup)</td><td>[N]</td></tr>
+  <tr><td>Dedup-as-enrichment promotions</td><td>[N]</td></tr>
+  <tr><td>Cross-run backfill duplicates marked for delete</td><td>[N — list page URLs in flags section below]</td></tr>
+  <tr><td>Status flips applied</td><td>[N]</td></tr>
+  <tr><td>Enrichments (attempted / succeeded)</td><td>[N / N]</td></tr>
+  <tr><td>Hub-family backfill enrichments</td><td>[N]</td></tr>
+  <tr><td>Metadata-fill backfills</td><td>[N]</td></tr>
+  <tr><td>Fetcher tier mix</td><td>Aggregator RSS [N] / Direct WebFetch [N] / fetch_url rescue [N] / WP REST [N] / WebSearch snippet [N] / Stub [N]</td></tr>
+  <tr><td>Sources that 403'd through ALL paths</td><td>[none / list]</td></tr>
+</table>
+
+<h2>Links</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Resource</th><th>URL</th></tr>
+  <tr><td>Pokémon GO News & Updates DB</td><td><a href="https://www.notion.so/b173baf260c4473e9dd9111c8820c0d3">https://www.notion.so/b173baf260c4473e9dd9111c8820c0d3</a></td></tr>
+  <tr><td>Run Log</td><td><a href="https://www.notion.so/e57321c855844e22b41285873853e26c">https://www.notion.so/e57321c855844e22b41285873853e26c</a> (this run's row at top)</td></tr>
+</table>
+
+<p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+Spawn Point News Monitor — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a> (filter Trigger = Monitor)
+</p>
 ```
 
 ## Step 6c: If NO major news
 
 Do not send the major-news email. Database entries are the record. Exit silently EXCEPT for the cleanup info email below.
 
-**Cleanup exception:** if `backfill_dupes_marked > 0` OR `dupes_prevented > 5`, send a low-priority info email via Spawn-Point-Fetcher MCP `send_email` tool. Args: `to="joelandor@gmail.com"`, `subject="[Spawn Point Monitor] Duplicate cleanup: N entries flagged"`, body listing the marked page URLs so Joe knows to delete them. Don't send if both counters are 0 or low.
+**Cleanup exception:** if `backfill_dupes_marked > 0` OR `dupes_prevented > 5`, send a low-priority info email per `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject="[Spawn Point Monitor] Duplicate cleanup: N entries flagged"`, `body`:
+
+```html
+<h1>🧹 Duplicate cleanup — N entries flagged</h1>
+
+<p><strong>Agent:</strong> News Monitor | <strong>Run date:</strong> [YYYY-MM-DD] | <strong>Status:</strong> Cleanup info (no major news this run)</p>
+
+<p>The News Monitor flagged or prevented duplicate entries this run. Database health note — no reader-affecting changes.</p>
+
+<h2>What was cleaned up</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Counter</th><th>Value</th></tr>
+  <tr><td>Cross-run backfill duplicates auto-archived</td><td>[N]</td></tr>
+  <tr><td>Duplicates prevented this run (semantic dedup)</td><td>[N]</td></tr>
+</table>
+
+<h2>Archived pages (review when convenient)</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Title</th><th>Archive URL</th></tr>
+  <tr><td>[page title]</td><td><a href="[URL]">[URL]</a></td></tr>
+  <!-- one row per archived page; if none, render: <tr><td colspan="2">No pages archived this run.</td></tr> -->
+</table>
+
+<p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+Spawn Point News Monitor — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a> (filter Trigger = Monitor)
+</p>
+```
+
+Don't send if both counters are 0 or low.
 
 ## Step 7: Write Run Log Entry (ALWAYS RUN — last step before exit)
 

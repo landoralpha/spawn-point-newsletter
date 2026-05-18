@@ -77,27 +77,38 @@ Before Step 1, check whether `fetch_url` from the Spawn-Point-Fetcher MCP appear
 **If `fetch_url` is NOT available:**
 
 1. Mark the run as degraded.
-2. **Send the degraded-mode email IMMEDIATELY** (before continuing research) so Joe can fix the connector before Step 5.5 audit gates hard-fail. Send via Spawn-Point-Fetcher MCP `send_email` tool. Args: `to="joelandor@gmail.com"`, `subject="[Spawn Point Research] DEGRADED RUN — fetch_url MCP unavailable"`, `body` (under 200 words):
-     ```
-     The Newsletter Research Agent is starting a DEGRADED RUN — `fetch_url` from Spawn-Point-Fetcher was not in this run's tool surface.
+2. **Send the degraded-mode email IMMEDIATELY** (before continuing research) so Joe can fix the connector before Step 5.5 audit gates hard-fail. Render per the master email format in `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject="[Spawn Point Research] DEGRADED RUN — fetch_url MCP unavailable"`, `body`:
+     ```html
+     <h1>🚨 DEGRADED RUN — fetch_url MCP unavailable</h1>
 
-     Impact on the draft:
-     * Pokebattler raid counters — UNREACHABLE without MCP. Counter sections will be snippet-only.
-     * db.pokemongohub.net hundo CPs — UNREACHABLE. Hundo CPs fall to compute-only from pokedex.json.
-     * Hub WP REST API — UNREACHABLE.
-     * LeekDuck event pages — UNREACHABLE without MCP rescue.
-     * github.io JSONs (PvPoke, raidboss, pokedex) — STILL REACHABLE via WebFetch.
+     <p><strong>Agent:</strong> Research Agent | <strong>Run date:</strong> [YYYY-MM-DD] | <strong>Status:</strong> Continuing best-effort</p>
 
-     Agent will continue best-effort. Step 5.5 audit gates may catch hard problems and convert this to a Failed run.
+     <p>The Newsletter Research Agent is starting a DEGRADED RUN — <code>fetch_url</code> from Spawn-Point-Fetcher was not in this run's tool surface.</p>
 
-     Recovery checklist:
-     1. Open the Newsletter Research Agent trigger in claude.ai → Connectors section.
-     2. Confirm `Spawn-Point-Fetcher` listed AND toggled ON. URL: `https://fetcher-mcp.vercel.app/mcp/<token>`.
-     3. If toggled on: toggle off → save → toggle on → save (cache refresh).
-     4. If missing or stale URL: remove + re-add.
-     5. To recover this issue: manually re-fire after fixing — this run's Notion draft (if produced) can be discarded.
+     <h2>Impact on this run</h2>
+     <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+       <tr><th>Source</th><th>Status</th></tr>
+       <tr><td>Pokebattler raid counters</td><td>❌ UNREACHABLE — counter sections will be snippet-only</td></tr>
+       <tr><td>db.pokemongohub.net hundo CPs</td><td>❌ UNREACHABLE — Hundo CPs fall to compute-only from pokedex.json</td></tr>
+       <tr><td>Hub WP REST API</td><td>❌ UNREACHABLE</td></tr>
+       <tr><td>LeekDuck event pages</td><td>❌ UNREACHABLE without MCP rescue</td></tr>
+       <tr><td>github.io JSONs (PvPoke, raidboss, pokedex)</td><td>✅ Still reachable via WebFetch</td></tr>
+     </table>
 
-     Run log: https://www.notion.so/e57321c855844e22b41285873853e26c (Trigger = Research Agent).
+     <p>Agent will continue best-effort. Step 5.5 audit gates may catch hard problems and convert this to a Failed run.</p>
+
+     <h2>Recovery checklist</h2>
+     <ol>
+       <li>Open the Newsletter Research Agent trigger in claude.ai → Connectors section.</li>
+       <li>Confirm <strong>Spawn-Point-Fetcher</strong> listed AND toggled ON. URL: <code>https://fetcher-mcp.vercel.app/mcp/&lt;token&gt;</code>.</li>
+       <li>If toggled on: toggle off → save → toggle on → save (cache refresh).</li>
+       <li>If missing or stale URL: remove + re-add.</li>
+       <li>To recover this issue: manually re-fire after fixing — this run's Notion draft (if produced) can be discarded.</li>
+     </ol>
+
+     <p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+     Spawn Point Research Agent — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a> (filter Trigger = Research Agent)
+     </p>
      ```
 3. Continue subsequent steps best-effort:
    - Hundo CPs: compute-only from pokedex.json. Provenance entries read `pokedex.json (computed)` — no fetched URLs.
@@ -276,37 +287,55 @@ Write to `output/research-brief-[YYYY-MM-DD].md` section by section.
 
 ## Step 4.5: Send Pre-Research Plan Email
 
-Send via Spawn-Point-Fetcher MCP `send_email` tool. Args: `to="joelandor@gmail.com"`, `subject="Spawn Point Research Plan: [Newsletter Monday] – [Newsletter Sunday]"`, `body` (under 250 words):
-```
-Research plan for the [date range] issue (Spawn Point #[N+1]):
+Render per the master email format in `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject="[Spawn Point Research] Pre-Research Plan — Issue #[N+1] ([Newsletter Monday] – [Newsletter Sunday])"`, `body`:
 
-* Featured Community Day: [name + date, or "None this week"]
-* Headline raid swap: [boss → boss with date]
-* Max Monday: [Dynamax Pokémon]
-* GBL cup: [cup name or "Open formats only"]
+```html
+<h1>📋 Pre-Research Plan — Issue #[N+1]</h1>
 
-**Trending Topic candidates (4):**
-1. [Title] — [1-line angle]
-2. [Title] — [1-line angle]
-3. [Title] — [1-line angle]
-4. [Title] — [1-line angle]
-**Default for draft: Option [N]** — [1-line reason]
+<p><strong>Week:</strong> [Newsletter Monday] – [Newsletter Sunday], 2026 | <strong>Publish:</strong> Saturday, [Publish Date], 2026 | <strong>Status:</strong> Plan confirmed — proceeding to draft in ~2 minutes</p>
 
-**Trainer Tip angle candidates (4):**
-1. [Angle name] — [1-line description]
-2. [Angle name] — [1-line description]
-3. [Angle name] — [1-line description]
-4. [Angle name] — [1-line description]
-**Default for draft: Option [N]** — [1-line reason]
+<h2>Issue Overview</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Field</th><th>Value</th></tr>
+  <tr><td>Featured Community Day</td><td>[name + date, or "None this week"]</td></tr>
+  <tr><td>Headline raid swap</td><td>[boss → boss with date]</td></tr>
+  <tr><td>Max Monday</td><td>[Dynamax Pokémon]</td></tr>
+  <tr><td>GBL cup</td><td>[cup name or "Open formats only"]</td></tr>
+  <tr><td>Section 11 (Month Transition)</td><td>[Included / Skipped — reason]</td></tr>
+</table>
 
-Flags surfaced:
-* [RULE CHANGE / ROTATION CONFLICT / PENDING / UNVERIFIED items, if any]
+<h2>Trending Topic Candidates (4)</h2>
+<p><strong>✅ DEFAULT: "[Title]"</strong> — [1-line reason this is strongest for THIS week]</p>
+<ol>
+  <li><strong>[Title]</strong> — [1-line angle]</li>
+  <li><strong>[Title]</strong> — [1-line angle]</li>
+  <li><strong>[Title]</strong> — [1-line angle]</li>
+  <li><strong>[Title]</strong> — [1-line angle]</li>
+</ol>
 
-Full mini-drafts of all 4 Trending Topic options (80-120 words each) and per-section Trainer Tip alternatives are in the research brief AND will be pushed to a `Trending Topic Drafts` Notion child page after drafting completes.
+<h2>Trainer Tip Angle Candidates (4)</h2>
+<p><strong>✅ DEFAULT: [Angle name]</strong> — [1-line reason]</p>
+<ol>
+  <li><strong>[Angle name]</strong> — [1-line description]</li>
+  <li><strong>[Angle name]</strong> — [1-line description]</li>
+  <li><strong>[Angle name]</strong> — [1-line description]</li>
+  <li><strong>[Angle name]</strong> — [1-line description]</li>
+</ol>
 
-To swap defaults after the draft lands: edit the Notion draft directly, or re-prompt the agent with the alternative.
+<h2>Flags surfaced</h2>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>Flag</th><th>Detail</th></tr>
+  <tr><td>[RULE CHANGE / ROTATION CONFLICT / PENDING / UNVERIFIED]</td><td>[1-line detail]</td></tr>
+  <!-- One row per flag. If none, render: <tr><td colspan="2">No flags surfaced this run.</td></tr> -->
+</table>
 
-Agent will proceed to draft writing in ~2 minutes. Heads-up only; the agent does not check inbox replies.
+<p>Full mini-drafts of all 4 Trending Topic options (80–120 words each) and per-section Trainer Tip alternatives are in the research brief AND will be pushed to a <code>Trending Topic Drafts</code> Notion child page after drafting completes. To swap defaults after the draft lands: edit the Notion draft directly, or re-prompt the agent with the alternative.</p>
+
+<p><em>Heads-up only — the agent does not check inbox replies. Agent will proceed to draft writing in ~2 minutes.</em></p>
+
+<p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+Spawn Point Research Agent — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a>
+</p>
 ```
 
 ## Step 5: Write the Newsletter Draft (Section by Section)
@@ -525,7 +554,7 @@ The agent has NO git push credentials AND the sandbox blocks curl. Step 6.5 prod
 
 ## Step 7: Send Email Notification (LOCKED HTML FORMAT)
 
-Send via Spawn-Point-Fetcher MCP `send_email` tool with `body_format="html"`. Args: `to="joelandor@gmail.com"`, `body_format="html"`, `subject="[Spawn Point] Issue #[N+1] Pipeline Complete — [Title] ([Publish Date Saturday])"`, `body` rendered per the locked template below.
+Render per the master email format in `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` tool with `body_format="html"`. Args: `to="joelandor@gmail.com"`, `body_format="html"`, `subject="[Spawn Point] Issue #[N+1] Pipeline Complete — [Title] ([Publish Date Saturday])"`, `body` rendered per the locked template below.
 
 **Why locked**: Joe approved this email layout — every research run uses the EXACT structure (header banner → Notion Pages → Subject Lines → Pre-Publish Audit → Hundo CP Provenance → Data Source Health → Trending Topic Candidates → Trainer Tip Angle Candidates → Archive Diff → Remaining Flags → footer). Do not invent alternate structures or reorder sections.
 
