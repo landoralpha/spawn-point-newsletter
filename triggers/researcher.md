@@ -132,7 +132,11 @@ Before Step 1, check whether `fetch_url` from the Spawn-Point-Fetcher MCP appear
 5. Archive continuity: avoid Trending Topics from past 4-6 issues.
 6. Trainer Tip angle drift: scan past 8 issues; identify underused (8+ gap) and heavily-reused (4+ of 8). Default away from heavily-reused.
 7. Month/season transition check (Section 11 conditional).
-8. Get next issue number from archive.
+8. **Get next issue number — Notion is source of truth (the local archive lags):**
+   - Query the Notion Newsletter Issues database (data source `collection://34831ca4-d6d5-815c-9420-000b81b2a9e6`) for ALL existing entries, take the MAX `Issue Number` property value, set `N+1 = max_existing + 1`. Use the search/fetch tools — the DB lives at https://www.notion.so/34831ca4d6d5819d83aecf31d3110551.
+   - Then read `instructions/newsletter-archive.md` Quick Reference Table; if its max issue number is lower than Notion's max, append `[ARCHIVE STALE — Notion at #X, archive at #Y]` to the Step 7 email so Joe can backfill.
+   - Notion DB = canonical counter (includes drafts). Archive file = record of PUBLISHED issues only. Always trust Notion for the next-issue number; never compute N+1 from the archive alone.
+   - **Failure mode this prevents:** May 17, 2026 the agent produced two consecutive "Spawn Point #14" runs because the archive only listed #1-#13 while Notion had already advanced to #14. Always cross-check Notion.
 9. Quarterly reference-file verification (first Monday of Feb/May/Aug/Nov).
 
 Flags: `[RULE CHANGE]` / `[STALE REFERENCE]` / `[UNVERIFIED]`.
@@ -260,7 +264,7 @@ Write to `output/research-brief-[YYYY-MM-DD].md` section by section.
   - **One sample tip (1-2 sentences)** showing how this angle would play in a SPECIFIC section of THIS week's issue (cite the section: "In the GBL section, this would land as: 'Lechonk's evolved form Oinkologne sits at #14...'")
   - The four themes should be distinct and pulled from underused angles per the angle drift scan (Step 1.5 #6) — don't propose heavily-reused themes.
   - Mark **ONE as DEFAULT** with a 1-line reason ("strongest fit because the issue centers on...").
-- **Per-section tip recommendations:** for each major section that gets a Trainer Tip slot (Events, Raid Bosses, GBL, Max Monday, Daily Discoveries), list TWO tip candidates: a default (drawing from the default angle theme) and an alternative (drawing from one of the other 3 angle themes). Each candidate is 1-2 sentences, with section relevance baked in.
+- **Per-section tip recommendations:** for each major section that gets a Trainer Tip slot (Events, Raid Bosses — Mega and 5-Star subsections, GBL, Max Monday — Daily Discoveries does NOT get a tip), list TWO tip candidates: a default (drawing from the default angle theme) and an alternative (drawing from one of the other 3 angle themes). Each candidate is 1-2 sentences, with section relevance baked in.
 - Any [PENDING] / [ROTATION CONFLICT] / [UNVERIFIED] flags
 
 ## Step 4.5: Send Pre-Research Plan Email
@@ -396,6 +400,24 @@ When an active multi-step research quest has a step completing or requiring an e
 
 ### CRITICAL: "What's New This Month/Season" Section (Conditional)
 Include ONLY if `new_month_in_window` OR new GBL season in window. Three modes. Position between Trending Topic and Don't Miss.
+
+### CRITICAL: One Trainer Tip Per Major Section (REQUIRED)
+
+Every major section gets ITS OWN inline Trainer Tip, drawn from the per-section tip recommendations in the research brief. NEVER collapse multiple sections' tips into one consolidated tip.
+
+Sections that REQUIRE a Trainer Tip block:
+- Events
+- Raid Bosses — Mega subsection
+- Raid Bosses — 5-Star subsection
+- GBL
+- Max Monday
+
+(Daily Discoveries does NOT require a Trainer Tip.)
+
+Placement: at the END of the section's body, BEFORE the Sources line.
+Format: `> **Trainer Tip:** [1-2 sentence tip, section-relevant]`
+
+Section relevance is mandatory — a tip placed in the Mega Raid subsection MUST reference that week's Mega boss or counter math, not a generic tip. Step 5.5 audit (Check #14) hard-fails any required section missing a Trainer Tip block.
 
 ### Trainer Tips Rules
 

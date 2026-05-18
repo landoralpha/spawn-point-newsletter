@@ -92,8 +92,20 @@ Capture: `{ event_name, start_datetime, end_datetime, section_id }`.
 
 ### Category H — Mechanic / cost statements
 Pattern: any claim about a game mechanic value, drop rule, cost, time window, threshold, or rate. Examples: "Mega Energy cap is 10,000", "Remote Raid daily cap of 10", "Adventure Effects last X hours", "XL Candy unlocks at Trainer Level 31", "weather boost adds 5 levels", "Pinap doubles candy", "Shiny rate during CD is ~1/25", "Special Trade is 1 per day", "evolution window closes 4 hours after event end".
-**IMPORTANT — extract from ALL content, including:** Trainer Tips, Veteran asides, "Daily Discoveries"-style tips, parenthetical mechanic notes inside event prose. Don’t skip mechanic claims just because they appear in a tip/aside rather than a main paragraph — those are exactly the claims that historically slip past fact-check.
+**IMPORTANT — extract from ALL content, including:** Trainer Tips, Veteran asides, "Daily Discoveries"-style tips, parenthetical mechanic notes inside event prose. Don't skip mechanic claims just because they appear in a tip/aside rather than a main paragraph — those are exactly the claims that historically slip past fact-check.
 Capture: `{ mechanic_name, value_claimed, surrounding_context, section_id }`.
+
+### Category I — Trainer Tip per-section presence (editorial structure check)
+NOT a claim-verification category; this is a structural audit run once per recon. Scan the Beehiiv draft for `Trainer Tip` blocks (any heading or callout containing the phrase "Trainer Tip"). Confirm one exists in EACH of these required sections:
+- Events
+- Raid Bosses — Mega subsection
+- Raid Bosses — 5-Star subsection
+- GBL
+- Max Monday
+
+(Daily Discoveries is EXCLUDED — do not flag if missing there.)
+
+FLAG any required section that is missing a Trainer Tip block as: Category I editorial-structure gap — `Section <name> is missing its required Trainer Tip block. Spawn Point editorial standard: every major section except Daily Discoveries gets its own inline Trainer Tip.` Also FLAG if multiple Trainer Tips are collapsed into ONE section (i.e., one section has 2+ tips that should have been distributed).
 
 If a claim doesn't fit cleanly: log under `uncategorized` and list in the email so Joe can spot it. Do not attempt verification.
 
