@@ -57,6 +57,8 @@ If (4) is missing → write Run Log with Run Status = Failed and Notes = `DEGRAD
    - Else: posts with `status=published` in last 7 days → mode = `post-publish`. Pick the most recent.
    - Else: email Joe (`no Beehiiv post found in last 14 days`) → Run Status = Failed → exit.
 3. Fetch the post with rendered web HTML body (`expand=free_web_content`).
+4. **Extract the issue number from the post title.** Every Spawn Point post follows the format `Spawn Point #N: <subtitle>` — apply regex `Spawn Point\s*#(\d+)` against `title`, capture group 1 as `issue_number_from_beehiiv` (integer). This is the canonical key for matching the post to its Notion entry in Step 4 and Step 5.5.
+   - If the regex does NOT match (post title doesn't include `#N`): set `issue_number_from_beehiiv = null` and append a `[BEEHIIV TITLE FORMAT]` flag to the Step 7 email — Joe needs to either rename the Beehiiv post or accept that Step 5.5 will skip the Notion URL writeback for this run.
 
 ## Step 2: Extract verifiable claims from the Beehiiv content
 
@@ -130,14 +132,19 @@ If total claim count > 50, prioritize categories in order: D > C > A > E > F > G
 
 ## Step 4: Build the Notion FYI sidebar (informational only — never fails the run)
 
-1. Notion MCP: query Newsletter Issues data source `34831ca4-d6d5-819d-83ae-cf31d3110551`. Get the most recent draft entry by Date Range Monday descending.
-2. Build a brief diff:
-   - Sections that appear in Beehiiv but not in Notion's most recent draft
+1. Notion MCP: query Newsletter Issues data source `34831ca4-d6d5-815c-9420-000b81b2a9e6` (data source ID; the database wrapper is at `34831ca4-d6d5-819d-83ae-cf31d3110551`). Match the Beehiiv post to its Notion entry using `issue_number_from_beehiiv` (from Step 1):
+   - **Primary match — by Issue Number:** filter rows where `Issue Number = issue_number_from_beehiiv`. Expected: exactly one match.
+   - **If zero matches:** Notion entry doesn't exist or its `Issue Number` is wrong. Sidebar reads: `No Notion entry found for issue #<N> — possible missing entry or stale Issue Number property.` Flag `[NOTION ENTRY MISSING]` in the Step 7 email so Joe can create/correct the entry.
+   - **If multiple matches:** duplicate Notion entries with the same Issue Number (the May 17 duplication bug). Sidebar reads: `Multiple Notion entries found for issue #<N> — picked most-recently-updated; resolve duplicates manually.` Pick the most-recently-updated row to proceed. Flag `[NOTION DUPLICATE ENTRIES]` in the Step 7 email.
+   - **Fallback if `issue_number_from_beehiiv = null`** (Beehiiv title didn't match the `Spawn Point #N` format): query Notion by `Issue Date Range` overlapping today's date, pick the most-recently-updated row. Sidebar reads: `Matched Notion entry by date fallback — Beehiiv title was missing #N.`
+2. Set `matched_notion_page_id` and `matched_notion_issue_number` from the single matched row (or null/null if no match). These are the canonical keys Step 5.5 uses for write-back.
+3. Build a brief diff:
+   - Sections that appear in Beehiiv but not in Notion's matched entry
    - Sections that appear in Notion but not in Beehiiv
    - Large content differences (different featured Pokémon, different cups, different Trending Topic)
-3. If no Notion entry found, sidebar reads: `No matching Notion draft found — Beehiiv reviewed standalone`.
+4. If no Notion entry matched, sidebar reads as above and `matched_notion_page_id = null`.
 
-This is FYI for Joe. Does NOT affect Run Status. NOT a comparison-failure signal.
+This is FYI for Joe. Does NOT affect Run Status. NOT a comparison-failure signal — but Notion entry mismatches/dupes ARE flagged in the Step 7 email so Joe can correct them.
 
 ## Step 5: Determine Run Status
 
@@ -182,10 +189,21 @@ Write that draft URL to Notion `Beehiiv URL`. This gives Joe one-click access to
 - Set `Publication Date` = today's date in UTC (`YYYY-MM-DD` format, single date — not a range).
 - These run regardless of fact-check outcome — Status/Date reflect ground truth (post is live) independent of flag count.
 
+### Matching contract (CRITICAL — added May 18, 2026)
+
+All Step 5.5 writes target `matched_notion_page_id` from Step 4, which is the Notion entry whose `Issue Number` equals `issue_number_from_beehiiv` from Step 1. **The recon trigger NEVER writes Beehiiv URLs to Notion based on recency alone** — that produces silent cross-issue corruption when multiple drafts are in flight (e.g., #15 in late review while #16 is being drafted).
+
+**Skip ALL Step 5.5 writes when:**
+- `issue_number_from_beehiiv = null` (Beehiiv post title was missing the `#N` format), OR
+- `matched_notion_page_id = null` (no Notion entry matched the issue number), OR
+- Step 4 detected `[NOTION DUPLICATE ENTRIES]` AND Joe hasn't resolved them yet (the trigger picks one to surface in the sidebar but does NOT auto-write to a duplicate set — too risky).
+
+In any skip case, log in Step 7 Run Log Notes: `Step 5.5 skipped — <reason>: <details>`. Continue to Step 6 (email) so Joe still gets fact-check results.
+
 ### Edge cases
 
 **No matching Notion entry:**
-- If Step 4 found no Notion entry, skip Step 5.5 entirely. Note in Step 7 Run Log: `Step 5.5 skipped — no Notion entry to update.`
+- Already covered by the matching contract above — surface in the Step 7 email so Joe can create or correct the Notion entry, then re-fire recon.
 
 **Error handling:**
 - If `notion-update-page` returns an error (permission, missing property, invalid value), continue to Step 6 anyway. Note the failure in Step 7 Run Log Notes: `Step 5.5 update failed: <error message>`. Do not retry mid-run; flag for next manual check.
