@@ -9,11 +9,22 @@
 - The eligible roster expands every week via Max Mondays (new featured Pokémon) and Max Battle Day events (Gigantamax debuts)
 - Trainers must be **level 13+** and complete the "To the Max!" Special Research to access their first Dynamax Pokémon
 
+### Canonical live eligibility list (CHECK BEFORE RECOMMENDING)
+
+**Authoritative source:** [`db.pokemongohub.net/pokemon-list/category/dynamax`](https://db.pokemongohub.net/pokemon-list/category/dynamax) — Hub-DB maintains a live category page listing every currently Dynamax-eligible species with dex# and form info.
+
+Access notes:
+- Sandbox-direct via WebFetch likely 403s. Use **fetch_url MCP** → returns 200.
+- Response truncates at the 250 KB cap; visible portion typically covers ~40 dex#s through the early Gen range. For verification of a specific species, that's usually enough; for a full roster pull, expect to make multiple fetches or use the tier-list pages.
+- Fall back to Hub Max Battle tier lists (`pokemongohub.net/post/guide/max-attackers-tier-list/` and `max-defenders-tier-list/`) if the category page is unreachable.
+
+When to consult: any time a Trainer Tip recommends a specific Pokémon for a Max Battle slot, OR when the Researcher is choosing alternates to mention. NEVER guess Dynamax eligibility from typing alone — many strong-typing Pokémon are NOT in the pool yet.
+
 ### Critical eligibility rules
 
 - **Shadow Pokémon CANNOT Dynamax** AND cannot fill any team slot (attacker, defender, or healer) in Max Battles
 - **Mega and Dynamax are mutually exclusive** — a Pokémon cannot Mega Evolve and Dynamax in the same battle
-- Always verify eligibility against current Pokémon GO Hub Max Battle tier lists before recommending in Trainer Tips
+- Always verify eligibility against the Hub-DB Dynamax category page above OR the Hub Max Battle tier lists before recommending in Trainer Tips
 
 ## Max Particles (the Resource)
 

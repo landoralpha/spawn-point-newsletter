@@ -58,6 +58,7 @@ Effective hierarchy in order:
 | **`pokemongohub.net/feed/`** (RSS) | often 403 in sandbox | ✅ 200 | WebFetch → fetch_url on 403 |
 | **`pokemongohub.net/post/guide/max-attackers-tier-list/`**, `max-defenders-tier-list/` | 403 | ✅ 200 | WebFetch → fetch_url on 403 |
 | **`db.pokemongohub.net/pokemon/[N]`** | 403 | ✅ **200** (Next.js with SSR; CP values are in the static HTML — see extraction note below) | **Use as primary for hundo CPs (paired with pokedex.json compute as cross-check).** |
+| **`db.pokemongohub.net/pokemon-list/category/dynamax`** | 403 | ✅ **200** (truncated by the 250 KB cap; ~40 dex#s visible per fetch) | **Use as primary for "is this species Dynamax-eligible" verification.** Cross-reference `instructions/dynamax-reference.md`. |
 | `pokemon-go-api.github.io/api/...` | ✅ 200 | n/a | Tier 1 — WebFetch (github.io always reachable) |
 | `raw.githubusercontent.com/pvpoke/...` | ✅ 200 | n/a | Tier 1 — WebFetch |
 | **Reddit `/r/<sub>/.rss`** (Atom feed) | sandbox-blocked | ✅ 200 (25 entries, real titles) | **fetch_url — RSS is the way to read Reddit programmatically.** |
