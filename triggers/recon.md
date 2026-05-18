@@ -293,6 +293,62 @@ In any skip case, log in Step 7 Run Log Notes: `Step 5.5 skipped — <reason>: <
 **Error handling:**
 - If `notion-update-page` returns an error (permission, missing property, invalid value), continue to Step 6 anyway. Note the failure in Step 7 Run Log Notes: `Step 5.5 update failed: <error message>`. Do not retry mid-run; flag for next manual check.
 
+## Step 5.7: Auto-patch Notion content for fixable FLAGs
+
+Beehiiv MCP v1 is READ-ONLY, so the recon trigger cannot fix issues at Beehiiv directly. But Notion IS writable, and Joe drafts in Notion before pasting into Beehiiv across iterations. Apply mechanical, low-risk corrections directly to the matched Notion entry's page content so Joe can either re-paste the corrected Notion blocks into Beehiiv or use them to update the Beehiiv draft inline. The recon email tells Joe exactly which FLAGs were auto-patched in Notion (ready to copy over) and which require manual judgment.
+
+This step ONLY runs when ALL of the following are true:
+- `matched_notion_page_id` is non-null (Step 5.5 matching contract passed).
+- `[NOTION DUPLICATE ENTRIES]` was NOT flagged in Step 4 (too risky to auto-write when duplicates exist).
+- The run produced at least one FLAG.
+
+If any of those gates fails, skip the entire step. Log in Step 7 Run Log Notes: `Step 5.7 skipped — <reason>`. Continue to Step 6 so Joe still gets the FLAG list as manual-fix items.
+
+### Per-category auto-patch eligibility
+
+| Category | Auto-patch? | Rationale |
+|---|---|---|
+| A — PvP rankings | NO (manual) | Rank changes often cascade into the surrounding paragraph's reasoning ("ranks #3 so it's a top pick" → if actual rank is #18, the whole sentence reasoning is wrong). Surface for Joe to rewrite. |
+| B — PvP movesets | NO (manual) | Moveset changes cascade into damage / coverage discussion in the same paragraph. Manual rewrite. |
+| C — Raid counters | NO (manual) | Counter swaps cascade into the entire counter-recommendation paragraph (premium vs budget tier, accessibility annotation, ordering). Manual rewrite. |
+| D — Hundo CPs | **YES** | Pure numeric substitution. Surrounding context is unaffected. `1815 CP` → `1825 CP` doesn't cascade. |
+| E — Raid boss schedule (date drift) | **YES** if drift is date-only (boss + tier correct, dates wrong) | Date substitutions are mechanical. NO if the boss/tier itself is wrong (cascades into counter section). |
+| F — Featured Pokémon | NO (manual) | Wrong featured species cascades into counters, hundo CPs, type-effectiveness, movesets — the entire section is wrong. Manual rewrite. |
+| G — Event dates and times | **YES** | Date/time substitutions are mechanical. `May 13` → `May 14` doesn't change anything else in the surrounding copy. |
+| H — Mechanic / cost statements | **YES** if the FLAG is a numeric value substitution (`X hours` → `Y hours`, `N pieces` → `M pieces`, `cap of X` → `cap of Y`) | Mechanical value swap. NO if the mechanic rule itself is structurally wrong (e.g., "you can spend Mega Energy across species" — the whole sentence is wrong, manual rewrite). |
+| I — Trainer Tip per-section presence | NO (manual) | A missing Trainer Tip block is a content-creation task, not a substitution. Joe writes the tip. |
+| J — Spelling | **YES** | Word-for-word substitution. `recieve` → `receive` is unambiguous. |
+| K — Grammar (single-word fixes only) | **YES** if the fix is one or two words (subject-verb agreement: `arrive` → `arrives`, missing article: `the gym` insertion at a single position) | Mechanical micro-edit. NO for run-on / comma-splice / dangling-modifier fixes — those require rewriting and Joe's voice. |
+| L — Readability | NO (manual) | Lowering grade level requires rewriting sentences for cadence, not substitution. Manual. |
+
+### Per-FLAG auto-patch workflow
+
+For each FLAG categorized as auto-patchable above:
+
+1. **Build the `old_str`** — extract a substring from the Beehiiv-claimed content that includes the wrong value PLUS ≥30 characters of surrounding context on each side (or to the start/end of the containing sentence if that's shorter). The context must make the substring UNIQUE within the section so the Notion update targets the right occurrence.
+   - Pull surrounding context from the Beehiiv HTML body extracted in Step 1 (the same body the FLAG was raised against). The Notion page content mirrors the Beehiiv body closely enough that the same substring lands in the right block.
+   - If the wrong value appears multiple times in the section even after ±30 chars (rare — usually a CP or date repeated in a table and prose), extend context until unique OR fall back to manual for that FLAG.
+2. **Build the `new_str`** — same as `old_str` but with the wrong value replaced by the authoritative value from Step 3.
+3. **Call `notion-update-page`** with `matched_notion_page_id` and a `content_updates` block targeting that page's content. Use search-and-replace mode (substitute `old_str` → `new_str`).
+4. **On success:** record `{flag_id, category, old_value, new_value, section_id, notion_block_updated: true}` for the Step 6 email's "Auto-Fixed in Notion" section.
+5. **On error** (Notion didn't find the `old_str`, multiple matches, write failure, permission denied): mark that FLAG as manual instead — record `{flag_id, category, old_value, new_value, section_id, notion_block_updated: false, error: "<error message>"}`. Continue with the next FLAG. Do NOT abort the rest of the auto-patches.
+
+### Batching
+
+Apply each auto-patch as a separate `notion-update-page` call rather than batching, so one failure doesn't poison the rest of the queue. This keeps the failure mode per-FLAG instead of per-run.
+
+### Safety floors
+
+- Never auto-patch outside the matched Notion entry's page content. No global Notion search-and-replace.
+- Never auto-patch a Category-A/B/C/F/I/L FLAG even if the substitution looks mechanical — those FLAG types are gated as manual at the category level above and that gate is the source of truth.
+- Never auto-patch when `matched_notion_page_id` is null. (Re-enforced from the entry gate above.)
+- If the total auto-patch count exceeds 15 for a single run, stop at 15 and move the remainder to manual. The signal of >15 mechanical errors usually points at a broken upstream draft and Joe should re-review before the rest get pushed.
+
+### Step 7 reporting
+
+Record in Run Log Notes:
+- `Step 5.7: <N> auto-patched in Notion, <M> moved to manual` where N = successful auto-patches and M = errors + manual-only-by-category. Include per-category counts if any category had >2 auto-patches.
+
 ## Step 6: Send result email (HTML — master format)
 
 Render per the master email format in `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject` per mode, `body` rendered per the locked template below.
@@ -333,6 +389,24 @@ Render per the master email format in `instructions/email-format.md`. Send via S
   <!-- one row per flag -->
 </table>
 
+<!-- AUTO-FIXED IN NOTION — omit if Step 5.7 was skipped or auto-patched zero FLAGs -->
+<h2>🔧 Auto-Fixed in Notion — Paste to Beehiiv (N)</h2>
+<p>These FLAGs were mechanically patched in the matched Notion entry (<a href="[NOTION_DRAFT_URL]">open</a>). Copy each corrected snippet from Notion into the Beehiiv draft. Beehiiv MCP is read-only, so Beehiiv updates are still manual — but the corrected text is ready in Notion.</p>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>#</th><th>Category</th><th>Section</th><th>Old value</th><th>New value (now in Notion)</th></tr>
+  <tr><td>AF-1</td><td>[X — Category]</td><td>[section_id]</td><td><code>[old_value]</code></td><td><code>[new_value]</code> ✓</td></tr>
+  <!-- one row per auto-patched FLAG -->
+</table>
+
+<!-- MANUAL FIX REQUIRED — omit if zero manual-only FLAGs -->
+<h2>⚠️ Manual Fix Required — Rewrite Needed (N)</h2>
+<p>These FLAGs cascade into surrounding context (counter recommendations, paragraph reasoning, cup analysis) or require editorial voice — they need your judgment, not a substitution. Fix in both Notion and Beehiiv.</p>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+  <tr><th>#</th><th>Category</th><th>Section</th><th>Why manual</th><th>What to change</th></tr>
+  <tr><td>M-1</td><td>[X — Category]</td><td>[section_id]</td><td>[Cascade reason / editorial reason]</td><td>[Suggested fix]</td></tr>
+  <!-- one row per manual FLAG (includes auto-patch failures with their error noted in the "Why manual" cell) -->
+</table>
+
 <!-- UNVERIFIABLE SECTION — omit if zero -->
 <h2>⚠️ UNVERIFIABLE — Source Unavailable (N)</h2>
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
@@ -357,11 +431,12 @@ Render per the master email format in `instructions/email-format.md`. Send via S
   <!-- one row per discrepancy; if none, render: <tr><td colspan="3">No discrepancies — Notion and Beehiiv aligned.</td></tr> -->
 </table>
 
-<!-- QUICK-FIX CHECKLIST — only if FLAGS present (omit entirely on PASS) -->
-<h2>Quick-Fix Checklist</h2>
+<!-- QUICK-FIX CHECKLIST — only if manual FLAGS present (omit entirely on PASS or if every FLAG was auto-patched) -->
+<h2>Quick-Fix Checklist (Beehiiv — manual)</h2>
+<p>One-line actionable steps for the Manual Fix Required FLAGs above. Auto-Fixed FLAGs are already corrected in Notion and not repeated here.</p>
 <ol>
-  <li>[Action description]: change <code>[old value]</code> → <code>[new value]</code></li>
-  <!-- repeat per fix -->
+  <li>[Action description]: change <code>[old value]</code> → <code>[new value]</code> in <code>[section]</code></li>
+  <!-- repeat per manual fix -->
 </ol>
 
 <h2>Links</h2>
@@ -381,14 +456,16 @@ Spawn Point Recon Agent — Run date: [YYYY-MM-DD] | <a href="https://www.notion
 
 **Pre-publish PASS:**
 - Top-line callout: `✅ All N claims verified across [categories]. Cleared to publish. Notion Status auto-set to 'Ready to Publish.'`
-- Omit FLAGS, UNVERIFIABLE, Quick-Fix Checklist sections entirely.
+- Omit FLAGS, UNVERIFIABLE, Auto-Fixed in Notion, Manual Fix Required, Quick-Fix Checklist sections entirely.
 - Keep PASSES table + Notion FYI Sidebar + Links.
 
-**Pre-publish FLAGGED:** all sections rendered per the template above.
+**Pre-publish FLAGGED:** all sections rendered per the template above. Top-line callout includes auto-patch summary when Step 5.7 ran:
+- `⚠️ N flags found — A auto-patched in Notion, M need manual rewrite. Notion Status held at 'In Review.'`
+- If Step 5.7 was skipped (`matched_notion_page_id = null`, duplicates, or zero flags), omit the auto-patch summary and the Auto-Fixed in Notion section entirely. Quick-Fix Checklist heading stays as is.
 
 **Post-publish FLAGGED:** as the pre-publish FLAGGED template, with these changes:
-- Top-line callout: `⚠️ N flags found post-publish. Issue #N already shipped — fix forward via archive notes or next-issue corrigenda if reader-affecting. Notion entry auto-updated: Status = Published, Beehiiv URL captured, Publication Date set to [today].`
-- Quick-Fix Checklist heading becomes `Corrigenda Checklist (post-publish)`.
+- Top-line callout: `⚠️ N flags found post-publish — A auto-patched in Notion, M need manual handling. Issue #N already shipped — fix forward via archive notes or next-issue corrigenda if reader-affecting. Notion entry auto-updated: Status = Published, Beehiiv URL captured, Publication Date set to [today].`
+- Quick-Fix Checklist heading becomes `Corrigenda Checklist (post-publish — manual)`.
 
 ### Important constraints
 
@@ -415,7 +492,7 @@ Properties:
 - **Tier Mix**: e.g., `PvPoke JSON: 4 / Pokebattler via fetch_url: 6 / db.pokemongohub.net via fetch_url: 3 / LeekDuck via fetch_url: 5 / Repo reference reads: 2`
 - **Sources Failed**: list of sources that 403'd through all paths
 - **CF Regressions**: list of URLs that returned a CF challenge body via fetch_url
-- **Notes**: mode, total claim count, category breakdown, flag count, unverifiable count, any priority cap applied, Notion FYI summary
+- **Notes**: mode, total claim count, category breakdown, flag count, unverifiable count, any priority cap applied, Notion FYI summary, Step 5.7 auto-patch summary (`<N> auto-patched, <M> manual` or `skipped — <reason>`)
 - **Email Sent**: `__YES__` if email sent, `__NO__` otherwise
 - **Email Subject**: actual subject if sent, else empty
 
