@@ -253,10 +253,35 @@ When raids rotate mid-week:
 
 #### REQUIRED: Hundo CPs
 
-Include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted) for every featured raid boss (Five-Star, Mega base-form catch, Shadow). Players screen-check post-raid to identify hundos — these two numbers are the deliverable.
+Include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted) for every featured raid boss (Five-Star, Mega base-form catch, Shadow) AND every featured Dynamax/Max Battle boss. Players screen-check post-raid to identify hundos — these two numbers are the deliverable.
 
-Format example (phrasing flexible per brand voice, but both values required):
-> Hundo check: **1996 CP** at L20, or **2496 CP** if weather-boosted.
+**LOCKED FORMAT** (no per-section flexibility — every Hundo CP line in every issue uses this exact form):
+
+Standard form:
+> **Hundo CPs:** **[L20 value]** (L20) / **[L25 value]** (L25, weather-boosted by [Weather Name])
+
+Mega-raid variant — encounter is the base species, NOT the Mega:
+> **Hundo CPs** (base [Species] catch): **[L20 value]** (L20) / **[L25 value]** (L25, weather-boosted by [Weather Name])
+
+Multiple boost weathers: list both with "or" — `(L25, weather-boosted by Windy or Cloudy)`. Order weathers alphabetically.
+
+If a Pokémon has no weather boost relevant to its types (extremely rare): use `(L25, weather-boosted)` with no specific weather name. Flag for editor verification.
+
+Reference examples:
+- **Hundo CPs:** **1398** (L20) / **1748** (L25, weather-boosted by Snow)
+- **Hundo CPs:** **1810** (L20) / **2263** (L25, weather-boosted by Cloudy or Sunny)
+- **Hundo CPs** (base Altaria catch): **1145** (L20) / **1432** (L25, weather-boosted by Cloudy or Windy)
+- **Hundo CPs:** **1633** (L20) / **2041** (L25, weather-boosted by Windy)
+- **Hundo CPs** (base Falinks catch): **1347** (L20) / **1683** (L25, weather-boosted by Cloudy)
+
+Style rules:
+- Label: `**Hundo CPs:**` (bold prefix, plural "CPs" since two values are shown). For Mega-raid variant, parenthetical qualifier sits between "Hundo CPs" and the colon.
+- Both CP values: bold.
+- Separator between L20 and L25 entries: ` / ` (space-slash-space).
+- Weather name(s): capitalized (Sunny, Cloudy, Windy, Snow, Rainy, Partly Cloudy, Fog) — match Niantic's in-game capitalization.
+- Never write Hundo CPs inline in prose (e.g., "CP 1347 at L20"). Always use the labeled block form.
+
+Step 5.5 audit Check #15 (Hundo CP Format Consistency) hard-fails any section whose Hundo CP line deviates from these forms.
 
 Source: `db.pokemongohub.net/pokemon/[dexNr]` lists both pre-computed. If unavailable, compute from `pokedex.json` base stats using the GO CP formula (see `instructions/meta-data-sources.md`).
 
