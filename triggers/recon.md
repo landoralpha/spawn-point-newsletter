@@ -148,27 +148,44 @@ This is FYI for Joe. Does NOT affect Run Status. NOT a comparison-failure signal
 ## Step 5.5: Notion property write-back
 
 After determining Run Status (Step 5), update the matched Notion Newsletter Issues entry (from Step 4) based on mode + run status. The entry has these properties relevant here:
-- `Beehiiv URL` (URL type) — the public published URL
+- `Beehiiv URL` (URL type) — populated with the draft URL pre-publish, overwritten with the published URL post-publish
 - `Status` (select with options Draft / In Review / Ready to Publish / Published)
 - `Publication Date` (date type)
 
 Use `notion-update-page` on the matched entry's page ID.
+
+### Beehiiv URL writing — runs every recon firing, regardless of Run Status
+
+The `Beehiiv URL` field gets written/refreshed on EVERY recon run (pre-publish or post-publish) because the recon trigger is the single point in the workflow that knows which Beehiiv post corresponds to the issue. The researcher trigger creates the Notion entry on Monday but has no Beehiiv post to point at yet; only recon has both pieces in hand.
+
+**Pre-publish mode:** the Beehiiv post object (from Step 1) is a draft. Pull the draft URL using this priority:
+1. `web_url` if populated and non-empty.
+2. Otherwise fall back to the editor URL pattern: `https://app.beehiiv.com/posts/<post_id>/edit` (substitute the post's `id` field).
+
+Write that draft URL to Notion `Beehiiv URL`. This gives Joe one-click access to the live Beehiiv draft from the Notion entry between recon runs.
+
+**Post-publish mode:** the Beehiiv post object is a live published post. Use `web_url` (the public rendered URL). This OVERWRITES any draft URL that was previously set on this Notion entry — once published, the public URL is the canonical reference.
+
+**If the Beehiiv URL field already holds a value:** overwrite unconditionally. The recon is the authority on which Beehiiv post matches; if the field was manually populated with something else, the recon-detected URL wins. Note the prior value in Step 7 Run Log Notes if the overwrite swapped a non-empty draft URL for a published URL: `Beehiiv URL updated: draft → published (<draft_url> → <published_url>)`.
+
+### Status + Publication Date writes
 
 **Pre-publish PASS (mode = `pre-publish`, Run Status = `Success`, zero FLAGS, zero UNVERIFIABLE):**
 - Set `Status` = `Ready to Publish`.
 - Rationale: the Beehiiv draft has cleared fact-check — Joe can hit publish without further review.
 
 **Pre-publish FLAGGED (mode = `pre-publish`, Run Status = `Partial` or `Failed`):**
-- DO NOT change Status. Keep at whatever the current value is (likely `Draft` or `In Review`). Joe needs to fix flags first.
+- DO NOT change Status. Keep at whatever the current value is (likely `Draft` or `In Review`). Joe needs to fix flags first. If the Status is currently `Ready to Publish` (from a prior clean recon), revert it to `In Review` to reflect that fresh issues have surfaced — see the "stale Ready to Publish" auto-revert rule that was already part of the trigger.
 
 **Post-publish (mode = `post-publish`, ANY Run Status):**
-- Set `Beehiiv URL` = the Beehiiv post's `web_url` field (the public rendered URL from the post object fetched in Step 1).
 - Set `Status` = `Published`.
 - Set `Publication Date` = today's date in UTC (`YYYY-MM-DD` format, single date — not a range).
-- All three updates run regardless of fact-check outcome — the URL/Status/Date reflect ground truth (post is live) independent of flag count.
+- These run regardless of fact-check outcome — Status/Date reflect ground truth (post is live) independent of flag count.
 
-**Edge case — no matching Notion entry:**
-- If Step 4 found no Notion entry (sidebar showed "No matching Notion draft found — Beehiiv reviewed standalone"), skip Step 5.5 entirely. Note in Step 7 Run Log: `Step 5.5 skipped — no Notion entry to update.`
+### Edge cases
+
+**No matching Notion entry:**
+- If Step 4 found no Notion entry, skip Step 5.5 entirely. Note in Step 7 Run Log: `Step 5.5 skipped — no Notion entry to update.`
 
 **Error handling:**
 - If `notion-update-page` returns an error (permission, missing property, invalid value), continue to Step 6 anyway. Note the failure in Step 7 Run Log Notes: `Step 5.5 update failed: <error message>`. Do not retry mid-run; flag for next manual check.
