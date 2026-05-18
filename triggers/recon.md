@@ -109,11 +109,57 @@ NOT a claim-verification category; this is a structural audit run once per recon
 
 FLAG any required section that is missing a Trainer Tip block as: Category I editorial-structure gap — `Section <name> is missing its required Trainer Tip block. Spawn Point editorial standard: every major section except Daily Discoveries gets its own inline Trainer Tip.` Also FLAG if multiple Trainer Tips are collapsed into ONE section (i.e., one section has 2+ tips that should have been distributed).
 
+### Category J — Spelling pass (copy-quality check)
+Run a spelling pass over the entire Beehiiv body. This is a sweep, not a per-claim verification.
+
+Flag any of:
+- **Typos in common English words** (e.g., `recieve` → `receive`, `tranier` → `trainer`, `seperate` → `separate`).
+- **Pokémon name misspellings** — cross-check every species name in the draft against `pokedex.json`'s `name` field. Allow regional form prefixes (`Alolan`, `Galarian`, `Hisuian`, `Paldean`) and Mega/Shadow/Primal/Gigantamax modifiers.
+- **Move name misspellings** — cross-check every cited move against the move-name list derivable from `pokedex.json`'s `quickMoves` / `cinematicMoves` / `eliteQuickMoves` / `eliteCinematicMoves` dicts (move display names like "Sludge Bomb", "Dragon Claw"). Watch for joins like "SludgeBomb" or "sludge_bomb".
+- **Brand-specific misses** — `Pokemon` without the accent → must be `Pokémon`; `Fast Attack` → must be `Fast Move`; lowercase `am`/`pm` → must be uppercase `AM`/`PM`.
+
+Per finding: FLAG with `Category J spelling — "<word as written>" → "<correct spelling>" in <section>`. Group multiple flags per section.
+
+### Category K — Grammar pass (copy-quality check)
+Run a grammar pass over the entire Beehiiv body. Sweep, not per-claim.
+
+Flag any of:
+- **Run-on sentences** (three or more independent clauses joined without proper punctuation).
+- **Comma splices** (two independent clauses joined by a comma without a coordinating conjunction).
+- **Subject-verb agreement errors** ("Tapu Bulu arrive Wednesday" → "arrives").
+- **Dangling or misplaced modifiers** ("Walking to the gym, the raid started" → fix who is walking).
+- **Tense drift inside a paragraph** (present tense mixing into past without intent).
+- **Sentence fragments in body prose** (only flag in flowing prose, NOT in headers / bullet lists / Trainer Tip callouts — those routinely use fragments for punch).
+
+Per finding: FLAG with `Category K grammar — <issue type>: "<sentence excerpt>" in <section>. Suggested fix: <correction>`. Multiple findings per section are fine.
+
+### Category L — Readability (Flesch-Kincaid grade level)
+Compute Flesch-Kincaid Grade Level per major section, NOT for the document as a whole (one bad section can hide in an aggregate average).
+
+**Method:**
+1. Strip headers (`##`, `###`), bullet markers, callout markers, and link URLs (keep link text). Keep prose only.
+2. Tokenize into sentences (split on `.`, `?`, `!` — handle `Mr.` / `Mrs.` / `Inc.` exceptions; abbreviation `vs.` is common in PoGO copy).
+3. Count words (whitespace-separated tokens).
+4. Count syllables per word (heuristic: count vowel groups; subtract 1 for silent trailing `e` unless the word is monosyllabic; minimum 1 per word).
+5. Apply formula: `FKGL = 0.39 × (words/sentences) + 11.8 × (syllables/words) − 15.59`.
+
+**Target:** Spawn Point editorial standard is 5th grade. Allow headroom up to **grade 6.0** without flagging.
+
+Per section: FLAG with `Category L readability — <section> reads at grade <X.X> (target ≤ 6.0). Sentence count: <N>, word count: <N>, avg syllables/word: <N.NN>. Top three offending sentences (longest or highest syllable density): "<excerpt>", "<excerpt>", "<excerpt>".`
+
+If a section is too short to measure reliably (< 30 words or < 3 sentences), skip it and note `Category L skipped — <section> too short to measure`.
+
+Use Python within the agent sandbox (available — `import re` for tokenization, no external libraries needed).
+
 If a claim doesn't fit cleanly: log under `uncategorized` and list in the email so Joe can spot it. Do not attempt verification.
 
 ## Step 3: Verify each claim against authoritative sources
 
-Verification recipes — use the Spawn-Point-Fetcher MCP `fetch_url` tool when WebFetch returns 403 (especially for Pokebattler and Hub family):
+**Categories A–H are claim-verification categories** — each claim resolves to PASS / FLAG / UNVERIFIABLE against an external source per the recipes below.
+
+**Categories I, J, K, L are structural / copy-quality sweeps** — they don't have external verification sources because the audit logic is defined inline in Step 2. Run them once per recon over the full Beehiiv body. Each finding emits a FLAG straight into the email; no per-claim source lookup needed.
+
+Verification recipes for A–H — use the Spawn-Point-Fetcher MCP `fetch_url` tool when WebFetch returns 403 (especially for Pokebattler and Hub family):
 
 | Category | Source | Verification logic |
 |---|---|---|
@@ -129,6 +175,8 @@ Verification recipes — use the Spawn-Point-Fetcher MCP `fetch_url` tool when W
 Per-claim outcome: PASS / FLAG (with specifics) / UNVERIFIABLE (with reason).
 
 If total claim count > 50, prioritize categories in order: D > C > A > E > F > G > B > H. Note in Run Log Notes if you capped.
+
+**Run Status treatment for I/J/K/L:** structural and copy-quality FLAGs count the same as factual claim FLAGs for Run Status determination (see Step 5). A copy-quality FLAG from J/K/L will downgrade a run from `Success` to `Partial`, which in turn prevents Step 5.5 from auto-setting Notion Status to `Ready to Publish` and (per the stale-Ready-to-Publish auto-revert rule) flips it back to `In Review` if it was previously cleared. That's intentional — Spawn Point's editorial floor includes copy quality, not just factual accuracy.
 
 ## Step 4: Build the Notion FYI sidebar (informational only — never fails the run)
 
