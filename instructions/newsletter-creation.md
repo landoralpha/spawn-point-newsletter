@@ -288,12 +288,26 @@ Source: `db.pokemongohub.net/pokemon/[dexNr]` lists both pre-computed. If unavai
 #### REQUIRED: Premium AND Budget Counters Per Boss
 
 Every featured raid boss must have BOTH:
-1. **Premium counter team** — top-tier picks (Legendaries, Mythicals, Megas, Shadows, top 6 by Pokebattler estimator).
+1. **Premium counter team** — top-tier picks (Legendaries, Mythicals, Megas, Shadows).
 2. **Budget counter team** — non-Legendary, non-Shadow alternatives that an Everyday Trainer is likely to actually have powered up. 3-4 options with movesets cited.
 
 Don't shortcut with "same counters as the previous boss." If two bosses share typing (e.g., Buzzwole and Pheromosa both Bug/Fighting), restate both tiers in each section — readers may scan one section and not the other.
 
 Acknowledge gaps in plain language: *"Don't have Primal Groudon? Most trainers don't either — Garchomp, Rhyperior, and Landorus Therian all duo this comfortably."* Brand voice (per `instructions/brand-voice.md`) applies — knowledgeable-friend asides, not data-dump bullet lists.
+
+##### Source balance: Pokebattler ⟷ Pokémon GO Hub Database
+
+**Use BOTH sources when picking counters — balance, don't pick one and dump.** They optimize for different things:
+
+- **Pokebattler** (`fight.pokebattler.com/raids/...`) — simulation-driven, ranks by `ESTIMATOR` / `TTW`. Best for: precise damage math, identifying theoretical-optimum lineups, calling out the absolute fastest clears. Risk: lists often over-weight Mega forms with legacy/exclusive moves the median trainer doesn't have.
+- **Pokémon GO Hub Database** (`db.pokemongohub.net/pokemon/[N]/counters`) — community-curated "Best Counters Highlights" + per-tier annotations. Best for: accessibility flags, non-exclusive-move alternatives, and what a real trainer roster will field. Risk: less precise on raw DPS ranking; their order doesn't always match Pokebattler's estimator.
+
+**How to balance:**
+1. Pull both lists. A counter appearing in BOTH = high-confidence recommendation; cite it without hedging.
+2. Where they DISAGREE, surface why: usually Pokebattler's pick has an exclusive move (Elite TM-only, Adventure Effect, Mega signature) that Hub-DB downranks for accessibility. Newsletter convention is to cite the Pokebattler pick AS the premium recommendation but always pair with the Hub-DB-friendly non-exclusive alternative (per `feedback_raid_premium_budget.md` and Category C accessibility-tier rule in recon).
+3. For the budget tier specifically, lean Hub-DB — it weights "what trainers actually have" more naturally than Pokebattler's pure-DPS estimator.
+
+This isn't a 50/50 averaging rule — it's a cross-check. If Pokebattler ranks Mega Beedrill #1 with Drill Run (Elite TM) and Hub-DB lists it #3 with standard Poison Jab/Sludge Bomb, the right Spawn Point write-up is: lead with Mega Beedrill (both agree it's premium), cite its standard non-exclusive moveset (Hub-DB's accessibility framing), and skip the Drill-Run-specific hedge unless the reader's whole bench requires it.
 
 #### What NOT to Mention (filler that pads without informing)
 
