@@ -151,10 +151,13 @@ Approximately **49+ Mega forms** in game (counting Charizard X/Y, Mewtwo X/Y sep
 | Boosted types (+30%) | Fire, Grass, Ground | Water, Electric, Bug |
 | All other types | +10% | +10% |
 
-**Aura rules:**
-- Boost applies to **OTHER trainers** in the raid, not the bringer
-- Does NOT stack with Mega auras or other Primal auras — only highest applicable bonus applies per attack type
-- "Aura persists after fainting" — **community folklore, NOT Niantic-confirmed**. Niantic's official text says "while a Primal-Reverted Pokémon is on the battlefield." Safer phrasing: "while the Primal is on the field."
+**Mega-Evolved / Primal attack boost rules** (in-game terminology — Niantic does NOT use "aura" in copy; do not write "Mega aura" / "Primal aura" / "type aura" in newsletter content):
+- Per Niantic FAQ #3334: "all Trainers' Pokémon receive an attack boost to all their attacks and gain an additional attack boost if their attack types match the Mega-Evolved Pokémon's type(s)."
+- **The bringer is excluded from the damage modifier.** Community-verified across multiple sources: the trainer who brings the Mega/Primal does NOT receive the +10%/+30% damage boost on their own team unless another trainer in the lobby also Mega-Evolves or Primal-Reverts. The Mega/Primal itself still benefits from the intrinsic stat improvements (CP, ATK, DEF, HP) — only the damage-multiplier component is bringer-excluded.
+- Multiple Megas/Primals in the lobby do NOT stack — only the highest applicable boost applies per attack type. Bringing a second Mega for redundancy doesn't compound the math.
+- "Boost persists after fainting" — **community folklore, NOT Niantic-confirmed**. Niantic's official text says "while a Mega-Evolved/Primal-Reverted Pokémon is on the battlefield." Safer phrasing: "while the Mega/Primal is on the field."
+
+**Language convention for newsletter copy:** Use "Mega-Evolved attack boost" / "type-matched attack boost" / "the Mega's attack boost," NOT "Mega aura" / "aura" / "type aura." This matches what Niantic uses in-game and avoids community jargon. Same rule applies to Primal Reversion boosts.
 
 ### Active-Primal Catch Bonuses
 
