@@ -202,12 +202,96 @@ Verification recipes for A–H — use the Spawn-Point-Fetcher MCP `fetch_url` t
 |---|---|---|
 | A (PvP rankings) | PvPoke JSON: `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/{cup-slug}/overall/rankings-{cap}.json` (cap = 1500 / 2500 / 10000) | Match species by name. If `rank_claimed` is within ±3 of actual rank (1-indexed by rating descending), PASS. Else FLAG with actual rank + rating. |
 | B (PvP movesets + PvE move stats) | PvPoke per-species "moveset" array. If both charged moves appear in PvPoke's moveset array for that species AND are in the top 4 recommended, PASS. If 1 of 2 matches, FLAG as "partial — sub-optimal." If 0 of 2, FLAG as "wrong moves cited." Move learn-set sanity check: pokedex.json under each species' `quickMoves` / `cinematicMoves` / `eliteQuickMoves` / `eliteCinematicMoves` dicts. PvE move stats (power, energy, durationMs): also in pokedex.json — each move ID under any species' move dicts has `power` (PvE damage), `energy` (PvE energy generation/cost), `durationMs` (PvE animation time in milliseconds). To verify a PvE stat for move X, find any species that has X as a learnable move and read X's stats from that species' move dict — the stats are the same wherever the move appears. Exact match required for PvE stats (power, energy, durationMs in ms). Differ → FLAG with claimed value, actual value, and species used for lookup. |
-| C (Raid counters) | Pokebattler JSON via fetch_url MCP: `https://fight.pokebattler.com/raids/defenders/{POKEMON_ID}/levels/{TIER}/attackers/levels/40/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM_MC?sort=ESTIMATOR&weatherCondition=NO_WEATHER&dodgeStrategy=DODGE_REACTION_TIME&aggregation=AVERAGE&includeLegendary=true&includeShadow=true&includeMegas=true&attackerTypes=POKEMON_TYPE_ALL`. **CRITICAL response-handling notes:** (1) Pokebattler responses for established defenders are typically 1MB+ in size, so the fetch_url MCP's 250 KB cap returns `status_code=200` with `truncated=true`. THIS IS EXPECTED AND NORMAL. The truncated body contains valid partial JSON starting with `{"attackers":[{"pokemonId":"<ID>","byMove":[{"move1":"...","move2":"...","defenders":[{"pokemonId":"<COUNTER>","byMove":[...]}]}]}]}` — and because the array is pre-sorted by `estimator`, the top ~10-15 counters fit comfortably within the first 250 KB. Always attempt to parse the partial JSON: extract `attackers[0].byMove[*].defenders[*].pokemonId` for as many entries as the truncated body permits. (2) Verification: if the Beehiiv-claimed counter_species (handle form prefixes like `MEGA_*`, `SHADOW_*`) appears anywhere in the extracted `defenders` list within the truncated body, PASS. Else FLAG with the actual top-5 counters from the partial parse. (3) **Truncated body is NEVER a reason to mark UNVERIFIABLE.** Only mark UNVERIFIABLE if `status_code` is genuinely a 4xx/5xx error or the connection fails. (4) Special case — actual 404: if Pokebattler returns a real `status_code=404` (with body like `{"error":"Not Found","path":"/raids/..."}`), this means the species has NEVER been in raids (very rare — only brand-new species making their raid debut). Established Pokémon including ALL Ultra Beasts (Buzzwole/Pheromosa/Xurkitree/Nihilego/Kartana/Celesteela/Stakataka/Blacephalon/Naganadel/Guzzlord) have appeared in raids before and ALWAYS have Pokebattler data. Do not assume "raid hasn't started yet = 404" — Pokebattler indexes all historical raid defenders. **Hub-DB fallback (Tier 2.5):** if Pokebattler genuinely 404s OR the truncated body contains zero parseable defenders, fetch the Hub-DB counter page at `https://db.pokemongohub.net/pokemon/{KEY}/counters` via fetch_url MCP. Key conventions (case-sensitive, capital first letter on form suffix): bare dex# (e.g., `870`) for base form; `{N}-Mega` for single Mega (e.g., `870-Mega`); `{N}-Mega_X` / `{N}-Mega_Y` with UNDERSCORE for Mega X/Y forms (e.g., `6-Mega_X` = Mega Charizard X, `150-Mega_Y` = Mega Mewtwo Y); `{N}-Shadow` (e.g., `488-Shadow`); `{N}-Primal` (e.g., `383-Primal`); `{N}-Gigantamax` (e.g., `6-Gigantamax`); `{N}-Dynamax` (e.g., `6-Dynamax`, distinct from Gigantamax). Parse the `BestCountersHighlights_highlights__O4EAQ` section; it lists the top 7 counters with species + fast move + charged move + rank. If Hub-DB returns "Pokémon not available yet" body for the form key, that form isn't indexed yet — fall to typing-analysis. Mark verifications via Hub-DB with `[fallback: hub-db-counters]` and treat them as authoritative-aggregator confirmation (above community guides, below Pokebattler simulation). **Accessibility-tier check (REQUIRED):** for every counter claim, identify whether the cited charged move (or fast move) is EXCLUSIVE. A move is exclusive if it appears in pokedex.json's `eliteQuickMoves` / `eliteCinematicMoves` dict for that counter species (NOT in standard `quickMoves` / `cinematicMoves`), OR it's a Mega signature move per `instructions/mega-evolution-reference.md`, OR it's an Adventure Effect-locked move per `instructions/adventure-effects-reference.md`. If the moveset cites an exclusive move, scan the surrounding section text for a non-exclusive alternative annotation (e.g., "Non-exclusive: <fast> / <charged>"). If the exclusive move is cited WITHOUT a non-exclusive alternative, FLAG as: Category C accessibility-tier gap — `Counter cites exclusive move <move> without non-exclusive alternative. Spawn Point standard requires both tiers.` This is an editorial-standard FLAG (not a factual error). Recommend a non-exclusive alternative based on pokedex.json's standard movepool entries for that species, ranked by Pokebattler estimator if data available. |
+| C (Raid counters) | **BALANCED dual-source verification — see "Category C dual-source recipe" below the table.** Pull both Pokebattler (theoretical-optimum) AND Hub-DB counters page (accessibility-weighted) for every raid-counter claim. Counter appearing on BOTH = high-confidence PASS. Appearing on only one = PASS with source-asymmetry note. Appearing on NEITHER = FLAG with top-5 from each source. Accessibility-tier check still required for all cited exclusive moves. |
 | D (Hundo CPs) | PRIMARY: db.pokemongohub.net/pokemon/{N} via fetch_url MCP. The page contains a per-level CP table — rows of 3 consecutive levels each. Parse with this pattern: find each `<tr>` that starts with `<th>{LEVEL}</th>`, then within that row extract the 3 `<strong>(\d+)<!-- --> <!-- -->CP</strong>` matches → those are the hundo CPs for levels {LEVEL}, {LEVEL}+1, {LEVEL}+2. Build a level→CP map covering all L1–L50. Note: the page also has a separate "Notable CPs" section at the top covering L15 (Research) / L20 (Raids/Eggs) / L25 (Weather Boost) / L40 / L50 — those values agree with the per-level table and can be used as quick sanity checks. FALLBACK (only if Hub-DB unreachable): compute via `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)` from pokedex.json base stats with full-precision CPMs: L15=0.51739395, L20=0.59740001, L25=0.66798449, L30=0.73177063, L35=0.76601638, L40=0.79030001, L50=0.84029999. The formula may disagree with Hub-DB by 1–10 CP at L35 (Hub-DB uses Niantic's authoritative half-level CPMs which differ slightly from public values) — when both are available, Hub-DB is authoritative. Exact match required against Hub-DB. Off by 1+ → FLAG with Beehiiv value, Hub-DB value, and computed value. If only formula is available, note "Hub-DB unreachable — formula-only" in the FLAG. |
 | E (Raid schedule) | LeekDuck event pages via fetch_url MCP. Fallback: pokemongo.com/news. | Verify boss is listed in tier on stated dates. Off by ≥1 day → FLAG. Wrong tier → FLAG. |
 | F (Featured Pokémon) | LeekDuck event pages, pokemongo.com/news, @PokemonGoApp via WebSearch | Match featured species against the announcement. Mismatch → FLAG. |
 | G (Event dates) | LeekDuck, pokemongo.com/news | Match dates and times. Drift → FLAG. |
 | H (Mechanic statements) | **Verification source priority (top-down):** (1) **Event-specific Niantic news article** for CD / CD Classic exclusive-move evolution windows (`pokemongo.com/news/communityday-<month>-<year>-<species>` or `pokemongo.com/news/communitydayclassic-<species>-<month>-<year>`) via WebFetch → fetch_url MCP on 403. Current 2026 standard is 4 hours (Niantic FAQ faq/1770 says 5 hours but is STALE; trust the event-specific article). (2) **Repo reference files in `instructions/`** (`cost-reference.md`, `niantic-help-reference.md`, `dynamax-reference.md`, `mega-evolution-reference.md`, `adventure-effects-reference.md`) — Joe’s curated truth, with stale-FAQ-value annotations baked in. The repo is bound as a session source — use `Read` and `Grep`. (3) **Niantic Help Center FAQ pages directly** (`niantic.helpshift.com/hc/en/6-pokemon-go/faq/<faq-id>-<slug>/` — e.g., `2389-candy-xl/`, `1770-what-are-community-days/`) via fetch_url MCP. Use when the reference files don’t cover the specific claim. Cross-check against the reference-file STALE annotations before trusting an FAQ value. (4) **Third-party aggregators** (Pokémon GO Hub guides, GamePress, Bulbapedia, Fandom Wiki) — ONLY as a last resort and ONLY when the claim is community-derived mechanic testing (drop rates, level thresholds, encounter rules) that Niantic doesn’t formally document. Always note in the FLAG/PASS reason whether the verification came from a tier-1/2 (authoritative) source or tier-3/4 (aggregator) source. NEVER cite a single aggregator summary as authoritative for a Niantic-defined mechanic — if the only confirmation is a third-party guide and Niantic doesn’t document it, mark UNVERIFIABLE with reason `Niantic documentation absent; only third-party aggregator confirmation found — verify with Joe before trusting.` | Match value_claimed against the highest available source tier. Mismatch → FLAG with claimed value, authoritative value, source URL, and source tier. If only tier-3/4 aggregator confirmation exists for a mechanic-rule claim → UNVERIFIABLE with the reason above. |
+
+### Category C dual-source recipe (Pokebattler ⟷ Hub-DB)
+
+Spawn Point drafts pull counters from both Pokebattler and Hub-DB by editorial policy (see `instructions/newsletter-creation.md` and `feedback_counter_source_balance.md`). Recon verifies against both, weighted the same way.
+
+#### Pokebattler lookup (theoretical-optimum)
+
+**URL template** (use Spawn-Point-Fetcher `fetch_url`, NOT WebFetch — Pokebattler gates on UA):
+```
+https://fight.pokebattler.com/raids/defenders/{POKEBATTLER_ID}/levels/{TIER}/attackers/levels/40/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM_MC?sort=ESTIMATOR&weatherCondition=NO_WEATHER&dodgeStrategy=DODGE_REACTION_TIME&aggregation=AVERAGE&includeLegendary=true&includeShadow=true&includeMegas=true&attackerTypes=POKEMON_TYPE_ALL&primalAssistants=&numParty=1
+```
+
+**`{TIER}` values:** `RAID_LEVEL_1`, `RAID_LEVEL_3`, `RAID_LEVEL_5`, `RAID_LEVEL_MEGA`, `RAID_LEVEL_MEGA_5` (Super Mega), `RAID_LEVEL_SHADOW_1`, `RAID_LEVEL_SHADOW_3`, `RAID_LEVEL_SHADOW_5`.
+
+**`{POKEBATTLER_ID}` formatting rules (CRITICAL — common source of spurious 404s):**
+- All caps, spaces become underscores, hyphens become underscores, apostrophes and punctuation dropped.
+- **Multi-word species names:** `Tapu Bulu` → `TAPU_BULU`; `Tapu Fini` → `TAPU_FINI`; `Tapu Koko` → `TAPU_KOKO`; `Tapu Lele` → `TAPU_LELE`; `Mr. Mime` → `MR_MIME`; `Mime Jr.` → `MIME_JR`; `Mr. Rime` → `MR_RIME`; `Type: Null` → `TYPE_NULL`; `Ho-Oh` → `HO_OH`; `Porygon-Z` → `PORYGON_Z`; `Farfetch'd` → `FARFETCHD`; `Sirfetch'd` → `SIRFETCHD`; `Wo-Chien` → `WO_CHIEN`; `Chien-Pao` → `CHIEN_PAO`; `Ting-Lu` → `TING_LU`; `Chi-Yu` → `CHI_YU`.
+- **Paradox Pokémon (Scarlet/Violet):** `Iron Hands` → `IRON_HANDS`; `Iron Bundle` → `IRON_BUNDLE`; `Iron Moth` → `IRON_MOTH`; `Iron Jugulis` → `IRON_JUGULIS`; `Iron Thorns` → `IRON_THORNS`; `Iron Valiant` → `IRON_VALIANT`; `Iron Leaves` → `IRON_LEAVES`; `Iron Boulder` → `IRON_BOULDER`; `Iron Crown` → `IRON_CROWN`; `Roaring Moon` → `ROARING_MOON`; `Scream Tail` → `SCREAM_TAIL`; `Brute Bonnet` → `BRUTE_BONNET`; `Flutter Mane` → `FLUTTER_MANE`; `Slither Wing` → `SLITHER_WING`; `Sandy Shocks` → `SANDY_SHOCKS`; `Walking Wake` → `WALKING_WAKE`; `Gouging Fire` → `GOUGING_FIRE`; `Raging Bolt` → `RAGING_BOLT`; `Great Tusk` → `GREAT_TUSK`.
+- **Form suffixes (NOT prefixes — this is opposite of Hub-DB):** `_MEGA` (e.g., `BEEDRILL_MEGA`); `_MEGA_X` / `_MEGA_Y` (e.g., `CHARIZARD_MEGA_Y`, `MEWTWO_MEGA_Y`); `_SHADOW_FORM` (e.g., `MOLTRES_SHADOW_FORM`); `_ALOLA` (e.g., `MUK_ALOLA`); `_GALARIAN` (e.g., `MOLTRES_GALARIAN`); `_HISUI` (e.g., `LILLIGANT_HISUI`); `_PALDEA` (e.g., `TAUROS_PALDEA_COMBAT_BREED`); `_PRIMAL` (e.g., `GROUDON_PRIMAL`). For Forces of Nature: `_INCARNATE` or `_THERIAN` (e.g., `THUNDURUS_THERIAN`). Necrozma fused forms: `NECROZMA_DUSK_MANE`, `NECROZMA_DAWN_WINGS`, `NECROZMA_ULTRA`. Shadow + form stacking: `_SHADOW_FORM` goes LAST (e.g., `MUK_ALOLA_SHADOW_FORM`).
+- **When in doubt:** test the URL once with fetch_url. A real 404 returns `{"error":"Not Found","path":"..."}`; a successful lookup returns JSON starting with `{"attackers":[...]}`. If you get a 404, try the form-suffix variant (e.g., bare `MUK` 404s but `MUK_ALOLA` works for Alolan Muk).
+
+**Response handling:**
+- Responses are typically 1MB+; fetch_url's 250 KB cap returns `status_code=200` with `truncated=true`. This is NORMAL.
+- Parse `attackers[0].byMove[*].defenders[*].pokemonId` from the truncated body — the array is pre-sorted by estimator, so the top 10–15 counters fit in the first 250 KB.
+- Truncated body is NEVER a reason to mark UNVERIFIABLE. Only mark UNVERIFIABLE on real 4xx/5xx or connection failure.
+- Real 404 → species has never been a raid defender (rare; only brand-new debut species). All established Pokémon including every Ultra Beast have historical Pokebattler data.
+
+#### Hub-DB counters lookup (accessibility-weighted)
+
+**URL template:**
+```
+https://db.pokemongohub.net/pokemon/{HUBDB_KEY}/counters
+```
+
+**`{HUBDB_KEY}` formatting rules (DIFFERENT from Pokebattler — be careful):**
+- Use the National Dex number for the base form (e.g., `787` for Tapu Bulu, `788` for Tapu Fini, `889` for Zamazenta).
+- Form suffixes are HYPHENATED with a capitalized first letter (NOT all-caps like Pokebattler):
+  - `{N}-Mega` (single Mega, e.g., `334-Mega` = Mega Altaria)
+  - `{N}-Mega_X` / `{N}-Mega_Y` (Mega X/Y forms, UNDERSCORE inside the form word — e.g., `6-Mega_X` = Mega Charizard X, `150-Mega_Y` = Mega Mewtwo Y)
+  - `{N}-Shadow` (e.g., `488-Shadow` = Shadow Cresselia)
+  - `{N}-Primal` (e.g., `383-Primal` = Primal Groudon)
+  - `{N}-Gigantamax`, `{N}-Dynamax` (distinct — don't conflate)
+- See [[reference-hub-db-form-conventions]] memory for full convention.
+
+**Parse logic:**
+- Extract the `BestCountersHighlights_highlights__O4EAQ` section. Lists the top 7 counters with species + fast move + charged move + rank.
+- If Hub-DB returns "Pokémon not available yet" body for the form key, that form isn't indexed yet — note `[hub-db: form not indexed]` and proceed with Pokebattler only.
+
+#### Cross-source verification logic
+
+For each Beehiiv-claimed counter:
+
+1. **Both sources confirm** (cited counter appears in Pokebattler top-10 AND Hub-DB top-7) → **PASS, high confidence.**
+2. **Pokebattler confirms, Hub-DB does not** → **PASS with note:** `Pokebattler-only — counter likely uses an exclusive move or higher-investment build that Hub-DB downranks for accessibility. Verify draft includes a non-exclusive alternative per accessibility-tier rule.` Trigger the accessibility-tier check below.
+3. **Hub-DB confirms, Pokebattler does not** → **PASS with note:** `Hub-DB-only — counter is community-recommended for accessibility, not theoretical-optimum. Acceptable for budget tier; flag if cited as a premium pick.` Cross-check whether the draft positions this as budget vs premium (per `instructions/newsletter-creation.md` Premium AND Budget Counters Per Boss rule).
+4. **Neither source confirms** → **FLAG** with the actual top-5 from each:
+   ```
+   Category C counter mismatch — "<cited counter>" not in Pokebattler top-10 or Hub-DB top-7.
+   Pokebattler top 5: <list>
+   Hub-DB top 5: <list>
+   Replacement candidates appearing in both: <intersection>
+   ```
+
+If Pokebattler returns a genuine 404 (brand-new debut), Hub-DB is the sole source for this run. Note `[verification: hub-db-only — Pokebattler not yet indexed]` in the PASS/FLAG.
+
+If Hub-DB returns "form not indexed," Pokebattler is the sole source for this run. Note `[verification: pokebattler-only — hub-db form not indexed]`.
+
+If BOTH sources fail → UNVERIFIABLE with reason.
+
+#### Accessibility-tier check (REQUIRED — runs in addition to the cross-source check above)
+
+For every counter claim, identify whether the cited charged or fast move is EXCLUSIVE. A move is exclusive if:
+- It appears in pokedex.json's `eliteQuickMoves` / `eliteCinematicMoves` dict for that counter species (NOT in standard `quickMoves` / `cinematicMoves`), OR
+- It's a Mega signature move per `instructions/mega-evolution-reference.md`, OR
+- It's an Adventure Effect-locked move per `instructions/adventure-effects-reference.md`.
+
+If the moveset cites an exclusive move, scan the surrounding section text for a non-exclusive alternative annotation (e.g., `Non-exclusive: <fast> / <charged>`). If the exclusive move is cited WITHOUT a non-exclusive alternative, FLAG:
+
+```
+Category C accessibility-tier gap — Counter cites exclusive move <move> without non-exclusive alternative.
+Spawn Point standard requires both tiers.
+```
+
+This is an editorial-standard FLAG (not a factual error). Recommend a non-exclusive alternative from pokedex.json's standard movepool entries, ranked by Pokebattler estimator when data is available.
 
 Per-claim outcome: PASS / FLAG (with specifics) / UNVERIFIABLE (with reason).
 
