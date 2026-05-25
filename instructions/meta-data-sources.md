@@ -32,6 +32,40 @@ The cloud agent has three outbound network primitives:
 - Twitter/X — returns 200 but only the "JavaScript required" gate page; no usable content. WebSearch snippet only.
 - `archive.ph` — 429 rate limited. Use Wayback instead.
 
+### Response-size filter modes (added 2026-05-25)
+
+`fetch_url` accepts a `mode` parameter that filters the response server-side before returning, dramatically reducing token cost for pages where you only need a small slice of the content. Default is `mode="raw"` (backwards-compatible — current behavior preserved).
+
+**Available modes:**
+
+| `mode` | What it does | Required extra args | Typical size after filter | Best use case |
+|---|---|---|---|---|
+| `raw` (default) | Raw HTML body, capped at 250 KB | — | 50–250 KB | When you need full structure (parsing tables manually, checking arbitrary markup) |
+| `text` | Strip `<script>` / `<style>` / `<noscript>` / `<header>` / `<footer>` / `<nav>` / `<iframe>` / `<svg>` then extract text, collapse whitespace | — | 5–30 KB | "Just give me the article body without HTML noise" |
+| `selector` | Return outerHTML of elements matching a CSS selector, joined by `\n\n` | `selector` | 1–20 KB | When you know the page structure (e.g., `selector="article"`, `selector=".tier-list-section"`, `selector="main"`) |
+| `grep` | Strip HTML to text, find regex matches, return snippets with `context_chars` on each side, joined by `\n---\n`, capped at `max_matches` | `pattern` (plus optional `context_chars=200`, `max_matches=50`) | 0.5–5 KB | Targeted lookups by keyword/species/value (most efficient — typical token reduction is 15–30× vs raw) |
+
+**Response shape additions:**
+- `mode=selector` and `mode=grep` return `match_count` (number of elements / snippets in the returned body).
+- `mode=grep` sets `truncated=True` when `max_matches` was reached (more matches exist on the page that weren't returned).
+- Filter modes against non-HTML content-types (e.g., JSON responses) fall through to raw with a `note` field explaining the fallback.
+
+**Editorial recipes for Spawn Point:**
+
+| Goal | Recipe |
+|---|---|
+| Tapu Fini hundo CPs from Hub-DB | `fetch_url(url="https://db.pokemongohub.net/pokemon/788", mode="grep", pattern="Lvl (20|25)", context_chars=100)` |
+| Vespiquen tier placement on Hub Max Defenders | `fetch_url(url="https://pokemongohub.net/post/guide/max-defenders-tier-list/", mode="grep", pattern="Vespiquen", context_chars=300)` |
+| Pokebattler counter top-10 for a boss (truncated JSON is fine — use `raw`) | Leave as `mode="raw"`. Parsing JSON via grep loses structure. |
+| Niantic FAQ — confirm a specific mechanic value | `fetch_url(url="https://niantic.helpshift.com/.../faq/<id>-<slug>/", mode="grep", pattern="<keyword>", context_chars=400)` |
+| LeekDuck event page — extract date range | `fetch_url(url="https://leekduck.com/events/<slug>/", mode="selector", selector="article")` or `mode="grep", pattern="Through|Starts|Ends"` |
+| Hub-DB article body (avoid full WP REST + image markup) | `fetch_url(url="<article-url>", mode="text")` then read the text directly |
+
+**When NOT to use a filter mode:**
+- JSON / RSS / XML endpoints (PvPoke, Pokebattler, news-aggregator RSS) — these are already structured data; raw is correct.
+- When you need the full page HTML structure for table parsing or schema verification.
+- When you're unsure what to grep for — use `mode="text"` first to see what's on the page, then narrow with `mode="grep"` on a re-fetch.
+
 Effective hierarchy in order:
 
 | Tier | Tool | When to use |
