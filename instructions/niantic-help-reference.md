@@ -29,7 +29,7 @@ When agent research finds an apparent conflict, default to the more recent autho
 - **Super Mega Raids** (added Feb 2026): bosses become enraged and deploy Shields requiring Mega Pokémon Charged Attacks to break
 - **Ultra Beast Raids:** Award Beast Balls (Ultra Beasts only)
 - **Primal Raids:** Award Primal Energy
-- **Shadow Raids:** In-person ONLY, no Remote Raid Passes
+- **Shadow Raids:** Remote-raidable (Remote Raid Passes work). Treat as silent default in newsletter copy — see `feedback_shadow_raid_remote_default.md`
 - **Elite Raids:** Egg appears 24h before boss; only **30 minutes** to challenge once hatched; in-person only
 - **EX Raids: DEPRECATED.** Suspended March 14, 2020 (COVID); all EX Raid Battle data removed from the game in January 2024. Niantic help center FAQs still reference EX Raid Passes — these are stale. Old EX Raid–eligible gyms appear to have been functionally replaced by Elite Raid–eligible gyms (community-implied, not officially confirmed). Do NOT reference EX Raids as an active mechanic in newsletter content. Use "Elite Raid–eligible gym" as the modern term.
 

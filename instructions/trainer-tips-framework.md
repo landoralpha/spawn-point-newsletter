@@ -413,7 +413,7 @@ Triggers during Raid Hour, Raid Day, and any event with bonus raids.
 - Remote Raid daily limit: 10 (doubles to 20 during some events)
 - Prioritize remote passes for Legendaries leaving soon over ones staying another week
 - Remote raids deal slightly less damage than in-person, so groups need to be slightly larger
-- **Shadow Raids can now be done remotely.** They are no longer in-person only. Remote Raid Passes work for Shadow Raids.
+- **Shadow Raids are remote-raidable.** [INTERNAL REFERENCE ONLY — DO NOT include this in newsletter copy. Per `feedback_shadow_raid_remote_default.md`, treat remote-raidability as silent default; mentioning it is default-filler. Only flag the exception when a specific Shadow Raid event is explicitly in-person only per Niantic's announcement.]
 - **The monthly featured Legendary Shadow Pokémon raids EVERY DAY during its window**, not just on weekends.
 - **1-Star and 3-Star Shadow Raids can also appear during the week**, not just weekends. Always check the current rotation for active Shadow Raids on any tier.
 
