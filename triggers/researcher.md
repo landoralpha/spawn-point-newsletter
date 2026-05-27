@@ -292,7 +292,8 @@ Render per the master email format in `instructions/email-format.md`. Send via S
 ```html
 <h1>📋 Pre-Research Plan — Issue #[N+1]</h1>
 
-<p><strong>Week:</strong> [Newsletter Monday] – [Newsletter Sunday], 2026 | <strong>Publish:</strong> Saturday, [Publish Date], 2026 | <strong>Status:</strong> Plan confirmed — proceeding to draft in ~2 minutes</p>
+<p><strong>Issue:</strong> #[N+1] | <strong>Week:</strong> [Mon Date]–[Sun Date], 2026 | <strong>Publish:</strong> Saturday, [Publish Date], 2026<br>
+<strong>Status:</strong> Plan confirmed — proceeding to draft in ~2 minutes</p>
 
 <h2>Issue Overview</h2>
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
@@ -304,37 +305,35 @@ Render per the master email format in `instructions/email-format.md`. Send via S
   <tr><td>Section 11 (Month Transition)</td><td>[Included / Skipped — reason]</td></tr>
 </table>
 
-<h2>Trending Topic Candidates (4)</h2>
-<p><strong>✅ DEFAULT: "[Title]"</strong> — [1-line reason this is strongest for THIS week]</p>
-<ol>
-  <li><strong>[Title]</strong> — [1-line angle]</li>
-  <li><strong>[Title]</strong> — [1-line angle]</li>
-  <li><strong>[Title]</strong> — [1-line angle]</li>
-  <li><strong>[Title]</strong> — [1-line angle]</li>
-</ol>
+<h2>Trending Topic Candidates (4 — shortlist)</h2>
+<p><strong>✅ CANDIDATE 1 (SELECTED): "[Title]"</strong><br>
+[1-2 sentence angle + why this is strongest for THIS week.]</p>
 
-<h2>Trainer Tip Angle Candidates (4)</h2>
-<p><strong>✅ DEFAULT: [Angle name]</strong> — [1-line reason]</p>
-<ol>
-  <li><strong>[Angle name]</strong> — [1-line description]</li>
-  <li><strong>[Angle name]</strong> — [1-line description]</li>
-  <li><strong>[Angle name]</strong> — [1-line description]</li>
-  <li><strong>[Angle name]</strong> — [1-line description]</li>
-</ol>
+<p><strong>CANDIDATE 2: "[Title]"</strong><br>[1-line angle.]</p>
+<p><strong>CANDIDATE 3: "[Title]"</strong><br>[1-line angle.]</p>
+<p><strong>CANDIDATE 4: "[Title]"</strong><br>[1-line angle.]</p>
 
-<h2>Flags surfaced</h2>
+<p style="font-size:0.9em;color:#666;">Full 80–120 word mini-drafts of all 4 options will land in the <code>Trending Topic Drafts</code> Notion child page after drafting completes.</p>
+
+<h2>Trainer Tip Angle Candidates (4 — shortlist)</h2>
+<p><strong>✅ CANDIDATE 1 (SELECTED): [Angle name]</strong><br>
+[1-2 sentence frame + why this is the strongest fit this week.]</p>
+
+<p><strong>CANDIDATE 2: [Angle name]</strong><br>[1-line description.]</p>
+<p><strong>CANDIDATE 3: [Angle name]</strong><br>[1-line description.]</p>
+<p><strong>CANDIDATE 4: [Angle name]</strong><br>[1-line description.]</p>
+
+<h2>Flags Surfaced</h2>
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
   <tr><th>Flag</th><th>Detail</th></tr>
   <tr><td>[RULE CHANGE / ROTATION CONFLICT / PENDING / UNVERIFIED]</td><td>[1-line detail]</td></tr>
   <!-- One row per flag. If none, render: <tr><td colspan="2">No flags surfaced this run.</td></tr> -->
 </table>
 
-<p>Full mini-drafts of all 4 Trending Topic options (80–120 words each) and per-section Trainer Tip alternatives are in the research brief AND will be pushed to a <code>Trending Topic Drafts</code> Notion child page after drafting completes. To swap defaults after the draft lands: edit the Notion draft directly, or re-prompt the agent with the alternative.</p>
-
-<p><em>Heads-up only — the agent does not check inbox replies. Agent will proceed to draft writing in ~2 minutes.</em></p>
+<p><em>Heads-up only — the agent does not check inbox replies. Agent will proceed to draft writing in ~2 minutes. To swap defaults after the draft lands: edit the Notion draft directly, or re-prompt the agent with the alternative.</em></p>
 
 <p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
-Spawn Point Research Agent — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a>
+Spawn Point Research Agent — Run date: [YYYY-MM-DD] | Issue #[N+1] | Publish [Saturday date] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a>
 </p>
 ```
 
