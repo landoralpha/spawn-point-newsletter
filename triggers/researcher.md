@@ -42,6 +42,16 @@ If you can't recompute a number on demand, don't put it in the draft. "It looked
 
 **The escalation rule applies to ALL endpoint types — HTML pages, JSON APIs, RSS feeds, image URLs.** A May 9, 2026 research run hit `fight.pokebattler.com` 403 via WebFetch and skipped straight to WebSearch snippet, missing the fetch_url MCP rescue tier. Pokebattler JSON IS reachable through fetch_url MCP — confirmed by direct probe. Treat any 403 as a signal to escalate, regardless of endpoint type. The Source Routing Table rows below spell out the escalation explicitly for each common source.
 
+## CRITICAL: Don't apply future-season info to a fully-past newsletter
+
+**`instructions/seasons-reference.md` is the single source of truth for season-scoped facts.** Always determine the newsletter's date range FIRST (Step 0), then look up which season(s) overlap that range via the Date Range Index in `seasons-reference.md`. Pull facts ONLY from the seasons overlapping the newsletter's range.
+
+A newsletter covering May 25-31, 2026 (entirely within Memories in Motion) must NOT include Forever Forward facts — Mega Skarmory, Mega Raichu X/Y, Scenic Sunday, GO Pass Major Milestone Bonuses, Dynamax Electabuzz / Magikarp / Feebas, June/July/August Community Day dates — all out of scope for that issue regardless of when it's drafted.
+
+Conversely, a newsletter covering June 8-14, 2026 (entirely within Forever Forward) must NOT cite Memories in Motion facts as current (Catch-Up Sunday, Fast-Track Monday, Pressure Rising as "active" — Pressure Rising persists but is no longer the active season research, etc.).
+
+If a newsletter range straddles a season boundary (e.g., Issue #17 covering June 1-7, 2026 spans the June 2 transition), the trigger MUST apply each season's data only to the days within that season's window AND make the transition explicit in copy.
+
 ## Notion Databases
 
 **Newsletter Issues (Step 6 Phase 1 destination):**
@@ -67,6 +77,20 @@ next_sunday = next_monday + timedelta(days=6)
 new_month_in_window = next_monday.month != next_sunday.month
 first_of_new_month = date(next_sunday.year, next_sunday.month, 1) if new_month_in_window else None
 ```
+
+### Step 0.1: Season Boundary Check (MANDATORY)
+
+After computing `next_monday` and `next_sunday`, Read `instructions/seasons-reference.md` and look up the Date Range Index. Determine which season(s) overlap the newsletter range `[next_monday, next_sunday]`:
+
+1. **Single-season newsletter:** both `next_monday` and `next_sunday` fall within one season. Record the season name as `season_context = "<season name>"`. All subsequent steps pull facts ONLY from that season's section of `seasons-reference.md`, plus the season-agnostic general references.
+
+2. **Cross-season newsletter:** `next_monday` and `next_sunday` fall in different seasons (the range straddles a season transition date). Record `season_context = "<outgoing season>/<incoming season>"` plus the exact transition timestamp (e.g., `transition_at = "2026-06-02 10:00 AM local"`). All subsequent steps apply each season's data ONLY to the days within that season's window, AND make the transition explicit in newsletter copy ("Through Tuesday at 10 AM (MIM era)..." / "Starting Tuesday at 10 AM (Forever Forward season opens)...").
+
+3. **Pre-launch upcoming season:** if the newsletter is entirely BEFORE the start of a newly-announced season, that season's facts MUST NOT appear as currently-active. Forward-looking previews are fine if scoped as "next season" (e.g., "Memories in Motion ends June 2; Forever Forward begins...").
+
+Log the `season_context` value into the research brief (Step 4) AND propagate it through to Step 6 (Notion push) so the issue's metadata records which season(s) it spans. The recon trigger will use this metadata to scope its checks.
+
+**Why this step exists:** Mid-cycle reference updates can leak future-season info into past newsletters. Without this check, a recon on Spawn Point #15 (May 18-24, fully within MIM) could surface Mega Skarmory in counter recommendations, which is anachronistic. See `seasons-reference.md` "Season-application rule" for the editorial standard.
 
 ## Step 0.5: MCP Availability Gate (PRE-FLIGHT)
 
