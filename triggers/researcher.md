@@ -42,6 +42,21 @@ If you can't recompute a number on demand, don't put it in the draft. "It looked
 
 **The escalation rule applies to ALL endpoint types — HTML pages, JSON APIs, RSS feeds, image URLs.** A May 9, 2026 research run hit `fight.pokebattler.com` 403 via WebFetch and skipped straight to WebSearch snippet, missing the fetch_url MCP rescue tier. Pokebattler JSON IS reachable through fetch_url MCP — confirmed by direct probe. Treat any 403 as a signal to escalate, regardless of endpoint type. The Source Routing Table rows below spell out the escalation explicitly for each common source.
 
+## CRITICAL: Shadow Raids are NOT weekend-only and NOT in-person-only
+
+**This error has recurred across multiple drafts (Shadow Cresselia #15, Shadow Dialga #17). HARD STOP.**
+
+- Shadow Raids (ALL tiers — 1-Star, 3-Star, 5-Star Legendary) are available **any day during their announced window**, NOT just weekends.
+- Shadow Raids **ARE remote-raidable** — Remote Raid Passes work.
+
+NEVER write any of these in a Shadow Raid section, Trending Topic, Trainer Tip, or anywhere else:
+- ❌ "weekend-only" / "only on weekends" / "Saturday and Sunday only"
+- ❌ "in-person only" / "no Remote Raid Passes" / "can't be done remotely"
+
+Also do NOT write the positive defaults ("available all week," "remote passes work") — that's default-filler. Just describe the boss, its window dates, and counters. The ONLY exception is a specific event Niantic explicitly schedules as weekend-only or in-person-only — in that rare case cite the Niantic source URL. Default assumption: all-week + remote-eligible. See `feedback_shadow_raid_remote_default.md` and `instructions/niantic-help-reference.md`.
+
+**Pre-push check:** before pushing any draft with a Shadow Raid section, grep the assembled text for `weekend`, `in-person`, `in person`, and `Remote Raid Pass` appearing near "Shadow." If found in a Shadow Raid context, strip the claim.
+
 ## CRITICAL: Don't apply future-season info to a fully-past newsletter
 
 **`instructions/seasons-reference.md` is the single source of truth for season-scoped facts.** Always determine the newsletter's date range FIRST (Step 0), then look up which season(s) overlap that range via the Date Range Index in `seasons-reference.md`. Pull facts ONLY from the seasons overlapping the newsletter's range.

@@ -188,13 +188,27 @@ If a section is too short to measure reliably (< 30 words or < 3 sentences), ski
 
 Use Python within the agent sandbox (available — `import re` for tokenization, no external libraries needed).
 
+### Category M — Hard-coded prohibited claims (recurring-error sweep)
+
+A literal-string sweep over the entire Beehiiv body for known-recurring factual errors. These are HARD FLAGS — they recur across drafts and must be caught every run, not left to per-claim mechanic verification. Run a case-insensitive search; for each hit, check whether it's in the prohibited context, and FLAG if so.
+
+**M-1: Shadow Raid weekend-only / in-person-only claims (HIGH FREQUENCY — see `feedback_shadow_raid_remote_default.md`).**
+Shadow Raids (all tiers) are available ANY day during their window AND are remote-raidable. Search for `weekend`, `weekends`, `in-person`, `in person`, `Remote Raid Pass`, `remotely` within ±150 chars of any "Shadow" mention. FLAG if the draft claims a Shadow Raid is:
+- weekend-only / "only on weekends" / "Saturday and Sunday only" → `Category M — Shadow Raid wrongly described as weekend-only. Shadow Raids run any day during their window. Strip the restriction.`
+- in-person only / "no Remote Raid Passes" / "can't be done remotely" → `Category M — Shadow Raid wrongly described as in-person-only. Shadow Raids are remote-raidable. Strip the restriction.`
+- EXCEPTION: do NOT flag if a specific Niantic-announced event genuinely restricts a Shadow Raid to certain days or in-person (rare — e.g., a one-off Shadow Raid Day). In that case the draft should cite the Niantic source; verify the citation exists before clearing.
+
+This is a HARD flag: any M-1 hit downgrades the run to `Partial` and is auto-patchable in Notion (strip the offending clause). It also makes the Step 6 email Priority Fix list.
+
+Extend this category with additional M-rows as new recurring errors are identified.
+
 If a claim doesn't fit cleanly: log under `uncategorized` and list in the email so Joe can spot it. Do not attempt verification.
 
 ## Step 3: Verify each claim against authoritative sources
 
 **Categories A–H are claim-verification categories** — each claim resolves to PASS / FLAG / UNVERIFIABLE against an external source per the recipes below.
 
-**Categories I, J, K, L are structural / copy-quality sweeps** — they don't have external verification sources because the audit logic is defined inline in Step 2. Run them once per recon over the full Beehiiv body. Each finding emits a FLAG straight into the email; no per-claim source lookup needed.
+**Categories I, J, K, L, M are structural / copy-quality / prohibited-claim sweeps** — they don't have external verification sources because the audit logic is defined inline in Step 2. Run them once per recon over the full Beehiiv body. Each finding emits a FLAG straight into the email; no per-claim source lookup needed. **Category M (hard-coded prohibited claims) is mandatory every run** — it catches high-frequency recurring errors like the Shadow Raid weekend-only / in-person-only misclaim.
 
 Verification recipes for A–H — use the Spawn-Point-Fetcher MCP `fetch_url` tool when WebFetch returns 403 (especially for Pokebattler and Hub family):
 
@@ -297,7 +311,7 @@ Per-claim outcome: PASS / FLAG (with specifics) / UNVERIFIABLE (with reason).
 
 If total claim count > 50, prioritize categories in order: D > C > A > E > F > G > B > H. Note in Run Log Notes if you capped.
 
-**Run Status treatment for I/J/K/L:** structural and copy-quality FLAGs count the same as factual claim FLAGs for Run Status determination (see Step 5). A copy-quality FLAG from J/K/L will downgrade a run from `Success` to `Partial`, which in turn prevents Step 5.5 from auto-setting Notion Status to `Ready to Publish` and (per the stale-Ready-to-Publish auto-revert rule) flips it back to `In Review` if it was previously cleared. That's intentional — Spawn Point's editorial floor includes copy quality, not just factual accuracy.
+**Run Status treatment for I/J/K/L/M:** structural, copy-quality, and prohibited-claim FLAGs count the same as factual claim FLAGs for Run Status determination (see Step 5). A FLAG from J/K/L/M will downgrade a run from `Success` to `Partial`, which in turn prevents Step 5.5 from auto-setting Notion Status to `Ready to Publish` and (per the stale-Ready-to-Publish auto-revert rule) flips it back to `In Review` if it was previously cleared. That's intentional — Spawn Point's editorial floor includes copy quality, factual accuracy, AND zero tolerance for the hard-coded recurring errors in Category M.
 
 ## Step 4: Build the Notion FYI sidebar (informational only — never fails the run)
 
@@ -406,6 +420,7 @@ If any of those gates fails, skip the entire step. Log in Step 7 Run Log Notes: 
 | J — Spelling | **YES** | Word-for-word substitution. `recieve` → `receive` is unambiguous. |
 | K — Grammar (single-word fixes only) | **YES** if the fix is one or two words (subject-verb agreement: `arrive` → `arrives`, missing article: `the gym` insertion at a single position) | Mechanical micro-edit. NO for run-on / comma-splice / dangling-modifier fixes — those require rewriting and Joe's voice. |
 | L — Readability | NO (manual) | Lowering grade level requires rewriting sentences for cadence, not substitution. Manual. |
+| M — Prohibited claims (Shadow Raid weekend/in-person misclaim, etc.) | **YES** when the fix is stripping the offending clause | Mechanical removal — e.g., delete "weekend-only, in-person-only" from a Shadow Raid sentence, or strip "and only on weekends." If removing the clause leaves a broken sentence that needs rewriting, mark manual. Always preserve the rest of the sentence. |
 
 ### Per-FLAG auto-patch workflow
 

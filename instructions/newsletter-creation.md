@@ -314,9 +314,9 @@ This isn't a 50/50 averaging rule — it's a cross-check. If Pokebattler ranks M
 These are widely understood defaults. **Do not write them into raid sections** — they take up space and read like AI-generated boilerplate:
 
 - ❌ "Remote Raid Passes work" / "can be done remotely" — that's the default. Only flag it as an EXCEPTION when the raid is **in-person only** (e.g., 6-Star Gigantamax raids, ticketed Raid Day events that override the default).
-- ❌ "Shadow Raids are in-person only" / "Remote Raid Passes don't work for Shadow Raids" — factually wrong; Shadow Raids ARE remote-raidable (see `feedback_shadow_raid_remote_default.md`).
-- ❌ "Shadow Raids are remote-raidable" / "Remote Raid Passes work for Shadow Raids" — also default-filler; readers know. Treat as silent default like standard Mega/5-Star remote-raidability.
-- ❌ "Shadow [boss] raids are available every day, not just weekends" — readers know how monthly Shadow Legendary windows work.
+- ❌ **"Shadow Raids are weekend-only" / "only on weekends" / "Saturday and Sunday only" — FACTUALLY WRONG and HIGH-FREQUENCY recurring error.** Shadow Raids (all tiers) run ANY day during their announced window. See `feedback_shadow_raid_remote_default.md`. Only cite a weekend restriction if Niantic explicitly schedules a specific event that way (rare) — with the source URL.
+- ❌ **"Shadow Raids are in-person only" / "Remote Raid Passes don't work for Shadow Raids" — FACTUALLY WRONG.** Shadow Raids ARE remote-raidable. Same recurring-error family as the weekend-only mistake.
+- ❌ "Shadow Raids are remote-raidable" / "Remote Raid Passes work for Shadow Raids" / "available every day, not just weekends" — also default-filler; readers know. Don't write the positive defaults either. Just give the boss, window, and counters.
 - ❌ "Don't forget your Remote Raid Pass" / "Bring friends!" — empty exhortation.
 
 When a default IS broken (in-person-only, ticket required, Premium Battle Pass only), call that out clearly.
