@@ -237,14 +237,14 @@ Quick summary as of May 2026:
    - **Fallback** (Hub-DB 404, "Pokémon not available yet", or fetch_url MCP unavailable): compute from pokemon-go-api pokedex.json base stats — formula `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)` with cpm = 0.5974 (L20), 0.6679 (L25).
    - **Create a new row in the Hundo CP Reference DB** with: Species, Form, Dex, Base ATK/DEF/STA, Hundo CP @ L20, Hundo CP @ L25, Source URL (or `pokedex.json (computed)`), Method (`hub-db-fetched` / `pokedex.json-computed`), First Recorded = today, Last Verified = today.
 
-3. **Maintain a per-run snapshot** at the top of `output/research-brief-[YYYY-MM-DD].md` titled `## Hundo CP Provenance` — copy the rows used this run (whether looked up or freshly created). Step 5.5 Check #9 audits against THIS snapshot, NOT against the master DB directly.
+3. **Maintain a per-run snapshot** at the top of `output/research-brief-[YYYY-MM-DD].md` titled `## Hundo CP Provenance` — copy the rows used this run (whether looked up or freshly created). Step 5.5 Check #9 audits against THIS snapshot, NOT against the master DB directly. Each row carries all four CPs even when the draft only cites a subset, so audits and last-minute copy tweaks (e.g. swapping in the L50 max for a power-up cost mention) don't trigger a re-fetch.
 
 ```
-| Species | Form | dex# | Source | Base atk/def/sta | L20 hundo | L25 weather-boosted | From master DB? |
-|---|---|---|---|---|---|---|---|
-| Flittle | base | 955 | db.pokemongohub.net/pokemon/955 (fetched 2026-05-30) | 105/60/102 | 401 | 501 | new (added this run) |
-| Espathra | base | 956 | pokedex.json (computed) | 204/127/216 | 1415 | 1769 | yes (verified 2026-04-12) |
-| Garchomp | mega | 445 | db.pokemongohub.net/pokemon/445-Mega | 339/222/216 | 3076 | 3845 | yes (verified 2026-03-21) |
+| Species | Form | dex# | Base atk/def/sta | L15 (Research) | L20 (Raid/Egg) | L25 (Weather-Boosted) | L50 (Max) | Source | From master DB? |
+|---|---|---|---|---|---|---|---|---|---|
+| Flittle | base | 955 | 105/60/102 | 301 | 401 | 501 | 1257 | db.pokemongohub.net/pokemon/955 (fetched 2026-05-30) | new (added this run) |
+| Espathra | base | 956 | 204/127/216 | 1061 | 1415 | 1769 | 4434 | pokedex.json (computed) | yes (verified 2026-04-12) |
+| Garchomp | mega | 445 | 339/222/216 | 2307 | 3076 | 3845 | 9645 | db.pokemongohub.net/pokemon/445-Mega | yes (verified 2026-03-21) |
 ```
 
 **Why master-first:** the old pattern re-fetched Hub-DB every run for every featured species — many of them repeat across rotations (Mega Charizard X cycles back multiple times a year). Pre-existing rows in the master DB are pre-verified; lookup is one Notion query instead of a network fetch + regex extraction + LLM check. Steady-state, only Pokémon that have NEVER been featured before trigger a fetch.

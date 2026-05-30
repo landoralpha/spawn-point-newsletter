@@ -23,8 +23,10 @@ This file documents:
 | **Base ATK** | Number | yes | Pokemon GO base attack from `pokemon-go-api/pokedex.json` (or Hub-DB if pokedex.json is stale on a brand-new release). |
 | **Base DEF** | Number | yes | Pokemon GO base defense. |
 | **Base STA** | Number | yes | Pokemon GO base stamina. |
-| **Hundo CP @ L20** | Number | yes | The base catch CP at level 20 for a perfect 15/15/15 IV spread. |
-| **Hundo CP @ L25** | Number | yes | The weather-boosted catch CP at level 25. |
+| **Hundo CP @ L15** | Number | yes | Research encounter CP (level 15, 15/15/15). |
+| **Hundo CP @ L20** | Number | yes | Raid catch + Egg hatch CP (level 20, 15/15/15). Same level for both — one column covers both encounter contexts. |
+| **Hundo CP @ L25** | Number | yes | Weather-Boosted Raid catch CP (level 25, 15/15/15). |
+| **Hundo CP @ L50** | Number | yes | Fully maxed-out CP (level 50 via XL candy, 15/15/15). Doesn't include the Best Buddy in-battle bump. |
 | **Source** | URL | yes | Either the Hub-DB URL (e.g. `https://db.pokemongohub.net/pokemon/445-Mega`) OR the literal string `pokedex.json (computed)` for compute-only fallback. |
 | **Method** | Select | yes | `hub-db-fetched` or `pokedex.json-computed`. (Defines the verification path. `hub-db-fetched` rows are higher trust because Hub-DB renders the actual GAME value, not a formula.) |
 | **First Recorded** | Date | yes | The run that first added the row. |
@@ -53,22 +55,31 @@ In order:
 
 ## 3. One-time pre-population playbook
 
-The "solid out of the gate" requirement means starting with a comprehensive base of rows so weekly runs do near-zero fetches. Suggested scope (~250–300 rows):
+Goal: seed every species + form variant in one rate-limited pass so weekly runs do near-zero new-row creation. Scope: **all Pokémon** in `pokemon-go-api/pokedex.json` (base species + every form: megaEvolutions, regionForms, tempEvolutions) + the speculative Legends Z-A backfills from `pogo-card-generator/src/data/overrides/megaRoster.ts` — roughly **1,200–1,500 rows**.
 
-- All **Legendary + Mythical** species (the `POKEMON_CLASS_LEGENDARY` / `POKEMON_CLASS_MYTHIC` set in pokedex.json — ~100 species).
-- All **Ultra Beasts** (`POKEMON_CLASS_ULTRA_BEAST` — 11 species: Nihilego, Buzzwole, Pheromosa, Xurkitree, Celesteela, Kartana, Guzzlord, Poipole, Naganadel, Stakataka, Blacephalon).
-- The full **Mega / Primal roster** from `pogo-card-generator/src/data/overrides/megaRoster.ts` (~94 entries — every released Mega/Primal plus the Legends Z-A additions including Mega Z variants).
-- Optional starter coverage: any base species that have featured in Spawn Point's last 12 months of newsletters (parse the archive Notion DB and dedup against the above).
+**Computation, not fetching.** For the four levels we care about (L15 / L20 / L25 / L50), the canonical GO CP formula `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)` matches Hub-DB exactly — the L34–L36 boundary where the formula and Hub-DB diverge is not touched by these levels. So the seeder reads pokedex.json base stats and computes; no Hub-DB fetches required for the bulk seed, which keeps the run polite and deterministic. The trigger's on-miss path still goes Hub-DB-first for any species the seeder didn't cover (genuinely new releases between pokedex.json updates).
 
-**Seeder script (location: `pogo-card-generator/scripts/seed-hundo-cp-master.mjs`, NOT YET WRITTEN):**
+**CPM constants (canonical):**
+- L15: `0.51739395`
+- L20: `0.5974`
+- L25: `0.667934`
+- L50: `0.84029999`
 
-- Reads pokedex.json + the mega roster to build the species/form list.
-- For each, fetches Hub-DB via fetch_url MCP (form-suffixed URL) and parses L20+L25 CPs. Falls back to pokedex.json compute on miss.
-- POSTs each row to the Hundo CP Reference DB via Notion MCP `notion-create-pages`.
-- Rate-limited (concurrency 2, ~500ms gap) to stay polite with both Hub-DB and Notion.
-- Run once. Total fetches: ~250–300. Total Notion writes: same. One-time cost.
+**Seeder script:** `pogo-card-generator/scripts/seed-hundo-cp-master.ts`. Three modes:
 
-When Joe wants this seeded, `claude /spawn-point` (or just ask in pogo-card-generator) — I'll write the script and run it against the live DB.
+- `--dry` (default): walks pokedex.json + the mega roster, computes all four hundo CPs per row, writes `scripts/.hundo-cp-seed.json` for Joe to review. No Notion writes.
+- `--create-db --parent-page-id=<id>`: creates the DB in Notion with the schema above (uses `NOTION_TOKEN`). Prints the new database URL.
+- `--push --db-id=<id>`: bulk-inserts every row from `.hundo-cp-seed.json` into the DB via raw Notion API. Rate-limited (~3 req/sec). Idempotent: queries by (Species, Form) before insert and skips existing rows, so re-runs after schema/data changes are safe.
+
+Joe's full rollout sequence:
+
+1. Create a Notion Integration at <https://www.notion.so/my-integrations>. Save the secret to `pogo-card-generator/.env.local` as `NOTION_TOKEN=secret_...`.
+2. Decide where the DB lives (under the Spawn Point workspace's Reference page) and copy that parent page's ID.
+3. `cd pogo-card-generator && npm run seed-hundo-master -- --create-db --parent-page-id=<id>` → prints the new DB's URL + `data_source_url`.
+4. `npm run seed-hundo-master -- --push --db-id=<id>` → ~7-minute bulk insert.
+5. Paste the `data_source_url` into `triggers/researcher.md`'s `[FILL_IN_AFTER_DB_CREATED]` slot. Commit + push spawn-point.
+
+After step 5 the researcher trigger runs in lookup-first mode against a fully-seeded DB.
 
 ---
 
