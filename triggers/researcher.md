@@ -228,16 +228,30 @@ Quick summary as of May 2026:
 
 **Capture URLs as you go.** Every WebFetch / fetch_url MCP / WebSearch call returns URLs. Note them alongside the data they produced; they become the Sources lines in Step 5. If you don't capture them in Step 2, you can't cite them in Step 5, and the Step 5.5 Source Presence Audit will hard-fail.
 
-**Capture Hundo CP Provenance as you go.** For every featured catchable Pokémon (raid bosses, Max Monday, Community Day, debut species, egg-hatch features), maintain a running list at the top of `output/research-brief-[YYYY-MM-DD].md` titled `## Hundo CP Provenance`. For each species, record ONE row of this table:
+**Hundo CPs come from the master Hundo CP Reference Notion database — lookup-first, fetch-on-miss.** This replaces the old "re-fetch Hub-DB every run for every species" pattern. For every featured catchable Pokémon (raid bosses, Max Monday, Community Day, debut species, egg-hatch features):
+
+1. **Look up** in the `Spawn Point Hundo CP Reference` Notion database (data source: `[FILL_IN_AFTER_DB_CREATED]` — see `instructions/hundo-cp-reference-db-spec.md` for schema, rollout, and the one-time pre-population playbook). Match by **Species + Form** (Form = `base` for the standard form, else `mega` / `mega_x` / `mega_y` / `mega_z` / `primal` / `gigantamax` / `dynamax` / `shadow` / `alolan` / `galarian` / `hisuian` / `paldean` / `origin` / etc.). Rows in this DB are pre-verified — use them DIRECTLY, no fetch required.
+
+2. **On miss** (species+form combo not in the DB), fetch and record:
+   - **Primary:** `db.pokemongohub.net/pokemon/[dexNr]` via fetch_url MCP (form-suffixed for non-base forms per the Hub-DB form conventions: `{N}-Mega`, `{N}-Mega_X`, `{N}-Mega_Y`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`, `{N}-Shadow`). Extract L20 + L25 hundo CPs via regex `<strong>(\d+)<!-- --> <!-- -->CP</strong>`.
+   - **Fallback** (Hub-DB 404, "Pokémon not available yet", or fetch_url MCP unavailable): compute from pokemon-go-api pokedex.json base stats — formula `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)` with cpm = 0.5974 (L20), 0.6679 (L25).
+   - **Create a new row in the Hundo CP Reference DB** with: Species, Form, Dex, Base ATK/DEF/STA, Hundo CP @ L20, Hundo CP @ L25, Source URL (or `pokedex.json (computed)`), Method (`hub-db-fetched` / `pokedex.json-computed`), First Recorded = today, Last Verified = today.
+
+3. **Maintain a per-run snapshot** at the top of `output/research-brief-[YYYY-MM-DD].md` titled `## Hundo CP Provenance` — copy the rows used this run (whether looked up or freshly created). Step 5.5 Check #9 audits against THIS snapshot, NOT against the master DB directly.
 
 ```
-| Species | dex# | Source | Base atk/def/sta | L20 hundo | L25 weather-boosted |
-|---|---|---|---|---|---|
-| Flittle | 955 | db.pokemongohub.net/pokemon/955 (fetched [date]) | 105/60/102 | 401 | 501 |
-| Espathra | 956 | pokedex.json (computed) | 204/127/216 | 1415 | 1769 |
+| Species | Form | dex# | Source | Base atk/def/sta | L20 hundo | L25 weather-boosted | From master DB? |
+|---|---|---|---|---|---|---|---|
+| Flittle | base | 955 | db.pokemongohub.net/pokemon/955 (fetched 2026-05-30) | 105/60/102 | 401 | 501 | new (added this run) |
+| Espathra | base | 956 | pokedex.json (computed) | 204/127/216 | 1415 | 1769 | yes (verified 2026-04-12) |
+| Garchomp | mega | 445 | db.pokemongohub.net/pokemon/445-Mega | 339/222/216 | 3076 | 3845 | yes (verified 2026-03-21) |
 ```
 
-Source is either a `db.pokemongohub.net/...` URL (fetched via fetch_url MCP, with values copied verbatim from the rendered page) OR `pokedex.json (computed)` with the formula `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)` applied where cpm = 0.5974 (L20) or 0.6679 (L25). Step 5.5 Check #9 hard-fails if any drafted hundo CP doesn't trace to this list AND recompute cleanly.
+**Why master-first:** the old pattern re-fetched Hub-DB every run for every featured species — many of them repeat across rotations (Mega Charizard X cycles back multiple times a year). Pre-existing rows in the master DB are pre-verified; lookup is one Notion query instead of a network fetch + regex extraction + LLM check. Steady-state, only Pokémon that have NEVER been featured before trigger a fetch.
+
+**Graceful fallback:** if the `data_source_url` above is still the placeholder OR the DB lookup fails (DB not found / Notion MCP unavailable), fall back to the legacy per-run fetch-and-record-to-brief flow for this run only — do not create master DB rows, do not block the run. Note `[no master DB this run — direct fetch]` in the brief snapshot's "From master DB?" column so Joe sees the regression in the audit pass.
+
+Source is either a `db.pokemongohub.net/...` URL OR `pokedex.json (computed)`. Step 5.5 Check #9 hard-fails if any drafted hundo CP doesn't trace to the brief snapshot AND recompute cleanly.
 
 ### Source Routing Table
 
@@ -255,7 +269,7 @@ Source is either a `db.pokemongohub.net/...` URL (fetched via fetch_url MCP, wit
 | Dynamax rankings | pokebase.app via fetch_url MCP | pokemongohub.net via fetch_url MCP |
 | Shiny availability | db.pokemongohub.net via fetch_url MCP | LeekDuck (fetch_url MCP) |
 | Pokémon base stats / forms / movesets | pokemon-go-api pokedex.json (WebFetch; github.io — always reachable) | (no good fallback; rely on JSON) |
-| CP/hundo values | **db.pokemongohub.net via fetch_url MCP (primary)**; compute from pokedex.json base stats + GO CP formula as redundancy / for unlisted Pokémon. **Capture provenance per Step 2 above; Step 5.5 Check #9 hard-fails on unverified values.** | pokebattler.com snippet via WebSearch — flag `[fallback: search-snippet]` |
+| CP/hundo values | **Master Hundo CP Reference Notion DB (lookup-first)**; on miss, `db.pokemongohub.net` via fetch_url MCP + write the row back; on Hub-DB miss, compute from pokedex.json base stats + GO CP formula. **See Step 2 above for the full flow; Step 5.5 Check #9 hard-fails on unverified values.** | pokebattler.com snippet via WebSearch — flag `[fallback: search-snippet]` |
 | Pokémon sprite/image | `raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm{dexNr}.icon.png` (form-aware) | None needed |
 | **Event banners / hero art** | **`pokemongo.com/news/[article-slug]` hero (PRIMARY)** — WebFetch → fetch_url MCP on 403 | LeekDuck event page banner → Hub article hero (fetch_url MCP) → sprite CDN (final fallback) |
 | Monthly content post | `pokemongo.com/news/[month]-[year]-content-update` (WebFetch → fetch_url MCP on 403; or RSS feed) | LeekDuck monthly recap, @PokemonGoApp |
@@ -407,17 +421,17 @@ Citation rules:
 - Computed/derived data: `Sources: pokemon-go-api pokedex.json (computed L20/L25 hundo CPs from base stats)`.
 - True no-citation sections (rare): write `Sources: [no external citation — internal/computed data]` rather than omitting the line.
 
-### CRITICAL: Hundo CPs (Provenance + Self-Verify required — Step 5.5 Check #9 is HARD FAIL)
+### CRITICAL: Hundo CPs (Master DB + Self-Verify required — Step 5.5 Check #9 is HARD FAIL)
 
 Every featured catchable Pokémon requires both **L20 hundo catch CP** and **L25 hundo catch CP**.
 
-**Bare CP numbers without provenance are forbidden.** Every value in the draft must trace to the `## Hundo CP Provenance` list at the top of the research brief, which records, per species, EITHER:
-- The fetched URL (`db.pokemongohub.net/pokemon/[dexNr]` via fetch_url MCP) with the rendered L20 + L25 values copied verbatim, OR
-- The computed values with base atk/def/sta (from pokemon-go-api pokedex.json) and CPM applied (0.5974 for L20, 0.6679 for L25)
+**Bare CP numbers without provenance are forbidden.** Every value in the draft must trace to a row in the `## Hundo CP Provenance` snapshot at the top of the research brief, which itself came from either:
+- The **master Hundo CP Reference Notion database** (pre-verified row, used directly — see Step 2 for the lookup-first flow), OR
+- A fresh fetch this run (Hub-DB via fetch_url MCP, or pokedex.json computed) that was ALSO written back to the master DB so the next run is a lookup.
 
-**Before drafting any CP value, self-verify:** recompute using `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)`. If recomputation differs from the listed value, fix the provenance list FIRST, then draft the corrected value.
+**Before drafting any CP value, self-verify:** recompute using `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)`. If recomputation differs from the snapshot value, fix the snapshot FIRST (and the master DB row, if it came from there — flag for re-verification), then draft the corrected value.
 
-Primary source: `db.pokemongohub.net/pokemon/[N]` via fetch_url MCP. Fallback: compute from pokemon-go-api pokedex.json.
+Primary path: master DB lookup. New-species path: Hub-DB via fetch_url MCP → write to master DB. Fallback: compute from pokemon-go-api pokedex.json.
 
 ### CRITICAL: Event Images
 **Image source priority:** pokemongo.com/news official blog hero (PRIMARY) → LeekDuck → Hub → sprite CDN final fallback. Each major section MUST start with `![Alt text](URL)`. Step 6 converts to plain-text URL paragraphs.
