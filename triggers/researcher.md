@@ -228,30 +228,33 @@ Quick summary as of May 2026:
 
 **Capture URLs as you go.** Every WebFetch / fetch_url MCP / WebSearch call returns URLs. Note them alongside the data they produced; they become the Sources lines in Step 5. If you don't capture them in Step 2, you can't cite them in Step 5, and the Step 5.5 Source Presence Audit will hard-fail.
 
-**Hundo CPs come from the master Hundo CP Reference Notion database — lookup-first, fetch-on-miss.** This replaces the old "re-fetch Hub-DB every run for every species" pattern. For every featured catchable Pokémon (raid bosses, Max Monday, Community Day, debut species, egg-hatch features):
+**Hundo CPs come from the master Hundo CP table on Vercel — lookup-first, fetch-on-miss.** The Vercel-hosted JSON is THE source of truth at runtime; Notion is a separately-maintained human-readable mirror that this trigger NEVER reads (no Notion dependency in the hot path). For every featured catchable Pokémon (raid bosses, Max Monday, Community Day, debut species, egg-hatch features):
 
-1. **Look up** in the `Spawn Point Hundo CP Reference` Notion database (data source: `[FILL_IN_AFTER_DB_CREATED]` — see `instructions/hundo-cp-reference-db-spec.md` for schema, rollout, and the one-time pre-population playbook). Match by **Species + Form** (Form = `base` for the standard form, else `mega` / `mega_x` / `mega_y` / `mega_z` / `primal` / `gigantamax` / `dynamax` / `shadow` / `alolan` / `galarian` / `hisuian` / `paldean` / `origin` / etc.). Rows in this DB are pre-verified — use them DIRECTLY, no fetch required.
+1. **Fetch the master table ONCE per run** at run start: `https://pogo-card-generator.vercel.app/data/hundo-cp-master.json` via `fetch_url` MCP (≈500 KB JSON; cached on Vercel's CDN, no auth — the `/data/` path is exempt from the pogo-card-generator login gate). Parse `.rows` into an in-memory map keyed by `{species_lowercase}|{form}`. **One fetch covers every species you look up this run.**
 
-2. **On miss** (species+form combo not in the DB), fetch and record:
-   - **Primary:** `db.pokemongohub.net/pokemon/[dexNr]` via fetch_url MCP (form-suffixed for non-base forms per the Hub-DB form conventions: `{N}-Mega`, `{N}-Mega_X`, `{N}-Mega_Y`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`, `{N}-Shadow`). Extract L20 + L25 hundo CPs via regex `<strong>(\d+)<!-- --> <!-- -->CP</strong>`.
-   - **Fallback** (Hub-DB 404, "Pokémon not available yet", or fetch_url MCP unavailable): compute from pokemon-go-api pokedex.json base stats — formula `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)` with cpm = 0.5974 (L20), 0.6679 (L25).
-   - **Create a new row in the Hundo CP Reference DB** with: Species, Form, Dex, Base ATK/DEF/STA, Hundo CP @ L20, Hundo CP @ L25, Source URL (or `pokedex.json (computed)`), Method (`hub-db-fetched` / `pokedex.json-computed`), First Recorded = today, Last Verified = today.
+2. **Look up** each featured Pokémon by **Species + Form** (Form = `base` for the standard form, else `mega` / `mega_x` / `mega_y` / `mega_z` / `primal` / `gigantamax` / `dynamax` / `shadow` / `alolan` / `galarian` / `hisuian` / `paldean` / `origin` / etc.). The master table carries all four CPs (L15 Research / L20 Raid+Egg / L25 Weather-Boosted Raid / L50 Max Power) plus base stats and source.
 
-3. **Maintain a per-run snapshot** at the top of `output/research-brief-[YYYY-MM-DD].md` titled `## Hundo CP Provenance` — copy the rows used this run (whether looked up or freshly created). Step 5.5 Check #9 audits against THIS snapshot, NOT against the master DB directly. Each row carries all four CPs even when the draft only cites a subset, so audits and last-minute copy tweaks (e.g. swapping in the L50 max for a power-up cost mention) don't trigger a re-fetch.
+3. **On miss** (species+form combo not in the master table — rare; means it's never been featured before AND wasn't in pokedex.json at last seed):
+   - **Primary:** `db.pokemongohub.net/pokemon/[dexNr]` via fetch_url MCP (form-suffixed for non-base forms per the Hub-DB form conventions: `{N}-Mega`, `{N}-Mega_X`, `{N}-Mega_Y`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`, `{N}-Shadow`). Extract L20 + L25 hundo CPs via regex `<strong>(\d+)<!-- --> <!-- -->CP</strong>`. Compute L15 + L50 from pokedex.json base stats with the formula.
+   - **Fallback** (Hub-DB 404 / "Pokémon not available yet" / fetch_url MCP unavailable): compute all four from pokemon-go-api pokedex.json base stats — formula `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)` with cpm = 0.51739395 (L15), 0.5974 (L20), 0.667934 (L25), 0.84029999 (L50).
+   - Use the row this run AND **flag the miss for the Run Log Notes** as `[hundo-master miss] <species>|<form> — fetched ad-hoc; rerun seed-hundo-master to backfill`. (The trigger CANNOT write back to the Vercel JSON mid-run — it's a static deploy artifact. Joe re-runs the seeder + commits to refresh the master, which closes the miss for future runs.)
+
+4. **Maintain a per-run snapshot** at the top of `output/research-brief-[YYYY-MM-DD].md` titled `## Hundo CP Provenance` — copy the rows used this run (whether master-lookup or freshly fetched). Step 5.5 Check #9 audits against THIS snapshot, NOT the Vercel JSON directly.
 
 ```
-| Species | Form | dex# | Base atk/def/sta | L15 (Research) | L20 (Raid/Egg) | L25 (Weather-Boosted) | L50 (Max) | Source | From master DB? |
+| Species | Form | dex# | Base atk/def/sta | L15 (Research) | L20 (Raid/Egg) | L25 (Weather-Boosted) | L50 (Max) | Source | From master? |
 |---|---|---|---|---|---|---|---|---|---|
-| Flittle | base | 955 | 105/60/102 | 301 | 401 | 501 | 1257 | db.pokemongohub.net/pokemon/955 (fetched 2026-05-30) | new (added this run) |
-| Espathra | base | 956 | 204/127/216 | 1061 | 1415 | 1769 | 4434 | pokedex.json (computed) | yes (verified 2026-04-12) |
-| Garchomp | mega | 445 | 339/222/216 | 2307 | 3076 | 3845 | 9645 | db.pokemongohub.net/pokemon/445-Mega | yes (verified 2026-03-21) |
+| Flittle | base | 955 | 105/60/102 | 301 | 401 | 501 | 1257 | pokemon-go-api pokedex.json (computed) | yes (seeded 2026-05-30) |
+| Espathra | base | 956 | 204/127/216 | 1061 | 1415 | 1769 | 4434 | pokemon-go-api pokedex.json (computed) | yes (seeded 2026-05-30) |
+| Mega Garchomp | mega | 445 | 339/222/239 | 2325 | 3099 | 3874 | 6132 | pokemon-go-api pokedex.json (computed) | yes (seeded 2026-05-30) |
+| <new-species> | base | 1026 | … | … | … | … | … | db.pokemongohub.net/pokemon/1026 (fetched 2026-06-15) | NO — miss, ad-hoc fetch (backfill via seed-hundo-master) |
 ```
 
-**Why master-first:** the old pattern re-fetched Hub-DB every run for every featured species — many of them repeat across rotations (Mega Charizard X cycles back multiple times a year). Pre-existing rows in the master DB are pre-verified; lookup is one Notion query instead of a network fetch + regex extraction + LLM check. Steady-state, only Pokémon that have NEVER been featured before trigger a fetch.
+**Why Vercel-primary:** the JSON is served from Vercel's edge CDN, ~500 KB, one fetch per run, no auth, no rate-limited third-party dependency. Notion as the read source would have meant a per-species query against the Notion API (10–30 queries per run) AND a hard runtime dependency on Notion being up — Vercel-first trades that for one CDN fetch.
 
-**Graceful fallback:** if the `data_source_url` above is still the placeholder OR the DB lookup fails (DB not found / Notion MCP unavailable), fall back to the legacy per-run fetch-and-record-to-brief flow for this run only — do not create master DB rows, do not block the run. Note `[no master DB this run — direct fetch]` in the brief snapshot's "From master DB?" column so Joe sees the regression in the audit pass.
+**Graceful fallback:** if the Vercel URL is unreachable (rare — Vercel + the public `/data/` path don't go down often), fall back to the legacy per-run Hub-DB fetch-and-snapshot flow for this run. Note `[master URL unreachable — direct fetch]` in EVERY row's "From master?" column so Joe sees the regression. Don't block the run.
 
-Source is either a `db.pokemongohub.net/...` URL OR `pokedex.json (computed)`. Step 5.5 Check #9 hard-fails if any drafted hundo CP doesn't trace to the brief snapshot AND recompute cleanly.
+Source is either `pokemon-go-api pokedex.json (computed)` (the seeded rows) OR `db.pokemongohub.net/...` (fresh fetch on miss). Step 5.5 Check #9 hard-fails if any drafted hundo CP doesn't trace to the brief snapshot AND recompute cleanly.
 
 ### Source Routing Table
 
@@ -269,7 +272,7 @@ Source is either a `db.pokemongohub.net/...` URL OR `pokedex.json (computed)`. S
 | Dynamax rankings | pokebase.app via fetch_url MCP | pokemongohub.net via fetch_url MCP |
 | Shiny availability | db.pokemongohub.net via fetch_url MCP | LeekDuck (fetch_url MCP) |
 | Pokémon base stats / forms / movesets | pokemon-go-api pokedex.json (WebFetch; github.io — always reachable) | (no good fallback; rely on JSON) |
-| CP/hundo values | **Master Hundo CP Reference Notion DB (lookup-first)**; on miss, `db.pokemongohub.net` via fetch_url MCP + write the row back; on Hub-DB miss, compute from pokedex.json base stats + GO CP formula. **See Step 2 above for the full flow; Step 5.5 Check #9 hard-fails on unverified values.** | pokebattler.com snippet via WebSearch — flag `[fallback: search-snippet]` |
+| CP/hundo values | **Master Hundo CP Vercel JSON (lookup-first):** `https://pogo-card-generator.vercel.app/data/hundo-cp-master.json` via fetch_url MCP, fetched once per run. On miss: `db.pokemongohub.net` via fetch_url MCP + flag the miss for backfill (the Vercel JSON is a static deploy artifact, not writable mid-run). On Hub-DB miss: compute from pokedex.json base stats + GO CP formula. **See Step 2 above for the full flow; Step 5.5 Check #9 hard-fails on unverified values.** | pokebattler.com snippet via WebSearch — flag `[fallback: search-snippet]` |
 | Pokémon sprite/image | `raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm{dexNr}.icon.png` (form-aware) | None needed |
 | **Event banners / hero art** | **`pokemongo.com/news/[article-slug]` hero (PRIMARY)** — WebFetch → fetch_url MCP on 403 | LeekDuck event page banner → Hub article hero (fetch_url MCP) → sprite CDN (final fallback) |
 | Monthly content post | `pokemongo.com/news/[month]-[year]-content-update` (WebFetch → fetch_url MCP on 403; or RSS feed) | LeekDuck monthly recap, @PokemonGoApp |
@@ -421,17 +424,19 @@ Citation rules:
 - Computed/derived data: `Sources: pokemon-go-api pokedex.json (computed L20/L25 hundo CPs from base stats)`.
 - True no-citation sections (rare): write `Sources: [no external citation — internal/computed data]` rather than omitting the line.
 
-### CRITICAL: Hundo CPs (Master DB + Self-Verify required — Step 5.5 Check #9 is HARD FAIL)
+### CRITICAL: Hundo CPs (Master Table + Self-Verify required — Step 5.5 Check #9 is HARD FAIL)
 
-Every featured catchable Pokémon requires both **L20 hundo catch CP** and **L25 hundo catch CP**.
+Every featured catchable Pokémon requires hundo CPs for the encounter contexts it shows up in — typically L20 (Raid/Egg) + L25 (Weather-Boosted Raid), occasionally L15 (Research) or L50 (Max Power).
 
 **Bare CP numbers without provenance are forbidden.** Every value in the draft must trace to a row in the `## Hundo CP Provenance` snapshot at the top of the research brief, which itself came from either:
-- The **master Hundo CP Reference Notion database** (pre-verified row, used directly — see Step 2 for the lookup-first flow), OR
-- A fresh fetch this run (Hub-DB via fetch_url MCP, or pokedex.json computed) that was ALSO written back to the master DB so the next run is a lookup.
+- The **master Hundo CP Vercel JSON** at `https://pogo-card-generator.vercel.app/data/hundo-cp-master.json` (lookup-first per Step 2), OR
+- A fresh ad-hoc fetch this run (Hub-DB via fetch_url MCP, or pokedex.json computed) for a species/form not yet in the master — the snapshot row records that this was an ad-hoc fetch so Joe can backfill via `npm run seed-hundo-master` and a commit.
 
-**Before drafting any CP value, self-verify:** recompute using `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)`. If recomputation differs from the snapshot value, fix the snapshot FIRST (and the master DB row, if it came from there — flag for re-verification), then draft the corrected value.
+**Before drafting any CP value, self-verify:** recompute using `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)` with cpm = 0.51739395 (L15), 0.5974 (L20), 0.667934 (L25), 0.84029999 (L50). If recomputation differs from the snapshot value, fix the snapshot FIRST (and flag the master row as suspect via the Run Log Notes — `[hundo-master suspect] <species>|<form> — snapshot value differs from recompute by N; re-verify`), then draft the corrected value.
 
-Primary path: master DB lookup. New-species path: Hub-DB via fetch_url MCP → write to master DB. Fallback: compute from pokemon-go-api pokedex.json.
+Primary path: Vercel master lookup. New-species path: Hub-DB via fetch_url MCP → ad-hoc snapshot row + flag for backfill. Fallback: compute from pokemon-go-api pokedex.json.
+
+**Notion mirror note:** there is a parallel Notion DB (the "Spawn Point Hundo CP Reference" mirror) that humans can browse and edit, but this trigger NEVER reads from it. If a Notion row and the Vercel JSON disagree, the Vercel JSON is the truth at runtime; resolve by re-running the seeder + committing.
 
 ### CRITICAL: Event Images
 **Image source priority:** pokemongo.com/news official blog hero (PRIMARY) → LeekDuck → Hub → sprite CDN final fallback. Each major section MUST start with `![Alt text](URL)`. Step 6 converts to plain-text URL paragraphs.
