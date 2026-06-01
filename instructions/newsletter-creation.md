@@ -464,17 +464,39 @@ Every section of the newsletter must include source links at the end. This tells
 
 **Format:** After each section's content, add a "Sources:" line with linked references.
 
-**Example:**
+**Example (correct):**
 ```
-Sources: [LeekDuck](https://leekduck.com/events/) | [Pokémon GO Hub](https://pokemongohub.net) | [Official Blog](https://pokemongo.com/news)
+Sources: [LeekDuck: Tapu Fini raids](https://leekduck.com/events/tapu-fini-in-5-star-raid-battles-may-june-2026/) | [Pokémon GO Hub: Tapu Fini stats](https://db.pokemongohub.net/pokemon/788) | [Pokémon GO Blog: Spring Marathon 2026](https://pokemongo.com/news/spring-marathon-2026)
+```
+
+**Example (WRONG — never do this):**
+```
+Sources: [leekduck.com/events/tapu-fini-...](https://leekduck.com/events/...) | [db.pokemongohub.net/pokemon/788](https://db.pokemongohub.net/pokemon/788)
 ```
 
 **Rules:**
-- List every source used for that section's data
-- Use the site name as link text, not the full URL
-- Separate sources with pipes (|)
-- If a specific article was referenced, link to that article, not just the homepage
-- Primary sources (official blog, LeekDuck) listed first, community sources after
+- **NEVER use a URL or URL fragment as link text.** Every `[text](URL)` requires a descriptive title that names the source AND what's at the link (see `feedback_source_link_titles.md` for the per-source convention table).
+- List every source used for that section's data.
+- Separate sources with pipes (|).
+- If a specific article was referenced, link to that article, not just the homepage.
+- Primary sources (Niantic blog, LeekDuck event page, Hub-DB species page) listed first, community sources after.
+
+**Per-source title convention:**
+
+| Source | Link text pattern |
+|---|---|
+| Pokémon GO Hub article | `Pokémon GO Hub: [Article topic]` |
+| db.pokemongohub.net pokedex pages | `Pokémon GO Hub: [Species] stats` or `Hub-DB: [Species]` |
+| LeekDuck event pages | `LeekDuck: [Event name]` |
+| LeekDuck calendar root | `LeekDuck event calendar` |
+| pokemongo.com news posts | `Pokémon GO Blog: [Topic]` or `Niantic — [Topic]` |
+| Niantic Help Center FAQ | `Niantic Help: [Topic]` |
+| Pokebattler counter pages | `Pokebattler: [Species] counters` |
+| PvPoke rankings | `PvPoke: [League] rankings` |
+| pokemon-go-api JSONs | `pokemon-go-api: [resource]` |
+| Reddit posts | `r/[subreddit]: [thread title]` |
+
+**Pre-push grep check:** search the assembled draft for `[https://`, `[http://`, `[www.`, `[db.poke`, `[pokemongohub.net`, `[leekduck.com`, `[fight.pokebattler` — any matches are URL-as-title and must be fixed before push.
 
 ---
 
