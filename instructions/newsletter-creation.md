@@ -213,6 +213,10 @@ A bullet-point planning reference with calendar specifics the opening paragraph 
 **Format:**
 Each bullet: `[emoji] **[Label]** — [one-line description with time/date]`
 
+**REQUIRED — emoji on every bullet (recurring drafting miss):** Every Week at a Glance bullet MUST start with a relevant emoji prefix. This has been left off repeatedly in past drafts. The emoji is part of the format, not decoration — it gives the scannable visual rhythm that makes the section work. Pick something specifically tied to the bullet's subject (the featured Pokémon's type/icon, the event vibe, the mechanic) — never a generic 📅 or 📌 unless the bullet really is a pure calendar marker with no thematic hook. Examples: 🔥 Reshiram, ⚔️ GBL season, 🌑 Shadow Legendary, ⚡ Spark-themed event, 🚀 new season launch, 🌏 GO Fest, 🧊 quest close.
+
+**Pre-push check:** scan the Week at a Glance section. If any bullet starts with `- **` (no emoji between the dash and the bold label), it's missing its emoji — add one before pushing.
+
 ### 5. Events
 List each special/limited-time event in chronological order (Monday through Sunday). For each:
 - Event name with one emoji
