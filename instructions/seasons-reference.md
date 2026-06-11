@@ -78,19 +78,46 @@ For a newsletter spanning [Monday] – [Sunday]:
 
 **Theme:** Future-of-Pokémon-GO + 10-year anniversary celebrations (GO Fest 2026 Global is the centerpiece).
 
-### Daily Discovery rotation (Forever Forward — CHANGES from MIM)
+### Daily Discovery rotation (Forever Forward — official June 15+ update)
 
-| Day | Bonus | Change from MIM |
+**Effective Monday, June 15, 2026** — Niantic published an updated Daily Discoveries spec in the "Choose Your Path" announcement ([pokemongo.com/news/choose-your-path-forever-forward-2026](https://pokemongo.com/news/choose-your-path-forever-forward-2026)). All bonuses below are **active 12:00 AM – 11:59 PM local time unless otherwise stated**.
+
+| Day | Daily Discovery | Bonuses (verbatim from Niantic) |
 |---|---|---|
-| Sunday | **Scenic Sunday** — more Pokémon spawn while following a Route; Incense attracts even more on Routes; faster Buddy Candy progress on Routes; encounter Mateo up to 3×/day on Routes | **CHANGED** — Catch-Up Sunday → Scenic Sunday. Routes-focused. |
-| Monday | **Max Monday** — Power Spots refresh more frequently; additional Power Spots active; Max Battles 6:00 AM–9:00 PM local rotate featured Dynamax Pokémon | **CHANGED** — Fast-Track Monday REMOVED. Only Max Monday remains. |
-| Tuesday | **Expanded Showcase Tuesday** — Trainers can enter up to **5** PokéStop Showcases | **CHANGED** — Showcase Tuesday expanded from 1 entry to 5. |
-| Wednesday | Presumed continuation: raid rotation flips at 6:00 AM + featured Raid Hour 6:00–7:00 PM | UNCHANGED (verify on first FF newsletter) |
-| Thursday | Presumed continuation: GO Battle Thursday (4× Stardust + 10 sets) | UNCHANGED (verify) |
-| Friday | Presumed continuation: Friendship Friday | UNCHANGED (verify) |
-| Saturday | Presumed continuation: Spotlight Saturday | UNCHANGED (verify) |
+| Sunday | **Scenic Sunday** | • More Pokémon will appear in the wild<br>• More Pokémon will appear while following a Route; Incense will attract even more Pokémon on Routes<br>• Reduced distance to earn Buddy Candy while exploring Routes with your Buddy Pokémon<br>• Encounter Mateo up to three times each day while on a Route |
+| Monday | **Max Monday** | • **1 Rare Candy XL for completing in-person Max Battles** (NEW)<br>• Power Spots refresh more frequently<br>• Additional Power Spots active on Mondays compared to the rest of the week<br>• Max Battles rotate to feature different Dynamax Pokémon |
+| Tuesday | **Showcase Tuesday** | • Trainers can enter up to **5** PokéStop Showcases<br>• More PokéStops may have PokéStop Showcases (NEW) |
+| Wednesday | **Wednesday Raid Hour** | • **1 Rare Candy XL for completing in-person Raid Battles** (NEW)<br>• (Raid rotation flips at 6:00 AM local; featured Raid Hour 6:00–7:00 PM local — long-standing structure, not in the official June 15 text but continuing) |
+| Thursday | **GO Battle Thursdays and Spotlight Hour** | • **Spotlight Hour returns 6:00–7:00 PM local** (NEW — first one is Thursday, June 18, Swinub with 2× Candy for transferring)<br>• (GO Battle Thursday 4× Stardust + 10 sets continues — long-standing, not in the official June 15 text but continuing) |
+| Friday | **Friendship Friday** | • Up to **2 additional Special Trades**<br>• Trades require **20% less Stardust** |
+| Saturday | _no Daily Discovery listed_ | Saturday is not in Niantic's June 15 Daily Discoveries spec. Treat as no recurring bonus. |
+
+**Key changes from the pre-June-15 Forever Forward set:**
+- **Rare Candy XL** added to Max Monday (Max Battles) AND Wednesday (Raid Battles) — both in-person only
+- **Spotlight Hour** returns and is now bundled with Thursday (not Tuesday) — paired with GO Battle Thursday window
+- **Friendship Friday** spec now explicit: 2 extra Special Trades + 20% Stardust discount on trades
+- **Showcase Tuesday** extends to more PokéStops (PoI density bump)
+- **Fast-Track Monday** stays removed (was retired at Forever Forward launch June 2)
+- **Saturday** has no Daily Discovery listed
+
+**Niantic's caveat (verbatim):** *"Daily Discoveries may change as we experiment with how to make the best experience."*
 
 **Note:** Daily Discoveries pause during weeks of global GO Fest, GO Wild Area, and GO Tour events.
+
+### Spotlight Hour schedule (Forever Forward — official Niantic listing)
+
+Spotlight Hours run **Thursdays 6:00–7:00 PM local**, paired with the GO Battle Thursday window. Shiny chance on every featured species.
+
+| Date | Featured | Bonus |
+|---|---|---|
+| Thursday, June 18, 2026 | Swinub | 2× Candy for transferring Pokémon |
+| Thursday, June 25, 2026 | Wingull | 2× Stardust for catching Pokémon |
+| Thursday, July 2, 2026 | Pidgey | 2× XP for evolving Pokémon |
+| Thursday, July 16, 2026 | Zubat | 2× XP for catching Pokémon |
+| Thursday, July 23, 2026 | Eevee | 2× Candy for catching Pokémon |
+| Thursday, July 30, 2026 | Bidoof | 2× Candy for transferring Pokémon |
+
+**Skipped: Thursday, July 9** — likely tied to GO Fest Global weekend (July 11–12) crowding the calendar.
 
 ### GO Pass: Forever Forward — NEW Major Milestone Bonus tier system
 
