@@ -44,7 +44,7 @@ TYPE_CHART = {
     "Electric": {"Water": SE, "Electric": RE, "Grass": RE, "Ground": DRE, "Flying": SE, "Dragon": RE},
     "Grass":    {"Fire": RE, "Water": SE, "Grass": RE, "Poison": RE, "Ground": SE, "Flying": RE, "Bug": RE, "Rock": SE, "Dragon": RE, "Steel": RE},
     "Ice":      {"Fire": RE, "Water": RE, "Grass": SE, "Ice": RE, "Ground": SE, "Flying": SE, "Dragon": SE, "Steel": RE},
-    "Fighting": {"Normal": SE, "Ice": SE, "Poison": RE, "Flying": RE, "Psychic": RE, "Bug": RE, "Rock": SE, "Ghost": DRE, "Dark": SE, "Steel": SE, "Fairy": RE, "Fighting": RE},
+    "Fighting": {"Normal": SE, "Ice": SE, "Poison": RE, "Flying": RE, "Psychic": RE, "Bug": RE, "Rock": SE, "Ghost": DRE, "Dark": SE, "Steel": SE, "Fairy": RE},
     "Poison":   {"Grass": SE, "Poison": RE, "Ground": RE, "Rock": RE, "Ghost": RE, "Steel": DRE, "Fairy": SE},
     "Ground":   {"Fire": SE, "Electric": SE, "Grass": RE, "Poison": SE, "Flying": DRE, "Bug": RE, "Rock": SE, "Steel": SE},
     "Flying":   {"Electric": RE, "Grass": SE, "Fighting": SE, "Bug": SE, "Rock": RE, "Steel": RE},
