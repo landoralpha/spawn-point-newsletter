@@ -38,6 +38,62 @@ Pokémon GO uses DIFFERENT multipliers than the main-series Pokémon games. "4×
 - **"takes 0 damage"** / **"no damage from X"** → flag. Minimum non-effective damage is 0.39× of base.
 - **"4× resistant"** / **"quadruple resistance"** → flag. Maximum resistance is 0.39× (double resistance).
 
+## Dual-type cancellation traps — common counter-list errors
+
+When a defender's two types react oppositely to the same attacking type, multipliers MULTIPLY (not stack additively). The result can be **exactly neutral** even when one half looks like a weakness. Check the math before listing a "weakness."
+
+### The math
+`Final multiplier = (Type A reaction) × (Type B reaction)`
+
+| Pattern | Example | Math | Net |
+|---|---|---|---|
+| Weak + Resist (same factor) | Fighting vs Normal/Fighting | 1.6 × 0.625 | **1.0× neutral** |
+| Weak + Doubly resist | Ground vs Ground/Steel | 1.6 × 0.39 | 0.625× resisted |
+| Doubly-weak | Flying vs Bug/Fighting | 1.6 × 1.6 | 2.56× |
+| Resist + Resist | Fairy vs Steel/Dragon | 0.625 × 0.625 | 0.39× doubly resisted |
+
+### Common-error dual-types — verify counters against these
+
+These dual-typings recur in raid rotations AND have type-chart traps that produce frequent counter-list errors. Always check before recommending a "weakness" counter.
+
+**Normal/Fighting** (Mega Lopunny, Diggersby, Greedent partial)
+- True weaknesses (1.6×): **Flying, Psychic, Fairy**
+- **Fighting is NEUTRAL (1.0×)** — Normal's Fighting weakness (1.6×) cancels Fighting's Fighting resist (0.625×). Conkeldurr, Machamp, Lucario, Hariyama, Mega Blaziken, Mega Lucario, Marshadow with Fighting movesets all hit NEUTRAL, not super-effective. Common counter-list error.
+- Ghost is doubly resisted (0.39×): Normal's main-series Ghost immunity (0.39× in PoGO) × Fighting's Ghost neutral (1.0×) = 0.39×. Do not bring Chandelure, Origin Giratina, or Gengar.
+
+**Steel/Dragon** (Dialga, Shadow Dialga, Duraludon, Empoleon partial)
+- True weaknesses (1.6×): **Fighting, Ground**
+- **Fire is NEUTRAL (1.0×)** — Steel's Fire weakness (1.6×) cancels Dragon's Fire neutral (1.0×) — wait, this is actually 1.6×. Let me recompute: Steel's Fire weakness = 1.6×, Dragon's Fire neutral = 1.0×, product = 1.6×. So Fire IS super-effective on Steel/Dragon at 1.6×. **Hub-DB confirms Fire is a weakness on Shadow Dialga.** ⚠️ This was previously mis-flagged in Spawn Point — Fire is genuinely 1.6× here.
+- **Dragon, Ice, Fairy are all NEUTRAL or RESISTED** — Dragon's Dragon weakness (1.6×) × Steel's Dragon resist (0.625×) = 1.0× (Dragon neutral). Dragon's Ice resist (0.625×) × Steel's Ice neutral (1.0×) = 0.625× (Ice resisted). Steel's Fairy resist (0.625×) × Dragon's Fairy weakness (1.6×) = 1.0× (Fairy neutral). The standard Dragon-type raid roster (Mamoswine, Dragonite Outrage, Togekiss) UNDERPERFORMS here.
+
+**Bug/Steel** (Genesect, Mega Scizor, Forretress, Escavalier partial)
+- True weaknesses: Fire is **doubly super-effective (2.56×)** — Bug's Fire weakness × Steel's Fire weakness.
+- Fire-type attackers (Mega Charizard Y, Shadow Moltres, Reshiram) are catastrophic on Bug/Steel raids. This is one of the cleanest matchups in PoGO.
+
+**Ghost/Dark** (Hoopa Unbound partial, Spiritomb, Sableye partial)
+- True weakness (single): **Fairy** (1.6× — Dark side)
+- **No weakness on Ghost side that isn't covered by Dark** — Ghost's Ghost weakness × Dark's Ghost neutral = 1.6×. Ghost attackers still work but only via the Ghost-half exposure.
+- Fighting, Psychic, Bug are ALL resisted or doubly resisted (Dark resists all three). Common error to bring Conkeldurr/Mewtwo for Spiritomb.
+
+**Water/Ground** (Swampert, Whiscash, Quagsire, Mega Swampert)
+- True weakness: **Grass at 2.56×** (Water weak × Ground weak, both 1.6× = 2.56×). The single strongest single-type matchup in the game.
+- Electric is DOUBLY RESISTED (Water resist × Ground immunity = 0.625 × 0.39 = 0.244×, effectively 0.39× per PoGO's floor). DO NOT lead with Electric.
+
+**Fire/Flying** (Charizard, Mega Charizard, Moltres, Talonflame)
+- True weakness: **Rock at 2.56×** (Fire weak × Flying weak, both 1.6×). Rock attackers cremate this typing.
+- Grass, Bug, Ground are all DOUBLY resisted. Ground vs Flying main-series immunity becomes 0.39× in PoGO, stacked with Fire's Ground neutral (1.0×) = 0.39×.
+
+**Rock/Ground** (Rhyperior, Excadrill partial, Mega Aerodactyl partial)
+- True weakness: **Water and Grass at 2.56×**
+- Electric is DOUBLY resisted (Ground immunity to Electric = 0.39× × Rock neutral × 1.0 = 0.39×). Never lead with Electric.
+
+### Validator rule (for recon Step 5.6)
+
+For every "Premium" or "Budget" counter listed against a boss, compute:
+`multiplier = boss_type_chart[charged_move_type] × (boss_type_chart[charged_move_type] if dual_type else 1)`
+
+If `multiplier < 1.6`, the charged move is **not super-effective** on the boss. Flag the counter unless the rationale is documented (e.g., high raw DPS, bulk for survival, Mega aura cross-promo). The Pokebattler `aggregation=AVERAGE` mode does sometimes rank neutral-coverage Megas highly due to raw stats, but the Hub article + Hub-DB typically correct this.
+
 ## Sources
 
 - [Pokémon GO Hub GamePress damage mechanics](https://pokemongo.gamepress.gg/damage-mechanics) (community-aggregated, derived from Niantic game data)

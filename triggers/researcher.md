@@ -361,15 +361,16 @@ Render per the master email format in `instructions/email-format.md`. Send via S
   <tr><td>Section 11 (Month Transition)</td><td>[Included / Skipped — reason]</td></tr>
 </table>
 
-<h2>Trending Topic Candidates (4 — shortlist)</h2>
-<p><strong>✅ CANDIDATE 1 (SELECTED): "[Title]"</strong><br>
+<h2>Trending Topic Candidates (4 — shortlist, category-rotated)</h2>
+<p style="font-size:0.9em;color:#666;"><strong>Category rotation rule (MANDATORY):</strong> the 4 candidates MUST span at least 3 of these 7 angle categories: Game-feature change · Event spotlight / new debut · Calendar/seasonal · Niantic corporate/industry · Competitive/esports · Ecosystem/spawn mechanics · Franchise/shiny news. Read <code>instructions/newsletter-archive.md</code> "Repeat-risk watchlist" section BEFORE selecting — any category used in 2+ of the last 3 issues is BLOCKED from the SELECTED candidate (still allowed as a non-selected option). Also read the freshest 5 entries in the News & Updates Notion DB (populated daily by the monitor trigger) for trending news that may not be on the radar yet.</p>
+<p><strong>✅ CANDIDATE 1 (SELECTED): "[Title]"</strong> <em>[Category: ...]</em><br>
 [1-2 sentence angle + why this is strongest for THIS week.]</p>
 
-<p><strong>CANDIDATE 2: "[Title]"</strong><br>[1-line angle.]</p>
-<p><strong>CANDIDATE 3: "[Title]"</strong><br>[1-line angle.]</p>
-<p><strong>CANDIDATE 4: "[Title]"</strong><br>[1-line angle.]</p>
+<p><strong>CANDIDATE 2: "[Title]"</strong> <em>[Category: ...]</em><br>[1-line angle.]</p>
+<p><strong>CANDIDATE 3: "[Title]"</strong> <em>[Category: ...]</em><br>[1-line angle.]</p>
+<p><strong>CANDIDATE 4: "[Title]"</strong> <em>[Category: ...]</em><br>[1-line angle.]</p>
 
-<p style="font-size:0.9em;color:#666;">Full 80–120 word mini-drafts of all 4 options will land in the <code>Trending Topic Drafts</code> Notion child page after drafting completes.</p>
+<p style="font-size:0.9em;color:#666;">Full 80–120 word mini-drafts of all 4 options will land in the <code>Trending Topic Drafts</code> Notion child page after drafting completes. To swap the SELECTED candidate post-draft: edit the Notion draft's Trending Topic section directly — no re-run needed.</p>
 
 <h2>Trainer Tip Angle Candidates (4 — shortlist)</h2>
 <p><strong>✅ CANDIDATE 1 (SELECTED): [Angle name]</strong><br>
@@ -443,6 +444,30 @@ Primary path: Vercel master lookup. New-species path: Hub-DB via fetch_url MCP �
 
 ### CRITICAL: Required Sections
 1. Subject Line A/B Options | 2. Title + Subtitle | 3. Opening | 4. Week at a Glance | 5. Events | 6. Raid Bosses | 7. GBL | 8. Max Monday | 9. Daily Discoveries | 10. Trending Topic | **11. What's New This Month/Season — CONDITIONAL** | 12. Don't Miss | 13. Sign-off
+
+### CRITICAL: Daily Discoveries Section (Section 9) — auto-rebuild from `seasons-reference.md`
+
+The Daily Discoveries section MUST be rebuilt from scratch each issue using the AUTHORITATIVE table in `instructions/seasons-reference.md` under the current season's "Daily Discovery rotation" subsection.
+
+**Procedure:**
+
+1. Identify the current season from Step 0.1 (`season_context`).
+2. Read the matching "Daily Discovery rotation" table in `seasons-reference.md` — this is the canonical bonus spec.
+3. For EACH day of the newsletter week (Monday through Sunday), build a bullet:
+   - **Day-of-week label** (e.g., "Monday, June 15")
+   - **Daily Discovery name** from the seasons-reference table (e.g., "Max Monday")
+   - **Bonus spec** from the seasons-reference table (verbatim from the table)
+   - **Week-specific overlay** — append event-specific items for that day (e.g., "Candela's Quest closes 8 PM", "Necrozma Raid Hour 6–7 PM", "Frigibax Community Day 2–5 PM")
+
+4. If the seasons-reference table says a day has "no Daily Discovery listed" (e.g., Saturday in Forever Forward post-June-15), do NOT invent one — note the week's event content for that day instead.
+
+5. If a `seasons-reference.md` Daily Discovery has changed effective a DATE within the newsletter window (mid-week update), split the affected day's bullet into "before the change" and "after the change" with the effective date called out.
+
+**Anti-pattern (HARD STOP):** NEVER copy the Daily Discoveries block from a previous issue's draft or Beehiiv template. Every issue rebuilds from `seasons-reference.md`. The most common error caught by recon is a stale "Fast-Track Monday" or "Catch-Up Sunday" surviving into a Forever Forward draft because the writer copied from a Memories in Motion template.
+
+**Pre-section verification:** before writing the Daily Discoveries section, grep your drafted Week at a Glance and Events sections for ANY Daily Discovery name that DOESN'T appear in the current season's `seasons-reference.md` table. Hit = stale. Fix before drafting Section 9.
+
+Sources line for Section 9: cite `instructions/seasons-reference.md` AND the Niantic season announcement URL referenced in seasons-reference's source citations.
 
 ### CRITICAL: Trending Topic Section (Section 10)
 Write the **default** Trending Topic candidate's full section (per the brief). After the section's body and Sources line, append a callout block:
@@ -522,7 +547,7 @@ Section relevance is mandatory — a tip placed in the Mega Raid subsection MUST
 - **Angle variety** — even within the default angle theme, vary the specific take across slots.
 - **Per-section alternatives footer:** at the END of the draft, add a small callout listing the 4 Trainer Tip angle candidates with the default flagged.
 
-**Game Mechanics Fact-Check:** Shadow can't trade, can't Max Battle. Trainer level cap 80. Friend cap 650. Mega Energy cap 10,000. Spotlight Hours retired March 3, 2026. Niantic for game-dev, Scopely for corporate. Lucky Friend = STATUS, Lucky Trade = OUTCOME. Adventure Effects vs Mega/Primal auras vs Dynamax = SEPARATE. Mega: 8-hour, 4 levels. Primal: only Groudon and Kyogre. Dynamax: 800 MP soft cap, 1500 MP storage. 6-Star Gigantamax in-person ONLY. Remote Raid daily cap is 10/day.
+**Game Mechanics Fact-Check:** Shadow can't trade, can't Max Battle. Trainer level cap 80. Friend cap 650. Mega Energy cap 10,000. Spotlight Hours retired March 3, 2026 — RETURN Thursday June 18, 2026 (Thursdays 6–7 PM local, paired with GO Battle Thursday). See `instructions/seasons-reference.md` for the full schedule through July 30. Niantic for game-dev, Scopely for corporate. Lucky Friend = STATUS, Lucky Trade = OUTCOME. Adventure Effects vs Mega/Primal auras vs Dynamax = SEPARATE. Mega: 8-hour, 4 levels. Primal: only Groudon and Kyogre. Dynamax: 800 MP soft cap, 1500 MP storage. 6-Star Gigantamax in-person ONLY. Remote Raid daily cap is 10/day.
 
 ## Step 5b: Generate Multi-Platform Social Copy Pack
 
@@ -583,20 +608,20 @@ For each of the 4 Trending Topic candidates from the brief, append:
 
 At the top of the page, include a 1-paragraph instruction explaining how to swap an alternative in.
 
-## Step 6.5: Generate Archive Diff for Manual Apply (no git push)
+## Step 6.5: Generate Archive Diff + Push to Notion Child Page
 
-The agent has NO git push credentials AND the sandbox blocks curl. Step 6.5 produces TEXT only.
+The agent has NO git push credentials AND the sandbox blocks curl. Step 6.5 produces TEXT and writes it to a Notion child page where Joe can one-click-copy on Saturday morning. Drift in the archive (last seen: 4-issue lag from #14–#17 caused the broken #18 format incident) is a known problem; surfacing the entry in the issue's own Notion page makes it impossible to miss.
 
-**Piece 1 — Quick Reference Table row:**
+### Output 1 — Quick Reference Table row
 ```
 | [N+1] | [Title] | [Date Range] | [CD or none] | [5-Star] | [Mega] | [Shadow] | [GBL Cup] | [Max Monday] | [Trending Topic title — the default that was written] |
 ```
 
-**Piece 2 — Detailed Issue Record:**
+### Output 2 — Detailed Issue Record
 ```
 ### Spawn Point #[N+1]: [Title]
 - **Week:** [date range]
-- **URL:** [TBD - update after Beehiiv publish]
+- **URL:** [TBD - update after Beehiiv publish; the recon trigger Step 0 will backfill]
 - **Community Day:** [or none]
 - **Five-Star Raids:** [list]
 - **Mega Raids:** [list]
@@ -608,6 +633,16 @@ The agent has NO git push credentials AND the sandbox blocks curl. Step 6.5 prod
 - **Trainer Tip Angle Theme Used (default):** [the default angle theme name]
 - **Trainer Tip Angles Used (per-slot specifics):** [list 3-5 specific tip framings, comma-separated]
 ```
+
+### Output 3 — Write to Notion child page (REQUIRED)
+
+Use Notion MCP `create_page` under the issue's Notion page (`parent_id = the issue page UUID from Step 6`):
+
+- **Title:** `Archive Entry — Apply to instructions/newsletter-archive.md (Issue #[N+1])`
+- **Body:** both Output 1 and Output 2 as code blocks, prefaced with the line:
+  > **🗂️ Action required:** Paste Output 1 into the Quick Reference Table (after the row for issue #[N]) and Output 2 into the Detailed Issue Records section (after issue #[N]'s block) in `instructions/newsletter-archive.md`. Commit + push to `main`. The recon trigger checks archive freshness — leaving this unapplied for more than one issue cycle WILL trigger a recon flag.
+
+The Step 7 email includes a direct link to this child page so Joe sees it before publish.
 
 ## Step 7: Send Email Notification (LOCKED HTML FORMAT)
 
@@ -704,8 +739,10 @@ Render per the master email format in `instructions/email-format.md`. Send via S
 <p><strong>CANDIDATE 3: [Angle name]</strong><br>[2-sentence frame.]</p>
 <p><strong>CANDIDATE 4: [Angle name]</strong><br>[2-sentence frame.]</p>
 
-<h2>Archive Diff — Apply Manually to instructions/newsletter-archive.md</h2>
+<h2>🗂️ Archive Entry — Apply Before Next Issue Drafts</h2>
+<p style="background:#fff8d6;padding:10px;border-left:4px solid #f4ba00;"><strong>Action required:</strong> the full archive entry is already drafted on a Notion child page on this issue's draft (<code>Archive Entry — Apply to instructions/newsletter-archive.md (Issue #[N+1])</code>). One-click-copy from there into <code>instructions/newsletter-archive.md</code> and push to <code>main</code>. The recon trigger checks archive freshness — leaving this unapplied for more than one issue cycle WILL trigger a recon flag (the broken-format #18 incident traced to a 4-issue archive lag).</p>
 <p>[If archive is stale (Notion has issues beyond archive max), call it out: "⚠️ ARCHIVE STALE: newsletter-archive.md shows max issue #X. Notion DB has #Y. Before applying #[N+1] entry below, backfill #X+1 through #Y first — or add #[N+1] now and note the gap."]</p>
+<p><em>Inline text copy below for backup — the Notion child page is the primary source.</em></p>
 
 <h3>Step 1 — Add to Quick Reference Table (after the #[N] row)</h3>
 <pre>| [N+1] | [Title] | [Date Range] | [CD or none] | [5-Star] | [Mega] | [Shadow] | [GBL Cup] | [Max Monday] | [Trending Topic title] |</pre>
