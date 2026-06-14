@@ -107,6 +107,30 @@ Log the `season_context` value into the research brief (Step 4) AND propagate it
 
 **Why this step exists:** Mid-cycle reference updates can leak future-season info into past newsletters. Without this check, a recon on Spawn Point #15 (May 18-24, fully within MIM) could surface Mega Skarmory in counter recommendations, which is anachronistic. See `seasons-reference.md` "Season-application rule" for the editorial standard.
 
+### Step 0.2: Weekly Recurring Features Check (MANDATORY — added 2026-06-14)
+
+After determining `season_context`, cross-reference the newsletter window `[next_monday, next_sunday]` against the recurring-features tables in `seasons-reference.md`. Two features MUST be checked every single run:
+
+**Spotlight Hour (Thursdays 6:00–7:00 PM local, Forever Forward onward)**
+1. Read the "Spotlight Hour schedule" table in `seasons-reference.md`.
+2. Is the Thursday in the newsletter window listed in the schedule? If YES, record `spotlight_hour_this_week = {date, featured_species, bonus}` in the research brief.
+3. The drafted newsletter MUST place Spotlight Hour in:
+   - **Week at a Glance** (bullet with relevant emoji — Pokémon icon for the featured species, e.g. 🐗 for Swinub)
+   - **Daily Discoveries** (Thursday entry — feature species + bonus + 6:00–7:00 PM window)
+   - **Don't Miss** (if it's the season's first Spotlight Hour OR it stacks with a major event like GBL Thursday's 4× Stardust window)
+
+**Choose Your Path Timed Research (Forever Forward debut)**
+1. Read the "Choose Your Path schedule" table in `seasons-reference.md`.
+2. Does the newsletter window OVERLAP (any single day) with any Choose Your Path event window? If YES, record `choose_your_path_this_week = {event_name, start_datetime, end_datetime, theme_implications}`.
+3. The drafted newsletter MUST place Choose Your Path in:
+   - **Week at a Glance** (bullet with 🧬 or theme-relevant emoji)
+   - **Events section** with its own subsection covering: exact dates/times verbatim, the three-path mechanic (Explore / Catch / Battle), the "once selected, cannot be changed" lock-in warning, the theme implications, AND a Trainer Tip with the "wait for in-game research preview at 10 AM launch or check community-reported task lists" guidance (Niantic does not publish per-path tasks in advance)
+   - **Don't Miss** (path lock-in deadline is the most actionable callout)
+
+**Anti-pattern (HARD STOP):** If either feature applies to the window and is OMITTED from the draft, the recon trigger fires a Category M flag and downgrades Run Status to `Partial`. The #19 (June 15–21) initial pre-fire missed Choose Your Path: Fossil Fun (June 17–21) entirely; this step exists to prevent recurrence.
+
+**Future-proof note:** when other Niantic features get a published recurring schedule (e.g. Adventure Effects rotations, GO Pass cycles), add them here AND to `seasons-reference.md` so the Step 0.2 check covers them mechanically.
+
 ## Step 0.5: MCP Availability Gate (PRE-FLIGHT)
 
 Before Step 1, check whether `fetch_url` from the Spawn-Point-Fetcher MCP appears in your tool surface.

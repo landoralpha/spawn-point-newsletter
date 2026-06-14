@@ -119,6 +119,35 @@ Spotlight Hours run **Thursdays 6:00–7:00 PM local**, paired with the GO Battl
 
 **Skipped: Thursday, July 9** — likely tied to GO Fest Global weekend (July 11–12) crowding the calendar.
 
+### Choose Your Path schedule (Forever Forward — official Niantic listing)
+
+**Choose Your Path Timed Research** is a Forever Forward debut. During the listed non-event weeks, Trainers select **one of three paths — Explore, Catch, or Battle** — at the start of the week. The selected path determines that week's Timed Research tasks and rewards. **Once selected, the path cannot be changed for the duration of the event.** Different Trainers may see different research opportunities depending on path choice.
+
+Niantic does NOT publish per-path task lists in advance — they reveal at launch via the in-game research preview. Per-path detail surfaces on LeekDuck and Hub within hours of launch. Plan a "wait-and-see" approach: don't lock in at 10:00 AM Wednesday without checking community-reported task lists first.
+
+| Event | Start | End | Theme implications |
+|---|---|---|---|
+| Choose Your Path: **Fossil Fun** | Wed, June 17, 2026 at 10:00 AM | Sun, June 21, 2026 at 8:00 PM | Fossil Pokémon focus — Lileep, Anorith, Tirtouga, Archen, Tyrunt, Amaura, Cranidos, Shieldon, Omanyte, Kabuto, Aerodactyl candidates |
+| Choose Your Path: **Charged Embers** | Tue, June 30, 2026 at 10:00 AM | Fri, July 3, 2026 at 8:00 PM | Fire and Electric theme implied |
+| Choose Your Path: **Fairy Trail** | Tue, July 28, 2026 at 10:00 AM | Mon, August 3, 2026 at 8:00 PM | Fairy-type focus |
+| Choose Your Path: **Venom and Vines** | Tue, August 11, 2026 at 10:00 AM | Mon, August 17, 2026 at 8:00 PM | Poison and Grass theme |
+
+### MANDATORY weekly check — Spotlight Hour AND Choose Your Path
+
+Every Spawn Point researcher run MUST cross-reference the newsletter window against BOTH tables above:
+
+1. **Spotlight Hour**: does any Thursday in the newsletter window appear in the Spotlight Hour schedule? If yes, the featured species, bonus, and 6:00–7:00 PM window MUST be in:
+   - Week at a Glance (with relevant emoji prefix)
+   - Daily Discoveries (Thursday entry)
+   - Don't Miss (if it's a first-of-season or stacks with another major event)
+
+2. **Choose Your Path**: does the newsletter window overlap with any Choose Your Path window above? If yes, the event MUST be in:
+   - Week at a Glance (with 🧬 or theme-relevant emoji)
+   - Events section with its own subsection covering: dates/times verbatim, the three-path mechanic, the "cannot be changed" warning, the theme, and a Trainer Tip with the "wait for in-game preview at launch" guidance
+   - Don't Miss (the path lock-in deadline is the most actionable callout)
+
+Missing either feature in a newsletter where the window overlaps is a recon CATEGORY M flag (prohibited omission). The recon trigger checks both schedules in Step 3 Category M sweep.
+
 ### GO Pass: Forever Forward — NEW Major Milestone Bonus tier system
 
 Free track + Deluxe paid version. The NEW feature is persistent rank-tier bonuses that **last until the current GO Pass ends** (not just per-rank one-time rewards):

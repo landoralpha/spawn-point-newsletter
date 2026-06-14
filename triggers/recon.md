@@ -209,6 +209,18 @@ Shadow Raids (all tiers) are available ANY day during their window AND are remot
 
 This is a HARD flag: any M-1 hit downgrades the run to `Partial` and is auto-patchable in Notion (strip the offending clause). It also makes the Step 6 email Priority Fix list.
 
+**M-2: Missing weekly recurring features — Spotlight Hour and Choose Your Path (added 2026-06-14).**
+
+The researcher Step 0.2 requires every issue to cross-reference its window against the recurring-features tables in `seasons-reference.md`. The recon trigger verifies this DID happen. Read `seasons-reference.md` "Spotlight Hour schedule" and "Choose Your Path schedule" tables. For each, check if any date in the issue's window falls within an event window. If yes, the Beehiiv body MUST contain the event.
+
+- **Spotlight Hour overlap with newsletter window:** if the scheduled Thursday in the window has a Spotlight Hour entry AND the Beehiiv body does NOT contain the featured species name OR does NOT mention "Spotlight Hour" in the Daily Discoveries / Week at a Glance / Don't Miss sections → `Category M — Missing Spotlight Hour. [Date]: [species] with [bonus]. Must appear in Week at a Glance + Daily Discoveries Thursday entry, AND in Don't Miss if it's a first-of-season or stacks with another major event.`
+
+- **Choose Your Path overlap with newsletter window:** if any day of the newsletter window falls within a Choose Your Path event window AND the Beehiiv body does NOT contain "Choose Your Path" AND does NOT contain the specific event name (e.g., "Fossil Fun", "Charged Embers", "Fairy Trail", "Venom and Vines") in the Week at a Glance / Events / Don't Miss sections → `Category M — Missing Choose Your Path event. [Event name]: [start] through [end]. Must appear in Week at a Glance + Events subsection (with three-path mechanic, lock-in warning, theme, and Trainer Tip) + Don't Miss (lock-in deadline callout).`
+
+Both M-2 sub-flags downgrade the run to `Partial`. Auto-patch is NOT safe for M-2 — adding a new section requires editorial judgment on length, voice, and placement. Surface the FLAG in the Step 6 email Priority Fix list with the exact Niantic / LeekDuck / Hub source URLs to consult.
+
+This rule traces back to the #19 (June 15–21) initial draft missing Choose Your Path: Fossil Fun (June 17–21) entirely. Adding M-2 prevents recurrence as new recurring-event formats appear in future seasons.
+
 Extend this category with additional M-rows as new recurring errors are identified.
 
 If a claim doesn't fit cleanly: log under `uncategorized` and list in the email so Joe can spot it. Do not attempt verification.
