@@ -288,9 +288,11 @@ Source is either `pokemon-go-api pokedex.json (computed)` (the seeded rows) OR `
 
 | Data Needed | Primary | Fallback |
 |---|---|---|
-| Event calendar | LeekDuck (WebFetch → fetch_url MCP on 403) | pokemongo.com/news (RSS or WebFetch → fetch_url MCP on 403) |
-| Upcoming raid bosses | LeekDuck event pages + pokemongo.com/news + @PokemonGoApp (search snippet) | Pokémon GO Hub previews via WP REST API or fetch_url MCP |
-| Current raid lineup | pokemon-go-api raidboss.json (WebFetch; github.io — always reachable) | LeekDuck "what's in raids now" (fetch_url MCP) |
+| Event calendar | **ScrapedDuck `events.json`** (WebFetch — raw.githubusercontent.com; structured JSON every 12h) → LeekDuck HTML (fetch_url MCP on 403) for cite-able human-readable source URLs | pokemongo.com/news (RSS or WebFetch → fetch_url MCP on 403) |
+| Upcoming raid bosses | **ScrapedDuck `raids.json`** (current rotation in structured JSON) + LeekDuck event pages for forward-looking rotations + pokemongo.com/news + @PokemonGoApp (search snippet) | Pokémon GO Hub previews via WP REST API or fetch_url MCP |
+| Current raid lineup | **ScrapedDuck `raids.json`** (PRIMARY — includes name/tier/CP ranges/boosted weather/shiny flag in clean JSON; updated every 12h) → pokemon-go-api raidboss.json (additional fields like Pokémon ID/form for Pokebattler lookups) | LeekDuck "what's in raids now" (fetch_url MCP) |
+| Field Research tasks + rewards | **ScrapedDuck `research.json`** (39 current tasks with reward encounter list + shiny flags + CP ranges) | LeekDuck research page (HTML) for cite-able URL |
+| Egg hatch pools | **ScrapedDuck `eggs.json`** (76 entries with eggType / canBeShiny / combatPower range / isRegional / isGiftExchange / rarity) | LeekDuck egg pool page (HTML) for cite-able URL |
 | **Raid counters** | **Equal-weight tri-source (UPDATED 2026-06-15):** (1) **Pokebattler JSON** via WebFetch → fetch_url MCP on 403. See "Canonical Pokebattler ID and tier format" below — wrong ID format produces 404 on every boss. (2) **Hub-DB `/counters` page** via fetch_url MCP: `https://db.pokemongohub.net/pokemon/{KEY}/counters` where KEY is dex# (e.g., `870`) for base form, or form-suffixed with capital-first letters: `{N}-Mega`, `{N}-Mega_X` / `{N}-Mega_Y` (UNDERSCORE inside Mega X/Y), `{N}-Shadow`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`. Parse the `BestCountersHighlights_highlights__O4EAQ` section for the top 7 curated picks. Both sources queried EQUALLY for every boss — not a primary/fallback hierarchy. | **Tiebreaker:** **DialgaDex** when Pokebattler and Hub-DB diverge meaningfully OR for challenging matchups (debuts, Super Mega Raid Day, low-meta bosses). URL: `https://www.dialgadex.com/?p={dex_num}&f={form}` where `f=S` Shadow, `f=M` Mega, `f=P` Primal, no `f` for base. JS-rendered SPA — use fetch_url MCP `mode="text"`. DialgaDex's Baseline / Budget / ESpace tiers map cleanly to Spawn Point's Premium / Budget editorial standard. Mark divergence outcomes `[tiebreaker: dialgadex sided with <source>]`. **Tier 4 (last resort):** WebSearch snippet `[fallback: search-snippet]`. **Tier 5:** typing analysis `[fallback: typing-analysis]`. See "Tri-source counter recipe" below the table for the full procedure. |
 | **PvP rankings** | **PvPoke JSON via WebFetch** (raw.githubusercontent.com — always reachable from sandbox; if you ever see a 403, escalate to fetch_url MCP before falling further) | Articles via fetch_url MCP — flag `[fallback: search-snippet]` if snippet-only |
 | Cup ban list | @PokemonGoApp (search), LeekDuck, Hub Nifty or Thrifty (via WP REST API or fetch_url MCP) | Niantic blog post (WebFetch → fetch_url MCP on 403) |
@@ -393,6 +395,33 @@ For every anomaly, the research brief logs: `Counter source delta — Pokebattle
 **1. Raid boss rotation (CURRENT only):** `https://pokemon-go-api.github.io/pokemon-go-api/api/raidboss.json` — snapshot, NOT a schedule.
 
 **2. Pokémon pokedex:** `https://pokemon-go-api.github.io/pokemon-go-api/api/pokedex.json`. **Hundo CP formula:** `floor((Atk * sqrt(Def) * sqrt(Sta) * cpm^2) / 10)` with cpm = 0.5974 (L20), 0.6679 (L25). Atk/Def/Sta = base + 15. Use db.pokemongohub.net via fetch_url MCP as primary; compute for redundancy / unlisted Pokémon. **Record both fetched and computed values in the Hundo CP Provenance list — Step 5.5 Check #9 cross-checks them.**
+
+### CRITICAL: ScrapedDuck JSON Endpoints (PRIMARY for events / raids / research / eggs — added 2026-06-15)
+
+ScrapedDuck scrapes LeekDuck every ~12 hours and publishes clean structured JSON on `raw.githubusercontent.com`. **Faster, cleaner, and sandbox-reliable** vs scraping LeekDuck HTML directly. Use ScrapedDuck for STRUCTURED DATA; cite LeekDuck's human-readable URL for the source line in the newsletter (LeekDuck explicitly permits this via the ScrapedDuck repo terms).
+
+| Endpoint | Schema | What you get |
+|---|---|---|
+| [`events.json`](https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json) (and `.min.json`) | Array of events with `{eventID, name, eventType, heading, link, image, start, end, extraData{generic{hasSpawns, hasFieldResearchTasks}, …}}`. ISO 8601 timestamps. | All 50+ current/upcoming events with the LeekDuck URL embedded. Use `start`/`end` for date overlap checks against the newsletter window — no HTML parsing needed. |
+| [`raids.json`](https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/raids.json) (and `.min.json`) | Array of raid bosses with `{name, tier ("Mega Raids" / "5-Star Raids" / "3-Star Raids" / "1-Star Raids" / "Shadow Raids" — verbatim string), canBeShiny, types[{name, image}], combatPower{normal{min,max}, boosted{min,max}}, boostedWeather[{name, image}], image}`. | The CURRENT raid rotation in structured JSON. CP min/max ranges already computed (no need to derive). `boostedWeather` is a list, not a single value. |
+| [`research.json`](https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/research.json) (and `.min.json`) | Array of `{text (task), rewards[{name, image, canBeShiny, combatPower{min,max}}]}`. | All ~40 current Field Research tasks + the reward Pokémon for each, with shiny flag and CP range. Replaces hand-tabulating from LeekDuck's research page. |
+| [`eggs.json`](https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/eggs.json) (and `.min.json`) | Array of `{name, eggType ("1 km" / "2 km" / "5 km" / "7 km" / "10 km" / "12 km"), isAdventureSync, image, canBeShiny, combatPower{min,max}, isRegional, isGiftExchange, rarity (integer)}`. | All ~75 current egg hatch entries with type, shiny flag, CP range, regional/Adventure Sync/Gift Exchange flags. |
+
+**Fetch pattern (Step 2 Research Phase — run once at start):**
+```
+GET https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.min.json
+GET https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/raids.min.json
+GET https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/research.min.json
+GET https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/eggs.min.json
+```
+
+All four fit comfortably under the fetch_url 250 KB cap; the `.min.json` variants are smaller. Use WebFetch first; raw.githubusercontent.com is sandbox-reliable but per the universal 4xx/5xx escalation rule, escalate to fetch_url MCP on any 4xx/5xx.
+
+**When to prefer pokemon-go-api raidboss.json over ScrapedDuck raids.json:** raidboss.json includes Pokémon `id` and `form` fields needed to construct Pokebattler `POKEMON_ID`s (e.g., `LOPUNNY_MEGA`). ScrapedDuck raids.json gives the human-readable name only. **Use BOTH:** ScrapedDuck for CP ranges + boosted weather + shiny flag in the newsletter copy, raidboss.json for the Pokebattler `POKEMON_ID` lookup.
+
+**Editorial standard:** ScrapedDuck data → newsletter facts (dates, CP ranges, egg pools). LeekDuck URL → newsletter source line. Don't cite ScrapedDuck directly in Spawn Point copy — cite the underlying LeekDuck event page (the `link` field in each ScrapedDuck event object).
+
+**Freshness check:** ScrapedDuck commits to the `data` branch every ~12 hours. If the most recent commit timestamp is more than 24 hours old, fall back to LeekDuck HTML scraping for fresh data. Check `https://api.github.com/repos/bigfoott/ScrapedDuck/branches/data` for the latest commit's `author.date` (no rate-limit concern; one call per run).
 
 ### Image URL Patterns
 
