@@ -42,6 +42,8 @@ If you can't recompute a number on demand, don't put it in the draft. "It looked
 
 **The escalation rule applies to ALL endpoint types — HTML pages, JSON APIs, RSS feeds, image URLs.** A May 9, 2026 research run hit `fight.pokebattler.com` 403 via WebFetch and skipped straight to WebSearch snippet, missing the fetch_url MCP rescue tier. Pokebattler JSON IS reachable through fetch_url MCP — confirmed by direct probe. Treat any 403 as a signal to escalate, regardless of endpoint type. The Source Routing Table rows below spell out the escalation explicitly for each common source.
 
+**UNIVERSAL 4xx/5xx ESCALATION RULE (added 2026-06-15 after #20 incident):** Even endpoints documented in the Source Routing Table as "always reachable" (github.io, raw.githubusercontent.com, etc.) MUST escalate to fetch_url MCP on ANY 4xx/5xx response. A #20 run hit `raidboss.json` on github.io with a 403 via WebFetch — the trigger treated "always reachable" as license to skip escalation, lost the rotation data, and worked from snippet only. Reliability is empirical, not guaranteed; the escalation tier is cheap. Apply it everywhere. (Note: a 404 from a JSON API like Pokebattler is DIFFERENT from a 403 — a 404 means the URL itself is wrong, NOT that the network blocked you; escalating to fetch_url MCP won't help. Re-check the query construction first — see the Pokebattler ID/tier rules below.)
+
 ## CRITICAL: Shadow Raids are NOT weekend-only and NOT in-person-only
 
 **This error has recurred across multiple drafts (Shadow Cresselia #15, Shadow Dialga #17). HARD STOP.**
@@ -289,7 +291,7 @@ Source is either `pokemon-go-api pokedex.json (computed)` (the seeded rows) OR `
 | Event calendar | LeekDuck (WebFetch → fetch_url MCP on 403) | pokemongo.com/news (RSS or WebFetch → fetch_url MCP on 403) |
 | Upcoming raid bosses | LeekDuck event pages + pokemongo.com/news + @PokemonGoApp (search snippet) | Pokémon GO Hub previews via WP REST API or fetch_url MCP |
 | Current raid lineup | pokemon-go-api raidboss.json (WebFetch; github.io — always reachable) | LeekDuck "what's in raids now" (fetch_url MCP) |
-| **Raid counters** | **Pokebattler JSON via WebFetch → `fetch_url` MCP on 403** (the sandbox 403s `fight.pokebattler.com`; fetch_url MCP rescues it. Confirmed May 9, 2026.) | **Tier 2.5:** Hub-DB `/counters` page via fetch_url MCP: `https://db.pokemongohub.net/pokemon/{KEY}/counters` where KEY is dex# (e.g., `870`) for base form, or form-suffixed with capital-first letters: `{N}-Mega` (single Mega), `{N}-Mega_X` / `{N}-Mega_Y` (Mega X/Y — note UNDERSCORE, not hyphen), `{N}-Shadow`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`. Parse the `BestCountersHighlights_highlights__O4EAQ` section for the top 7 curated picks with species + fast/charged moves + rank. Mark `[fallback: hub-db-counters]`. Use when Pokebattler 404s OR returns a fully-truncated response with no parseable defenders. If Hub-DB returns "Pokémon not available yet" the form isn't indexed yet — fall further. **Tier 3:** WebSearch snippet — mark `[fallback: search-snippet]`. **Tier 4:** typing analysis (boss weaknesses + meta knowledge of top type attackers) — mark `[fallback: typing-analysis]`. NEVER skip the fetch_url MCP or Hub-DB escalation before falling to snippet/typing. |
+| **Raid counters** | **Equal-weight tri-source (UPDATED 2026-06-15):** (1) **Pokebattler JSON** via WebFetch → fetch_url MCP on 403. See "Canonical Pokebattler ID and tier format" below — wrong ID format produces 404 on every boss. (2) **Hub-DB `/counters` page** via fetch_url MCP: `https://db.pokemongohub.net/pokemon/{KEY}/counters` where KEY is dex# (e.g., `870`) for base form, or form-suffixed with capital-first letters: `{N}-Mega`, `{N}-Mega_X` / `{N}-Mega_Y` (UNDERSCORE inside Mega X/Y), `{N}-Shadow`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`. Parse the `BestCountersHighlights_highlights__O4EAQ` section for the top 7 curated picks. Both sources queried EQUALLY for every boss — not a primary/fallback hierarchy. | **Tiebreaker:** **DialgaDex** when Pokebattler and Hub-DB diverge meaningfully OR for challenging matchups (debuts, Super Mega Raid Day, low-meta bosses). URL: `https://www.dialgadex.com/?p={dex_num}&f={form}` where `f=S` Shadow, `f=M` Mega, `f=P` Primal, no `f` for base. JS-rendered SPA — use fetch_url MCP `mode="text"`. DialgaDex's Baseline / Budget / ESpace tiers map cleanly to Spawn Point's Premium / Budget editorial standard. Mark divergence outcomes `[tiebreaker: dialgadex sided with <source>]`. **Tier 4 (last resort):** WebSearch snippet `[fallback: search-snippet]`. **Tier 5:** typing analysis `[fallback: typing-analysis]`. See "Tri-source counter recipe" below the table for the full procedure. |
 | **PvP rankings** | **PvPoke JSON via WebFetch** (raw.githubusercontent.com — always reachable from sandbox; if you ever see a 403, escalate to fetch_url MCP before falling further) | Articles via fetch_url MCP — flag `[fallback: search-snippet]` if snippet-only |
 | Cup ban list | @PokemonGoApp (search), LeekDuck, Hub Nifty or Thrifty (via WP REST API or fetch_url MCP) | Niantic blog post (WebFetch → fetch_url MCP on 403) |
 | Max Battle tier lists | pokemongohub.net via fetch_url MCP / WP REST API (reaches successfully as of May 7, 2026) | pokebase.app via fetch_url MCP |
@@ -308,13 +310,83 @@ Source is either `pokemon-go-api pokedex.json (computed)` (the seeded rows) OR `
 
 **For PvP rankings (themed cup):** fetch CURRENT ban list FIRST. Then PvPoke JSON: `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/{cup}/overall/rankings-{cap}.json`. Filter against ban list. Cite specific rank/score/moveset. PvPoke JSON is on raw.githubusercontent.com so WebFetch should reach it directly; if it ever 403s (rare), escalate to fetch_url MCP.
 
-**For raid counters:** Pokebattler JSON. The sandbox 403s `fight.pokebattler.com` via WebFetch — you MUST escalate to **fetch_url MCP** on the 403 before any snippet fallback. Confirmed working endpoint structure:
+**For raid counters: tri-source equal-weight + tiebreaker (UPDATED 2026-06-15).** Pokebattler JSON AND Hub-DB `/counters` are BOTH primary sources — query both, compare results, and use DialgaDex as a third-source tiebreaker when they diverge. Joe's editorial standard: when manually checking counters, he checks both Pokebattler and Hub-DB; usually they agree; when they don't, the third opinion (DialgaDex) breaks the tie. For challenging matchups (debuts, Super Mega, low-meta bosses) DialgaDex gets pulled in proactively, not just as a tiebreaker.
+
+### Canonical Pokebattler ID and tier format (CRITICAL — Pokebattler 404s the whole roster if either is wrong)
+
+Confirmed via empirical test 2026-06-15 after a #20 run that 404'd on every boss due to format errors.
+
+**Pokebattler `defenders/{POKEMON_ID}/levels/{TIER}` URL parts:**
+
+| Form | `POKEMON_ID` | Example |
+|---|---|---|
+| Base | `{POKEMON}` | `DIALGA`, `ZEKROM`, `CELESTEELA`, `KARTANA` |
+| Mega (single) | `{POKEMON}_MEGA` — **SUFFIX, NOT prefix** | `SKARMORY_MEGA`, `PIDGEOT_MEGA`, `LOPUNNY_MEGA` |
+| Mega X / Y | `{POKEMON}_MEGA_X` / `{POKEMON}_MEGA_Y` | `MEWTWO_MEGA_X`, `MEWTWO_MEGA_Y` |
+| Primal | `{POKEMON}_PRIMAL` — suffix | `GROUDON_PRIMAL`, `KYOGRE_PRIMAL` |
+| Shadow | use BASE `{POKEMON}` at the Shadow tier (NO `_SHADOW` suffix in the defender ID) | `DIALGA` (at `RAID_LEVEL_5_SHADOW`) |
+
+**Tier constants:**
+
+| Tier | Constant | Notes |
+|---|---|---|
+| 5-Star | `RAID_LEVEL_5` | |
+| Mega | `RAID_LEVEL_MEGA` | Also covers Super Mega Raid Day AND Primal — same constant |
+| Shadow 5-Star | `RAID_LEVEL_5_SHADOW` | **NOT `RAID_LEVEL_5_LEGENDARY`** (deprecated, returns 404) |
+| 3-Star | `RAID_LEVEL_3` | |
+| 1-Star | `RAID_LEVEL_1` | |
+
+**Anti-patterns that produce 404 (do NOT use):**
+- `MEGA_SKARMORY` ❌ → must be `SKARMORY_MEGA` ✓
+- `MEGA_PIDGEOT` ❌ → `PIDGEOT_MEGA` ✓
+- `MEGA_MEWTWO_X` ❌ → `MEWTWO_MEGA_X` ✓
+- `PRIMAL_GROUDON` ❌ → `GROUDON_PRIMAL` ✓
+- `RAID_LEVEL_5_LEGENDARY` ❌ → `RAID_LEVEL_5_SHADOW` ✓
+- `RESHIRAM_SHADOW` ❌ → `RESHIRAM` at `RAID_LEVEL_5_SHADOW` ✓
+
+Confirmed working endpoint structure:
 
 ```
 https://fight.pokebattler.com/raids/defenders/{POKEMON_ID}/levels/{TIER}/attackers/levels/40/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM_MC?sort=ESTIMATOR&weatherCondition=NO_WEATHER&dodgeStrategy=DODGE_REACTION_TIME&aggregation=AVERAGE&includeLegendary=true&includeShadow=true&includeMegas=true&attackerTypes=POKEMON_TYPE_ALL
 ```
 
-Responses can exceed the fetch_url 100 KB cap; the 100 KB will still contain the top counters (the JSON is sorted by estimator). Counter array `data.attackers[0].randomMove.defenders`, sort by `total.estimator`. Skip Frustration/Return movesets, skip Eternamax forms. For Max Battles: filter out Shadow Pokémon entirely. **Do NOT fall to WebSearch snippet for raid counters without first attempting fetch_url MCP** — a May 9 run lost Pokebattler-quality counter data because the agent skipped the rescue tier.
+Responses can exceed the fetch_url 100 KB cap; the 100 KB will still contain the top counters (the JSON is sorted by estimator). Counter array `data.attackers[0].randomMove.defenders`, sort by `total.estimator`. Skip Frustration/Return movesets, skip Eternamax forms. For Max Battles: filter out Shadow Pokémon entirely.
+
+### Tri-source counter recipe (Pokebattler ⟷ Hub-DB equal + DialgaDex tiebreaker)
+
+**Step 1 — Query both primary sources in parallel for every featured raid boss:**
+
+1. **Pokebattler** via the URL above (escalate WebFetch 403 → fetch_url MCP). Parse top 10 attackers by estimator.
+2. **Hub-DB `/counters` page** via fetch_url MCP: `https://db.pokemongohub.net/pokemon/{KEY}/counters` where KEY is dex# for base form, or form-suffixed: `{N}-Mega` (single Mega), `{N}-Mega_X` / `{N}-Mega_Y` (UNDERSCORE inside Mega X/Y), `{N}-Shadow`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`. Parse the `BestCountersHighlights_highlights__O4EAQ` section for the top 7 curated picks.
+
+**Step 2 — Compare:**
+- **Agreement (most common):** both sources surface the same top 5–7 counters with the same recommended movesets. HIGH CONFIDENCE — use the merged top picks for the draft. Note `[both sources agree]` in the research brief.
+- **Anomaly:** the lists diverge meaningfully (different top pick, different recommended moveset for the same counter, one source has a counter the other doesn't rank). This is expected for 1 in ~5 bosses per Joe's manual-check experience.
+
+**Step 3 — DialgaDex tiebreaker (when anomalies exist OR for challenging matchups):**
+
+Query DialgaDex's species/raid attacker page:
+- URL pattern: `https://www.dialgadex.com/?p={dex_num}&f={form}` where `f=S` is Shadow, `f=M` is Mega, `f=P` is Primal — base is no `f` parameter
+- Example: `https://www.dialgadex.com/?p=483&f=S` for Shadow Dialga
+- DialgaDex is a JS-rendered SPA; use fetch_url MCP with `mode="text"` to extract the rendered counter rankings (Baseline / Budget / ESpace tiers visible in the page)
+
+DialgaDex's three reference baselines are useful editorially:
+- **Baseline** (all-Pokémon top picks) — comparable to Pokebattler's unfiltered top
+- **Budget** (no Megas, no Shadows, no Legendaries; must be on-type) — comparable to Spawn Point's "Budget" counter list standard
+- **ESpace** (excluding Shadow Legendaries, Research Mythics, energy-gimmick Megas, Dragon Ascent) — middle tier, useful for the "premium without exclusives" call
+
+When DialgaDex sides with Pokebattler vs Hub-DB (or vice versa), break the tie in that direction. Note `[tiebreaker: dialgadex sided with <source>]` in the brief.
+
+**Step 4 — Proactively pull DialgaDex (no tiebreaker needed) for these bosses:**
+- Debuting Mega or Pokémon (no historical counter-list consensus yet)
+- Super Mega Raid Day bosses
+- Bosses Hub-DB ranks below the "Legendary tier" attacker recommendation
+- When the Premium and Budget lists diverge sharply (e.g., Premium is 80% Mega and Budget is 80% off-type)
+
+**Step 5 — Document divergences:**
+For every anomaly, the research brief logs: `Counter source delta — Pokebattler #N: [X with moveset]; Hub-DB #N: [Y with moveset]; DialgaDex tiebreaker: [outcome and rationale]`. This is editorially valuable AND feeds recon's Category C consistency check.
+
+**Do NOT** fall to WebSearch snippet for raid counters without first attempting Pokebattler fetch_url MCP + Hub-DB fetch_url MCP. A May 9 run lost Pokebattler-quality counter data because the agent skipped the rescue tier. The new tri-source standard makes that loss less likely — Hub-DB + DialgaDex still produce a defensible recommendation even if Pokebattler is fully unreachable.
 
 ### CRITICAL: pokemon-go-api JSON Endpoints
 
