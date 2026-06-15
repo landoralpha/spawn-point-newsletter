@@ -299,7 +299,7 @@ Source is either `pokemon-go-api pokedex.json (computed)` (the seeded rows) OR `
 | Max Battle tier lists | pokemongohub.net via fetch_url MCP / WP REST API (reaches successfully as of May 7, 2026) | pokebase.app via fetch_url MCP |
 | Dynamax rankings | pokebase.app via fetch_url MCP | pokemongohub.net via fetch_url MCP |
 | Shiny availability | db.pokemongohub.net via fetch_url MCP | LeekDuck (fetch_url MCP) |
-| Pokémon base stats / forms / movesets | pokemon-go-api pokedex.json (WebFetch; github.io — always reachable) | (no good fallback; rely on JSON) |
+| Pokémon base stats / forms / movesets | pokemon-go-api pokedex.json (WebFetch; github.io — always reachable) + **mgrann03/pokemon-resources `pogo_pkm.min.json`** (`raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_pkm.min.json` — adds `raid_tier`, separated `elite_fm`/`elite_cm` legacy-move tracking, manual override layer for announced pre-release species). Use `tools/mgrann03_check.py` for cached lookups. | (no good fallback; rely on JSON) |
 | CP/hundo values | **Master Hundo CP Vercel JSON (lookup-first):** `https://pogo-card-generator.vercel.app/data/hundo-cp-master.json` via fetch_url MCP, fetched once per run. On miss: `db.pokemongohub.net` via fetch_url MCP + flag the miss for backfill (the Vercel JSON is a static deploy artifact, not writable mid-run). On Hub-DB miss: compute from pokedex.json base stats + GO CP formula. **See Step 2 above for the full flow; Step 5.5 Check #9 hard-fails on unverified values.** | pokebattler.com snippet via WebSearch — flag `[fallback: search-snippet]` |
 | Pokémon sprite/image | `raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm{dexNr}.icon.png` (form-aware) | None needed |
 | **Event banners / hero art** | **`pokemongo.com/news/[article-slug]` hero (PRIMARY)** — WebFetch → fetch_url MCP on 403 | LeekDuck event page banner → Hub article hero (fetch_url MCP) → sprite CDN (final fallback) |
@@ -389,6 +389,26 @@ When DialgaDex sides with Pokebattler vs Hub-DB (or vice versa), break the tie i
 For every anomaly, the research brief logs: `Counter source delta — Pokebattler #N: [X with moveset]; Hub-DB #N: [Y with moveset]; DialgaDex tiebreaker: [outcome and rationale]`. This is editorially valuable AND feeds recon's Category C consistency check.
 
 **Do NOT** fall to WebSearch snippet for raid counters without first attempting Pokebattler fetch_url MCP + Hub-DB fetch_url MCP. A May 9 run lost Pokebattler-quality counter data because the agent skipped the rescue tier. The new tri-source standard makes that loss less likely — Hub-DB + DialgaDex still produce a defensible recommendation even if Pokebattler is fully unreachable.
+
+### Counter moveset confidence check via mgrann03 (REQUIRED — added 2026-06-15)
+
+After collecting Premium + Budget counter lists from the tri-source query above, run `tools/mgrann03_check.py moveset "<Species>" "<Fast Move>/<Charged Move>"` on EVERY cited counter. The tool returns one of three verdicts based on `mgrann03/pokemon-resources` data:
+
+- **`✓ STANDARD`** — both moves in the species's regular movepool. No Elite TM required. Counter passes accessibility tier as-is.
+- **`⚠ ELITE`** — one or both moves are in `elite_fm` / `elite_cm` (Community Day legacy, Elite TM-only, event-exclusive). Counter is real and powerful, but the median trainer needs an Elite TM. **The draft MUST include a non-exclusive alternative moveset annotation per the accessibility-tier rule** (e.g., "Mega Rayquaza with Dragon Tail / Dragon Ascent [exclusive: Mega Rayquaza Raid Day move]. Non-exclusive: Dragon Tail / Outrage.").
+- **`✗ INVALID`** — the moveset is not learnable by the species per mgrann03. **HARD STOP — the source list is wrong.** Re-query the source; do not draft an invalid moveset.
+
+This catches cases like Mega Latios with Aura Sphere (Aura Sphere IS in Mega Latios's movepool per mgrann03 — corroborates the rewritten #18) AND would catch cases where Pokebattler's Hub-DB cross-reference would still miss a learnset error.
+
+### Debut detection via mgrann03 (REQUIRED — added 2026-06-15)
+
+Before writing any "debuts" / "new to Pokémon GO" / "GO debut" framing, run `tools/mgrann03_check.py debut "<Species>"`. Output:
+
+- **`✓ DEBUT`** — species is in `pogo_pkm_manual_announced.json` with an `eff_date`. Confirm the `eff_date` matches the newsletter window before using debut framing. (For #20's Mega Skarmory: tool returned `✓ DEBUT, eff_date 2026-06-27, raid_tier 8 (Super Mega Raid Day)`.)
+- **`✗ NOT A DEBUT`** — species is already released in `pogo_pkm.min.json`. **Strip "debuts" framing; use "returns" / "rotates back in" / "continues" instead.** Cross-references `feedback_not_a_debut.md` memory.
+- **`? UNKNOWN`** — not in either file. Verify against `instructions/newsletter-archive.md` BEFORE writing the claim. mgrann03's announced file lags Niantic announcements by a few days for fresh debuts; if the issue is the recent date of the announcement, that's expected — surface in the Pre-Research Plan email as a flag for Joe to confirm.
+
+This is a mechanical replacement for the editorial "remember to check if it's actually a debut" rule. The historic violations (#15's Tapu Bulu, #16's Mega Medicham, #17's Tapu Fini) all would have triggered `✗ NOT A DEBUT` with the tool.
 
 ### CRITICAL: pokemon-go-api JSON Endpoints
 
