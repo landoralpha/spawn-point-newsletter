@@ -179,23 +179,33 @@ Flag any of:
 
 Per finding: FLAG with `Category K grammar — <issue type>: "<sentence excerpt>" in <section>. Suggested fix: <correction>`. Multiple findings per section are fine.
 
-### Category L — Readability (Flesch-Kincaid grade level)
-Compute Flesch-Kincaid Grade Level per major section, NOT for the document as a whole (one bad section can hide in an aggregate average).
+### Category L — Readability, AI tells, sourceless claims (UPDATED 2026-06-15)
 
-**Method:**
-1. Strip headers (`##`, `###`), bullet markers, callout markers, and link URLs (keep link text). Keep prose only.
-2. Tokenize into sentences (split on `.`, `?`, `!` — handle `Mr.` / `Mrs.` / `Inc.` exceptions; abbreviation `vs.` is common in PoGO copy).
-3. Count words (whitespace-separated tokens).
-4. Count syllables per word (heuristic: count vowel groups; subtract 1 for silent trailing `e` unless the word is monosyllabic; minimum 1 per word).
-5. Apply formula: `FKGL = 0.39 × (words/sentences) + 11.8 × (syllables/words) − 15.59`.
+Run `tools/readability_check.py` against the Beehiiv body. The tool does four passes:
 
-**Target:** Spawn Point editorial standard is 5th grade. Allow headroom up to **grade 6.0** without flagging.
+1. **Grade-level scoring per section** — triangulates FKGL + Gunning Fog + Coleman-Liau. Flag any section where the worst of the three exceeds **6.0**.
+2. **Worst-sentence list** — top 10 hardest sentences across the draft, each with the metric that flunks it. Use these as the auto-patch targets.
+3. **AI-tell regex sweep** — patterns from `tools/ai_slop_patterns.json`, split into tier-1 (hard / immediate fix), tier-2 (warn), tier-3 (structural). Tier-1 hits are FLAGs even though they don't hard-stop the run — Joe's standard is that they must be corrected immediately.
+4. **Sourceless-claim detection** — appeals to authority ("studies show", "most trainers", "according to data") without a URL within 300 characters of the claim. Heuristic-only; FLAG, not hard-fail.
 
-Per section: FLAG with `Category L readability — <section> reads at grade <X.X> (target ≤ 6.0). Sentence count: <N>, word count: <N>, avg syllables/word: <N.NN>. Top three offending sentences (longest or highest syllable density): "<excerpt>", "<excerpt>", "<excerpt>".`
+**Run command (Beehiiv body extracted from Step 1 → temp file):**
+```
+python3 tools/readability_check.py --file <beehiiv-body.md>
+```
 
-If a section is too short to measure reliably (< 30 words or < 3 sentences), skip it and note `Category L skipped — <section> too short to measure`.
+The tool's exit code is 1 if any section is above grade 6.0 OR any tier-1 AI tell is found. Mirror that into Run Status: Category L FAIL downgrades to `Partial`.
 
-Use Python within the agent sandbox (available — `import re` for tokenization, no external libraries needed).
+**FLAG format:**
+- **Per failing section:** `Category L readability — <section> at grade <X.X> (target ≤ 6.0). Top sentence to fix: "<excerpt>" (grade <Y.Y>, <N> words).`
+- **Per tier-1 AI tell:** `Category L AI tell (immediate fix) — "<word/phrase>" in <section>. Suggested replacement: <fix>.` AUTO-PATCHABLE — propose a Notion update with the recommended fix.
+- **Per tier-2 AI tell:** `Category L AI tell (review) — "<word/phrase>" in <section>. <fix>.` Not auto-patched; flag for editorial review.
+- **Per sourceless claim:** `Category L sourceless claim — "<phrase>" in <section>; no URL within ±300 chars. <fix>.`
+
+**Spawn Point context caveats** documented in `tools/readability_check.py`:
+- Proper nouns (Pokémon names, location names) inflate polysyllable count. "Mewtwo," "Psystrike," "Pokémon," "Copenhagen" are recognizable to readers but score as complex words. Expect the tool to flag sections where these dominate; review the worst-sentence list to confirm the issue is real sentence structure, not just brand-name density.
+- Trending Topic does NOT have to be a meta deep-dive. Some weeks the Trending Topic is an event preview, a news drop, or a strategy reminder. All formats must still hit grade ≤ 6.0.
+
+**If `tools/readability_check.py` is unavailable** in the sandbox: fall back to the pre-2026-06-15 inline FKGL-only computation (formula `0.39 × (words/sentences) + 11.8 × (syllables/words) − 15.59`) and skip the AI-tell + sourceless-claim passes. Note the degradation in the Run Log.
 
 ### Category M — Hard-coded prohibited claims (recurring-error sweep)
 

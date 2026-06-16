@@ -355,7 +355,14 @@ Daily bonuses active throughout the week. Only include ones with significant val
 - Friday: Friendship Friday (trade bonuses)
 
 ### 10. Trending Topic
-A deeper write-up on one community story, controversy, discovery, or meta shift from the past week. This is the newsletter's editorial voice, where you go beyond event listings and cover something the community is actively talking about.
+A short write-up on one story, event preview, news drop, or meta shift that matters this week. This is the newsletter's editorial voice, where you go beyond event listings and cover something readers care about right now.
+
+**The Trending Topic does NOT have to be a meta deep-dive every week** (clarified 2026-06-15). Format the section to match the week's biggest actionable story. Recent examples that worked:
+- News drop: "Spotlight Hour returns Thursday — here's the schedule" (Issue #18)
+- Event preview: "GO Fest Copenhagen — what remote trainers can still catch" (Issue #18)
+- New feature explainer: "The Explorer Gadget is live for some trainers" (Issue #18)
+- Investment case: "Shadow Dialga — why this is your most important raid of the summer" (Issue #19)
+- Datamine or controversy: still valid when something genuine breaks
 
 **What belongs:**
 - Reddit investigations or discoveries (r/TheSilphRoad, r/PokémonGO)
@@ -364,14 +371,15 @@ A deeper write-up on one community story, controversy, discovery, or meta shift 
 - Meta shifts (new Pokémon or move rebalances shaking up PvP/PvE)
 - Niantic responses to community feedback
 - Notable community-created tools, maps, or resources
+- News drops, event previews, feature explainers, investment cases (per the formats above)
 
 **Guidelines:**
-- 2-4 paragraphs of prose
-- Tell the story: what happened, why it matters, what the community response has been
-- Link to primary sources (Reddit threads, news articles, official responses)
-- If Niantic responded, include their statement
-- Tone: informative and fair. Present the facts, don't editorialize excessively.
+- 2–4 paragraphs of prose, OR a structured format (headed sub-sections) when the story has multiple angles (Chicago + universal info, mechanic explainer + cost breakdown, etc.)
+- Tell the story: what happened, why it matters, what the reader should do about it
+- Link to primary sources (Reddit threads, news articles, Niantic blog posts)
+- Tone: informative and fair. Skip the throat-clearing ("It's important to note that…") — make the claim directly.
 - End with a "Sources:" line listing the key links
+- **Hit grade level ≤ 6.0** (per Category L readability check). Even when the story is analytical, write at 5th–6th grade reading level — short sentences, plain words, one idea per paragraph.
 
 **Research process:**
 - WebSearch: "Pokémon GO controversy [month] [year]", "Pokémon GO reddit [month] [year]", "site:reddit.com/r/TheSilphRoad top this week"

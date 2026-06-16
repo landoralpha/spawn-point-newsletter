@@ -718,6 +718,29 @@ Apply audit pass per `instructions/pre-publish-checklist.md`. **TWO HARD FAIL ga
 
 The remaining 22+ checks (cross-section consistency, dates, etc.) follow.
 
+### Check #25 — Readability + AI tells (added 2026-06-15)
+
+Run `tools/readability_check.py` against the assembled draft prose BEFORE the Notion push:
+
+1. Save the assembled draft body (all sections, prose only — no Notion-page chrome) to `output/draft-[YYYY-MM-DD].md`.
+2. Run `python3 tools/readability_check.py --file output/draft-[YYYY-MM-DD].md`.
+3. Tool checks four dimensions:
+   - **Grade-level per section** (target ≤ 6.0 — flat, every section): FKGL + Gunning Fog + Coleman-Liau triangulation
+   - **Worst 10 sentences** across the whole draft — the ones to rewrite first
+   - **AI-tell regex sweep** — patterns from `tools/ai_slop_patterns.json`. Tier-1 hits ("delve," "tapestry," "leverage" as verb, "in the realm of," etc.) get immediate-fix treatment.
+   - **Sourceless authority claims** — "studies show," "most trainers," etc. without a URL within ±300 chars.
+
+**Self-correction loop:** if the tool returns non-zero exit:
+- Tier-1 AI tells → swap the exact word per the tool's suggested fix; re-run.
+- Section above grade 6.0 → shorten the worst sentences flagged by the tool (use the tool's worst-sentence list as the target list).
+- Sourceless claims → either add a Source URL inline OR rephrase as observation ("a lot of trainers" instead of "most trainers").
+
+Iterate until the tool returns exit 0 OR until two correction rounds have run (whichever comes first; the recon trigger on Friday will catch anything that survives). The Notion push proceeds either way, but Step 8 Run Log records the final Category L status.
+
+**Spawn Point context caveats** (documented in the tool too):
+- Proper nouns ("Mewtwo," "Psystrike," "Pokémon," "Copenhagen") inflate polysyllable counts. The score can over-flag sections that are actually fine — review the worst-sentence list to confirm whether the problem is sentence structure or just brand-name density.
+- The flat ≤ 6.0 target applies even to the Trending Topic. Trending Topic does NOT have to be a meta deep-dive; sometimes it's an event preview, a news drop, or a strategy reminder. Match the format to the week's biggest story; just keep the grade level low.
+
 ## Step 5.6: Social Copy Pre-Publish Audit
 
 Apply per `instructions/social-copy.md`: length checks, hashtag rules, hook test, banned phrases, default-filler scan, link inclusion, cross-platform de-duplication, voice check, no carousel content.

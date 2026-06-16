@@ -1,0 +1,70 @@
+{
+  "_comment": "AI-tell regex patterns for Spawn Point readability_check.py. Match is case-insensitive. \\b word boundaries. Add/remove entries freely.",
+  "_version": "2026-06-15",
+
+  "tier1_hard": [
+    {"pattern": "\\bdelve(s|d|ing)?\\b", "fix": "use 'look into' or 'examine'"},
+    {"pattern": "\\btapestr(y|ies)\\b", "fix": "use a plain noun like 'mix' or 'set'"},
+    {"pattern": "\\bleverag(e|es|ed|ing)\\b", "fix": "use 'use' or 'put to work'"},
+    {"pattern": "\\bin the realm of\\b", "fix": "delete; name the thing directly"},
+    {"pattern": "\\bnavigate the (complexit(y|ies)|challenges|landscape|world|nuances)\\b", "fix": "use 'handle' or 'work through'"},
+    {"pattern": "\\bunlock the power of\\b", "fix": "use 'tap' or 'get more from'"},
+    {"pattern": "\\bembark on a journey\\b", "fix": "use 'start' or 'begin'"},
+    {"pattern": "\\bever[- ]evolving\\b", "fix": "use 'changing'"},
+    {"pattern": "\\bparadigm shift(s)?\\b", "fix": "use 'big change'"},
+    {"pattern": "\\bgame[- ]chang(er|ing|ers)\\b", "fix": "be specific about what changes"},
+    {"pattern": "\\bsynergy\\b", "fix": "use 'fit' or 'works with'"},
+    {"pattern": "\\bsynergiz(e|es|ed|ing)\\b", "fix": "use 'pair' or 'fit'"},
+    {"pattern": "\\bharness(es|ed|ing)? (the|its|their) (power|potential|strength)\\b", "fix": "be specific"},
+    {"pattern": "\\bcutting[- ]edge\\b", "fix": "use 'new' or specify what's new"},
+    {"pattern": "\\bstate[- ]of[- ]the[- ]art\\b", "fix": "use 'top' or 'best available'"},
+    {"pattern": "\\bgroundbreaking\\b", "fix": "use 'new' or 'first'"},
+    {"pattern": "\\bin today's (fast[- ]paced|ever[- ]changing|digital|modern) world\\b", "fix": "delete the throat-clearing"}
+  ],
+
+  "tier2_warn": [
+    {"pattern": "\\bcomprehensive(ly)?\\b", "fix": "use 'full' or 'complete'"},
+    {"pattern": "\\brobust(ly)?\\b", "fix": "use 'strong' or 'solid'"},
+    {"pattern": "\\bseamless(ly)?\\b", "fix": "use 'smooth' or 'easy'"},
+    {"pattern": "\\bvibrant(ly)?\\b", "fix": "use 'bright' or 'lively'"},
+    {"pattern": "\\bintricat(e|ely|ies|acies)\\b", "fix": "use 'complex' or specify"},
+    {"pattern": "\\bmyriad( of)?\\b", "fix": "use 'many' or a number"},
+    {"pattern": "\\bplethora( of)?\\b", "fix": "use 'lots of' or a number"},
+    {"pattern": "\\bunderscor(e|es|ed|ing)\\b", "fix": "use 'shows' or 'highlights'"},
+    {"pattern": "\\belevat(e|es|ed|ing)\\b", "fix": "use 'raise' or 'lift' (or delete)"},
+    {"pattern": "\\binnovativ(e|ely)\\b", "fix": "use 'new' or specify what's new"},
+    {"pattern": "\\bpivotal(ly)?\\b", "fix": "use 'key' or 'important'"},
+    {"pattern": "\\btransformative(ly)?\\b", "fix": "use 'big change'"},
+    {"pattern": "\\bholistic(ally)?\\b", "fix": "use 'full' or 'whole-system'"},
+    {"pattern": "\\bfacilitat(e|es|ed|ing)\\b", "fix": "use 'help' or 'make easier'"},
+    {"pattern": "\\bparamount\\b", "fix": "use 'top' or 'most important'"},
+    {"pattern": "\\butiliz(e|es|ed|ing)\\b", "fix": "use 'use'"},
+    {"pattern": "\\bencompass(es|ed|ing)?\\b", "fix": "use 'covers' or 'includes'"},
+    {"pattern": "\\bnumerous\\b", "fix": "use 'many' or a number"}
+  ],
+
+  "tier3_structural": [
+    {"pattern": "\\bit'?s (important|worth) (to note|noting) that\\b", "fix": "delete; just make the claim"},
+    {"pattern": "\\bwhen it comes to\\b", "fix": "delete; restructure the sentence"},
+    {"pattern": "\\blet'?s (dive in|break it down|get into it|unpack)\\b", "fix": "delete; the next sentence is the dive"},
+    {"pattern": "\\bin conclusion\\b", "fix": "delete or rephrase"},
+    {"pattern": "\\bin essence\\b", "fix": "delete; just state the essence"},
+    {"pattern": "\\bat its core\\b", "fix": "delete; just describe the core"},
+    {"pattern": "\\bwithout further ado\\b", "fix": "delete"},
+    {"pattern": "\\bat the end of the day\\b", "fix": "delete"},
+    {"pattern": "\\bnot only [^.]{1,80} but also\\b", "fix": "split into two sentences"},
+    {"pattern": "\\bthat (being |having )?said,?\\b", "fix": "use 'still' or 'but' or restructure"},
+    {"pattern": "\\bin the world of (raids|pvp|pokémon go|pokemon go)\\b", "fix": "delete the throat-clearing"},
+    {"pattern": "\\bhere'?s what you need to know\\b", "fix": "delete; just tell them"},
+    {"pattern": "\\bhere'?s what to expect\\b", "fix": "delete; just describe what's happening"}
+  ],
+
+  "sourceless_claim_patterns": [
+    {"pattern": "\\b(studies|research|data|surveys|polls|analytics)\\s+(show|shows|indicate|indicates|suggest|suggests|demonstrate|demonstrates|reveal|reveals)\\b", "fix": "cite the study/source within 300 chars, OR rephrase as observation"},
+    {"pattern": "\\bmost\\s+(trainers|players|members|users)\\b", "fix": "cite a survey/poll, OR rephrase ('many trainers' / 'a lot of folks')"},
+    {"pattern": "\\bthe community (agrees|believes|reports|says)\\b", "fix": "cite a Reddit thread / Discord poll, OR rephrase"},
+    {"pattern": "\\baccording to (data|recent data|research|studies)\\b", "fix": "cite the source within the same paragraph"},
+    {"pattern": "\\bit'?s (well[- ]known|common knowledge) that\\b", "fix": "delete; if it's common knowledge, just state it"},
+    {"pattern": "\\beveryone knows\\b", "fix": "delete; if true, just state it"}
+  ]
+}
