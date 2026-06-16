@@ -203,6 +203,40 @@ def stat_at_level(base, iv, level):
     return (base + iv) * CPM[level]
 
 
+# DialgaDex's two raid-system toggles, both ON by default in settings.js
+# and both load-bearing for matching the live site's eDPS numbers.
+#   pve_turns  = quantize move durations to 0.5s steps (post-Aug-2024
+#                turn system) AND power-adjust moves whose rounding
+#                shifts duration ≥19.9% from raw ms.
+#   newdps     = add 0.5 × incoming_cm_dmg to the x term — models the
+#                energy wasted from a single incoming charged move.
+SETTINGS_PVE_TURNS = True
+SETTINGS_NEWDPS = True
+
+
+def process_duration(move):
+    """Return move duration in seconds, quantized to 0.5s steps when
+    pve_turns is on (matches Niantic's August-2024 turn system)."""
+    raw_s = move["duration"] / 1000
+    if SETTINGS_PVE_TURNS:
+        return round(raw_s * 2) / 2
+    return raw_s
+
+
+def process_power(move):
+    """When pve_turns rounding shifts duration ≥19.9%, scale the move's
+    power proportionally so the per-turn damage stays consistent."""
+    if not SETTINGS_PVE_TURNS:
+        return move["power"]
+    new_dur = process_duration(move)
+    if new_dur == 0:
+        return move["power"]
+    modifier = (new_dur - move["duration"] / 1000) / new_dur
+    if abs(modifier) >= 0.199:
+        return move["power"] * (1 + modifier)
+    return move["power"]
+
+
 def calc_dps(types, atk, defense, hp, fm, cm, shadow=False):
     """Comprehensive DPS — port of DialgaDex's GetDPS (calc.js:23).
 
@@ -221,24 +255,33 @@ def calc_dps(types, atk, defense, hp, fm, cm, shadow=False):
     tof = hp / y
 
     x = 0.5 * -cm["energy_delta"] + 0.5 * fm["energy_delta"]
+    if SETTINGS_NEWDPS:
+        x = x + 0.5 * in_cm_dmg
 
     fm_stab = STAB if fm["type"] in types and fm["name"] != "Hidden Power" else 1
     cm_stab = STAB if cm["type"] in types else 1
 
-    fm_dur = fm["duration"] / 1000
-    cm_dur = cm["duration"] / 1000
+    fm_dur = process_duration(fm)
+    cm_dur = process_duration(cm)
+    fm_pwr = process_power(fm)
+    cm_pwr = process_power(cm)
 
-    fm_dmg = 0.5 * fm["power"] * (atk / DEFAULT_ENEMY_DEF) * fm_stab + 0.5
+    if fm_dur == 0 or cm_dur == 0:
+        return 0.0
+
+    fm_dmg = 0.5 * fm_pwr * (atk / DEFAULT_ENEMY_DEF) * fm_stab + 0.5
     fm_dps = fm_dmg / fm_dur
     fm_eps = fm["energy_delta"] / fm_dur
 
-    cm_dmg = 0.5 * cm["power"] * (atk / DEFAULT_ENEMY_DEF) * cm_stab + 0.5
+    cm_dmg = 0.5 * cm_pwr * (atk / DEFAULT_ENEMY_DEF) * cm_stab + 0.5
     cm_dps = cm_dmg / cm_dur
     cm_eps = -cm["energy_delta"] / cm_dur
 
-    # One-bar charged-move penalty — energy lost during damage window
+    # One-bar charged-move penalty — energy lost during damage window.
+    # With pve_turns on, DialgaDex uses dws = 0 (turn quantization absorbs
+    # the discrete damage-window timing); off-mode reads dws from the move.
     if cm["energy_delta"] == -100:
-        dws = cm["damage_window_start"] / 1000
+        dws = 0 if SETTINGS_PVE_TURNS else cm["damage_window_start"] / 1000
         cm_eps = (-cm["energy_delta"] + 0.5 * fm["energy_delta"] + 0.5 * y * dws) / cm_dur
 
     if fm_dps > cm_dps:
