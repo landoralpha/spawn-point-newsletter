@@ -266,11 +266,29 @@ def calc_tdo(dps, hp, defense, shadow=False):
 
 
 def calc_metric(dps, tdo):
-    """Equivalent Damage Rating — DialgaDex's EER (calc.js:721).
-    DPS^3 × TDO weighted; higher = stronger overall attacker."""
+    """DialgaDex's default 'eDPS' (Effective DPS) — calc.js:703 GetEDPS.
+
+    The full JS formula models a 6-trainer raid:
+      tof      = tdo / dps                          (time on field per life)
+      lives    = HP / tdo                           (attacker-lives needed)
+      deaths   = lives - 0.5
+      relobbies = deaths / 6 - 0.5                  (every 6 deaths → relobby)
+      ttw      = lives × tof + (deaths-relobbies) × 1s_respawn
+                              + relobbies × 10s_rejoin
+      eDPS     = HP / ttw
+
+    For ranking with no specific boss (DialgaDex's default uses HP = 1e9, a
+    near-infinite stand-in), this collapses analytically to:
+      eDPS ≈ (DPS × TDO) / (TDO + 2.5 × DPS)
+    The constant 2.5 = (1s_respawn × 5/6 + 10s_rejoin × 1/6), the average
+    seconds-of-downtime per attacker-life across the relobby cycle. The
+    closed form keeps the ranking faithful without simulating a million-
+    HP raid loop per species. Penalizes both glass cannons (low TDO) AND
+    tanky-but-weak attackers (low DPS) the same way DialgaDex does.
+    """
     if dps <= 0 or tdo <= 0:
         return 0
-    return (dps ** 3) * tdo  # matches DialgaDex's "Metric" power form
+    return (dps * tdo) / (tdo + 2.5 * dps)
 
 
 def best_moveset(entry, fm_lookup, cm_lookup, shadow, level, type_filter=None):
@@ -398,7 +416,7 @@ def cmd_rank(args, pkm_data, announced_data):
     print(f"   ─ Best moveset: {rankings[target_idx]['fm']} / {rankings[target_idx]['cm']}")
     print(f"   ─ DPS {rankings[target_idx]['dps']:.2f}  "
           f"TDO {rankings[target_idx]['tdo']:.0f}  "
-          f"EER {rankings[target_idx]['metric']/1e6:.2f}M")
+          f"eDPS {rankings[target_idx]['metric']:.2f}")
     print()
 
     # Show ±5 neighbors so the rank reads in context.
