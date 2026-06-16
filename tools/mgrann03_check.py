@@ -40,6 +40,15 @@ Subcommands:
   info "Species" [--form "FormName"]
     Print the full mgrann03 entry for a species/form.
 
+  rank "Species" [--form "FormName"] [--type Type] [--level 40|50]
+    Compute DialgaDex-style PvE attacker rank using the comprehensive
+    DPS / TDO / EER formula (Gamepress-derived, ported from DialgaDex's
+    calc.js). Output is the species's rank within the released attacker
+    pool plus its ±5 neighbors so the position reads in context.
+    --type filters to one-type rankings (matches DialgaDex's "Strongest
+    Psychic Attackers" page); omit for any-type.
+    Default level 40 (standard raid attacker); 50 for XL-capped.
+
 The script caches mgrann03's JSON locally for 24 hours under tools/cache/mgrann03/
 to keep fetches cheap. Override the cache TTL with --refresh to force re-pull.
 
@@ -71,6 +80,9 @@ TTL_SECONDS = 24 * 60 * 60  # 24h freshness
 ENDPOINTS = {
     "pkm": "https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_pkm.min.json",
     "announced": "https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_pkm_manual_announced.json",
+    # Move databases — only fetched when the rank subcommand runs.
+    "fm": "https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_fm.json",
+    "cm": "https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_cm.json",
 }
 
 REGIONAL_PREFIXES = {
@@ -148,6 +160,258 @@ def find_entries(data, species, form_hint=None):
 
     # 3. Fuzzy substring fallback (last resort, only when no prefix and no direct match)
     return [e for e in data if species.lower() in e["name"].lower()]
+
+
+# ────────────────────────────────────────────────────────────────────
+# PvE rank calculation — ported from DialgaDex's calc.js + rankings.js.
+#
+# The PoGO PvE damage model follows Gamepress's well-documented formula
+# (https://gamepress.gg/pokemongo/how-calculate-comprehensive-dps).
+# DialgaDex layers on a "comprehensive DPS" that accounts for charged-
+# move timing and incoming damage from the boss; we mirror that here so
+# the ranking ordering matches DialgaDex's "Strongest of Any Type" page.
+# Simplifications vs. the full DialgaDex JS:
+#   - No "search string" / Suboptimal toggle (always best moveset only).
+#   - No party-power boost (settings_party_size = 1).
+#   - "Old raid system" durations (settings_pve_turns = false) — matches
+#     DialgaDex's default + nearly all real PoGO raid contexts.
+#   - One-bar charged-move penalty IS applied per the JS.
+# These match DialgaDex's defaults; absolute DPS numbers + ranking order
+# should land within a few percent of the live site.
+# ────────────────────────────────────────────────────────────────────
+
+# CPM at each level — Niantic-published. Only L40 / L50 needed for PvE
+# (L40 is standard raid attacker, L50 is XL-candy capped).
+CPM = {40: 0.7903, 50: 0.84029999}
+STAB = 1.2
+DEFAULT_ENEMY_DEF = 180  # Generic Tier-5 raid boss DEF baseline
+EST_Y_NUMERATOR = 1340   # DialgaDex calc.js — incoming dps approximation
+EST_CM_POWER = 11670     # DialgaDex calc.js — incoming charged-move power
+SHADOW_ATK_MULT = 1.2
+SHADOW_DEF_MULT = 0.8333333
+
+
+def fetch_moves_indexed():
+    """Returns (fm_by_name, cm_by_name) — dicts keyed by move display name."""
+    fm = fetch_cached("fm")
+    cm = fetch_cached("cm")
+    return ({m["name"]: m for m in fm}, {m["name"]: m for m in cm})
+
+
+def stat_at_level(base, iv, level):
+    """ATK/DEF/HP formula: (base + iv) * cpm. HP gets floored later."""
+    return (base + iv) * CPM[level]
+
+
+def calc_dps(types, atk, defense, hp, fm, cm, shadow=False):
+    """Comprehensive DPS — port of DialgaDex's GetDPS (calc.js:23).
+
+    types: list of the attacker's types (for STAB check)
+    atk/def/hp: effective stats (post-shadow multiplier, post-CPM)
+    fm, cm: move dict entries from pogo_fm.json / pogo_cm.json
+    """
+    if not fm or not cm:
+        return 0.0
+    if shadow:
+        atk = atk * SHADOW_ATK_MULT
+        defense = defense * SHADOW_DEF_MULT
+
+    y = EST_Y_NUMERATOR / defense
+    in_cm_dmg = EST_CM_POWER / defense
+    tof = hp / y
+
+    x = 0.5 * -cm["energy_delta"] + 0.5 * fm["energy_delta"]
+
+    fm_stab = STAB if fm["type"] in types and fm["name"] != "Hidden Power" else 1
+    cm_stab = STAB if cm["type"] in types else 1
+
+    fm_dur = fm["duration"] / 1000
+    cm_dur = cm["duration"] / 1000
+
+    fm_dmg = 0.5 * fm["power"] * (atk / DEFAULT_ENEMY_DEF) * fm_stab + 0.5
+    fm_dps = fm_dmg / fm_dur
+    fm_eps = fm["energy_delta"] / fm_dur
+
+    cm_dmg = 0.5 * cm["power"] * (atk / DEFAULT_ENEMY_DEF) * cm_stab + 0.5
+    cm_dps = cm_dmg / cm_dur
+    cm_eps = -cm["energy_delta"] / cm_dur
+
+    # One-bar charged-move penalty — energy lost during damage window
+    if cm["energy_delta"] == -100:
+        dws = cm["damage_window_start"] / 1000
+        cm_eps = (-cm["energy_delta"] + 0.5 * fm["energy_delta"] + 0.5 * y * dws) / cm_dur
+
+    if fm_dps > cm_dps:
+        return fm_dps
+
+    # Guard against degenerate moves (zero energy on either side) that
+    # would zero out the cycle-DPS denominator. Real PoGO data has a few
+    # structural / event moves with energy_delta == 0; falling back to
+    # fast-move-only DPS keeps the ranking stable instead of crashing.
+    if (cm_eps + fm_eps) == 0:
+        return fm_dps
+
+    dps0 = (fm_dps * cm_eps + cm_dps * fm_eps) / (cm_eps + fm_eps)
+    dps = dps0 + ((cm_dps - fm_dps) / (cm_eps + fm_eps)) * (0.5 - x / hp) * y
+    return max(fm_dps, dps if dps > 0 else 0)
+
+
+def calc_tdo(dps, hp, defense, shadow=False):
+    """Total damage output — port of DialgaDex's GetTDO (calc.js:98)."""
+    if shadow:
+        defense = defense * SHADOW_DEF_MULT
+    y = EST_Y_NUMERATOR / defense
+    tof = hp / y
+    return dps * tof
+
+
+def calc_metric(dps, tdo):
+    """Equivalent Damage Rating — DialgaDex's EER (calc.js:721).
+    DPS^3 × TDO weighted; higher = stronger overall attacker."""
+    if dps <= 0 or tdo <= 0:
+        return 0
+    return (dps ** 3) * tdo  # matches DialgaDex's "Metric" power form
+
+
+def best_moveset(entry, fm_lookup, cm_lookup, shadow, level, type_filter=None):
+    """Returns (best_dps, best_tdo, best_metric, best_fm_name, best_cm_name, atk, defense, hp).
+
+    Iterates every (fm × cm) combination including elite moves. When
+    type_filter is set, only counts movesets where either the fast or
+    charged move matches that type (mirrors DialgaDex's per-type rank).
+    """
+    types = entry["types"]
+    base_atk = entry["stats"]["baseAttack"]
+    base_def = entry["stats"]["baseDefense"]
+    base_hp = entry["stats"]["baseStamina"]
+    atk = stat_at_level(base_atk, 15, level)
+    defense = stat_at_level(base_def, 15, level)
+    hp = int(stat_at_level(base_hp, 15, level))
+
+    fms = list(entry.get("fm", [])) + list(entry.get("elite_fm", []))
+    cms = list(entry.get("cm", [])) + list(entry.get("elite_cm", []))
+
+    best = (0.0, 0.0, 0.0, None, None)
+    for fm_name in fms:
+        fm = fm_lookup.get(fm_name)
+        if not fm:
+            continue
+        for cm_name in cms:
+            cm = cm_lookup.get(cm_name)
+            if not cm:
+                continue
+            if type_filter and fm["type"] != type_filter and cm["type"] != type_filter:
+                continue
+            dps = calc_dps(types, atk, defense, hp, fm, cm, shadow=shadow)
+            tdo = calc_tdo(dps, hp, defense, shadow=shadow)
+            metric = calc_metric(dps, tdo)
+            if metric > best[2]:
+                best = (dps, tdo, metric, fm_name, cm_name)
+    return best + (atk, defense, hp)
+
+
+def cmd_rank(args, pkm_data, announced_data):
+    """Rank a species among all PvE attackers using DialgaDex's calc.
+
+    Examples:
+      rank "Necrozma" --form Normal              # base Necrozma vs. all
+      rank "Necrozma" --form Dawn_wings --type Ghost
+      rank "Mewtwo" --form Mega_y --level 50
+    """
+    species = args.species
+    target_type = args.type.capitalize() if args.type else None
+    level = args.level
+    if level not in CPM:
+        print(f"Error: --level must be 40 or 50, got {level}", file=sys.stderr)
+        return 2
+
+    target_entries = find_entries(pkm_data, species, args.form)
+    if not target_entries:
+        print(f"✗ Species not found in mgrann03: {species!r}")
+        return 1
+    # When the user wants a specific form, narrow to it (find_entries already
+    # does this when --form is set); otherwise pick the base "Normal" form.
+    if len(target_entries) > 1:
+        target = next((e for e in target_entries if e.get("form") == "Normal"), target_entries[0])
+    else:
+        target = target_entries[0]
+
+    fm_lookup, cm_lookup = fetch_moves_indexed()
+
+    print(f"Ranking against the released PoGO attacker pool "
+          f"(L{level}, perfect IVs, neutral target, "
+          f"{'type-filtered: ' + target_type if target_type else 'any-type'})...",
+          file=sys.stderr)
+
+    rankings = []
+    for e in pkm_data:
+        if not e.get("released"):
+            continue
+        # Skip pure HP/raid-boss entries that lack stats (defensive).
+        if not e.get("stats") or not e.get("fm") or not e.get("cm"):
+            continue
+        dps, tdo, metric, fm_name, cm_name, atk, defense, hp = best_moveset(
+            e, fm_lookup, cm_lookup, shadow=False, level=level, type_filter=target_type)
+        if metric == 0:
+            continue
+        rankings.append({
+            "name": e["name"], "form": e.get("form", "Normal"),
+            "dps": dps, "tdo": tdo, "metric": metric,
+            "fm": fm_name, "cm": cm_name,
+        })
+        # Also include the Shadow variant if mgrann03 marks it available.
+        if e.get("shadow"):
+            sdps, stdo, smetric, sfm, scm, *_ = best_moveset(
+                e, fm_lookup, cm_lookup, shadow=True, level=level, type_filter=target_type)
+            if smetric > 0:
+                rankings.append({
+                    "name": "Shadow " + e["name"], "form": e.get("form", "Normal"),
+                    "dps": sdps, "tdo": stdo, "metric": smetric,
+                    "fm": sfm, "cm": scm,
+                })
+
+    rankings.sort(key=lambda r: r["metric"], reverse=True)
+
+    # Locate the target row.
+    target_name = target["name"]
+    target_form = target.get("form", "Normal")
+    target_idx = next(
+        (i for i, r in enumerate(rankings)
+         if r["name"] == target_name and r["form"] == target_form),
+        None,
+    )
+    if target_idx is None:
+        print(f"✗ {target_name} ({target_form}) didn't produce a valid ranking "
+              f"(no moveset matched the filter?). Try without --type.")
+        return 1
+
+    rank = target_idx + 1
+    total = len(rankings)
+    pct = 100 * (1 - target_idx / total)
+    def pretty(form):
+        """mgrann03 form names use underscore_lowercase ('Dawn_wings'); humanize."""
+        return form.replace("_", " ").title() if form else ""
+    label = f"{target_name}" + (f" ({pretty(target_form)})" if target_form != "Normal" else "")
+    print()
+    print(f"   {label}")
+    print(f"   ─ Rank #{rank} of {total} ({pct:.1f} percentile)")
+    print(f"   ─ Best moveset: {rankings[target_idx]['fm']} / {rankings[target_idx]['cm']}")
+    print(f"   ─ DPS {rankings[target_idx]['dps']:.2f}  "
+          f"TDO {rankings[target_idx]['tdo']:.0f}  "
+          f"EER {rankings[target_idx]['metric']/1e6:.2f}M")
+    print()
+
+    # Show ±5 neighbors so the rank reads in context.
+    lo = max(0, target_idx - 5)
+    hi = min(total, target_idx + 6)
+    print(f"   Neighbors:")
+    for i in range(lo, hi):
+        r = rankings[i]
+        marker = " ▶" if i == target_idx else "  "
+        name = r["name"] + (f" ({pretty(r['form'])})" if r["form"] != "Normal" else "")
+        print(f"   {marker} #{i+1:>3d}  {name:<30s}  DPS {r['dps']:6.2f}  TDO {r['tdo']:6.0f}")
+    print()
+    return 0
 
 
 def cmd_moveset(args, pkm_data, announced_data):
@@ -305,6 +569,17 @@ def main():
     p.add_argument("species")
     p.add_argument("--form", help="Restrict to a specific form name")
 
+    p = sub.add_parser(
+        "rank",
+        help="Compute DialgaDex-style PvE attacker rank (DPS/TDO/EER)",
+    )
+    p.add_argument("species")
+    p.add_argument("--form", help="Specific form (e.g., 'Mega', 'Dawn_wings'). Defaults to Normal.")
+    p.add_argument("--type", help="Filter rankings to a specific attacker type (e.g., 'Psychic'). "
+                                  "Default: any-type ranking.")
+    p.add_argument("--level", type=int, default=40, choices=[40, 50],
+                   help="Attacker level (default 40 = standard raid attacker).")
+
     args = ap.parse_args()
 
     pkm_data = fetch_cached("pkm", args.refresh)
@@ -316,6 +591,7 @@ def main():
         "tier": cmd_tier,
         "shadow": cmd_shadow,
         "info": cmd_info,
+        "rank": cmd_rank,
     }[args.cmd]
     sys.exit(handler(args, pkm_data, announced_data))
 
