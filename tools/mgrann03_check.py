@@ -399,16 +399,30 @@ def cmd_rank(args, pkm_data, announced_data):
 
     fm_lookup, cm_lookup = fetch_moves_indexed()
 
-    print(f"Ranking against the released PoGO attacker pool "
-          f"(L{level}, perfect IVs, neutral target, "
+    # Mirror DialgaDex's settings_speculative=true default: merge the
+    # announced-but-not-released pool (Mega Darkrai, Mega Magearna,
+    # Mega Zygarde, etc.) into the ranking set. Most announced entries
+    # are Megas of strong species that genuinely belong in the leaderboard.
+    # The merge prefers main-pool entries when the same (name, form) exists
+    # in both (manual_released > announced).
+    pool = list(pkm_data)
+    seen = {(e.get("name"), e.get("form")) for e in pool}
+    for e in announced_data:
+        key = (e.get("name"), e.get("form"))
+        if key not in seen:
+            pool.append(e)
+            seen.add(key)
+
+    print(f"Ranking against the released + announced PoGO attacker pool "
+          f"({len(pool)} entries, L{level}, perfect IVs, neutral target, "
           f"{'type-filtered: ' + target_type if target_type else 'any-type'})...",
           file=sys.stderr)
 
     rankings = []
-    for e in pkm_data:
-        if not e.get("released"):
-            continue
-        # Skip pure HP/raid-boss entries that lack stats (defensive).
+    for e in pool:
+        # Announced entries are released=false but DialgaDex still ranks
+        # them under settings_speculative, so accept any pool entry that
+        # has the stats + movelist needed for the calc.
         if not e.get("stats") or not e.get("fm") or not e.get("cm"):
             continue
         dps, tdo, metric, fm_name, cm_name, atk, defense, hp = best_moveset(
