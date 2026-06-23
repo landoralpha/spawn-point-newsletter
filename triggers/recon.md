@@ -160,11 +160,55 @@ NOT a claim-verification category; this is a structural audit run once per recon
 - Raid Bosses — Mega subsection
 - Raid Bosses — 5-Star subsection
 - GBL
+- **Spotlight Hour** (added 2026-06-23 — Spotlight Hour Trainer Tips MUST call out at least one stacking opportunity per the standing rule)
 - Max Monday
 
 (Daily Discoveries is EXCLUDED — do not flag if missing there.)
 
 FLAG any required section that is missing a Trainer Tip block as: Category I editorial-structure gap — `Section <name> is missing its required Trainer Tip block. Spawn Point editorial standard: every major section except Daily Discoveries gets its own inline Trainer Tip.` Also FLAG if multiple Trainer Tips are collapsed into ONE section (i.e., one section has 2+ tips that should have been distributed).
+
+### Category I.5 — Required-section presence + format (added 2026-06-23 after #20+#21 Spotlight Hour misses)
+
+**Hard structural check.** Spawn Point #20 shipped with NO Spotlight Hour section, and #21 shipped with the section present but in non-canonical format (`## SPOTLIGHT HOUR` all-caps, no emoji, no Trainer Tip, source link as URL not title). Two consecutive misses on a section that's been a locked editorial standard since 2026-06-20. This category enforces presence + format.
+
+**Required-section grep matrix.** Run against the assembled Beehiiv body:
+
+| Required H2 section | Exact pattern (case-sensitive, line-anchored) |
+|---|---|
+| Week at a Glance | `^## 📅 Week at a Glance$` |
+| Events | `^## 🎪 Events$` |
+| Raid Bosses | `^## ⚔️ Raid Bosses$` |
+| GO Battle League | `^## 🏆 GO Battle League$` |
+| Spotlight Hour | `^## ✨ Spotlight Hour: [A-Z]` |
+| Max Monday | `^## 🌀 Max Monday: [A-Z]` |
+| Daily Discoveries | `^## 🗓️ Daily Discoveries$` |
+| Trending Topic | `^## 💬 Trending Topic` |
+| Don't Miss | `^## ⚠️ Don't Miss$` |
+
+Each pattern must match ≥ 1 line in the body. Any miss → HARD FLAG `Category I.5 missing required section — "<section name>" not found. Expected pattern: <pattern>. Auto-fix: add the canonical section template from instructions/newsletter-creation.md Section 7.5 (or applicable section) before publish.`
+
+**Anti-pattern grep matrix.** These all-caps / no-emoji variants must NOT appear:
+
+| Anti-pattern | What it should be |
+|---|---|
+| `^## SPOTLIGHT HOUR` | `## ✨ Spotlight Hour: [Species]` |
+| `^## MAX MONDAY` | `## 🌀 Max Monday: [Species]` |
+| `^## GO BATTLE LEAGUE` | `## 🏆 GO Battle League` |
+| `^## EVENTS$` | `## 🎪 Events` |
+| `^## RAID BOSSES$` / `^## RAID CORNER` | `## ⚔️ Raid Bosses` |
+| `^## DAILY DISCOVERIES` | `## 🗓️ Daily Discoveries` |
+| `^## DON'T MISS` / `^## DONT MISS` | `## ⚠️ Don't Miss` |
+| `^## TRENDING TOPIC` (without `: subtitle`) | `## 💬 Trending Topic — [Subtitle]` |
+
+Each match → HARD FLAG `Category I.5 wrong section format — found "<actual>" should be "<canonical>". Auto-fix: rewrite the section header in-place.`
+
+**Spotlight Hour species cross-check.** When the section IS present, recon must:
+1. Extract the species name from the header (`## ✨ Spotlight Hour: ([A-Z][a-z]+)`).
+2. Fetch LeekDuck Spotlight Hour schedule (`https://leekduck.com/spotlight-hour/`) via fetch_url MCP.
+3. Cross-check the species + Thursday date in the section header against the LeekDuck schedule for that week. Mismatch → FLAG `Category I.5 Spotlight Hour species mismatch — section says <X> on <date>, LeekDuck shows <Y> on <date>.`
+4. Cross-check the bonus type (2× Catch Stardust / 2× Catch Candy / 2× Catch XP / 2× Evolution XP / etc.) against LeekDuck. Mismatch → FLAG.
+
+This category fires in under 5 seconds (grep + one LeekDuck fetch + one regex compare). It's cheap insurance against the high-frequency miss class.
 
 ### Category J — Spelling pass (copy-quality check)
 Run a spelling pass over the entire Beehiiv body. This is a sweep, not a per-claim verification.

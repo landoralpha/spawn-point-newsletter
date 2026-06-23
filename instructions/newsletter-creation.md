@@ -760,6 +760,57 @@ Sources: [leekduck.com/events/tapu-fini-...](https://leekduck.com/events/...) | 
 
 ---
 
+## Required-section presence checks (HARD FAIL if missing — added 2026-06-23)
+
+**Why this exists:** Spawn Point #20 and #21 both shipped with the Spotlight Hour section missing or in non-canonical format (`## SPOTLIGHT HOUR` all-caps, no emoji, no Trainer Tip). The section is required per Section 7.5 but the rule wasn't enforced by a pre-push check, so the omission slipped through twice in a row. This block hard-codes the grep pattern that catches it.
+
+Run these greps on the assembled draft BEFORE pushing to Notion / Beehiiv. Any miss = HARD FAIL; do not publish until the section is added in the correct format.
+
+| Required section | Exact grep pattern (case-sensitive) | Position |
+|---|---|---|
+| Week at a Glance | `^## 📅 Week at a Glance$` | After intro, before Events |
+| Events | `^## 🎪 Events$` | After WaaG, before Raid Bosses |
+| Raid Bosses | `^## ⚔️ Raid Bosses$` | After Events, before GBL |
+| GO Battle League | `^## 🏆 GO Battle League$` | After Raid Bosses, before Spotlight Hour |
+| **Spotlight Hour** | `^## ✨ Spotlight Hour: [A-Z]` | Between GBL and Max Monday |
+| Max Monday | `^## 🌀 Max Monday: [A-Z]` | After Spotlight Hour, before Daily Discoveries |
+| Daily Discoveries | `^## 🗓️ Daily Discoveries$` | After Max Monday, before Trending Topic |
+| Trending Topic | `^## 💬 Trending Topic` | After Daily Discoveries |
+| Don't Miss | `^## ⚠️ Don't Miss$` | After Trending Topic |
+
+**Anti-pattern grep (HARD FAIL — these all-caps / no-emoji variants must NOT appear):**
+
+- `^## SPOTLIGHT HOUR` — must be `## ✨ Spotlight Hour: [Species]`
+- `^## MAX MONDAY` — must be `## 🌀 Max Monday: [Species]`
+- `^## GO BATTLE LEAGUE` — must be `## 🏆 GO Battle League`
+- `^## EVENTS` — must be `## 🎪 Events`
+- `^## RAID BOSSES` / `^## RAID CORNER` — must be `## ⚔️ Raid Bosses`
+- `^## DAILY DISCOVERIES` — must be `## 🗓️ Daily Discoveries`
+- `^## DON'T MISS` / `^## DONT MISS` — must be `## ⚠️ Don't Miss`
+- `^## TRENDING TOPIC` (without `: [subtitle]`) — must be `## 💬 Trending Topic — [Subtitle]`
+
+**One-shot shell command** (run from the draft directory):
+
+```bash
+draft=/path/to/draft.md
+echo "=== Required sections (must all be 1) ==="
+for pattern in '^## 📅 Week at a Glance$' '^## 🎪 Events$' '^## ⚔️ Raid Bosses$' '^## 🏆 GO Battle League$' '^## ✨ Spotlight Hour: [A-Z]' '^## 🌀 Max Monday: [A-Z]' '^## 🗓️ Daily Discoveries$' '^## 💬 Trending Topic' '^## ⚠️ Don'\''t Miss$'; do
+  count=$(grep -cE "$pattern" "$draft")
+  status="✓"; [ "$count" -eq 0 ] && status="✗ MISSING"
+  echo "$status  $count  $pattern"
+done
+echo "=== Anti-patterns (must all be 0) ==="
+for pattern in '^## SPOTLIGHT HOUR' '^## MAX MONDAY' '^## GO BATTLE LEAGUE' '^## EVENTS$' '^## RAID BOSSES$' '^## RAID CORNER' '^## DAILY DISCOVERIES' '^## DON'\''T MISS' '^## DONT MISS'; do
+  count=$(grep -cE "$pattern" "$draft")
+  status="✓"; [ "$count" -ne 0 ] && status="✗ WRONG FORMAT"
+  echo "$status  $count  $pattern"
+done
+```
+
+**Recon enforcement:** Recon Category A (Section Presence) now hard-flags any Spotlight Hour omission OR all-caps section variant in the assembled Beehiiv body. Recon will also re-pull the LeekDuck Spotlight Hour schedule and cross-check that the featured species in the section header matches the week's published Spotlight Hour.
+
+---
+
 ## Important Reminders
 - Always include times in **local time** as found in source data. DO NOT convert time zones
 - **Time format: use AM/PM (caps, no periods) throughout.** Never mix "AM/PM" with "a.m./p.m." in the same newsletter. Examples: "6:00 AM to 9:00 PM" ✓, not "6:00 a.m. to 9:00 p.m." Apply consistently across all sections including Daily Discoveries.
