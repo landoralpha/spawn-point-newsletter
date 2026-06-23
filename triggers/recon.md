@@ -91,9 +91,20 @@ If (4) is missing → write Run Log with Run Status = Failed and Notes = `DEGRAD
 1. Read `instructions/newsletter-archive.md` from the bound repo. Extract the max Issue Number from the Quick Reference Table.
 2. Query Notion Newsletter Issues data source `34831ca4-d6d5-815c-9420-000b81b2a9e6` for the row with the highest `Issue Number`.
 3. If `notion_max - archive_max > 1`, set the run flag `[ARCHIVE STALE]` with detail `archive at #X, Notion at #Y, gap = Y-X-1 issues unapplied`. This becomes a STANDING flag attached to every recon email until resolved — it does NOT block the run but is surfaced prominently in the Step 6 email summary so Joe sees it.
-4. Cross-check against the researcher Step 6.5 child page convention: under each issue page in Notion, look for a child page titled `Archive Entry — Apply to instructions/newsletter-archive.md`. If any such page exists for an issue whose archive entry isn't yet in `newsletter-archive.md`, list it explicitly in the flag detail so Joe knows which child page to copy from.
+4. Cross-check against the researcher Step 6.5 child page convention: under each issue page in Notion, look for a child page titled `Archive Entry — Apply to instructions/newsletter-archive.md` OR `Archive Diff — Issue #N` OR `Archive Entry — Issue #N (TEXT ONLY — for newsletter-archive.md)`. If any such page exists for an issue whose archive entry isn't yet in `newsletter-archive.md`, list each by URL in the flag detail so Joe knows exactly which child pages to copy from.
 
 This step runs in under 10 seconds (one Notion query + one repo read). It catches the drift class that produced the broken-format #18 incident before it can compound.
+
+**Escalation tiering (added 2026-06-22 after #18-#21 backfill gap):**
+
+- **Gap = 0 (archive current):** silent PASS, no flag.
+- **Gap = 1 issue:** soft flag `[ARCHIVE 1 behind]` in email body only. Researcher trigger can still pull the latest archive snapshot for the next draft because the most recent issue's pattern is the editorial baseline.
+- **Gap = 2 issues:** hard flag `🚨 ARCHIVE GAP — backfill required` in email body, BOLD. Append the Notion Archive Diff URLs for the missing issues.
+- **Gap ≥ 3 issues:** elevate to the email SUBJECT: prepend `[🚨 ARCHIVE GAP: K issues behind]` to the existing subject line. This is the threshold above which drafting from the stale snapshot starts producing format drift (#18 incident was at gap=4). The subject elevation makes the alert impossible to miss in Joe's inbox.
+- **Gap ≥ 5 issues:** also include a one-line block at the TOP of the email body, before the Run Summary table:
+  > **⚠️ STOP DRAFTING NEW ISSUES** until the archive is backfilled. The researcher trigger will produce non-canonical-format drafts (the #18 stale-snapshot failure mode) at this drift level.
+
+**Local Claude Code session note:** when this recon runs inside a local Claude Code session (Bash tool available + repo bind mount), the agent CAN apply the backfill directly using Edit/Write on `instructions/newsletter-archive.md`. The agent must still NOT `git push` (Joe's credentials only) — apply the edit and surface the modified file as ready-to-commit in the email summary. Cron-mode cloud agent CANNOT apply the backfill (no repo write access) — it must fall back to the Notion-Diff-pages workflow above.
 
 ## Step 1: Identify the target Beehiiv post
 
@@ -179,33 +190,45 @@ Flag any of:
 
 Per finding: FLAG with `Category K grammar — <issue type>: "<sentence excerpt>" in <section>. Suggested fix: <correction>`. Multiple findings per section are fine.
 
-### Category L — Readability, AI tells, sourceless claims (UPDATED 2026-06-15)
+### Category L — Readability, AI detection, sourceless claims (UPDATED 2026-06-17)
 
-Run `tools/readability_check.py` against the Beehiiv body. The tool does four passes:
+Two-phase audit against the Beehiiv body — mechanical metrics first, then forensic AI-detection via the `ai-check` skill.
+
+**Phase A — `tools/readability_check.py` (three passes; the AI-tell regex pass is deprecated):**
 
 1. **Grade-level scoring per section** — triangulates FKGL + Gunning Fog + Coleman-Liau. Flag any section where the worst of the three exceeds **6.0**.
 2. **Worst-sentence list** — top 10 hardest sentences across the draft, each with the metric that flunks it. Use these as the auto-patch targets.
-3. **AI-tell regex sweep** — patterns from `tools/ai_slop_patterns.json`, split into tier-1 (hard / immediate fix), tier-2 (warn), tier-3 (structural). Tier-1 hits are FLAGs even though they don't hard-stop the run — Joe's standard is that they must be corrected immediately.
-4. **Sourceless-claim detection** — appeals to authority ("studies show", "most trainers", "according to data") without a URL within 300 characters of the claim. Heuristic-only; FLAG, not hard-fail.
+3. **Sourceless-claim detection** — appeals to authority ("studies show", "most trainers", "according to data") without a URL within 300 characters of the claim. Heuristic-only; FLAG, not hard-fail.
+4. **Word-budget check** — must run with `--word-budget 1400-1700`. Out-of-range is a FLAG.
 
-**Run command (Beehiiv body extracted from Step 1 → temp file):**
+**Phase B — `ai-check` skill (replaces the prior `tools/ai_slop_patterns.json` regex pass):**
+
+Invoke the `ai-check` skill on the Beehiiv body. It scores 9 signal categories (perplexity, burstiness, stylometry, hedge density, discourse coherence, punctuation, RLHF voice, specificity, structural redundancy), produces a verdict (Human / Likely Human / Uncertain / Likely AI / AI), confidence level, and quotes evidence for every fired pattern. The skill also produces an AI-edited-fraction estimate (Pure human / Lightly AI-assisted / Mixed authorship / Heavily AI-edited / Pure AI).
+
+**Run command (Phase A; Beehiiv body extracted from Step 1 → temp file):**
 ```
-python3 tools/readability_check.py --file <beehiiv-body.md>
+python3 tools/readability_check.py --file <beehiiv-body.md> --word-budget 1400-1700
 ```
 
-The tool's exit code is 1 if any section is above grade 6.0 OR any tier-1 AI tell is found. Mirror that into Run Status: Category L FAIL downgrades to `Partial`.
+**Invocation (Phase B):** "Run ai-check on this draft body."
+
+Category L FAIL conditions (any one → downgrade Run Status to `Partial`):
+- Phase A exit code 1 (grade above 6.0, sourceless claim, OR word budget out of range)
+- Phase B verdict of **Uncertain, Likely AI, or AI**
 
 **FLAG format:**
 - **Per failing section:** `Category L readability — <section> at grade <X.X> (target ≤ 6.0). Top sentence to fix: "<excerpt>" (grade <Y.Y>, <N> words).`
-- **Per tier-1 AI tell:** `Category L AI tell (immediate fix) — "<word/phrase>" in <section>. Suggested replacement: <fix>.` AUTO-PATCHABLE — propose a Notion update with the recommended fix.
-- **Per tier-2 AI tell:** `Category L AI tell (review) — "<word/phrase>" in <section>. <fix>.` Not auto-patched; flag for editorial review.
+- **Per ai-check finding:** `Category L AI tell (ai-check) — <signal category>: "<evidence quote>" in <section>. Verdict: <Human/Likely Human/Uncertain/Likely AI/AI>. Recommended fix: invoke humanize skill on this section.`
 - **Per sourceless claim:** `Category L sourceless claim — "<phrase>" in <section>; no URL within ±300 chars. <fix>.`
+- **Per word-budget miss:** `Category L word budget — body at <X> words; target 1,400–1,700. <over/under> by <delta>.`
+
+If ai-check returns Likely AI or AI: invoke the `humanize` skill to rewrite the flagged sections, then re-run ai-check. The humanize skill applies the 9 humanization levers (perplexity injection, burstiness enforcement, hedge surgery, structural flattening, specificity insertion, voice + register, AI-transition removal, punctuation normalization, RLHF voice strip).
 
 **Spawn Point context caveats** documented in `tools/readability_check.py`:
 - Proper nouns (Pokémon names, location names) inflate polysyllable count. "Mewtwo," "Psystrike," "Pokémon," "Copenhagen" are recognizable to readers but score as complex words. Expect the tool to flag sections where these dominate; review the worst-sentence list to confirm the issue is real sentence structure, not just brand-name density.
 - Trending Topic does NOT have to be a meta deep-dive. Some weeks the Trending Topic is an event preview, a news drop, or a strategy reminder. All formats must still hit grade ≤ 6.0.
 
-**If `tools/readability_check.py` is unavailable** in the sandbox: fall back to the pre-2026-06-15 inline FKGL-only computation (formula `0.39 × (words/sentences) + 11.8 × (syllables/words) − 15.59`) and skip the AI-tell + sourceless-claim passes. Note the degradation in the Run Log.
+**If `tools/readability_check.py` is unavailable** in the sandbox: fall back to the pre-2026-06-15 inline FKGL-only computation (formula `0.39 × (words/sentences) + 11.8 × (syllables/words) − 15.59`) and skip the sourceless-claim + word-budget passes. Note the degradation in the Run Log. **The `ai-check` skill is available in any agent that loads the `~/.claude/skills/` directory** — that doesn't have a sandbox-availability problem the way the local Python tool does.
 
 ### Category M — Hard-coded prohibited claims (recurring-error sweep)
 
@@ -254,11 +277,16 @@ Verification recipes for A–H — use the Spawn-Point-Fetcher MCP `fetch_url` t
 | G (Event dates) | **ScrapedDuck `events.json`** (PRIMARY — `https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.min.json`; ISO 8601 `start`/`end` timestamps, no HTML parsing). Cross-check: LeekDuck, pokemongo.com/news. | Match Beehiiv-claimed event dates against ScrapedDuck's `start`/`end` timestamps. Convert ISO to local-time tuple (date + 12/24-hour clock) and compare verbatim. Drift → FLAG with both values. ScrapedDuck `eventID` is the LeekDuck slug; the source URL Beehiiv cites should match `https://leekduck.com/events/{eventID}/`. |
 | H (Mechanic statements) | **Verification source priority (top-down):** (1) **Event-specific Niantic news article** for CD / CD Classic exclusive-move evolution windows (`pokemongo.com/news/communityday-<month>-<year>-<species>` or `pokemongo.com/news/communitydayclassic-<species>-<month>-<year>`) via WebFetch → fetch_url MCP on 403. Current 2026 standard is 4 hours (Niantic FAQ faq/1770 says 5 hours but is STALE; trust the event-specific article). (2) **Repo reference files in `instructions/`** (`cost-reference.md`, `niantic-help-reference.md`, `dynamax-reference.md`, `mega-evolution-reference.md`, `adventure-effects-reference.md`, `shiny-odds-reference.md`) — Joe’s curated truth, with stale-FAQ-value annotations baked in. The repo is bound as a session source — use `Read` and `Grep`. **For shiny-odds claims specifically:** consult `shiny-odds-reference.md` BEFORE marking UNVERIFIABLE. The doc is the locked editorial source for Spawn Point shiny rates (1/20 for 5-Star Legendary/Mythical/Ultra Beast and 5-Star Shadow Legendary raids; 1/64 for non-5-Star raids and egg hatches; Mega Raid rates are intentionally not cited per the doc's vagueness rule). Do NOT mark shiny-odds claims UNVERIFIABLE just because Niantic doesn't publish — Spawn Point's editorial floor is the reference doc. (3) **Niantic Help Center FAQ pages directly** (`niantic.helpshift.com/hc/en/6-pokemon-go/faq/<faq-id>-<slug>/` — e.g., `2389-candy-xl/`, `1770-what-are-community-days/`) via fetch_url MCP. Use when the reference files don’t cover the specific claim. Cross-check against the reference-file STALE annotations before trusting an FAQ value. **Use `mode="grep"` for value lookups (added 2026-05-25):** `fetch_url(url="<faq-url>", mode="grep", pattern="<keyword|value>", context_chars=400)` — returns just the paragraphs that mention the keyword, typically 1–3 KB vs the 50–80 KB full FAQ page. (4) **Third-party aggregators** (Pokémon GO Hub guides, GamePress, Bulbapedia, Fandom Wiki) — ONLY as a last resort and ONLY when the claim is community-derived mechanic testing (drop rates, level thresholds, encounter rules) that Niantic doesn’t formally document. Always note in the FLAG/PASS reason whether the verification came from a tier-1/2 (authoritative) source or tier-3/4 (aggregator) source. NEVER cite a single aggregator summary as authoritative for a Niantic-defined mechanic — if the only confirmation is a third-party guide and Niantic doesn’t document it, mark UNVERIFIABLE with reason `Niantic documentation absent; only third-party aggregator confirmation found — verify with Joe before trusting.` | Match value_claimed against the highest available source tier. Mismatch → FLAG with claimed value, authoritative value, source URL, and source tier. If only tier-3/4 aggregator confirmation exists for a mechanic-rule claim → UNVERIFIABLE with the reason above. |
 
-### Category C tri-source recipe (Pokebattler ⟷ Hub-DB equal + DialgaDex tiebreaker)
+### Category C tri-source recipe (Hub-DB primary + DialgaDex secondary + Pokebattler tertiary)
 
-**UPDATED 2026-06-15.** Spawn Point drafts pull counters from BOTH Pokebattler AND Hub-DB by editorial policy (see `instructions/newsletter-creation.md` and `feedback_counter_source_balance.md`). Joe's manual-check standard: both sources usually agree; when they don't, **DialgaDex** breaks the tie. For challenging matchups (debuts, Super Mega Raid Day, low-meta bosses) DialgaDex is consulted proactively, not just as a tiebreaker.
+**UPDATED 2026-06-22 (Kanto bird incident).** Order is now Hub-DB FIRST, then DialgaDex, then Pokebattler. Spawn Point #21 reported "Pokebattler 404 + Hub-DB 404" for Articuno/Zapdos/Moltres and inferred movesets from type-effectiveness analysis. Direct probe of the same URLs returned **HTTP 200 from both Hub-DB and Pokebattler** — the agent's report was wrong. Hub-DB returned the full curated top-7 with explicit movesets via `fetch_url` MCP. Pokebattler returned 5–12 MB JSON bodies that exceeded the fetch_url result cap and looked like failures.
 
-Recon verifies against both primaries equally — no "theoretical-optimum vs accessibility-weighted" hierarchy. Equal weight means: a counter cited in Hub-DB but absent from Pokebattler is not automatically downranked, and vice versa. The asymmetry triggers a DialgaDex consult, not a flag.
+**Recon Category C MUST do this for EVERY featured raid boss, no exceptions:**
+
+1. **Hub-DB FIRST.** Always. `https://db.pokemongohub.net/pokemon/{KEY}/counters` via `fetch_url` MCP, grep mode with pattern `Best counter 👑` and `context_chars=1000`. This returns the top 7 + every counter's recommended Fast / Charged moveset (with `*` marking legacy / exclusive moves). Hub-DB has near-100% coverage of every species indexed in PoGO.
+2. **If the draft says "moves inferred from game data" or "counters inferred from type-effectiveness" — HARD FLAG.** Re-pull Hub-DB and overwrite the draft with the verified top-7 + movesets BEFORE publish. The researcher's "inferred" claim is treated as a known-bad signal: hard-flag it every time and re-verify.
+3. **Pokebattler is now tertiary.** Use ONLY when (a) Hub-DB returns a non-200 with the URL pattern verified correct, OR (b) cross-check confirmation is editorially valuable (debut Megas, Super Mega Raid Day, low-meta bosses). When Pokebattler IS hit, the response can be 5–12 MB for popular legendaries; expect the fetch_url cap to truncate. If truncated, log as `[pokebattler: response oversized]` and proceed with Hub-DB alone — do NOT report this as 404.
+4. **Status-code discipline.** Any reported "404" must quote the actual HTTP status. If the response was 200 with oversized body, 200 with parse fail, 403 (Cloudflare TLS-fingerprint), or 500/timeout, report THAT — never collapse to "404." 404 means the URL is wrong; the escalation path is to recheck the URL construction, not to fall back to another tool.
 
 #### Pokebattler lookup (theoretical-optimum)
 

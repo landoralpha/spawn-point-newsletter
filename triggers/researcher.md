@@ -44,6 +44,21 @@ If you can't recompute a number on demand, don't put it in the draft. "It looked
 
 **UNIVERSAL 4xx/5xx ESCALATION RULE (added 2026-06-15 after #20 incident):** Even endpoints documented in the Source Routing Table as "always reachable" (github.io, raw.githubusercontent.com, etc.) MUST escalate to fetch_url MCP on ANY 4xx/5xx response. A #20 run hit `raidboss.json` on github.io with a 403 via WebFetch — the trigger treated "always reachable" as license to skip escalation, lost the rotation data, and worked from snippet only. Reliability is empirical, not guaranteed; the escalation tier is cheap. Apply it everywhere. (Note: a 404 from a JSON API like Pokebattler is DIFFERENT from a 403 — a 404 means the URL itself is wrong, NOT that the network blocked you; escalating to fetch_url MCP won't help. Re-check the query construction first — see the Pokebattler ID/tier rules below.)
 
+**ERROR-CLASS DISCIPLINE (added 2026-06-22 after #21 Kanto bird incident):** When a fetch fails, the research brief MUST report the actual HTTP status code returned (200 / 403 / 404 / 5xx / timeout / parse-fail / oversized-response). Do NOT use "404" as a generic stand-in for "the source didn't give me usable data." Each error class triggers a different escalation:
+
+| Reported status | What it means | Correct response |
+|---|---|---|
+| **HTTP 200 + parseable** | Source worked | Use the data |
+| **HTTP 200 + oversized (>250 KB)** | Source worked but body too large for fetch_url cap | Skip with `[oversized-response]`, use other primaries |
+| **HTTP 200 + JSON parse fail** | Truncation. Try a tighter grep or different aggregation. Do NOT report as 404 |
+| **HTTP 403** | Network-layer block (Cloudflare / WAF / TLS fingerprint) | Escalate WebFetch → fetch_url MCP. If fetch_url MCP also 403s, escalate to WebSearch snippet |
+| **HTTP 404** | URL is genuinely wrong (bad species ID, bad tier constant, bad form suffix) | Re-check URL construction. Do NOT escalate to another tool — the URL is wrong, not the network |
+| **Timeout / 5xx** | Source up but slow / failing | Retry once, then escalate |
+
+**Anti-pattern:** "Pokebattler returned 404, Hub-DB returned 404, counters inferred." If two primary sources both 404, ~100% of the time the agent used wrong URL patterns or conflated 403/oversized/parse-fail with 404. The #21 brief reported "Pokebattler 404 + Hub-DB 404" for Articuno/Zapdos/Moltres — direct probe of the same URLs returned 200 from both. Always quote the exact URL hit AND the exact response status before reporting a source as unreachable.
+
+**Pre-publish gate:** if the research brief says "moves inferred from game data" or "counters inferred from type-effectiveness" for ANY featured raid boss, the recon trigger MUST re-verify by hitting Hub-DB `/counters` directly. If Hub-DB returns 200, the "inferred" claim is overridden and the draft is updated with the Hub-DB top 7 + movesets before publish.
+
 ## CRITICAL: Shadow Raids are NOT weekend-only and NOT in-person-only
 
 **This error has recurred across multiple drafts (Shadow Cresselia #15, Shadow Dialga #17). HARD STOP.**
@@ -121,13 +136,14 @@ After determining `season_context`, cross-reference the newsletter window `[next
    - **Daily Discoveries** (Thursday entry — feature species + bonus + 6:00–7:00 PM window)
    - **Don't Miss** (if it's the season's first Spotlight Hour OR it stacks with a major event like GBL Thursday's 4× Stardust window)
 
-**Choose Your Path Timed Research (Forever Forward debut)**
+**Choose Your Path Timed Research (recurring format introduced in Forever Forward — see `seasons-reference.md` for sourcing)**
 1. Read the "Choose Your Path schedule" table in `seasons-reference.md`.
 2. Does the newsletter window OVERLAP (any single day) with any Choose Your Path event window? If YES, record `choose_your_path_this_week = {event_name, start_datetime, end_datetime, theme_implications}`.
 3. The drafted newsletter MUST place Choose Your Path in:
    - **Week at a Glance** (bullet with 🧬 or theme-relevant emoji)
-   - **Events section** with its own subsection covering: exact dates/times verbatim, the three-path mechanic (Explore / Catch / Battle), the "once selected, cannot be changed" lock-in warning, the theme implications, AND a Trainer Tip with the "wait for in-game research preview at 10 AM launch or check community-reported task lists" guidance (Niantic does not publish per-path tasks in advance)
-   - **Don't Miss** (path lock-in deadline is the most actionable callout)
+   - **Events section** with its own subsection covering: exact dates/times verbatim, the three-path mechanic (Explore / Catch / Battle), the theme implications, AND a Trainer Tip with the "check the in-game research preview at 10 AM launch or wait for community-reported task lists before committing" guidance (Niantic does not publish per-path tasks in advance)
+   - **Don't Miss** (path-selection deadline is the most actionable callout)
+4. **Do NOT call later runs the "debut" / "first" / "new format" Choose Your Path.** The first run was the unbranded **Choose Your Path Timed Research on May 19–24, 2026** (3 bonuses, no theme). Fossil Fun (June 17–21) is the SECOND run and the first themed one (6 bonuses, Cranidos/Shieldon encounters). Use "second run" / "this week's Choose Your Path" / "the next Choose Your Path" — never "first" or "debut."
 
 **Anti-pattern (HARD STOP):** If either feature applies to the window and is OMITTED from the draft, the recon trigger fires a Category M flag and downgrades Run Status to `Partial`. The #19 (June 15–21) initial pre-fire missed Choose Your Path: Fossil Fun (June 17–21) entirely; this step exists to prevent recurrence.
 
@@ -352,18 +368,32 @@ Confirmed working endpoint structure:
 https://fight.pokebattler.com/raids/defenders/{POKEMON_ID}/levels/{TIER}/attackers/levels/40/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM_MC?sort=ESTIMATOR&weatherCondition=NO_WEATHER&dodgeStrategy=DODGE_REACTION_TIME&aggregation=AVERAGE&includeLegendary=true&includeShadow=true&includeMegas=true&attackerTypes=POKEMON_TYPE_ALL
 ```
 
-Responses can exceed the fetch_url 100 KB cap; the 100 KB will still contain the top counters (the JSON is sorted by estimator). Counter array `data.attackers[0].randomMove.defenders`, sort by `total.estimator`. Skip Frustration/Return movesets, skip Eternamax forms. For Max Battles: filter out Shadow Pokémon entirely.
+**⚠️ Oversized Pokebattler responses (added 2026-06-22 from #21 Kanto bird incident).** For popular legendaries (Articuno/Zapdos/Moltres, Mewtwo, the Kyurems, Tapus, etc.), the JSON response is **5–12 MB** because every attacker × every moveset combo is included. The fetch_url MCP truncates at its body cap → the truncated stream is invalid JSON → ANY attempt to read top counters by slicing the first N KB will fail. The prior note about "sorted by estimator" was WRONG — the JSON is NOT pre-sorted by estimator; the first attackers in the array are in pokemonId order, not optimal order.
 
-### Tri-source counter recipe (Pokebattler ⟷ Hub-DB equal + DialgaDex tiebreaker)
+**For these bosses, do NOT try to parse the Pokebattler API response.** Use the Hub-DB `/counters` page as the PRIMARY source (curated top 7 + explicit movesets, ~10 KB grep-able), and DialgaDex as the second source. Document the Pokebattler oversized-response skip as `[pokebattler: response >250KB, skipped per oversized-response rule]` in the research brief — do NOT report it as "404" or "unreachable." The API DID return 200; it's just too large to parse in-context.
 
-**Step 1 — Query both primary sources in parallel for every featured raid boss:**
+For smaller, less-popular bosses (most 3-Star / 1-Star, debut Megas, etc.), the response is small enough to grep. Counter array path: `data.attackers[N].byMove[M].defenders[K]`, sort by `result.estimator` ascending (lower = better). Skip Frustration/Return movesets, skip Eternamax forms. For Max Battles: filter out Shadow Pokémon entirely.
 
-1. **Pokebattler** via the URL above (escalate WebFetch 403 → fetch_url MCP). Parse top 10 attackers by estimator.
-2. **Hub-DB `/counters` page** via fetch_url MCP: `https://db.pokemongohub.net/pokemon/{KEY}/counters` where KEY is dex# for base form, or form-suffixed: `{N}-Mega` (single Mega), `{N}-Mega_X` / `{N}-Mega_Y` (UNDERSCORE inside Mega X/Y), `{N}-Shadow`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`. Parse the `BestCountersHighlights_highlights__O4EAQ` section for the top 7 curated picks.
+### Tri-source counter recipe (Hub-DB primary + DialgaDex secondary + Pokebattler tertiary)
 
-**Step 2 — Compare:**
+**Updated 2026-06-22:** Hub-DB is the FIRST stop for every counter list, not the second. The prior "Pokebattler ⟷ Hub-DB equal" framing produced false-404 reports in #21 because the agent kept treating Pokebattler as the primary, hit oversized responses, and bailed without trying Hub-DB. Hub-DB worked at 200 the whole time for all three Kanto birds.
+
+**Step 1 — Hub-DB FIRST (every raid boss, no exceptions):**
+
+`https://db.pokemongohub.net/pokemon/{KEY}/counters` via fetch_url MCP. KEY is dex# for base form, or form-suffixed: `{N}-Mega` (single Mega), `{N}-Mega_X` / `{N}-Mega_Y` (UNDERSCORE inside Mega X/Y), `{N}-Shadow`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`. Use grep mode with pattern `Best counter 👑` and `context_chars=1000` to capture the curated top-7 list AND each counter's recommended moveset (Fast / Charged with asterisks for legacy moves).
+
+If Hub-DB returns anything other than 200 with the `Best counter 👑` marker present in the body, escalate ONLY after verifying the URL pattern (dex number correct, form suffix correct per `[[hub-db-form-conventions]]` memory). Cloudflare blocks Node fetch / curl at the TLS layer → use fetch_url MCP (Python httpx-based), NOT WebFetch.
+
+**Step 2 — Pokebattler API SECOND (only if response is parseable):**
+
+Pokebattler URL above. If the response body exceeds 250 KB (the fetch_url result cap), do NOT attempt to parse — log as `[pokebattler: response oversized, skipped]` and move on. Hub-DB top 7 is already authoritative for the draft; Pokebattler is just a cross-check.
+
+For smaller responses: parse top 10 by sorting `data.attackers[*].byMove[*].defenders[*]` by `result.estimator` ascending.
+
+**Step 2.5 — Compare Hub-DB vs Pokebattler (when Pokebattler was parseable):**
 - **Agreement (most common):** both sources surface the same top 5–7 counters with the same recommended movesets. HIGH CONFIDENCE — use the merged top picks for the draft. Note `[both sources agree]` in the research brief.
 - **Anomaly:** the lists diverge meaningfully (different top pick, different recommended moveset for the same counter, one source has a counter the other doesn't rank). This is expected for 1 in ~5 bosses per Joe's manual-check experience.
+- **Pokebattler oversized-skip:** Hub-DB top 7 is treated as authoritative; note `[verification: hub-db sole primary; pokebattler oversized-skip]` in the brief.
 
 **Step 3 — DialgaDex tiebreaker (when anomalies exist OR for challenging matchups):**
 
@@ -718,24 +748,32 @@ Apply audit pass per `instructions/pre-publish-checklist.md`. **TWO HARD FAIL ga
 
 The remaining 22+ checks (cross-section consistency, dates, etc.) follow.
 
-### Check #25 — Readability + AI tells (added 2026-06-15)
+### Check #25 — Readability + AI tells (updated 2026-06-17)
 
-Run `tools/readability_check.py` against the assembled draft prose BEFORE the Notion push:
+Two-phase audit BEFORE the Notion push:
+
+**Phase A — Mechanical metrics via `tools/readability_check.py`:**
 
 1. Save the assembled draft body (all sections, prose only — no Notion-page chrome) to `output/draft-[YYYY-MM-DD].md`.
-2. Run `python3 tools/readability_check.py --file output/draft-[YYYY-MM-DD].md`.
-3. Tool checks four dimensions:
+2. Run `python3 tools/readability_check.py --file output/draft-[YYYY-MM-DD].md --word-budget 1400-1700`.
+3. Tool checks three dimensions (the AI-tell regex pass is DEPRECATED — see Phase B):
    - **Grade-level per section** (target ≤ 6.0 — flat, every section): FKGL + Gunning Fog + Coleman-Liau triangulation
    - **Worst 10 sentences** across the whole draft — the ones to rewrite first
-   - **AI-tell regex sweep** — patterns from `tools/ai_slop_patterns.json`. Tier-1 hits ("delve," "tapestry," "leverage" as verb, "in the realm of," etc.) get immediate-fix treatment.
-   - **Sourceless authority claims** — "studies show," "most trainers," etc. without a URL within ±300 chars.
+   - **Sourceless authority claims** — "studies show," "most trainers," etc. without a URL within ±300 chars
+   - **Word-budget check** — body prose must land in 1,400–1,700 (see `instructions/newsletter-creation.md` Word-Count Budget)
 
-**Self-correction loop:** if the tool returns non-zero exit:
-- Tier-1 AI tells → swap the exact word per the tool's suggested fix; re-run.
-- Section above grade 6.0 → shorten the worst sentences flagged by the tool (use the tool's worst-sentence list as the target list).
+**Phase B — AI-detection forensic + rewrite via `humanize` skills (replaces the prior `ai_slop_patterns.json` regex pass):**
+
+4. Invoke the `ai-check` skill on the assembled draft body. It scores 9 signal categories (perplexity, burstiness, stylometry, hedge density, discourse coherence, punctuation, RLHF voice, specificity, structural redundancy), returns a verdict (Human / Likely Human / Uncertain / Likely AI / AI), and quotes evidence for every flag.
+5. If verdict is **Uncertain or worse**, invoke the `humanize` skill on the flagged sections. The skill applies the 9 humanization levers (perplexity injection, burstiness enforcement, hedge surgery, structural flattening, specificity insertion, voice and register, AI-transition removal, punctuation normalization, RLHF voice strip) plus its own audit-revise loop.
+6. Re-run `ai-check` on the humanized output. Target: verdict of **Human** or **Likely Human** before pushing to Notion.
+
+**Self-correction loop:** if Phase A returns non-zero exit:
+- Section above grade 6.0 → shorten the worst sentences flagged by the tool.
 - Sourceless claims → either add a Source URL inline OR rephrase as observation ("a lot of trainers" instead of "most trainers").
+- Word budget out of range → cut per the prioritization in `newsletter-creation.md` Word-Count Budget (Daily Discoveries + Don't Miss first).
 
-Iterate until the tool returns exit 0 OR until two correction rounds have run (whichever comes first; the recon trigger on Friday will catch anything that survives). The Notion push proceeds either way, but Step 8 Run Log records the final Category L status.
+If Phase B returns Likely AI or AI verdict → run `humanize` and re-check. Iterate until Human/Likely Human OR until two correction rounds have run (whichever comes first; the recon trigger on Friday will catch anything that survives). The Notion push proceeds either way, but Step 8 Run Log records the final Category L status with both the readability_check exit code and the ai-check verdict.
 
 **Spawn Point context caveats** (documented in the tool too):
 - Proper nouns ("Mewtwo," "Psystrike," "Pokémon," "Copenhagen") inflate polysyllable counts. The score can over-flag sections that are actually fine — review the worst-sentence list to confirm whether the problem is sentence structure or just brand-name density.

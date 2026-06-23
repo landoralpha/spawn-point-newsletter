@@ -83,17 +83,45 @@ Before writing, verify information across multiple sources:
 
 ## Writing Quality — Anti-AI-Tell Reference
 
-Before finalizing any section, check the prose against the anti-slop reference files in the `anti-slop/` directory:
+**Primary tooling (updated 2026-06-17):** the `humanize` and `ai-check` skills installed at `~/.claude/skills/` (from [harshaneel/humanize](https://github.com/harshaneel/humanize)) are the canonical AI-detection + rewrite layer. They're grounded in 50+ peer-reviewed sources through April 2026 and cover 9 signal categories.
+
+- **ai-check** — invoke during the pre-push audit (researcher Step 5.5 Phase B + recon Category L Phase B). Returns verdict + evidence-quoted flags + AI-edited-fraction estimate.
+- **humanize** — invoke when ai-check returns Uncertain / Likely AI / AI. Applies the 9 humanization levers (perplexity injection, burstiness, hedge surgery, structural flattening, specificity insertion, voice + register, AI-transition removal, punctuation normalization, RLHF voice strip) plus its own audit-revise loop.
+
+**Legacy reference (still useful for editorial intuition, no longer the enforcement layer):**
+
+Before finalizing any section, you can spot-check prose against the `anti-slop/` directory references:
 
 - **phrases.md** — Throat-clearing openers, emphasis crutches, business jargon, adverbs, and vague declaratives to remove.
 - **structures.md** — Patterns to avoid: binary contrasts, negative listings, dramatic fragmentation, false agency, passive voice, narrator-from-a-distance voice.
 - **examples.md** — Before/after rewrites showing how to apply the rules.
 - **SKILL.md** — Master checklist with Quick Checks and 5-dimension scoring (Directness, Rhythm, Trust, Authenticity, Density). Below 35/50 needs revision.
 
+The `tools/ai_slop_patterns.json` regex sweep that previously ran as part of `tools/readability_check.py` is **deprecated** as of 2026-06-17 — `ai-check` covers the same ground with better evidence and broader coverage. The grade-level, worst-sentence, sourceless-claim, and word-budget passes in `readability_check.py` remain in active use.
+
 **The two most common newsletter-specific tells to watch for:**
 
 1. **False agency in event descriptions.** "The event brings double Stardust" or "the week offers something for everyone." Events don't do things, people do. Rewrite: "You earn double Stardust during the event."
 2. **Repetitive sentence openers.** "Trainers can catch... Trainers can earn... Trainers can find..." Vary the subject. Mix "you," named Pokémon, and direct statements.
+
+### Structural AI-tell rules (added 2026-06-17 from ai-check pass on #20)
+
+These three patterns score moderate-strong on the `ai-check` skill and are easy to write past without noticing. Hardcode them into every drafting pass:
+
+**Em dash density: target ≤ 1 per 300 words.** AI uses em dashes 3–5× more than human writers, mostly as dramatic mid-sentence pivots. For Spawn Point at 1,400–1,700 words, that's ~5 em dashes maximum across the whole issue.
+- Most droppable pattern: em dash as period-substitute ("winding down — the window closes Tuesday" → "winding down. The window closes Tuesday.").
+- Same in Trainer Tips ("Saturday's coordination — ride that momentum" → "Saturday's coordination. Ride that momentum.").
+- Date-range en-dashes (`June 23–29`) and section-heading em dashes (`Mega Skarmory Is Here — and It's More Useful...`) don't count toward the density limit; the rule is about prose em dashes.
+- Pre-push grep check: count `—` in the body; if ≥ 6 in a 1,500-word draft, cut down.
+
+**Don't make every Trending Topic paragraph open with a bold lead.** The Trending Topic's strongest paragraphs use bold-phrase-as-section-header (e.g. "**Defensive typing that almost nothing touches.**"), but applying it to *every* paragraph creates "architecturally perfect" parallel structure that ai-check flags as Signal D (structural tells). Pattern: leave the first and last paragraphs with bold leads; drop the bold on the middle two. The asymmetry reads more human even though the information is the same.
+
+**Soften symmetric tricolons in the intro paragraph.** When the week features three big items (e.g., three species debuting on three different days), the natural draft is three parallel sentences:
+> "Squawkabilly debuts in Flying Taxi starting Tuesday. Shadow Reshiram appears from Giovanni starting Thursday. On Saturday, Mega Skarmory throws its first party."
+
+That's a tricolon — three sentences with the same shape — which ai-check Signal I (asyndeton tricolon) and Signal D (structural tell) both flag. Two fixes:
+1. **Drop one item to Week at a Glance only.** If the item is already in WaaG, the intro tricolon is redundant — just mention two items in the intro and let the third land in the bullet list.
+2. **Vary the structure of one sentence.** "Saturday's the big day: Mega Skarmory's first party, invite-only with six friends." Asymmetric three-beat reads more human than symmetric.
 
 ---
 
@@ -128,6 +156,57 @@ Every section in the newsletter should include an image when available. Images c
 - Daily Discoveries
 - Don't Miss
 
+## Word-Count Budget (target 1,400–1,700)
+
+Every issue must land **between 1,400 and 1,700 words of body prose**. Subject line options, headline options, opening paragraph options, and the Pre-Publish Audit Results / Hundo CP Provenance Table at the bottom do NOT count — measure only what the reader sees in the published email body.
+
+**Why this changed (2026-06-15):** Issues #18 (3,949 words) and #19 (2,974 words) blew past the readable-email zone. Beehiiv engagement curves drop sharply past ~1,800 words on mobile, and most readers skim past the fold. Issue #20 hit 1,420 after readability rewrites — proof that tightening prose hits the target without losing depth.
+
+### What graphics are available TODAY (2026-06-15)
+
+**Raid cards only.** Joe currently generates raid card graphics (per `instructions/graphics-brief.md` Card Type 1). The other card types in that document (Event card, GBL cup card, Max Battle card, Hundo CP strip) are FUTURE — they MIGHT be added later, but **do not assume they exist when planning a draft.**
+
+Practical implication: only Section 6 (Raid Bosses) is in graphics-replace mode today. Every other section operates in text-only mode and must hit its cap via prose tightening alone. Daily Discoveries (Section 9) and Don't Miss (Section 12) carry the biggest prose-only cuts; those are the levers that get a heavy week into the 1,400–1,700 zone.
+
+### Per-section caps
+
+| Section | Cap (today) | Notes |
+|---|---|---|
+| Intro paragraph | ≤ 120 words | Voice + scene-set, one paragraph |
+| Week at a Glance | ≤ 180 words | 6–8 bullets max, emoji + one line each |
+| Events (each major event) | ≤ 200 words text-only | No event card today. Cut spawn/research/pool lists hard; lead with the "why it matters." |
+| Raid bosses (each) | ≤ 80 words + **REQUIRED raid card graphic** | Counter lists live in the graphic; text retains only the "why it matters" sentence + Hundo CP line + Trainer Tip + Sources |
+| GO Battle League | ≤ 200 words text-only | Top picks lists in prose; no cup card yet |
+| Max Monday | ≤ 100 words text-only | Featured Dynamax + Hundo CPs + Trainer Tip; no Max card yet |
+| Daily Discoveries | ≤ 100 words | 1 line per day; NEVER rehash content already in Events / Week at a Glance |
+| Trending Topic | 200–350 words | Don't cut. This is the differentiator. |
+| What's New (conditional) | 100–300 per existing rules | Section 11 keeps its own caps |
+| Don't Miss | ≤ 150 words | 5 items max, ~25 words each |
+| Sign-off | ≤ 25 words | Date callout + warm close. NO recap. |
+
+### Graphics-replace mode (raid cards only, today)
+
+A raid boss section qualifies for graphics-replace mode when the embedded raid card carries the counter lists, typing, weakness chips, and Hundo CPs. When the raid card is embedded:
+
+- **Drop the 10-bullet counter list from the text entirely.** The graphic IS the reference; do not restate it in prose.
+- **Keep**: 1-sentence "why it matters" + Hundo CP line (still required, per Section 6 — screen-readers and image-stripped email clients need it) + Trainer Tip + Sources line.
+- **Image alt text** must include the boss name, typing, weakness list, and top counter (e.g., "Mega Skarmory raid card — Steel/Flying, weak to Fire and Electric, top counter Mega Charizard Y. Hundo at L20: 1,204, at L25 weather-boosted: 1,506.").
+
+When a raid card is unavailable for a given week (art pipeline gap), the raid boss section falls back to text-only mode (≤ 200 words per boss with the full counter list in prose). Flag the fallback in the research brief so recon catches the pattern over time.
+
+### Heavy-week reality check
+
+For a normal week (3 raid bosses + 1–2 events + 1 Trending Topic), the per-section caps land an issue around 1,400–1,600 words. Doable with raid cards alone.
+
+For a heavy week (4 raid bosses + 2 major events + 2 Trending Topics — #18-style), even with aggressive prose cuts you may overshoot 1,700 by 100–200 words. That's the cost of not having event cards yet. Two options when this happens:
+
+1. **Demote one item**: drop a secondary Trending Topic to a Don't Miss callout, or fold a smaller event into the Week at a Glance line and skip its sub-section.
+2. **Acknowledge the overshoot in the research brief**: log it as "heavy-week overshoot" so we can quantify how much event/cup/Max card graphics would save once they exist.
+
+### Word-count enforcement
+
+The readability check tool (`tools/readability_check.py`) flags any issue whose body falls outside the budget. Run with `--word-budget 1400-1700` to enforce. Recon Category L includes this check post-publish.
+
 ## Newsletter Structure
 
 ### 1. Title and Date Range
@@ -145,19 +224,90 @@ Spawn Point: [Creative Title]
 - Keep it 3-7 words
 - Can be playful, punny, or thematic
 
-**Subject Line A/B Options (REQUIRED):** the agent must generate **3 subject-line alternatives** at the top of the draft (above the title). Beehiiv supports A/B testing natively, and 3 options gives Joe real comparison material. Each alternative should pull from a different headline pattern (subject-led, action-led, theme-led, hook — see `instructions/brand-voice.md`).
+**Subject Line A/B Options (REQUIRED — 5):** the agent must generate **5 subject-line alternatives** at the top of the draft (above the title). Beehiiv supports A/B testing natively. Each alternative should pull from a different headline pattern (subject-led, action-led, theme-led, hook, deadline-led — see `instructions/brand-voice.md`).
 
 Format the alternatives as:
 ```
 **Subject Line A/B Options:**
-1. [Subject-led]: e.g., "Lechonk's Big Day"
-2. [Action-led]: e.g., "Three Raids Arrive Wednesday"
-3. [Theme-led or hook]: e.g., "Will You Catch the Shiny?"
+A. [Subject-led]: e.g., "Lechonk's Big Day"
+B. [Action-led]: e.g., "Three Raids Arrive Wednesday"
+C. [Theme-led or hook]: e.g., "Will You Catch the Shiny?"
+D. [Deadline-led]: e.g., "This Saturday Only: Mega Skarmory Debut"
+E. [Curiosity / cliffhanger]: e.g., "The parrot. The steel bird. The Shadow Reshiram."
 
-**Selected for draft:** Option [1|2|3] — [reason for default pick]
+**Selected for draft:** Option [A|B|C|D|E] — [reason for default pick]
+```
+
+**Title Options (REQUIRED — 5):** the agent must also generate **5 short theme-name alternatives** for the H1 / Notion page title (distinct from the full subject line — the title is the short brand handle for the issue). Format:
+
+```
+**Title Options (short theme name — used in H1 / Notion page title):**
+1. **The Triple Debut Edition** *(selected)*
+2. **Three Debuts, Seven Days**
+3. **Flying Taxi Week**
+4. **Mega Skarmory Arrives**
+5. **Squawkabilly Lands**
 ```
 
 The "Selected for draft" line tells Joe which one will appear in the title block below if he doesn't pick a different one. The agent's default pick should be the option most aligned with the week's marquee event.
+
+### Format Consistency Rules (apply across every section — added 2026-06-17)
+
+**Section title emoji (REQUIRED).** Every H2 section title AND every H3 sub-section title must start with an emoji. The emoji marks the section visually in Beehiiv and Notion. Use the same emoji conventions as the Week at a Glance bullets (above) so the same event/Pokémon gets the same emoji everywhere in the newsletter.
+
+Standard section emojis:
+- `## 📅 Week at a Glance`
+- `## 🎪 Events`
+- `### 🚖 Flying Taxi` (or whatever the event-themed emoji is)
+- `### 🌑 Flying Taxi: Taken Over` (Rocket-themed for Giovanni / Shadow)
+- `## ⚔️ Raid Bosses`
+- `### 🦅 Mega Raids: [Boss]` (use species emoji)
+- `### 🦅 Super Mega Raids: [Boss]` (use species emoji)
+- `### 🌌 5-Star Raids: [Boss]`
+- `### 🌑 Shadow Raids: [Boss]`
+- `## 🏆 GO Battle League`
+- `## ✨ Spotlight Hour: [Species]`
+- `## 🌀 Max Monday: [Species]`
+- `## 🗓️ Daily Discoveries`
+- `## 💬 Trending Topic — [Subtitle]`
+- `## ⚠️ Don't Miss`
+- `## 🆕 What's New` (when Section 11 applies)
+
+If you don't see an obvious species emoji, default to the type-aligned emoji (🔥 Fire, 💧 Water, ⚡ Electric, 🌱 Grass, ❄️ Ice, 🌪️ Flying, 🪨 Rock, 🌍 Ground, 🥊 Fighting, 🌑 Dark, 🔮 Psychic, ✨ Fairy, 🐛 Bug, 🪲 Bug-alt, 🐉 Dragon, 🦴 Ghost, 🛡️ Steel, ☠️ Poison, 🐾 Normal).
+
+**Date/time format (REQUIRED locked formats).** Every date/time mention in the newsletter must follow one of these three locked forms — no other formats permitted:
+
+| Context | Format | Example |
+|---|---|---|
+| **Event section header** (under `### Event Name`) | `**[Full Day], [Full Month] [Day], [Start time]–[End time] local**` for single-day events; `**[Full Day], [Full Month] [Day], [Start time] – [Full Day], [Full Month] [Day], [End time] local**` for multi-day | `**Saturday, June 27, 2:00–5:00 PM local**` / `**Tuesday, June 23, 10:00 AM – Monday, June 29, 8:00 PM local**` |
+| **Week at a Glance bullet** | `([Abbreviated Day] [Abbreviated Month] [Day], [time] local)` for single-time; `([Abbreviated Day] [Abbreviated Month] [Day] – [Abbreviated Day] [Abbreviated Month] [Day])` for multi-day | `(Sat Jun 27, 2:00–5:00 PM local)` / `(Tue Jun 23 – Mon Jun 29)` |
+| **Don't Miss callout header** | Same as WaaG (abbreviated) | `Sat Jun 27, 2:00–5:00 PM local` |
+
+Rules:
+- Month names: full ("June") in event headers; 3-letter abbreviation ("Jun") in WaaG and Don't Miss
+- Day names: full ("Saturday") in event headers; 3-letter abbreviation ("Sat") in WaaG and Don't Miss
+- Time format: ALWAYS `[H]:[MM] AM/PM` with caps and no periods ("2:00 PM" not "2pm" or "2:00 p.m.")
+- Use en-dash (`–`) for time ranges within a single day (`2:00–5:00 PM`); use en-dash for date ranges across days (`Tue Jun 23 – Mon Jun 29`); never use hyphens for ranges
+- Time zone: append "local" for local-time events; spell out "PDT" / "PST" / "EST" / etc. for fixed-zone events (GBL rotation cutovers are always in PDT)
+
+**Hundo CP format (REQUIRED locked formats).** Every Hundo CP line must use one of these two forms — already specified in Section 6, restated here for cross-section consistency:
+
+Standard form:
+> `**Hundo CPs:** **[L20 value]** (L20) / **[L25 value]** (L25, weather-boosted by [Weather Name])`
+
+Mega/Super Mega raid variant (catch is base species, not Mega):
+> `**Hundo CPs** (base [Species] catch): **[L20 value]** (L20) / **[L25 value]** (L25, weather-boosted by [Weather Name])`
+
+Rules:
+- CP values: comma-separated thousands (1,216 not 1216), bolded
+- "L20" and "L25" in parentheses after each value
+- "weather-boosted by" preceding the weather name(s); always include this phrase even if weather is implied
+- Weather names: capitalized, alphabetical when multiple (`Partly Cloudy or Windy`, `Snow or Windy`, `Sunny or Snow`)
+- Per-boss Hundo CPs go in the raid section AND in the Hundo CP Provenance Table at the bottom
+
+**Anti-pattern (wrong):** `**Hundo CPs:** 1,772 Celesteela (L20) / 2,216 (L25, Snow or Windy); 2,101 Kartana (L20) / 2,626 (L25, Sunny or Snow)` — never combine two species on one Hundo CP line; give each species its own block.
+
+**Source link titles (REQUIRED — reaffirmed from `feedback_source_link_titles.md`).** Every `[text](URL)` link in a Sources line must have a descriptive title. Never use the URL or URL fragment as the link text. See the convention table in the Source Attribution section below for per-source title patterns.
 
 ### 2. Subtitle
 Write a fun, creative subtitle that expands on the title or highlights what makes this week special.
@@ -190,7 +340,18 @@ This metadata makes the newsletter database queryable: Joe can filter by Feature
 ### 3. Opening Paragraph
 Set the tone and emotional priority for the week. This is NOT a summary of every event. It answers one question: what should Trainers care about most, and why?
 
-**Guidelines:**
+**Opening Paragraph Options (REQUIRED — 5):** the agent must generate **5 distinct opener alternatives** at the top of the draft (alongside the Title Options). Each alternative should hit a different angle: lead-with-marquee-event, lead-with-deadline, lead-with-investment-case, lead-with-coordination-ask, lead-with-rhetorical-question. Format:
+
+```
+**Opening Paragraph Options:**
+1. (selected) [Lead-with-marquee-event paragraph]
+2. [Lead-with-deadline paragraph]
+3. [Lead-with-investment-case paragraph]
+4. [Lead-with-coordination-ask paragraph]
+5. [Lead-with-rhetorical-question paragraph]
+```
+
+**Guidelines (apply to every option):**
 - 3 sentences max
 - Lead with the most important thing happening this week, stated directly
 - Name the key Pokémon, event, or deadline that defines the week
@@ -200,18 +361,46 @@ Set the tone and emotional priority for the week. This is NOT a summary of every
 
 **The test:** Could the opening stand alone and tell a casual Trainer what to prioritize this week? If yes, it's working. If it just lists things they'll read again two seconds later, it's not.
 
+**Tricolon trap (added 2026-06-17).** When the week features three big items, the natural draft is three parallel sentences. That's a tricolon — `ai-check` Signal I + D both fire on symmetric three-beat openings. Fix one of two ways: (a) drop one item to Week at a Glance only and lead the intro with two, or (b) vary the structure of one sentence so the three beats aren't grammatically identical (e.g., one declarative + one descriptive clause + one colon-style reveal). See "Structural AI-tell rules" above for examples.
+
 ### 4. Week at a Glance
 A bullet-point planning reference with calendar specifics the opening paragraph left out.
 
 **Guidelines:**
-- 4-6 bullets max
-- Each bullet names one thing: an event, a rotation, a deadline, a new feature
-- Include the key time or date for each item
+- 4-8 bullets max
+- **Event-first naming (added 2026-06-17).** Each bullet leads with the **event name** (Flying Taxi, Skarmory Super Mega Raid Day, Wingull Spotlight Hour, etc.), NOT just the featured Pokémon. The Pokémon is what the event delivers; the event is what the reader plans around. "🦜 Squawkabilly debuts in Flying Taxi" → "🚖 **Flying Taxi** (Tue Jun 23 – Mon Jun 29): Squawkabilly debut + 4 regional plumage forms."
+- Cover ALL the week's events, rotations, and recurring beats — not just species debuts. Specifically include: every major event, GBL rotation, raid rotation, Spotlight Hour, Community Day, Max Monday, and any deadline (event end times, no-cap windows, expirations).
+- **Every bullet must start with an emoji prefix** (no exceptions). Match the emoji to the event type:
+  - 🚖 / 🚌 / ✈️ — travel-themed events (Flying Taxi, Wings, etc.)
+  - 🚀 / 🦅 — Raid Day events (use creature emoji for species-specific raid days)
+  - 🔥 / 💧 / ⚡ / 🌱 / 🌌 — type-themed raid rotations
+  - ✨ — Spotlight Hour
+  - 🌀 — Max Monday / Max Battle
+  - ⚔️ — GO Battle League rotations + GBL events
+  - 🏆 — GBL Cup launches / endings
+  - 🎟️ / 🪙 — GO Pass / no-cap windows / paid tickets
+  - 🔚 — event ENDS / deadline-driven callouts
+  - 🌑 — Shadow Raids / Team GO Rocket / Giovanni
+  - 🐉 — Community Day (or use the featured species emoji)
+- Include the key time or date for each item (see "Date/time format" rules below)
 - Do NOT restate the "why" or the narrative from the opening paragraph
-- Think of it as a table of contents with just enough detail to plan around
 
 **Format:**
-Each bullet: `[emoji] **[Label]** — [one-line description with time/date]`
+Each bullet: `[emoji] **[Event name]** ([date/time]): [one-line description of what's in the event]`
+
+**Examples (correct):**
+- 🚖 **Flying Taxi** (Tue Jun 23 – Mon Jun 29): Squawkabilly debut + 4 regional plumage forms
+- 🦅 **Skarmory Super Mega Raid Day** (Sat Jun 27, 2:00–5:00 PM local): Mega Skarmory debut
+- ✨ **Wingull Spotlight Hour** (Thu Jun 25, 6:00–7:00 PM local): 2× Catch Stardust
+- 🏆 **GBL rotation** (Tue Jun 23, 1:00 PM PDT): open Great/Ultra/Master triple
+- 🌌 **5-Star + Mega raid rotation** (Wed Jun 24, 6:00 AM): Celesteela (S), Kartana (N), Mega Pidgeot in
+- 🪙 **No-cap GO Points window** (Sat 12:00 AM – Mon 7:59 PM)
+- 🔚 **Shadow Dialga window closes** (Tue Jun 30, 10:00 PM)
+
+**Anti-pattern (wrong — Pokémon-first instead of event-first):**
+- ~~🦜 Squawkabilly debuts in Flying Taxi (June 23–29)~~ — leads with species, buries event name
+- ~~🦅 Mega Skarmory debuts at Super Mega Raid Day~~ — leads with species
+- ~~🌌 Celesteela and Kartana enter 5-star raids~~ — leads with species; "5-star raids" should be the lead
 
 **REQUIRED — emoji on every bullet (recurring drafting miss):** Every Week at a Glance bullet MUST start with a relevant emoji prefix. This has been left off repeatedly in past drafts. The emoji is part of the format, not decoration — it gives the scannable visual rhythm that makes the section work. Pick something specifically tied to the bullet's subject (the featured Pokémon's type/icon, the event vibe, the mechanic) — never a generic 📅 or 📌 unless the bullet really is a pure calendar marker with no thematic hook. Examples: 🔥 Reshiram, ⚔️ GBL season, 🌑 Shadow Legendary, ⚡ Spark-themed event, 🚀 new season launch, 🌏 GO Fest, 🧊 quest close.
 
@@ -242,6 +431,10 @@ If multiple research quests are active and intersect with the week, list them al
 **Standalone section.** Do NOT duplicate in Events.
 
 Cover Five-Star, Mega, and Shadow raids. Raids rotate on Wednesdays at the start of the day. Always check if any bosses end during the week and what rotates in.
+
+**Default format = raid card graphic + ≤ 80 words per boss.** Each featured raid boss gets an embedded raid card graphic (spec in `instructions/graphics-brief.md`) carrying the counter lists, typing, weakness chips, and Hundo CPs. Prose retains: 1-sentence "why it matters" + Hundo CP line (the labeled block form below — still required even when shown in the graphic, for screen-readers and email clients that strip images) + Trainer Tip + Sources line. **Do NOT spell out the 10-bullet counter list in prose when the graphic is embedded** — that's the whole point of the format change.
+
+When no graphic is available (rush week, art pipeline blocked), fall back to text-only mode: ≤ 200 words per boss, full counter list in prose, same Hundo CP + Trainer Tip + Sources blocks. Flag the fallback in the recon trigger so we catch art-pipeline gaps over time.
 
 **Shadow Raid notes (agent-facing, NOT to be repeated in newsletter copy):**
 - Shadow Raids can be done remotely. The monthly featured Legendary Shadow Pokémon raids every day during its window, not just weekends. 1-Star and 3-Star Shadow Raids can also appear during the week.
@@ -334,6 +527,27 @@ Do NOT include one-star or three-star raids.
 ### 7. GO Battle League
 Cover active leagues, cups, rotation dates, and notable meta picks.
 
+### 7.5. Spotlight Hour (REQUIRED standalone section — added 2026-06-20)
+**Standalone section.** Do NOT bury inside Week at a Glance / Daily Discoveries / Don't Miss alone. Spotlight Hour gets its own H2 section every single newsletter, between GO Battle League and Max Monday.
+
+Why standalone: Spotlight Hour is a weekly recurring 1-hour event with its own featured species, shiny odds, and stackable bonus (dust / candy / XP / evolution candy depending on the week). Readers plan their Tuesday-evening hour around it. It's not a calendar footnote.
+
+Standard format:
+```
+## ✨ Spotlight Hour: [Species]
+**[Full Day], [Full Month] [Day], 6:00–7:00 PM local**
+
+[Species] takes the Spotlight Hour pool. Bonus: [2× Catch Stardust / 2× Catch Candy / 2× Catch XP / 2× Evolution XP / etc.]. Shiny [Species] at boosted odds. [Evolution note if relevant — e.g., "Evolves into X with Y Candy"].
+
+> **Trainer Tip:** [Stacking advice — Star Piece + GBL + Lucky Egg etc., or moveset note, or PvP relevance, or shiny-hunting tip]
+
+*Sources: [LeekDuck: Spotlight Hour schedule](https://leekduck.com/spotlight-hour/), [Hub-DB: {Species}](https://db.pokemongohub.net/pokemon/{N})*
+```
+
+Section emoji is always `✨`. Date format follows the standard event-header convention. The Trainer Tip should call out at least one stacking opportunity (Star Piece, GO Battle Thursday, Friendship Friday Stardust discount, Community Day overlap, etc.) — Spotlight Hour's value is multiplicative.
+
+Verify the featured Pokémon and bonus on LeekDuck the same week (not from cached memory). The featured species rotates weekly and the bonus type rotates monthly.
+
 ### 8. Max Monday
 **Standalone section.** Do NOT duplicate in Events.
 
@@ -346,13 +560,20 @@ Max Monday runs 6:00 AM to 9:00 PM local time. Include featured Dynamax Pokémon
 ### 9. Daily Discoveries
 **Standalone section.** Do NOT duplicate in Events.
 
+**Cap: ≤ 100 words for the whole section.** One line per day, day-stamped. NO rehash of content already in Events / Week at a Glance — if a major event drops on Thursday, link to its Events section rather than restating times, spawns, and bonuses. Daily Discoveries is the recurring-weekday-bonus row, not a second pass at the calendar.
+
 Daily bonuses active throughout the week. Only include ones with significant value:
-- Sunday: Double-Time Sunday (Incense/Lures 2x duration)
-- Monday: Fast-Track Monday (2x GO Points)
-- Tuesday: Showcase Tuesday
-- Wednesday: Raid Hour (covered in Raid Bosses)
-- Thursday: GO Battle Thursday (4x Stardust, 10 battle sets)
-- Friday: Friendship Friday (trade bonuses)
+- Sunday: Scenic Sunday (Routes, Buddy Candy, Mateo encounters)
+- Monday: Max Monday (in-person Max Battle Rare Candy XL)
+- Tuesday: Showcase Tuesday (up to 5 entries)
+- Wednesday: Wednesday Raid Hour (in-person Raid Rare Candy XL, raid rotation flips at 6 AM)
+- Thursday: GO Battle Thursday + Spotlight Hour (6–7 PM)
+- Friday: Friendship Friday (extra Special Trades, –20% Stardust)
+
+**Format per day** (one line each):
+`**[Day, Date] — [Headline]:** [one-sentence bonus/event line, with a link to the Events subsection if the day's main story lives there].`
+
+**Anti-pattern**: re-stating every detail of an event already covered above. If Wednesday has Necrozma Raid Hour AND a raid rotation AND Choose Your Path beginning, the Daily Discoveries line says "Wednesday Raid Hour + raid rotation flips + Choose Your Path begins (see Events)." Three callouts, one line.
 
 ### 10. Trending Topic
 A short write-up on one story, event preview, news drop, or meta shift that matters this week. This is the newsletter's editorial voice, where you go beyond event listings and cover something readers care about right now.
@@ -377,6 +598,7 @@ A short write-up on one story, event preview, news drop, or meta shift that matt
 - 2–4 paragraphs of prose, OR a structured format (headed sub-sections) when the story has multiple angles (Chicago + universal info, mechanic explainer + cost breakdown, etc.)
 - Tell the story: what happened, why it matters, what the reader should do about it
 - Link to primary sources (Reddit threads, news articles, Niantic blog posts)
+- **Bold-lead alternation (added 2026-06-17).** If the section uses bold-phrase-as-paragraph-opener (e.g., "**Defensive typing that almost nothing touches.**"), do NOT apply it to every paragraph. `ai-check` flags 4-paragraph parallel bold-lead structures as Signal D (architecturally perfect = AI). Use bold leads on the first and last paragraphs; drop them on the middle two. Asymmetry reads more human.
 - Tone: informative and fair. Skip the throat-clearing ("It's important to note that…") — make the claim directly.
 - End with a "Sources:" line listing the key links
 - **Hit grade level ≤ 6.0** (per Category L readability check). Even when the story is analytical, write at 5th–6th grade reading level — short sentences, plain words, one idea per paragraph.
@@ -453,19 +675,45 @@ This section appears ONLY when the newsletter's Mon-Sun window contains the star
 - Combined: "May Kicks Off a New Season"
 
 ### 12. Don't Miss
-Three short callouts surfacing things NOT covered elsewhere in the newsletter.
+Short callouts surfacing the week's highest-stakes deadlines and stack opportunities.
 
-**What belongs:** Tools/trackers, meta picks, upcoming teasers, community stories, Reddit discoveries, fan resources
+**Cap: ≤ 150 words for the whole section.** 5 items max, ~25 words each.
+
+**What belongs (deadline / stack-opportunity callouts, not generic links):**
+- Raid Hour / Spotlight Hour windows
+- Move-rotation evolution windows (Community Day signature moves close-of-window)
+- Research expiration deadlines
+- Last-day-of-event reminders
+- Mid-week raid rotation flips
+
 **Rules:**
-- Exactly 3 callouts
-- Each links to a source
-- Must be genuinely new to the reader at this point
-- 1-2 sentences each
+- 3–5 callouts (5 is the ceiling; don't pad)
+- Each callout = emoji + bold header line + 1 sentence consequence/CTA
+- Must be a TRUE deadline or stack — not a generic "go play the event" reminder
+- The Trending Topic, Trainer Tips, and Events subsections cover analysis; Don't Miss is the "what closes if you ignore it" list
+- Don't restate the event in detail — readers already saw it in Events / Week at a Glance. Just the deadline + the consequence.
 
-**Format:**
+**Format per callout** (strict):
 ```
-**🔍 [Short label]**
-One or two sentences. [Link text](URL)
+**[emoji] [Short header — what's closing/stacking]**
+[One sentence: when it ends + what you lose if you miss it.]
+```
+
+**Example (correct):**
+```
+**🐉 Frigibax evolution window closes Saturday June 20 at 9:00 PM**
+Evolve Arctibax to Baxcalibur during this window for Glaive Rush. Next chance is a Community Day Classic with no announced timeline.
+```
+
+**Anti-pattern (cut):**
+```
+**Spotlight Hour returns Thursday, June 18, 6:00–7:00 PM local**
+The first Spotlight Hour since the March 3 retirement. Swinub is the debut species with 2x Candy for transferring Pokémon. Shiny eligible. This is also the new permanent Thursday slot — paired with GO Battle Thursday, so you can stack the 6:00 PM Spotlight Hour with the 4x Stardust GBL window. Pop a Star Piece before 6:00 PM.
+```
+^ 4 sentences, 60 words, all rehash from Daily Discoveries. Compress to:
+```
+**🔦 Spotlight Hour stacks with GO Battle Thursday — Thu June 18, 6–7 PM**
+Pop a Star Piece before 6:00 PM. Catch Stardust + GBL 4× Stardust + Star Piece is the week's biggest XP/dust stack.
 ```
 
 ---

@@ -12,6 +12,11 @@ Four passes over a draft (markdown text from --file, --notion-page-id, or stdin)
   3. AI-tell regex sweep — patterns loaded from ai_slop_patterns.json
      in three tiers (hard / warn / structural). Hard tells are an
      immediate-action flag even though the run doesn't hard-stop.
+     DEPRECATED as of 2026-06-17 — the harshaneel/humanize `ai-check`
+     skill at ~/.claude/skills/ai-check is the canonical AI-detection
+     layer now. Pass 3 still runs for backwards compatibility but the
+     workflow docs (researcher.md Step 5.5, recon.md Category L) call
+     ai-check as Phase B and treat its verdict as authoritative.
 
   4. Sourceless-claim detection — appeals to authority ("studies show",
      "most trainers", etc.) without a URL or citation within 300 chars.
@@ -56,7 +61,12 @@ URL_RE = re.compile(r"https?://[^\s)\]]+")
 
 def strip_markdown_chrome(text):
     """Remove markdown structure that isn't prose — code blocks, image refs,
-    table syntax, list markers, bold/italic markers. Leaves the words behind."""
+    table syntax, list markers, bold/italic markers. Leaves the words behind.
+
+    Bullet items get a terminal period added if they don't have one already,
+    so the sentence splitter sees each bullet as its own sentence rather than
+    merging them all together (a single 6-bullet 'Week at a Glance' would
+    otherwise score as one mega-sentence in the 80+ word range)."""
     # Code blocks
     text = re.sub(r"```[\s\S]*?```", " ", text)
     text = re.sub(r"`[^`]+`", " ", text)
@@ -66,9 +76,20 @@ def strip_markdown_chrome(text):
     text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
     # Bold / italic markers
     text = re.sub(r"\*\*|__|\*|_", "", text)
-    # List bullets
-    text = re.sub(r"^[\s]*[-*+]\s+", "", text, flags=re.MULTILINE)
-    text = re.sub(r"^[\s]*\d+\.\s+", "", text, flags=re.MULTILINE)
+
+    # Bullet handling — strip the marker AND make sure each bullet ends in
+    # punctuation so sentence splitting treats them individually.
+    def normalize_bullet(match):
+        body = match.group(1).rstrip()
+        if not body:
+            return ""
+        if body[-1] not in ".!?":
+            body += "."
+        return body + "\n"
+
+    text = re.sub(r"^[\s]*[-*+]\s+(.+)$", normalize_bullet, text, flags=re.MULTILINE)
+    text = re.sub(r"^[\s]*\d+\.\s+(.+)$", normalize_bullet, text, flags=re.MULTILINE)
+
     # Blockquote markers
     text = re.sub(r"^>\s*", "", text, flags=re.MULTILINE)
     # Pipe-tables — keep cell text
@@ -100,12 +121,22 @@ def split_into_sections(markdown):
 
 
 def split_sentences(text):
-    """Naive sentence splitter — good enough for editorial work."""
-    text = re.sub(r"\s+", " ", text).strip()
-    if not text:
+    """Naive sentence splitter — good enough for editorial work.
+
+    Treats newlines as a hard sentence boundary first (so bullets and short
+    headed lines split cleanly even when the lookahead-on-capital wouldn't
+    fire — emoji-prefixed bullets, for example), then runs the standard
+    punctuation-based splitter inside each line."""
+    if not text or not text.strip():
         return []
-    parts = SENTENCE_END_RE.split(text)
-    return [p.strip() for p in parts if p.strip()]
+    out = []
+    for line in re.split(r"\n+", text):
+        line = re.sub(r"[ \t]+", " ", line).strip()
+        if not line:
+            continue
+        parts = SENTENCE_END_RE.split(line)
+        out.extend(p.strip() for p in parts if p.strip())
+    return out
 
 
 # ----------------------------- syllable counting -----------------------------
@@ -317,12 +348,81 @@ def render_report(sections, target, slop_hits, sourceless_hits, worst_sentences)
 
 # ----------------------------- main -----------------------------
 
+def parse_word_budget(s):
+    """Parse '1400-1700' into (floor, ceiling). Returns (None, None) on 'off'."""
+    if not s or s.lower() == "off":
+        return (None, None)
+    m = re.match(r"^\s*(\d+)\s*-\s*(\d+)\s*$", s)
+    if not m:
+        raise ValueError(f"--word-budget must be 'floor-ceiling' or 'off', got: {s!r}")
+    floor, ceil = int(m.group(1)), int(m.group(2))
+    if floor > ceil:
+        raise ValueError(f"--word-budget floor ({floor}) > ceiling ({ceil})")
+    return (floor, ceil)
+
+
+def count_body_words(raw):
+    """Count words in the body prose, excluding scaffolding sections that
+    don't reach the reader (Subject Line Options, Headline Options, Subtitle
+    Options, Opening Paragraph Options, Pre-Publish Audit Results, Hundo CP
+    Provenance Table) AND graphic-placeholder briefs (raid card placeholders
+    are agent→Joe annotations that get replaced by the actual image at
+    embed time). Uses the same chrome stripper as the readability passes so
+    URLs / table syntax / bold markers don't inflate the count."""
+    EDITORIAL_HEADINGS = (
+        "subject line options", "title options", "headline options",
+        "subtitle options", "opening paragraph options",
+        "pre-publish audit results", "pre-publish audit",
+        "hundo cp provenance", "editorial options",
+        "selected for draft",
+    )
+
+    # Graphic-placeholder lines — these are briefs the drafting agent writes
+    # for Joe (per instructions/graphics-brief.md). At publish time, the
+    # placeholder text is replaced by the actual graphic, so the brief text
+    # never reaches the reader and shouldn't inflate the body word count.
+    GRAPHIC_PLACEHOLDER_RE = re.compile(
+        r"^\s*>?\s*🎨\s+\*\*(?:RAID CARD|EVENT CARD|CUP CARD|MAX BATTLE CARD|HUNDO STRIP)",
+        re.IGNORECASE,
+    )
+
+    def strip_placeholder_blocks(text):
+        out_lines = []
+        in_placeholder = False
+        for line in text.splitlines():
+            if GRAPHIC_PLACEHOLDER_RE.match(line):
+                in_placeholder = True
+                continue
+            if in_placeholder:
+                # Placeholder ends at the next blank line or non-blockquote line.
+                if not line.strip() or not line.lstrip().startswith(">"):
+                    in_placeholder = False
+                    if line.strip():
+                        out_lines.append(line)
+                continue
+            out_lines.append(line)
+        return "\n".join(out_lines)
+
+    body_chunks = []
+    for name, body in split_into_sections(raw):
+        if name and any(name.lower().startswith(h) for h in EDITORIAL_HEADINGS):
+            continue
+        body_chunks.append(strip_placeholder_blocks(body))
+
+    if not body_chunks:
+        body_chunks = [strip_placeholder_blocks(raw)]
+
+    text = strip_markdown_chrome("\n\n".join(body_chunks))
+    return len(WORD_RE.findall(text))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--file", help="Path to markdown file. If omitted, reads stdin.")
     ap.add_argument("--target", type=float, default=6.0, help="Max grade per section (default 6.0)")
     ap.add_argument("--strict", action="store_true", help="Exit 1 on any tier-2 or sourceless flag too")
-    ap.add_argument("--only", choices=["grade", "slop", "claims"], help="Run only one pass")
+    ap.add_argument("--only", choices=["grade", "slop", "claims", "budget"], help="Run only one pass")
+    ap.add_argument("--word-budget", default="off", help="Body word range, e.g. '1400-1700'. 'off' disables. Default off so existing CI doesn't break; the newsletter workflow passes '1400-1700' explicitly.")
     args = ap.parse_args()
 
     if args.file:
@@ -336,6 +436,12 @@ def main():
 
     if not raw.strip():
         print("Error: input is empty.", file=sys.stderr)
+        sys.exit(2)
+
+    try:
+        budget_floor, budget_ceiling = parse_word_budget(args.word_budget)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
         sys.exit(2)
 
     patterns = load_patterns()
@@ -363,10 +469,27 @@ def main():
         worst if show_grade else [],
     ))
 
+    # Word-budget pass (always reports if --word-budget was set)
+    budget_fail = False
+    if budget_floor is not None and only in (None, "budget"):
+        body_wc = count_body_words(raw)
+        print()
+        print("=== Word-Budget Check ===")
+        print(f"  Body word count: {body_wc}")
+        print(f"  Target range:    {budget_floor}–{budget_ceiling}")
+        if body_wc < budget_floor:
+            print(f"  ✗ Under floor by {budget_floor - body_wc} words. Section may feel thin — add depth in Trending Topic or Trainer Tips, not in reference-data sections.")
+            budget_fail = True
+        elif body_wc > budget_ceiling:
+            print(f"  ✗ Over ceiling by {body_wc - budget_ceiling} words. Cut reference data first (counter lists, spawn lists, GO Pass tiers) — those should move to embedded graphics per instructions/graphics-brief.md. Daily Discoveries and Don't Miss are the next-biggest bulk offenders.")
+            budget_fail = True
+        else:
+            print(f"  ✓ Within target range.")
+
     # Exit code
     failed_sections = [(n, grade_summary(m)["max"]) for n, m in sections if grade_summary(m)["max"] > args.target]
     tier1_hits = [h for h in slop_hits if h[0] == "tier1_hard"]
-    fail = bool(failed_sections) or bool(tier1_hits)
+    fail = bool(failed_sections) or bool(tier1_hits) or budget_fail
     if args.strict:
         fail = fail or any(h[0] == "tier2_warn" for h in slop_hits) or bool(sourceless_hits)
     sys.exit(1 if fail else 0)
