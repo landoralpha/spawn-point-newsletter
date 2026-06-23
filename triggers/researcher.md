@@ -775,6 +775,28 @@ Two-phase audit BEFORE the Notion push:
 
 If Phase B returns Likely AI or AI verdict → run `humanize` and re-check. Iterate until Human/Likely Human OR until two correction rounds have run (whichever comes first; the recon trigger on Friday will catch anything that survives). The Notion push proceeds either way, but Step 8 Run Log records the final Category L status with both the readability_check exit code and the ai-check verdict.
 
+**Phase C — Banned editorial claims grep (HARD FAIL — added 2026-06-23):**
+
+Read the **Banned editorial claims** table in `instructions/newsletter-creation.md` (located before "Important Reminders"). For every regex pattern listed there, grep the assembled draft body. ANY match is a HARD FAIL — fix BEFORE pushing to Notion.
+
+Standing banned patterns (this list is canonical in newsletter-creation.md; check there for the live version):
+
+```
+"Shiny .* at boosted odds"            # Spotlight Hour fabrication — SH does not boost per-encounter shiny rate
+"boosted shiny rate"                  # Same
+"increased shiny rate"                # Same (unless cited from Niantic with a number)
+"Spotlight Hour.*shiny boost"         # Same
+"wild encounter rate.*boosted shiny"  # Only allowed for CD / Raid Days / Hatch Days / GO Fest with source
+```
+
+If any match fires, the agent MUST:
+1. Identify whether the claim is verifiable from a Niantic source (event blog post, LeekDuck event Notes section).
+2. If verifiable AND a specific number is available: rewrite the sentence to cite the source + the number (e.g., "Per LeekDuck, this event boosts shiny Wingull rate to ~1 in 250 from the standard ~1 in 500.").
+3. If NOT verifiable: rewrite using the volume-not-rate framing (e.g., "Standard shiny rate applies — the spawn volume means more rolls, not better per-encounter odds.")
+4. Do NOT delete the sentence wholesale unless it adds no editorial value. The corrected framing is itself useful.
+
+The banned-claim grep is the same list applied during researcher Step 5.5 Phase C AND during recon (Category H, see `triggers/recon.md`). Both agents reference `instructions/newsletter-creation.md` Banned editorial claims table as the single source of truth — when a new banned phrase is added there, both checks pick it up automatically.
+
 **Spawn Point context caveats** (documented in the tool too):
 - Proper nouns ("Mewtwo," "Psystrike," "Pokémon," "Copenhagen") inflate polysyllable counts. The score can over-flag sections that are actually fine — review the worst-sentence list to confirm whether the problem is sentence structure or just brand-name density.
 - The flat ≤ 6.0 target applies even to the Trending Topic. Trending Topic does NOT have to be a meta deep-dive; sometimes it's an event preview, a news drop, or a strategy reminder. Match the format to the week's biggest story; just keep the grade level low.

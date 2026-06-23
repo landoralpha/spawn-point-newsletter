@@ -537,7 +537,9 @@ Standard format:
 ## ✨ Spotlight Hour: [Species]
 **[Full Day], [Full Month] [Day], 6:00–7:00 PM local**
 
-[Species] takes the Spotlight Hour pool. Bonus: [2× Catch Stardust / 2× Catch Candy / 2× Catch XP / 2× Evolution XP / etc.]. Shiny [Species] at boosted odds. [Evolution note if relevant — e.g., "Evolves into X with Y Candy"].
+[Species] floods the spawn pool for one hour. Event bonus: [2× Catch Stardust / 2× Catch Candy / 2× Catch XP / 2× Evolution XP / 2× Transfer Candy / etc.]. [Evolution note if relevant — e.g., "Evolves into X with Y Candy"]. [Brief PvP / utility note if applicable.]
+
+**Shiny rate: standard, NOT boosted (do NOT claim "boosted shiny odds" — Niantic does not boost the per-encounter shiny rate for Spotlight Hour featured species). The volume of spawns means more rolls, so absolute shiny encounters per hour go up, but the rate per spawn is unchanged. If the editorial calls out shiny chasing, frame it as "more shots at one" — never "boosted odds."**
 
 > **Trainer Tip:** [Stacking advice — Star Piece + GBL + Lucky Egg etc., or moveset note, or PvP relevance, or shiny-hunting tip]
 
@@ -757,6 +759,24 @@ Sources: [leekduck.com/events/tapu-fini-...](https://leekduck.com/events/...) | 
 | Reddit posts | `r/[subreddit]: [thread title]` |
 
 **Pre-push grep check:** search the assembled draft for `[https://`, `[http://`, `[www.`, `[db.poke`, `[pokemongohub.net`, `[leekduck.com`, `[fight.pokebattler` — any matches are URL-as-title and must be fixed before push.
+
+**Banned editorial claims (HARD FAIL — added 2026-06-23):**
+
+These claims have appeared in Spawn Point drafts without source backing. Each is a HARD FAIL pre-push grep — if any pattern matches in the Spotlight Hour or wider event body, fix BEFORE publishing.
+
+| Banned phrase | Why | Replacement |
+|---|---|---|
+| `Shiny .* at boosted odds` (Spotlight Hour context) | Niantic does NOT boost per-encounter shiny rate during Spotlight Hour. Featured species has its standard shiny rate. | "Standard shiny rate applies — volume means more rolls, not better per-encounter odds" OR "More shots at a shiny than usual" (volume framing only) |
+| `boosted shiny rate` / `increased shiny rate` (Spotlight Hour context) | Same as above. | Same as above. |
+| `Spotlight Hour.*shiny boost` | Same as above. | Same as above. |
+| `wild encounter rate.*boosted shiny` (anywhere outside of explicit Niantic-confirmed events: Community Day, special raid days, Hatch Day) | Most events do NOT boost the per-encounter shiny rate. Only Community Day, specific Raid Days, Hatch Days, GO Fest, and Niantic-confirmed special windows do. | Verify from Niantic's official event page; if no shiny boost is listed, do NOT claim one. Default framing: spawn volume increase only. |
+
+**Shiny rate sources of truth (when in doubt):**
+- Niantic event blog post for that specific event
+- [LeekDuck event page](https://leekduck.com/events/) (Notes section flags shiny boosts explicitly)
+- [The Silph Road shiny odds research thread](https://thesilphroad.com/) (historical baselines per event type)
+
+**When a shiny boost IS confirmed:** call it out specifically with the source ("Per LeekDuck, this event boosts shiny Wingull rate to roughly 1 in 250 from the standard ~1 in 500"). NEVER use generic "boosted odds" without a number or source.
 
 ---
 

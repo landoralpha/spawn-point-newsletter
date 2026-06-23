@@ -300,6 +300,30 @@ This rule traces back to the #19 (June 15–21) initial draft missing Choose You
 
 Extend this category with additional M-rows as new recurring errors are identified.
 
+**M-3: Unsourced shiny-boost claims (added 2026-06-23 after #20+#21 Spotlight Hour fabrication).**
+
+Spotlight Hour does NOT boost the per-encounter shiny rate (volume only). Several other event types ALSO do not boost shiny rate. Banned phrases that the agent has used as filler:
+
+| Banned regex (case-insensitive) | Allowed only if |
+|---|---|
+| `[Ss]hiny .* at boosted odds` | Inside a Community Day / Raid Day / Hatch Day / GO Fest section AND followed by a specific rate ("~1 in 25") AND a Niantic source citation |
+| `boosted shiny rate` | Same as above |
+| `increased shiny rate` | Same as above |
+| `[Ss]potlight [Hh]our.*shiny boost` | NEVER (Spotlight Hour does not have boosted shiny rate by Niantic spec) |
+| `wild encounter rate.*boosted shiny` | Only for explicitly Niantic-confirmed special events with source |
+
+For every M-3 hit:
+- **In a Spotlight Hour section:** HARD FLAG `Category M-3 Spotlight Hour shiny-boost fabrication — "boosted shiny" claim has no Niantic backing. Spotlight Hour does not boost per-encounter shiny rate. Rewrite using the volume-not-rate framing: "Standard shiny rate applies — the spawn volume means more rolls, not better per-encounter odds." Auto-patchable.`
+- **In an event section that legitimately has boosted shiny rate** (Community Day, Raid Day, Hatch Day, GO Fest):
+  - If a specific rate + source is cited → PASS.
+  - If "boosted odds" appears without a specific rate or source → SOFT FLAG `Category M-3 vague shiny-boost claim — "boosted odds" needs a specific number (e.g., "~1 in 25") AND a source. Add both, or remove the claim.`
+
+This rule traces back to #20 (Wingull SH "shiny at boosted odds") + #21 (Pidgey SH "shiny at boosted odds") — both fabricated. The full banned-phrase table lives in `instructions/newsletter-creation.md` Banned editorial claims; M-3 is the recon enforcement layer. See [[no-unsourced-shiny-boost]] for the editorial rule + Niantic-confirmed-vs-fabricated event lists.
+
+**M-4 and beyond:** future recurring fabrications go here. The pattern: identify a phrase the agent uses as filler that has no source backing, add it to the `instructions/newsletter-creation.md` Banned editorial claims table, add an M-row here referencing it, and add a memory entry documenting the incident class.
+
+Both researcher Step 5.5 Phase C and recon Category M-3+ READ the same banned-claims table in `instructions/newsletter-creation.md`. When a new banned phrase is added there, both checks pick it up automatically — single source of truth.
+
 If a claim doesn't fit cleanly: log under `uncategorized` and list in the email so Joe can spot it. Do not attempt verification.
 
 ## Step 3: Verify each claim against authoritative sources
