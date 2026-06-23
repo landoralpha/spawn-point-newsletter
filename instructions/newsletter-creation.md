@@ -292,20 +292,25 @@ Rules:
 - Use en-dash (`–`) for time ranges within a single day (`2:00–5:00 PM`); use en-dash for date ranges across days (`Tue Jun 23 – Mon Jun 29`); never use hyphens for ranges
 - Time zone: append "local" for local-time events; spell out "PDT" / "PST" / "EST" / etc. for fixed-zone events (GBL rotation cutovers are always in PDT)
 
-**Hundo CP format (REQUIRED locked formats).** Every Hundo CP line must use one of these two forms — already specified in Section 6, restated here for cross-section consistency:
+**Hundo CP format (REQUIRED locked formats).** Every Hundo CP line must use one of these THREE forms — already specified in Section 6 (raids) + Section 8 (Max Monday), restated here for cross-section consistency:
 
-Standard form:
+Standard raid form (5-Star, 3-Star, 1-Star, Shadow):
 > `**Hundo CPs:** **[L20 value]** (L20) / **[L25 value]** (L25, weather-boosted by [Weather Name])`
 
 Mega/Super Mega raid variant (catch is base species, not Mega):
 > `**Hundo CPs** (base [Species] catch): **[L20 value]** (L20) / **[L25 value]** (L25, weather-boosted by [Weather Name])`
 
-Rules:
+**Max Monday / Max Battle form** (added 2026-06-23 after #20 Hoothoot incident — see `feedback_max_battle_l20_only.md`):
+> `**Hundo CPs:** **[L20 value]** (L20 Max Battle catch)`
+
+**CRITICAL Max Battle rule:** Max Battle encounters are **L20 only**. No weather-boost applies to Max Battle catches. Do NOT use the "/ L25 (L25, weather-boosted by ...)" segment for Max Monday sections. Hub-DB's per-species page shows an L25 weather-boost row but that's for raid/egg catches, not Max Battle catches.
+
+Rules (all three forms):
 - CP values: comma-separated thousands (1,216 not 1216), bolded
 - "L20" and "L25" in parentheses after each value
 - "weather-boosted by" preceding the weather name(s); always include this phrase even if weather is implied
 - Weather names: capitalized, alphabetical when multiple (`Partly Cloudy or Windy`, `Snow or Windy`, `Sunny or Snow`)
-- Per-boss Hundo CPs go in the raid section AND in the Hundo CP Provenance Table at the bottom
+- Per-boss Hundo CPs go in the raid section AND in the Hundo CP Provenance Table at the bottom (Max Monday entries in the provenance table also use L20-only — leave the L25 + Weather columns empty or marked `n/a (Max Battle)`)
 
 **Anti-pattern (wrong):** `**Hundo CPs:** 1,772 Celesteela (L20) / 2,216 (L25, Snow or Windy); 2,101 Kartana (L20) / 2,626 (L25, Sunny or Snow)` — never combine two species on one Hundo CP line; give each species its own block.
 
@@ -557,9 +562,15 @@ Verify the featured Pokémon and bonus on LeekDuck the same week (not from cache
 
 Max Monday runs 6:00 AM to 9:00 PM local time. Include featured Dynamax Pokémon, whether it's a debut or continuation, type weaknesses, and a Trainer Tip.
 
-**REQUIRED for the featured Dynamax Pokémon:** include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted). Same rationale as raid bosses — players screen-check post-Max-Battle.
+**REQUIRED for the featured Dynamax Pokémon:** include the **L20 hundo catch CP** (15/15/15 IVs). Players screen-check post-Max-Battle to confirm IVs.
 
-**CRITICAL:** When suggesting attackers, defenders, or healers for Max Battles, only recommend Dynamax-capable Pokémon. Not every Pokémon in the game can Dynamax. Shadow Pokémon CANNOT be brought into Max Battles at all (they cannot Dynamax and cannot fill any team slot). Verify each recommended Pokémon is actually Dynamax-eligible AND non-Shadow before including it.
+**CRITICAL — L20 ONLY (corrected 2026-06-23):** Max Battle encounters are **L20 only**. There is NO weather-boosted L25 catch from Max Battles. Hub-DB's per-species page shows an L25 weather-boost row, but that applies to RAID and EGG catches — not Max Battles. Use the Max Monday Hundo CP locked format:
+
+> `**Hundo CPs:** **[L20 value]** (L20 Max Battle catch)`
+
+Do NOT include a "/ L25 weather-boosted" segment in any Max Monday section. See `feedback_max_battle_l20_only.md` for the rationale + anti-pattern examples.
+
+**CRITICAL — attacker eligibility:** When suggesting attackers, defenders, or healers for Max Battles, only recommend Dynamax-capable Pokémon. Not every Pokémon in the game can Dynamax. Shadow Pokémon CANNOT be brought into Max Battles at all (they cannot Dynamax and cannot fill any team slot). Verify each recommended Pokémon is actually Dynamax-eligible AND non-Shadow before including it.
 
 ### 9. Daily Discoveries
 **Standalone section.** Do NOT duplicate in Events.
