@@ -349,7 +349,7 @@ def render_report(sections, target, slop_hits, sourceless_hits, worst_sentences)
 # ----------------------------- main -----------------------------
 
 def parse_word_budget(s):
-    """Parse '1400-1700' into (floor, ceiling). Returns (None, None) on 'off'."""
+    """Parse '1400-1800' into (floor, ceiling). Returns (None, None) on 'off'."""
     if not s or s.lower() == "off":
         return (None, None)
     m = re.match(r"^\s*(\d+)\s*-\s*(\d+)\s*$", s)
@@ -422,7 +422,7 @@ def main():
     ap.add_argument("--target", type=float, default=6.0, help="Max grade per section (default 6.0)")
     ap.add_argument("--strict", action="store_true", help="Exit 1 on any tier-2 or sourceless flag too")
     ap.add_argument("--only", choices=["grade", "slop", "claims", "budget"], help="Run only one pass")
-    ap.add_argument("--word-budget", default="off", help="Body word range, e.g. '1400-1700'. 'off' disables. Default off so existing CI doesn't break; the newsletter workflow passes '1400-1700' explicitly.")
+    ap.add_argument("--word-budget", default="off", help="Body word range, e.g. '1400-1800'. 'off' disables. Default off so existing CI doesn't break; the newsletter workflow passes '1400-1800' explicitly (raised from 1400-1700 on 2026-06-23 to accommodate Spotlight Hour as a required H2 section).")
     args = ap.parse_args()
 
     if args.file:

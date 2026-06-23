@@ -243,7 +243,7 @@ Two-phase audit against the Beehiiv body — mechanical metrics first, then fore
 1. **Grade-level scoring per section** — triangulates FKGL + Gunning Fog + Coleman-Liau. Flag any section where the worst of the three exceeds **6.0**.
 2. **Worst-sentence list** — top 10 hardest sentences across the draft, each with the metric that flunks it. Use these as the auto-patch targets.
 3. **Sourceless-claim detection** — appeals to authority ("studies show", "most trainers", "according to data") without a URL within 300 characters of the claim. Heuristic-only; FLAG, not hard-fail.
-4. **Word-budget check** — must run with `--word-budget 1400-1700`. Out-of-range is a FLAG.
+4. **Word-budget check** — must run with `--word-budget 1400-1800`. Out-of-range is a FLAG.
 
 **Phase B — `ai-check` skill (replaces the prior `tools/ai_slop_patterns.json` regex pass):**
 
@@ -251,7 +251,7 @@ Invoke the `ai-check` skill on the Beehiiv body. It scores 9 signal categories (
 
 **Run command (Phase A; Beehiiv body extracted from Step 1 → temp file):**
 ```
-python3 tools/readability_check.py --file <beehiiv-body.md> --word-budget 1400-1700
+python3 tools/readability_check.py --file <beehiiv-body.md> --word-budget 1400-1800
 ```
 
 **Invocation (Phase B):** "Run ai-check on this draft body."
@@ -264,7 +264,7 @@ Category L FAIL conditions (any one → downgrade Run Status to `Partial`):
 - **Per failing section:** `Category L readability — <section> at grade <X.X> (target ≤ 6.0). Top sentence to fix: "<excerpt>" (grade <Y.Y>, <N> words).`
 - **Per ai-check finding:** `Category L AI tell (ai-check) — <signal category>: "<evidence quote>" in <section>. Verdict: <Human/Likely Human/Uncertain/Likely AI/AI>. Recommended fix: invoke humanize skill on this section.`
 - **Per sourceless claim:** `Category L sourceless claim — "<phrase>" in <section>; no URL within ±300 chars. <fix>.`
-- **Per word-budget miss:** `Category L word budget — body at <X> words; target 1,400–1,700. <over/under> by <delta>.`
+- **Per word-budget miss:** `Category L word budget — body at <X> words; target 1,400–1,800. <over/under> by <delta>.`
 
 If ai-check returns Likely AI or AI: invoke the `humanize` skill to rewrite the flagged sections, then re-run ai-check. The humanize skill applies the 9 humanization levers (perplexity injection, burstiness enforcement, hedge surgery, structural flattening, specificity insertion, voice + register, AI-transition removal, punctuation normalization, RLHF voice strip).
 

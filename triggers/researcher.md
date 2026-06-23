@@ -755,12 +755,12 @@ Two-phase audit BEFORE the Notion push:
 **Phase A — Mechanical metrics via `tools/readability_check.py`:**
 
 1. Save the assembled draft body (all sections, prose only — no Notion-page chrome) to `output/draft-[YYYY-MM-DD].md`.
-2. Run `python3 tools/readability_check.py --file output/draft-[YYYY-MM-DD].md --word-budget 1400-1700`.
+2. Run `python3 tools/readability_check.py --file output/draft-[YYYY-MM-DD].md --word-budget 1400-1800`.
 3. Tool checks three dimensions (the AI-tell regex pass is DEPRECATED — see Phase B):
    - **Grade-level per section** (target ≤ 6.0 — flat, every section): FKGL + Gunning Fog + Coleman-Liau triangulation
    - **Worst 10 sentences** across the whole draft — the ones to rewrite first
    - **Sourceless authority claims** — "studies show," "most trainers," etc. without a URL within ±300 chars
-   - **Word-budget check** — body prose must land in 1,400–1,700 (see `instructions/newsletter-creation.md` Word-Count Budget)
+   - **Word-budget check** — body prose must land in 1,400–1,800 (see `instructions/newsletter-creation.md` Word-Count Budget)
 
 **Phase B — AI-detection forensic + rewrite via `humanize` skills (replaces the prior `ai_slop_patterns.json` regex pass):**
 

@@ -1,6 +1,6 @@
 # Spawn Point — Graphics Brief
 
-Card specs for the embedded graphics that absorb reference data and let prose hit the 1,400–1,700 word target. Wired into `instructions/newsletter-creation.md` Section 6 (Raid Bosses) today; other sections aspirationally.
+Card specs for the embedded graphics that absorb reference data and let prose hit the 1,400–1,800 word target. Wired into `instructions/newsletter-creation.md` Section 6 (Raid Bosses) today; other sections aspirationally.
 
 **Source of truth**: Joe generates these cards. The newsletter agent's job is to provide a brief specifying which datapoints the card must carry, then write the prose around the embedded image. If a graphic is missing or pipeline-blocked, the agent falls back to text-only mode per each section's text-only cap.
 

@@ -108,7 +108,7 @@ The `tools/ai_slop_patterns.json` regex sweep that previously ran as part of `to
 
 These three patterns score moderate-strong on the `ai-check` skill and are easy to write past without noticing. Hardcode them into every drafting pass:
 
-**Em dash density: target ≤ 1 per 300 words.** AI uses em dashes 3–5× more than human writers, mostly as dramatic mid-sentence pivots. For Spawn Point at 1,400–1,700 words, that's ~5 em dashes maximum across the whole issue.
+**Em dash density: target ≤ 1 per 300 words.** AI uses em dashes 3–5× more than human writers, mostly as dramatic mid-sentence pivots. For Spawn Point at 1,400–1,800 words, that's ~6 em dashes maximum across the whole issue.
 - Most droppable pattern: em dash as period-substitute ("winding down — the window closes Tuesday" → "winding down. The window closes Tuesday.").
 - Same in Trainer Tips ("Saturday's coordination — ride that momentum" → "Saturday's coordination. Ride that momentum.").
 - Date-range en-dashes (`June 23–29`) and section-heading em dashes (`Mega Skarmory Is Here — and It's More Useful...`) don't count toward the density limit; the rule is about prose em dashes.
@@ -156,17 +156,19 @@ Every section in the newsletter should include an image when available. Images c
 - Daily Discoveries
 - Don't Miss
 
-## Word-Count Budget (target 1,400–1,700)
+## Word-Count Budget (target 1,400–1,800)
 
-Every issue must land **between 1,400 and 1,700 words of body prose**. Subject line options, headline options, opening paragraph options, and the Pre-Publish Audit Results / Hundo CP Provenance Table at the bottom do NOT count — measure only what the reader sees in the published email body.
+Every issue must land **between 1,400 and 1,800 words of body prose**. Subject line options, headline options, opening paragraph options, and the Pre-Publish Audit Results / Hundo CP Provenance Table at the bottom do NOT count — measure only what the reader sees in the published email body.
 
-**Why this changed (2026-06-15):** Issues #18 (3,949 words) and #19 (2,974 words) blew past the readable-email zone. Beehiiv engagement curves drop sharply past ~1,800 words on mobile, and most readers skim past the fold. Issue #20 hit 1,420 after readability rewrites — proof that tightening prose hits the target without losing depth.
+**Budget history:**
+- **2026-06-15:** Initial budget set to 1,400–1,700 after #18 (3,949 words) and #19 (2,974 words) blew past the readable-email zone. Beehiiv engagement curves drop sharply past ~1,800 words on mobile.
+- **2026-06-23:** Ceiling bumped from 1,700 → 1,800 to accommodate Spotlight Hour as a required H2 section (locked 2026-06-20; nine H2 sections now required vs prior eight). 1,800 is the practical Beehiiv-engagement ceiling; do not raise further without re-testing engagement.
 
 ### What graphics are available TODAY (2026-06-15)
 
 **Raid cards only.** Joe currently generates raid card graphics (per `instructions/graphics-brief.md` Card Type 1). The other card types in that document (Event card, GBL cup card, Max Battle card, Hundo CP strip) are FUTURE — they MIGHT be added later, but **do not assume they exist when planning a draft.**
 
-Practical implication: only Section 6 (Raid Bosses) is in graphics-replace mode today. Every other section operates in text-only mode and must hit its cap via prose tightening alone. Daily Discoveries (Section 9) and Don't Miss (Section 12) carry the biggest prose-only cuts; those are the levers that get a heavy week into the 1,400–1,700 zone.
+Practical implication: only Section 6 (Raid Bosses) is in graphics-replace mode today. Every other section operates in text-only mode and must hit its cap via prose tightening alone. Daily Discoveries (Section 9) and Don't Miss (Section 12) carry the biggest prose-only cuts; those are the levers that get a heavy week into the 1,400–1,800 zone.
 
 ### Per-section caps
 
@@ -205,7 +207,7 @@ For a heavy week (4 raid bosses + 2 major events + 2 Trending Topics — #18-sty
 
 ### Word-count enforcement
 
-The readability check tool (`tools/readability_check.py`) flags any issue whose body falls outside the budget. Run with `--word-budget 1400-1700` to enforce. Recon Category L includes this check post-publish.
+The readability check tool (`tools/readability_check.py`) flags any issue whose body falls outside the budget. Run with `--word-budget 1400-1800` to enforce. Recon Category L includes this check post-publish.
 
 ## Newsletter Structure
 
