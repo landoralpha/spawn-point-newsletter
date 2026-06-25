@@ -182,7 +182,7 @@ Know the current shiny rate tiers (post-Memories in Motion flattening, March 202
 
 ### 12. Mega Evolution & Primal Reversion
 
-For complete mechanics, Mega Levels (Base / High / Max / Super Max), rest periods, Mega Energy sources, raid auras, Super Mega Raid Day catch bonuses, the spend-to-level mechanic, and Primal Reversion details, see `instructions/mega-evolution-reference.md`. The reference now includes a **consolidated benefits-per-Mega-Level cheat sheet** (added 2026-06-24).
+For complete mechanics, Mega Levels (Base / High / Max / Super Max), rest periods, Mega Energy sources, the Mega-Evolved attack boost (Niantic FAQ #3334; do NOT write "aura" in newsletter copy), Super Mega Raid Day catch bonuses, the spend-to-level mechanic, and Primal Reversion details, see `instructions/mega-evolution-reference.md`. The reference now includes a **consolidated benefits-per-Mega-Level cheat sheet** (added 2026-06-24).
 
 Quick reference (Mega Level benefits):
 
@@ -192,11 +192,11 @@ Quick reference (Mega Level benefits):
 | Same-type catch XP | none | +50 | +100 | greater |
 | Same-type Candy XL chance | 0% | +10% | +25% | greater |
 | Rest period after 8-hr active | ~7 days | ~5 days | ~3 days | **24 hrs** |
-| Damage aura (party bonus in raids) | +30% type-match / +10% other (does NOT scale by level) |||| 
+| Mega-Evolved attack boost (party bonus in raids) | +30% type-match / +10% other (does NOT scale by level) |||| 
 
 - **Mega active duration:** 8 hours per use
 - **One Mega/Primal active** per trainer at a time
-- **Mega aura math** (raid bonus): +30% type-matched / +10% other types to OTHER trainers in lobby. Bringer is EXCLUDED unless another trainer also has an active Mega/Primal. Auras do NOT stack — only highest boost applies per attack type.
+- **Mega-Evolved attack boost** (raid bonus, per Niantic FAQ #3334 — Niantic does NOT use "aura"; do not write "Mega aura" / "type aura" in newsletter copy): +30% type-matched / +10% other types to OTHER trainers in lobby. Bringer is EXCLUDED unless another trainer also has an active Mega/Primal. Attack boosts do NOT stack — only the highest boost applies per attack type.
 - **Mega Levels progress only ONCE per individual per day via free Evolution.** Reaching Max = 30+ days minimum on the free path.
 
 **Spend-to-level (live May 23, 2026):** Trainers can spend that species' Mega Energy to push the Mega Level at ANY level — Base → High, High → Max, or Max → Super Max. Cost scales DOWN with prior Mega Evolution count for that species (the more times you've already Mega Evolved it, the cheaper each level becomes). Specific costs not published by Niantic. Mega Energy is per-species, NOT generic — Beedrill Energy only levels Mega Beedrill.
@@ -208,7 +208,7 @@ Quick reference (Mega Level benefits):
 - Primal Groudon boosts Fire/Grass/Ground at +30% (other types +10%)
 - Primal Kyogre boosts Water/Electric/Bug at +30% (other types +10%)
 - Primal Energy NOT earned from buddy walking (only Mega Energy is)
-- Primal aura is strictly stronger than Mega aura for its boosted types
+- Primal attack boost is strictly stronger than Mega-Evolved attack boost for its boosted types
 
 **2026 changes (Pokémon GO Tour: Kalos, Feb 28 – March 1, 2026):**
 - New Super Max Mega Level
@@ -661,7 +661,7 @@ Variety matters. The same 4–5 angles get over-used while 30+ remain dormant. E
 Heavily-reused (as of May 2026, per archive analysis):
 - XP/Stardust farming combos
 - Lucky Egg / Star Piece / Pinap stacking
-- Mega synergy auras
+- Mega-Evolved attack boost synergy
 - Raid counter recommendations
 
 Underused (rotate in when content allows):

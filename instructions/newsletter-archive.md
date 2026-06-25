@@ -343,7 +343,7 @@ Complete archive of every published issue of the Spawn Point Pokemon GO newslett
 - Shiny lock breaks (#13) recent — avoid for several more weeks.
 
 ### Trainer Tip Angle Rotation (most-used to least-used)
-Heavy rotation: XP/Stardust farming optimization, raid counter recommendations, Mega Evolution synergy, Lucky Egg/Star Piece/Pinap stacking, **Mega-aura coordination for full-lobby damage boost** (heavily used #14 Mega Lucario, #15 Mega Lucario, #16 Mega Gardevoir, #17 Mega Beedrill — consider rest).
+Heavy rotation: XP/Stardust farming optimization, raid counter recommendations, Mega Evolution synergy, Lucky Egg/Star Piece/Pinap stacking, **Mega-Evolved attack boost coordination for full-lobby damage boost** (heavily used #14 Mega Lucario, #15 Mega Lucario, #16 Mega Gardevoir, #17 Mega Beedrill — consider rest). [Note: historical entries below use "aura" — that was prior terminology; current convention per Niantic FAQ #3334 is "Mega-Evolved attack boost".]
 Recently used: party-play Premier Ball bonus (#15, #16); Shadow Raid Appraise-before-purify (#15); gender-gated evolution awareness (#16 Combee→Vespiquen); phone-orientation evolution trick (#17 Inkay→Malamar); high-Attack appraisal-first for Shadow Legendaries (#17 Shadow Dialga); 7 km Egg pool stacking with no-cap GO Points window (#17).
 Underused angles: Field Research task stacking, Pokédex completion strategy (last in #6), TM cycling, Buddy Adventure heart farming, Routes/Zygarde Cell collection, Gym defending Stardust, Hyper Training prep with Gold Bottle Cap (mentioned #14 only).
 

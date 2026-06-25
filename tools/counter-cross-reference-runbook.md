@@ -61,7 +61,7 @@ Return a markdown table per source (top 10), then synthesize:
 
 Mark exclusive moves with [exclusive]. Cite the source(s) supporting each pick: `[both]`, `[pokebattler+dialgadex]`, `[hub-db+dialgadex]`, etc.
 
-CRITICAL: For dual-type bosses, verify every charged move is super-effective using PoGO type-chart math (1.6 / 1.0 / 0.625 / 0.39, multiplicative). Cross-reference instructions/type-effectiveness-reference.md "Dual-type cancellation traps" section. Skip counters whose charged move is neutral or worse UNLESS the rationale is high raw DPS / bulk / Mega aura cross-promo (document the exception).
+CRITICAL: For dual-type bosses, verify every charged move is super-effective using PoGO type-chart math (1.6 / 1.0 / 0.625 / 0.39, multiplicative). Cross-reference instructions/type-effectiveness-reference.md "Dual-type cancellation traps" section. Skip counters whose charged move is neutral or worse UNLESS the rationale is high raw DPS / bulk / Mega-Evolved attack boost coordination (document the exception).
 
 Return under 1500 words.
 ```

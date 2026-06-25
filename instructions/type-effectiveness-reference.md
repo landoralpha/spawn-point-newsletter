@@ -118,7 +118,7 @@ These dual-typings recur in raid rotations AND have type-chart traps that produc
 For every "Premium" or "Budget" counter listed against a boss, compute:
 `multiplier = boss_type_chart[charged_move_type] × (boss_type_chart[charged_move_type] if dual_type else 1)`
 
-If `multiplier < 1.6`, the charged move is **not super-effective** on the boss. Flag the counter unless the rationale is documented (e.g., high raw DPS, bulk for survival, Mega aura cross-promo). The Pokebattler `aggregation=AVERAGE` mode does sometimes rank neutral-coverage Megas highly due to raw stats, but the Hub article + Hub-DB typically correct this.
+If `multiplier < 1.6`, the charged move is **not super-effective** on the boss. Flag the counter unless the rationale is documented (e.g., high raw DPS, bulk for survival, Mega-Evolved attack boost cross-promo). The Pokebattler `aggregation=AVERAGE` mode does sometimes rank neutral-coverage Megas highly due to raw stats, but the Hub article + Hub-DB typically correct this.
 
 ## Sources
 

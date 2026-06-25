@@ -493,7 +493,7 @@ python3 tools/check_counter_moveset.py \
 
 The script returns a per-counter verdict:
 - **✓ SE charged** — passes the type-chart check (CM multiplier ≥ 1.6× on the boss's typing).
-- **⚠ NEUTRAL charged (fast SE — borderline OK)** — fast move SE, charged neutral. Borderline; acceptable IF the counter is documented as a raw-DPS / bulk / Mega-aura pick, otherwise FLAG.
+- **⚠ NEUTRAL charged (fast SE — borderline OK)** — fast move SE, charged neutral. Borderline; acceptable IF the counter is documented as a raw-DPS / bulk / Mega-Evolved-attack-boost-coordination pick, otherwise FLAG.
 - **⚠ NEUTRAL charged — SUBOPTIMAL** — both moves neutral or worse. FLAG with the recommended SE alternative from pokedex.json's movepool.
 - **✗ RESISTED charged — DROP** — charged move resisted on the boss's typing. Hard FLAG; counter must be removed or its moveset corrected.
 

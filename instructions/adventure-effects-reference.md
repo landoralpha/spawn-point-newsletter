@@ -13,8 +13,8 @@ There are three separate systems that get conflated:
 | System | Trigger | Who has it | What it does |
 |---|---|---|---|
 | **Adventure Effects** | Specific Charged Attack used outside battle, costs Stardust + Candy | Small specific roster of Legendary/Mythical (Origin Formes, Fusions, Crowned Forms, Necrozma forms, Eternatus) | Temporary world/encounter bonus (6 min – 24 hrs) |
-| **Mega Evolution raid aura** | Pokémon actively Mega-Evolved on field | All Megas | +30% same-type / +10% other for OTHER trainers in raid |
-| **Primal Reversion raid aura** | Pokémon in raid party (no activation needed beyond reverting) | Only Primal Groudon, Primal Kyogre | +30% to typed attacks for OTHER trainers in raid |
+| **Mega-Evolved attack boost** (Niantic FAQ #3334; community calls it "Mega aura," but Niantic does NOT use that term) | Pokémon actively Mega-Evolved on field | All Megas | +30% same-type / +10% other for OTHER trainers in raid |
+| **Primal-Reverted attack boost** (same mechanic family; not officially "aura") | Pokémon in raid party (no activation needed beyond reverting) | Only Primal Groudon, Primal Kyogre | +30% to typed attacks for OTHER trainers in raid |
 
 **No Mega or Primal Pokémon has its own Adventure Effect.** If you see a community claim like "Mega Garchomp's Dragon Soul Adventure Effect," it is not a Niantic-documented mechanic — flag as community speculation.
 
@@ -26,7 +26,7 @@ There are three separate systems that get conflated:
 - **Duration per block:** 6 minutes (Roar of Time, Behemoth Blade, Behemoth Bash) or 10 minutes (everything else)
 - **Stacking:** Up to 2 hours can be added in a single tap-spree; total active time can extend up to **24 hours** maximum
 - **Concurrency:** Only ONE Adventure Effect may be active per trainer at a time. Activating a second different effect ends the first.
-- **External stacking:** Adventure Effects DO stack with Incense, Lucky Eggs, Star Pieces, active Mega Evolution, and Primal raid auras (these are separate systems)
+- **External stacking:** Adventure Effects DO stack with Incense, Lucky Eggs, Star Pieces, active Mega Evolution, and Primal-Reverted attack boosts (these are separate systems)
 - **Multi-player stacking:** Adventure Effects are personal, NOT shared. Each trainer activates their own.
 - **Mega Level requirement:** None. Adventure Effects are tied to the move + species, not to Mega Level.
 - **TM restriction:** Adventure-Effect moves typically CANNOT be obtained via Charged TM. Only learned at capture during the corresponding event.
@@ -111,7 +111,7 @@ There are **9** confirmed Adventure Effects in the game.
 | Freeze Shock | Raid Hour, jumpy raid bosses | +25% Premier Ball catch rate |
 | Sunsteel Strike | Need Espeon at night, day evolutions on demand | Day evolutions at any hour |
 | Moongeist Beam | Need Ursaluna or Umbreon | Bypass nighttime requirement on demand |
-| Behemoth Blade | Mega Raid Day, Elite Raids | +10% raid damage on top of Mega aura |
+| Behemoth Blade | Mega Raid Day, Elite Raids | +10% raid damage on top of Mega-Evolved attack boost |
 | Behemoth Bash | Low-trainer raids, Super Mega Raids | -10% damage taken; survival tool |
 | Dynamax Cannon | Every Max Monday, G-Max debuts | Lvl 4 Max Moves break the normal cap |
 
@@ -132,7 +132,7 @@ All 9 Adventure Effects in this document are **Niantic-confirmed** via official 
 
 **Unverified / community speculation to AVOID:**
 - Any "Mega [X] Adventure Effect" not in this list — Megas don't have them
-- Any "Primal Adventure Effect" — Primals don't have them, only the passive raid aura
+- Any "Primal Adventure Effect" — Primals don't have them, only the passive Primal-Reverted attack boost
 - "Team-wide Adventure Effects" — Adventure Effects are personal, not shared
 
 ## Sources

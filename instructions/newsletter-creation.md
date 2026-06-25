@@ -783,6 +783,10 @@ These claims have appeared in Spawn Point drafts without source backing. Each is
 | `boosted shiny rate` / `increased shiny rate` (Spotlight Hour context) | Same as above. | Same as above. |
 | `Spotlight Hour.*shiny boost` | Same as above. | Same as above. |
 | `wild encounter rate.*boosted shiny` (anywhere outside of explicit Niantic-confirmed events: Community Day, special raid days, Hatch Day) | Most events do NOT boost the per-encounter shiny rate. Only Community Day, specific Raid Days, Hatch Days, GO Fest, and Niantic-confirmed special windows do. | Verify from Niantic's official event page; if no shiny boost is listed, do NOT claim one. Default framing: spawn volume increase only. |
+| `[Mm]ega aura` (added 2026-06-24) | Niantic does NOT use "aura" in official copy. Per Niantic Help FAQ #3334 the mechanic is the "Mega-Evolved attack boost." See [[feedback-niantic-language]]. | "Mega-Evolved attack boost" / "the Mega's attack boost" / "type-matched attack boost" |
+| `[Pp]rimal aura` (added 2026-06-24) | Same — "aura" is community jargon, not Niantic terminology. | "Primal-Reverted attack boost" |
+| `[Tt]ype aura` / `[Rr]aid aura` (added 2026-06-24) | Same. | "type-matched attack boost" / "Mega-Evolved attack boost" / "Primal-Reverted attack boost" depending on context |
+| standalone `\baura\b` in a Mega/Primal/raid context | Same — covers cases the more-specific patterns above miss. | Reword to "attack boost" with the appropriate prefix |
 
 **Shiny rate sources of truth (when in doubt):**
 - Niantic event blog post for that specific event

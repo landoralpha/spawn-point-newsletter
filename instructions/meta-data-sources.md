@@ -277,7 +277,7 @@ Examples:
 For mechanics-heavy questions about these systems, consult the dedicated reference files:
 
 - `instructions/adventure-effects-reference.md` — Adventure Effects (the 9 confirmed Charged-Attack-based outside-battle abilities)
-- `instructions/mega-evolution-reference.md` — Mega Evolution and Primal Reversion mechanics, levels, costs, auras, 2026 changes
+- `instructions/mega-evolution-reference.md` — Mega Evolution and Primal Reversion mechanics, levels, costs, Mega-Evolved attack boost (Niantic FAQ #3334 — community jargon is "aura"; never use), 2026 changes
 - `instructions/dynamax-reference.md` — Dynamax/Gigantamax mechanics, Max Particles, tier costs, G-Max roster, role composition
 
 These three references replace the older condensed coverage in framework angles 12 (Mega) and 21 (Dynamax). The framework angles point to these files for full detail.

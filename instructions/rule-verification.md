@@ -179,7 +179,7 @@ The repo's reference files are static snapshots. When pricing, mechanics, or eli
 | `instructions/niantic-help-reference.md` | Friend cap, level cap, Mega Energy storage cap, feature retirements (Spotlight Hour-style) | Quarterly |
 | `instructions/shiny-odds-reference.md` | Boosted shiny rates for events, Lucky odds | Per relevant event run |
 | `instructions/dynamax-reference.md` | MP soft cap, storage cap, Gigantamax species count | Per Niantic patch |
-| `instructions/mega-evolution-reference.md` | Mega Levels, aura percentages, eligible species | Per Niantic patch |
+| `instructions/mega-evolution-reference.md` | Mega Levels, Mega-Evolved attack boost percentages (Niantic FAQ #3334; not "aura"), eligible species | Per Niantic patch |
 
 **Quarterly check (every ~13 issues, or trigger run on the first Monday of Feb / May / Aug / Nov):**
 

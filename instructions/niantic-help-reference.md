@@ -572,7 +572,7 @@ Three official devices: **Pokémon GO Plus**, **Poké Ball Plus**, **Pokémon GO
 ### Niantic-confirmed (help center / news posts)
 
 - 45-minute raid window, lobby caps, pass system
-- Mega Evolution: 8-hour duration, one active at a time, +30%/+10% raid aura math, raid auras don't stack
+- Mega Evolution: 8-hour duration, one active at a time, +30%/+10% Mega-Evolved attack boost math (per Niantic FAQ #3334 — NOT "aura," that's community jargon), attack boosts don't stack
 - Primal Reversion: same 8-hour duration, separate Primal Energy resource
 - Friendship Levels exact bonus structure
 - Daily bonuses (catch streak, spin streak, defender bonus 50/day)

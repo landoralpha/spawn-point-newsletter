@@ -25,12 +25,12 @@
 
 ### Benefits at each Mega Level — CONSOLIDATED CHEAT SHEET (added 2026-06-24)
 
-Quick reference for newsletter editorial — what the reader actually gains from each level. Combines the catch-bonus, rest-period, raid-aura, and Energy-cost-reduction effects into one table.
+Quick reference for newsletter editorial — what the reader actually gains from each level. Combines the catch-bonus, rest-period, Mega-Evolved attack boost, and Energy-cost-reduction effects into one table.
 
 | Mechanic | Base (L1) | High (L2) | Max (L3) | Super Max |
 |---|---|---|---|---|
-| **Damage bonus to party (Mega aura)** — type-matched | +30% to type-matched attacks | +30% (same — aura math doesn't change by level) | +30% (same) | +30% (same) |
-| **Damage bonus to party (Mega aura)** — other types | +10% to non-matched attacks | +10% (same) | +10% (same) | +10% (same) |
+| **Mega-Evolved attack boost to party** — type-matched | +30% to type-matched attacks | +30% (same — attack boost math doesn't change by level) | +30% (same) | +30% (same) |
+| **Mega-Evolved attack boost to party** — other types | +10% to non-matched attacks | +10% (same) | +10% (same) | +10% (same) |
 | **Same-type catch Candy** | +1 Candy | +2 Candy | +3 Candy | greater than +3 (Niantic: "greater bonus," specific value not published) |
 | **Same-type catch XP bonus** | none | +50 XP per catch (community datamine) | +100 XP per catch (community datamine) | greater (Niantic: "greater bonus") |
 | **Same-type Candy XL chance bonus** | 0% | +10% | +25% | greater than +25% |
@@ -41,9 +41,11 @@ Quick reference for newsletter editorial — what the reader actually gains from
 
 **Key editorial framing for newsletter copy:**
 
-- The **+30% damage aura** does NOT scale with Mega Level — Base and Max give the same +30% to type-matched attacks. The Mega Level matters for **catch bonuses, rest period, and XL Candy odds**, NOT raid damage.
-- The bringer is **excluded** from the damage aura UNLESS another trainer in the lobby also has an active Mega/Primal. Always pair up for coordinated Mega raids.
-- Auras do NOT stack — two Megas in the lobby = only the highest applicable boost applies per attack type. Don't bring the same Mega as a partner; bring different types or coordinate one Mega with one Primal.
+- The **+30% Mega-Evolved attack boost** does NOT scale with Mega Level — Base and Max give the same +30% to type-matched attacks. The Mega Level matters for **catch bonuses, rest period, and XL Candy odds**, NOT raid damage.
+- The bringer is **excluded** from the attack boost UNLESS another trainer in the lobby also has an active Mega/Primal. Always pair up for coordinated Mega raids.
+- Attack boosts do NOT stack — two Megas in the lobby = only the highest applicable boost applies per attack type. Don't bring the same Mega as a partner; bring different types or coordinate one Mega with one Primal.
+
+**Niantic language convention** (do NOT use "aura" / "Mega aura" / "type aura" — see Language convention section below for the full rule). Use "Mega-Evolved attack boost" / "type-matched attack boost" per Niantic FAQ #3334.
 
 ### Super Mega Raid Day catch bonus — STANDING RULE since May 23, 2026 (added 2026-06-24)
 
@@ -98,16 +100,18 @@ While a Pokémon is actively Mega-Evolved as your active Mega:
 
 **Tip phrasing rule:** Use specific values for Candy (+1/+2/+3) since Niantic confirms the scaling. Use "increased" for XP since exact integers are community-derived.
 
-### Mega Aura in Raids (and Max Battles)
+### Mega-Evolved Attack Boost in Raids (and Max Battles)
+
+(Per Niantic FAQ #3334. Niantic does NOT use "aura" in official copy — use "Mega-Evolved attack boost" / "type-matched attack boost" in newsletter content.)
 
 While at least one Mega-Evolved Pokémon is on the battlefield in a raid:
 - Other trainers' attacks deal **1.1x damage** (+10%) for non-matching types
 - Attacks matching the Mega's type(s) deal **1.3x damage** (+30%)
 
-**Critical aura rules:**
-- Aura applies to **OTHER trainers** in the raid, not the trainer who brought the Mega
+**Critical attack-boost rules:**
+- The attack boost applies to **OTHER trainers** in the raid, not the trainer who brought the Mega
 - For the bringer to get the boost, **another trainer in the lobby must also have an active Mega/Primal**
-- **Auras DO NOT stack.** Multiple Megas in one raid = only the highest applicable boost applies per attack type.
+- **Attack boosts DO NOT stack.** Multiple Megas in one raid = only the highest applicable boost applies per attack type.
 - Active while the Mega is alive on the battlefield. (Note: "persists after fainting" is community folklore for Primals; for Megas, the boost ends when the Mega is removed/fainted.)
 
 ### Mega Energy Sources
@@ -185,7 +189,9 @@ Approximately **49+ Mega forms** in game (counting Charizard X/Y, Mewtwo X/Y sep
 - **Special / Timed Research** during themed events
 - **NOT earned from buddy walking** (Niantic-confirmed: walking yields Mega Energy but not Primal Energy)
 
-### Active-Primal Aura in Raids
+### Active-Primal Attack Boost in Raids
+
+(Same mechanic as Mega-Evolved attack boost — Niantic does NOT use "aura" in official copy.)
 
 | Bonus | Primal Groudon | Primal Kyogre |
 |---|---|---|
@@ -222,8 +228,8 @@ Both Primals, when caught from raids, can learn exclusive signature charged atta
 
 | Mechanic | What it is | Resource | Duration |
 |---|---|---|---|
-| **Mega Evolution** | Temporary form change with raid aura, catch bonuses, and modified stats | Mega Energy | 8 hours active |
-| **Primal Reversion** | Same as Mega but for Groudon/Kyogre with different aura math | Primal Energy | 8 hours active |
+| **Mega Evolution** | Temporary form change with Mega-Evolved attack boost, catch bonuses, and modified stats | Mega Energy | 8 hours active |
+| **Primal Reversion** | Same as Mega but for Groudon/Kyogre with different attack-boost types | Primal Energy | 8 hours active |
 | **Adventure Effects** | Out-of-battle map abilities tied to specific Charged Attacks | Stardust + Candy | 6 min – 24 hours |
 
 **Mega and Primal Pokémon do NOT have Adventure Effects.** Adventure Effects are tied to specific Charged Attacks on a small Legendary roster (Origin Formes, Fusions, Crowned Forms, Necrozma forms, Eternatus). See `instructions/adventure-effects-reference.md` for the full list.
@@ -235,7 +241,7 @@ Both Primals, when caught from raids, can learn exclusive signature charged atta
 ### When to Mega Evolve
 
 - **Before catch sequences during type-matching Community Days** (Mega Tyranitar before a Larvitar CD for +1 Rock Candy)
-- **Before Raid Hours of a same-type boss** (the +30% aura helps your raid party — coordinate so multiple trainers bring Megas)
+- **Before Raid Hours of a same-type boss** (the +30% Mega-Evolved attack boost helps your raid party — coordinate so multiple trainers bring Megas)
 - **Before walking long distances with same-type buddies** (Candy XL grind acceleration at High/Max/Super Max)
 - **At the start of an 8-hour window**, ideally early in the play session
 
@@ -260,22 +266,22 @@ Both Primals, when caught from raids, can learn exclusive signature charged atta
 | Mega Gardevoir | Psychic/Fairy | Psychic/Fairy CDs |
 | Mega Houndoom | Dark/Fire | Dark/Fire coverage |
 | Mega Tyranitar | Rock/Dark | Rock/Dark CDs |
-| Mega Manectric | Electric (single) | Premier Electric aura |
+| Mega Manectric | Electric (single) | Premier Electric attack-boost lead |
 | Mega Lucario | Fighting/Steel | Fighting/Steel coverage |
 | Primal Groudon | Ground/Fire (boosts Grass too) | Massive 3-type catch coverage |
 | Primal Kyogre | Water (boosts Electric/Bug) | Water/Electric/Bug events |
 
 ### Raid Hour Mega Rotation Strategy
 
-- Coordinate with raid groups: 1–2 trainers bring same-type Megas for the +30% aura on the raid boss's counter type
-- Don't all bring the same Mega — auras don't stack, second same-type Mega is wasted utility
-- The Mega-bringer doesn't get aura unless another trainer also brings a Mega/Primal — pair up
+- Coordinate with raid groups: 1–2 trainers bring same-type Megas for the +30% Mega-Evolved attack boost on the raid boss's counter type
+- Don't all bring the same Mega — attack boosts don't stack; second same-type Mega is wasted utility
+- The Mega-bringer doesn't get the attack boost unless another trainer also brings a Mega/Primal — pair up
 
 ### Primal Strategy
 
 - **Primal Groudon** in raids vs anything weak to Fire/Grass/Ground (Steel, Ice, Bug, Grass, Rock raid bosses)
 - **Primal Kyogre** in raids vs anything weak to Water/Electric/Bug (Fire, Rock, Ground, Flying)
-- **Primal aura is strictly stronger than any Mega aura** for its three boosted types — always preferred when available
+- **Primal attack boost is strictly stronger than any Mega-Evolved attack boost** for its three boosted types — always preferred when available
 - Save Primal Energy for raid weeks (Primal Raids are the only Primal Energy source besides research)
 - Bring Mega Rayquaza or top Dragon Megas alongside Primal Kyogre for combined DPS
 
@@ -284,13 +290,13 @@ Both Primals, when caught from raids, can learn exclusive signature charged atta
 ## Source Confidence Map
 
 **Niantic-confirmed (official help center / pokemongo.com posts):**
-- 8-hour duration, one Mega/Primal active at a time, +30%/+10% raid aura math, aura applies to other trainers, no stacking, Primal types per species, Mega Levels exist with bonuses, Super Max introduced Feb 20 2026, Super Mega Raids require 7+ trainers, Mega Energy storage 10,000, Mewtwo Mega debut at GO Fest 2026 Global (free), trade resets Mega Level, restricted from standard GBL, Link Charges/Link Holder mechanics, daily once-per-day level contribution, signature attacks 130 power, **Mega Energy spend-to-level at ALL levels effective May 23, 2026 with cost scaling down by prior Mega Evolution count (Falinks Super Mega Raid Day announcement)**.
+- 8-hour duration, one Mega/Primal active at a time, +30%/+10% Mega-Evolved attack boost math, attack boost applies to other trainers, no stacking, Primal types per species, Mega Levels exist with bonuses, Super Max introduced Feb 20 2026, Super Mega Raids require 7+ trainers, Mega Energy storage 10,000, Mewtwo Mega debut at GO Fest 2026 Global (free), trade resets Mega Level, restricted from standard GBL, Link Charges/Link Holder mechanics, daily once-per-day level contribution, signature attacks 130 power, **Mega Energy spend-to-level at ALL levels effective May 23, 2026 with cost scaling down by prior Mega Evolution count (Falinks Super Mega Raid Day announcement)**.
 
 **Community-derived but well-documented (GamePress, Pokémon GO Hub, Serebii, LeekDuck):**
 - Specific initial Mega Energy costs (100/200/300/400 by tier), exact rest period durations (7/5/3/1 days), exact Mega Level requirements (1/7/30 evolutions), Super Max requires 5,000 ME, +1/+2/+3 catch candy at Base/High/Max scaling, +50/+100 catch XP at High/Max, +10%/+25% Candy XL at High/Max, 5 Mega Energy per 1 km buddy walk.
 
 **Unverified / community folklore — flag carefully:**
-- "Primal aura persists after the Primal faints" — Niantic text says "while on the battlefield." Phrase as: "the aura is active while the Primal is on the field."
+- "Primal attack boost persists after the Primal faints" — Niantic text says "while on the battlefield." Phrase as: "the attack boost is active while the Primal is on the field."
 - Exact Catch XP integers (+50 / +100) — datamine-based, not in official docs.
 
 ---

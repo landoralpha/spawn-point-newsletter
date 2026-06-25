@@ -17,7 +17,7 @@ Output: per-counter table marking whether the listed Charged Move is super-effec
 
 If the FAST move is also of an attacking type that's super-effective, it gets a
 "fast-also-SE" note; if neither move is SE, the counter is flagged as POSSIBLY
-SUBOPTIMAL (acceptable rationale: raw DPS, bulk, Mega aura — must be documented).
+SUBOPTIMAL (acceptable rationale: raw DPS, bulk, Mega-Evolved attack boost coordination — must be documented).
 
 The script reads its move→type mapping from a small bundled JSON (`moves.json`).
 For moves not in the bundle, pass `--unknown-ok` to skip the move silently, or
