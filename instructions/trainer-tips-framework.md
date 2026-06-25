@@ -182,16 +182,26 @@ Know the current shiny rate tiers (post-Memories in Motion flattening, March 202
 
 ### 12. Mega Evolution & Primal Reversion
 
-For complete mechanics, Mega Levels (Base / High / Max / Super Max), rest periods, Mega Energy sources, raid auras, and Primal Reversion details, see `instructions/mega-evolution-reference.md`.
+For complete mechanics, Mega Levels (Base / High / Max / Super Max), rest periods, Mega Energy sources, raid auras, Super Mega Raid Day catch bonuses, the spend-to-level mechanic, and Primal Reversion details, see `instructions/mega-evolution-reference.md`. The reference now includes a **consolidated benefits-per-Mega-Level cheat sheet** (added 2026-06-24).
 
-Quick reference:
-- Mega active duration: 8 hours
-- One Mega/Primal active per trainer at a time
-- Same-type catch Candy: +1 (Base) / +2 (High) / +3 (Max) / greater (Super Max)
-- XL Candy chance on same-type catches: none (Base), +10% (High), +25% (Max)
-- Increased catch XP at higher Mega Levels
-- Mega aura in raids: +30% same-type / +10% other to OTHER trainers in lobby (auras don't stack — only highest applies)
-- Mega Levels progress only ONCE per individual per day. Reaching Max = 30+ days minimum.
+Quick reference (Mega Level benefits):
+
+| Mechanic | Base | High | Max | Super Max |
+|---|---|---|---|---|
+| Same-type catch Candy | +1 | +2 | +3 | >+3 |
+| Same-type catch XP | none | +50 | +100 | greater |
+| Same-type Candy XL chance | 0% | +10% | +25% | greater |
+| Rest period after 8-hr active | ~7 days | ~5 days | ~3 days | **24 hrs** |
+| Damage aura (party bonus in raids) | +30% type-match / +10% other (does NOT scale by level) |||| 
+
+- **Mega active duration:** 8 hours per use
+- **One Mega/Primal active** per trainer at a time
+- **Mega aura math** (raid bonus): +30% type-matched / +10% other types to OTHER trainers in lobby. Bringer is EXCLUDED unless another trainer also has an active Mega/Primal. Auras do NOT stack — only highest boost applies per attack type.
+- **Mega Levels progress only ONCE per individual per day via free Evolution.** Reaching Max = 30+ days minimum on the free path.
+
+**Spend-to-level (live May 23, 2026):** Trainers can spend that species' Mega Energy to push the Mega Level at ANY level — Base → High, High → Max, or Max → Super Max. Cost scales DOWN with prior Mega Evolution count for that species (the more times you've already Mega Evolved it, the cheaper each level becomes). Specific costs not published by Niantic. Mega Energy is per-species, NOT generic — Beedrill Energy only levels Mega Beedrill.
+
+**Super Mega Raid Day catch bonus (standing rule since Falinks, May 23, 2026):** Every catch from a Super Mega Raid Day comes with **Mega Level 1 already unlocked**. Trainers do NOT pay the initial Mega Energy cost for their first Mega Evolution of that species. Confirmed across Falinks, Mewtwo X/Y (GO Fest 2026 Global), Skarmory. Treat as standing mechanic for ALL future Super Mega Raid Day events — do not call it "new" for each one after Falinks.
 
 **Primal Reversion (Groudon and Kyogre only):**
 - Same 8-hour duration, separate Primal Energy resource

@@ -1,6 +1,6 @@
 # Mega Evolution & Primal Reversion Reference
 
-**Last verified:** May 18, 2026 (includes the Falinks Super Mega Raid Day Mega Energy spend-to-level rollout effective May 23, 2026)
+**Last verified:** June 24, 2026 (includes the Super Mega Raid Day pre-unlocked-Mega-Level-1 generalization, confirmed through Falinks May 23 + Mewtwo X/Y GO Fest 2026 Global + Skarmory June 27)
 
 ## Mega Evolution — Complete System
 
@@ -22,6 +22,47 @@
 | **Super Max** | Reach Max + spend 5,000 Mega Energy on that individual | New Feb 20, 2026 |
 
 **Critical rule:** Only ONE Mega Evolution per individual Pokémon per day counts toward leveling up. Subsequent same-day Megas still grant catch/damage bonuses but don't progress the level. Reaching Max takes a minimum of **30 days**.
+
+### Benefits at each Mega Level — CONSOLIDATED CHEAT SHEET (added 2026-06-24)
+
+Quick reference for newsletter editorial — what the reader actually gains from each level. Combines the catch-bonus, rest-period, raid-aura, and Energy-cost-reduction effects into one table.
+
+| Mechanic | Base (L1) | High (L2) | Max (L3) | Super Max |
+|---|---|---|---|---|
+| **Damage bonus to party (Mega aura)** — type-matched | +30% to type-matched attacks | +30% (same — aura math doesn't change by level) | +30% (same) | +30% (same) |
+| **Damage bonus to party (Mega aura)** — other types | +10% to non-matched attacks | +10% (same) | +10% (same) | +10% (same) |
+| **Same-type catch Candy** | +1 Candy | +2 Candy | +3 Candy | greater than +3 (Niantic: "greater bonus," specific value not published) |
+| **Same-type catch XP bonus** | none | +50 XP per catch (community datamine) | +100 XP per catch (community datamine) | greater (Niantic: "greater bonus") |
+| **Same-type Candy XL chance bonus** | 0% | +10% | +25% | greater than +25% |
+| **Rest period (cooldown after 8-hour active window)** | ~7 days | ~5 days | ~3 days | **24 hours** |
+| **Mega Energy cost to re-Evolve after rest** | Full cost — minus the discount that scales with prior Mega Evolution count | (same — cost decreases linearly as rest timer ticks down; once rest ends, re-Evolve is FREE) | (same) | (same) |
+| **Spend-to-level path** (live May 23, 2026) | Spend that species' Mega Energy to push Base → High at any time. Cost discount scales with prior Mega Evolution count. | Same — spend ME to push High → Max | Same — spend ME to push Max → Super Max (replaces the prior 5,000 ME fixed cost with scaled cost) | Final level — no further levels to spend toward |
+| **Catch on raid bosses (any type)** | +1 Candy | +1 (same) | +1 (same) | +1 (same) |
+
+**Key editorial framing for newsletter copy:**
+
+- The **+30% damage aura** does NOT scale with Mega Level — Base and Max give the same +30% to type-matched attacks. The Mega Level matters for **catch bonuses, rest period, and XL Candy odds**, NOT raid damage.
+- The bringer is **excluded** from the damage aura UNLESS another trainer in the lobby also has an active Mega/Primal. Always pair up for coordinated Mega raids.
+- Auras do NOT stack — two Megas in the lobby = only the highest applicable boost applies per attack type. Don't bring the same Mega as a partner; bring different types or coordinate one Mega with one Primal.
+
+### Super Mega Raid Day catch bonus — STANDING RULE since May 23, 2026 (added 2026-06-24)
+
+**Every Super Mega Raid Day catch arrives with Mega Level 1 already unlocked.** This is the "grind-skip" mechanic that defines Super Mega Raid Day economically. Confirmed in successive Niantic Super Mega Raid Day blog posts.
+
+**Confirmed Super Mega Raid Day events through publication:**
+
+| Date | Species | Source |
+|---|---|---|
+| Saturday, May 23, 2026 | Mega Falinks (debut) | [Niantic — Falinks Super Mega Raid Day](https://pokemongo.com/news/falinks-super-mega-raid-day-2026) |
+| Saturday, July 11–12, 2026 (GO Fest 2026 Global) | Mega Mewtwo X + Mega Mewtwo Y (debut) | [LeekDuck — GO Fest 2026 Global](https://leekduck.com/events/pokemon-go-fest-2026-global/) |
+| Saturday, June 27, 2026 | Mega Skarmory (debut) | [Niantic — Skarmory Super Mega Raid Day](https://pokemongo.com/news/skarmory-super-mega-raid-day-2026) |
+
+**Editorial implication for newsletter copy:**
+
+- The pre-unlocked Mega Level 1 means trainers do NOT need to pay the initial Mega Energy cost for their first Mega Evolution of that species. This is the single biggest value lever in Super Mega Raid Day events — it bypasses the typical 200-400 ME hurdle.
+- The catch IS still the base-form (e.g., catch is Skarmory, not Mega Skarmory). The "Mega Level 1 unlocked" applies to that individual Skarmory's Mega Evolution status — when the trainer first Mega Evolves it, no ME is required and the Pokémon enters Base level immediately.
+- Combined with the spend-to-level mechanic (live May 23, 2026), trainers who catch multiple Skarmory from the Super Mega Raid Day can use the day's Mega Energy farm to push past Base toward High/Max quickly.
+- The pattern likely continues for ALL future Super Mega Raid Day debuts. Until Niantic announces otherwise, treat this as a standing mechanic for newsletter framing — do NOT call it "new" or "special" for each individual Super Mega Raid Day after Falinks.
 
 ### Rest Period / Cooldown by Mega Level
 
