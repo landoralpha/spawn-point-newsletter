@@ -320,7 +320,34 @@ For every M-3 hit:
 
 This rule traces back to #20 (Wingull SH "shiny at boosted odds") + #21 (Pidgey SH "shiny at boosted odds") — both fabricated. The full banned-phrase table lives in `instructions/newsletter-creation.md` Banned editorial claims; M-3 is the recon enforcement layer. See [[no-unsourced-shiny-boost]] for the editorial rule + Niantic-confirmed-vs-fabricated event lists.
 
-**M-4 and beyond:** future recurring fabrications go here. The pattern: identify a phrase the agent uses as filler that has no source backing, add it to the `instructions/newsletter-creation.md` Banned editorial claims table, add an M-row here referencing it, and add a memory entry documenting the incident class.
+**M-4: False "PvPoke JS-rendered" source failure (added 2026-06-29 after #22 incident).**
+
+The PvPoke website (pvpoke.com) IS a JS-rendered SPA. The PvPoke ranking DATA on GitHub raw IS static JSON. They are different surfaces. The agent must not conflate them.
+
+If a Spawn Point research run reports any of:
+- "PvPoke JS-rendered" / "PvPoke unreachable" / "GBL rankings unavailable" / "PvPoke website inaccessible"
+
+AND the actual GBL section uses qualified language for picks ("likely top picks", "based on standing meta", etc.) WITHOUT a specific PvPoke citation OR a documented 404 from the GitHub raw JSON URL:
+
+→ HARD FLAG `Category M-4 false PvPoke source failure — agent claimed PvPoke unreachable without probing the GitHub raw JSON. Required: fetch https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/{cup}/overall/rankings-{cap}.json and quote the actual HTTP status. If 200 (parseable or oversized): the data exists, use it. If real 404: PvPoke has not published [cup] rankings for this rotation; reframe as "PvPoke has not published [cup] rankings yet" not as "JS-rendered limitation".`
+
+Auto-patchable when the cup directory genuinely 404s (re-frame to the published-status language). Manual when the JSON IS reachable (the picks need to be re-pulled).
+
+Real-world: Spawn Point #22 (July 6-12, 2026) marked PvPoke as "JS-rendered (GBL rankings unavailable)" and the Fantasy Cup section used vague community-meta picks. The actual diagnosis: `fantasy/rankings-2500.json` returns a real HTTP 404 because PvPoke hasn't published a Fantasy Cup rotation for July 2026. Correct framing: "PvPoke has not published Fantasy Cup rankings yet" not "JS-rendered."
+
+**M-5: Wrong LeekDuck GBL URL reported as "404" (added 2026-06-29 after #22 incident).**
+
+LeekDuck GBL pages use cup-slug-specific URLs (`gbl-forever-forward_{league}_{cup-slug}`). A generic `/events/gbl/` URL doesn't exist.
+
+If a research run reports "LeekDuck GBL page: 404" without quoting the exact URL hit:
+
+→ HARD FLAG `Category M-5 wrong LeekDuck GBL URL — agent reported GBL page 404 without quoting the URL. The active-cup URL pattern is gbl-forever-forward_{league}_{cup-slug}. Required: re-probe with the cup-slug-specific URL (e.g., gbl-forever-forward_ultra-league_fantasy-cup-ultra-league-edition for Fantasy Cup UL). The cup slug should be derivable from the Niantic event name; if Niantic hasn't published the slug yet, fall back to ScrapedDuck events.min.json which carries the LeekDuck eventID verbatim.`
+
+Real-world: Spawn Point #22 run log marked LeekDuck GBL as 404. Direct probe of the Fantasy Cup-specific URL returned 200 with full event details. The agent likely tried a generic URL.
+
+See `instructions/meta-data-sources.md` for the canonical PvPoke + LeekDuck URL patterns and full anti-pattern documentation.
+
+**M-6 and beyond:** future recurring fabrications go here. The pattern: identify a phrase the agent uses as filler that has no source backing, add it to the `instructions/newsletter-creation.md` Banned editorial claims table, add an M-row here referencing it, and add a memory entry documenting the incident class.
 
 Both researcher Step 5.5 Phase C and recon Category M-3+ READ the same banned-claims table in `instructions/newsletter-creation.md`. When a new banned phrase is added there, both checks pick it up automatically — single source of truth.
 

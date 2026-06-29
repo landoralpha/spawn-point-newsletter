@@ -17,7 +17,18 @@ The cloud agent has three outbound network primitives:
 - News-aggregator RSS — Google News, Bing News, Feedburner-Hub, all 200.
 - Niantic Labs newsroom (`nianticlabs.com/news`).
 - `pokemongo.com/en/news`, `pokemongo.com/feed`.
-- `leekduck.com/events/` and event pages.
+- `leekduck.com/events/` (the calendar index) and individual event pages.
+- **LeekDuck GBL pages (URL convention, locked 2026-06-29):** the active GBL rotation page is **cup-slug specific**, NOT a generic `/events/gbl/` URL. Pattern:
+  ```
+  https://leekduck.com/events/gbl-forever-forward_{league}_{cup-slug}/
+  ```
+  Where `{league}` = `great-league` / `ultra-league` / `master-league` and `{cup-slug}` is the formatted cup name (e.g., `summer-cup-great-league-edition`, `fantasy-cup-ultra-league-edition`, `sunshine-cup-great-league-edition`). Open rotations (no cup) use the `gbl-forever-forward_{league}_{league}-split-1` pattern.
+  
+  Confirmed examples reachable as of 2026-06-29 (HTTP 200):
+  - `https://leekduck.com/events/gbl-forever-forward_great-league_summer-cup-great-league-edition/` (Summer Cup GL, June 30 – July 7)
+  - `https://leekduck.com/events/gbl-forever-forward_ultra-league_fantasy-cup-ultra-league-edition/` (Fantasy Cup UL, July 7 – July 14)
+  
+  **Anti-pattern (DO NOT report as a real URL):** `https://leekduck.com/events/gbl/` returns 404 because it doesn't exist. If a research agent reports "LeekDuck GBL page 404" without quoting the exact URL hit, treat as a wrong-URL error and re-probe with the cup-slug-specific pattern above. Real-world example: Spawn Point #22 run log marked LeekDuck GBL as 404 → direct probe of the Fantasy Cup-specific URL returned 200 with full event details (dates, CP cap, eligible types).
 - **Pokémon GO Hub** — `pokemongohub.net/*` (articles, tier lists, RSS feed). The earlier "Cloudflare wall" verdict was based on local-Mac IP tests; Vercel's IP space does NOT trigger Hub's anti-bot. Verified live with article URLs, the Max Attackers tier list, the Max Defenders tier list, and `pokemongohub.net/feed/`.
 - **`db.pokemongohub.net/pokemon/[N]`** — hundo CP pages reachable directly. No more need to compute from pokedex.json as a primary path (still useful as redundancy / for not-yet-listed Pokémon).
 - Reddit subreddit `.rss` feeds (`/r/<sub>/.rss`) — Atom feeds, real entries.
@@ -224,6 +235,24 @@ https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/{cup}/o
 Where:
 - `{cup}` = `all` for standard format, OR a specific cup name (`jungle`, `retro`, `fantasy`, `kingdom`, `holiday`, `remix`, etc.)
 - `{cap}` = `1500` (Great League), `2500` (Ultra League), `10000` (Master League)
+
+### 🔒 Anti-pattern: never report PvPoke as "JS-rendered limitation" (locked 2026-06-29)
+
+The PvPoke **website** (`pvpoke.com`) IS a JS-rendered SPA and is hard to scrape. The PvPoke **data** (raw JSON on GitHub) is static and fully reachable via the URL pattern above. Do NOT conflate them.
+
+**Required behavior:**
+1. Before claiming "PvPoke is JS-rendered" or "PvPoke unavailable" or any similar source-failure label, hit the GitHub raw JSON URL for the relevant `{cup}` and `{cap}`.
+2. Quote the actual HTTP status returned. Per `feedback_counter_source_order` status-code discipline: never collapse 200/200-oversized/403/5xx into "404."
+3. If the JSON returns 200 (parseable or oversized), the data exists. Parse it (using the recon Category A truncation-tolerant rule if oversized).
+4. If the JSON returns a **real 404**, the cup directory genuinely doesn't exist in PvPoke's published rankings. Report this honestly: `"PvPoke has not published [cup] rankings for this rotation"` (linked to GitHub URL), NOT `"PvPoke JS-rendered limitation"`.
+5. To enumerate which cups PvPoke currently has published, call `https://api.github.com/repos/pvpoke/pvpoke/contents/src/data/rankings` and grep for directory names.
+
+**Real-world example (2026-06-29, Spawn Point #22):** Fantasy Cup July 2026 rotation was due to start July 7. The research agent reported "PvPoke JS-rendered (GBL rankings unavailable)" and used qualified language throughout the GBL section. Direct probe of `raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/fantasy/overall/rankings-2500.json` returned a real **HTTP 404** because PvPoke's rankings directory genuinely does not contain a `fantasy` folder for this rotation. The agent should have:
+- Hit the JSON URL and quoted the 404
+- Reported it as "PvPoke has not published Fantasy Cup rankings yet"
+- Fallen back to LeekDuck for type eligibility + community meta knowledge for picks
+
+NOT reported a tooling limitation that doesn't exist.
 
 ### Examples
 
