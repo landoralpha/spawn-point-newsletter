@@ -108,10 +108,10 @@ The `tools/ai_slop_patterns.json` regex sweep that previously ran as part of `to
 
 These three patterns score moderate-strong on the `ai-check` skill and are easy to write past without noticing. Hardcode them into every drafting pass:
 
-**Em dash density: target ≤ 1 per 300 words.** AI uses em dashes 3–5× more than human writers, mostly as dramatic mid-sentence pivots. For Spawn Point at 1,400–1,800 words, that's ~6 em dashes maximum across the whole issue.
+**🔒 Em dash density: ZERO em dashes in body prose (locked 2026-06-29 per `feedback_no_em_dashes` memory).** Em dashes (—) are an AI-writing tell that is NOT Joe's voice. Replace every em dash with a period, comma, or parentheses. The prior "≤1 per 300 words" target is superseded. En dashes (–) for numeric ranges (e.g., "2:00–5:00 PM", "8–12 min") are still fine, the rule is specifically about em dashes as sentence punctuation. DO NOT DEVIATE unless Joe explicitly approves.
 - Most droppable pattern: em dash as period-substitute ("winding down — the window closes Tuesday" → "winding down. The window closes Tuesday.").
 - Same in Trainer Tips ("Saturday's coordination — ride that momentum" → "Saturday's coordination. Ride that momentum.").
-- Date-range en-dashes (`June 23–29`) and section-heading em dashes (`Mega Skarmory Is Here — and It's More Useful...`) don't count toward the density limit; the rule is about prose em dashes.
+- Date-range en-dashes (`June 23–29`) are fine. Section-heading em dashes were previously allowed under the prior ≤1/300 target, but per the 2026-06-29 zero-em-dash lock they should also be replaced with periods or colons (`Mega Skarmory Is Here. And It's More Useful...` or `Mega Skarmory Is Here: More Useful Than You Think`).
 - Pre-push grep check: count `—` in the body; if ≥ 6 in a 1,500-word draft, cut down.
 
 **Don't make every Trending Topic paragraph open with a bold lead.** The Trending Topic's strongest paragraphs use bold-phrase-as-section-header (e.g. "**Defensive typing that almost nothing touches.**"), but applying it to *every* paragraph creates "architecturally perfect" parallel structure that ai-check flags as Signal D (structural tells). Pattern: leave the first and last paragraphs with bold leads; drop the bold on the middle two. The asymmetry reads more human even though the information is the same.
@@ -783,6 +783,7 @@ These claims have appeared in Spawn Point drafts without source backing. Each is
 | `boosted shiny rate` / `increased shiny rate` (Spotlight Hour context) | Same as above. | Same as above. |
 | `Spotlight Hour.*shiny boost` | Same as above. | Same as above. |
 | `wild encounter rate.*boosted shiny` (anywhere outside of explicit Niantic-confirmed events: Community Day, special raid days, Hatch Day) | Most events do NOT boost the per-encounter shiny rate. Only Community Day, specific Raid Days, Hatch Days, GO Fest, and Niantic-confirmed special windows do. | Verify from Niantic's official event page; if no shiny boost is listed, do NOT claim one. Default framing: spawn volume increase only. |
+| `—` (em dash anywhere in body prose, added 2026-06-29) | 🔒 Joe-voice rule: ZERO em dashes per [[feedback_no_em_dashes]]. They were AI leftovers, not his voice. En dashes (–) for numeric ranges only. | Replace each em dash with a period, comma, or parentheses. Audit: `grep -c '—' <draft>` should return 0 in body prose. |
 | `[Mm]ega aura` (added 2026-06-24) | Niantic does NOT use "aura" in official copy. Per Niantic Help FAQ #3334 the mechanic is the "Mega-Evolved attack boost." See [[feedback-niantic-language]]. | "Mega-Evolved attack boost" / "the Mega's attack boost" / "type-matched attack boost" |
 | `[Pp]rimal aura` (added 2026-06-24) | Same — "aura" is community jargon, not Niantic terminology. | "Primal-Reverted attack boost" |
 | `[Tt]ype aura` / `[Rr]aid aura` (added 2026-06-24) | Same. | "type-matched attack boost" / "Mega-Evolved attack boost" / "Primal-Reverted attack boost" depending on context |
