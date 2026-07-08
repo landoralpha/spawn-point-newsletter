@@ -175,24 +175,21 @@ Icon source of truth: the recolored PNGs live in `assets/brand-icons/` (generate
 
 **Report emails only:** researcher Step 7 (Pipeline Complete), researcher Step 4.5 (Research Plan), recon Step 6 (result), monitor Step 6b (major news). Degraded (Step 0.5) and cleanup (Step 6c) emails NEVER carry an image — alert paths stay fast and dependency-free.
 
-Generation (one curl, before assembling the body):
+Generation (one MCP call, before assembling the body): call the Spawn-Point-Fetcher MCP `generate_image` tool with a short `theme` word:
 
 ```
-POST https://fal.run/fal-ai/flux/schnell
-Authorization: Key $FAL_KEY        ← provided in the trigger prompt config; if absent, skip image
-Content-Type: application/json
-{"prompt": "<locked formula below>", "image_size": {"width": 1200, "height": 600}, "num_images": 1}
+generate_image(theme="ocean wave")   → {"success": true, "url": "https://...fal.media/...png"}
 ```
 
-The response's `images[0].url` (fal.media host, publicly served) goes straight into the hero `<img src>`.
+The tool holds `FAL_KEY` server-side (never in the trigger), applies the locked brand prompt below, and returns a public `fal.media` URL. Put `result.url` straight into the hero `<img src>`. Optional args: `width` / `height` (default 1200×600), `prompt_override` (leave unset in normal use).
 
-**Locked prompt formula** — fill ONE theme slot, change nothing else:
+**Locked prompt formula** (baked into the MCP tool — shown here for reference; the tool fills the ONE theme slot):
 
 > Minimal abstract editorial graphic, [THEME] motif, flowing geometric shapes and soft gradient bars, deep midnight navy #0A1628 background, crimson #E30B5C and indigo #3D52A0 gradient accents, ice white highlights, premium dark tech aesthetic, generous negative space, no text, no letters, no logos, no characters
 
-`[THEME]` examples: `ocean wave` (water-week issue), `lightning storm` (electric), `radio broadcast signal` (major news), `magnifying lens` (recon report). One or two words, drawn from the email's subject matter. Never Pokémon likenesses — abstract motifs only (IP safety).
+`theme` examples: `ocean wave` (water-week issue), `lightning storm` (electric), `radio broadcast signal` (major news), `magnifying lens` (recon report). One or two words, drawn from the email's subject matter. Never Pokémon likenesses — abstract motifs only (IP safety).
 
-**Failure = omit.** Any error (no FAL_KEY, non-200, timeout over 30s, missing URL): drop the hero `<tr>` entirely and note `[hero image skipped: <reason>]` in the Run Log Notes. Never retry more than once, never block the email on the image.
+**Failure = omit.** If `generate_image` returns `success: false` (FAL_KEY not set on the server, fal error, timeout, missing URL) or the tool is absent: drop the hero `<tr>` entirely and note `[hero image skipped: <error>]` in the Run Log Notes. Never retry more than once, never block the email on the image. The email is fully branded without it.
 
 ## Required sections per email type
 
