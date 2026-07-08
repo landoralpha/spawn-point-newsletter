@@ -32,13 +32,13 @@ For EACH event found in Step 1, fetch the official announcement:
 ### Step 3: Check Specific Event Types
 Now that you have the major events, fill in the weekly recurring content:
 
-**Daily Discoveries (Starting March 3, 2026):**
-- Sunday: Double-Time Sunday (Incense/Lures last 2x as long)
-- Monday: Fast-Track Monday (2x GO Points) + Max Monday (6:00 AM - 9:00 PM)
-- Tuesday: Showcase Tuesday (PokéStop Showcases)
-- Wednesday: Raid rotation + Raid Hour (6:00 PM - 7:00 PM)
-- Thursday: GO Battle Thursday (4x Stardust, increased battle sets)
-- Friday: Friendship Friday (special trade bonuses)
+**Daily Discoveries (Forever Forward season — current; see `seasons-reference.md` for the authoritative schedule):**
+- Sunday: Scenic Sunday (Routes, Buddy Candy, Mateo encounters)
+- Monday: Max Monday (in-person Max Battle Rare Candy XL; event runs 6:00 AM - 9:00 PM, Max Hour spike 6-7 PM)
+- Tuesday: Showcase Tuesday (up to 5 PokéStop Showcase entries)
+- Wednesday: Wednesday Raid Hour (in-person Raid Rare Candy XL; raid rotation flips at 6 AM, Raid Hour 6:00 PM - 7:00 PM)
+- Thursday: GO Battle Thursday + Spotlight Hour (6-7 PM)
+- Friday: Friendship Friday (extra Special Trades, -20% Stardust on trades)
 
 **Raid Bosses:**
 - Check current Five-Star, Mega, and Shadow raid bosses
@@ -457,7 +457,7 @@ When raids rotate mid-week:
 
 #### REQUIRED: Hundo CPs
 
-Include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted) for every featured raid boss (Five-Star, Mega base-form catch, Shadow) AND every featured Dynamax/Max Battle boss. Players screen-check post-raid to identify hundos — these two numbers are the deliverable.
+For every featured **raid boss** (Five-Star, Mega base-form catch, Shadow), include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted). For every featured **Dynamax/Max Battle boss (Max Monday)**, include the **L20 hundo catch CP ONLY** — Max Battle catches are always L20, there is NO weather-boosted L25 catch (see `feedback_max_battle_l20_only.md` and Section 8). Players screen-check post-raid to identify hundos — these numbers are the deliverable.
 
 **LOCKED FORMAT** (no per-section flexibility — every Hundo CP line in every issue uses this exact form):
 
@@ -499,19 +499,15 @@ Don't shortcut with "same counters as the previous boss." If two bosses share ty
 
 Acknowledge gaps in plain language: *"Don't have Primal Groudon? Most trainers don't either — Garchomp, Rhyperior, and Landorus Therian all duo this comfortably."* Brand voice (per `instructions/brand-voice.md`) applies — knowledgeable-friend asides, not data-dump bullet lists.
 
-##### Source balance: Pokebattler ⟷ Pokémon GO Hub Database
+##### Source order: Hub-DB first, DialgaDex second, Pokebattler tertiary
 
-**Use BOTH sources when picking counters — balance, don't pick one and dump.** They optimize for different things:
+**Order locked 2026-06-22 (matches recon Category C).** Query in this order and stop when you have a confident pick:
 
-- **Pokebattler** (`fight.pokebattler.com/raids/...`) — simulation-driven, ranks by `ESTIMATOR` / `TTW`. Best for: precise damage math, identifying theoretical-optimum lineups, calling out the absolute fastest clears. Risk: lists often over-weight Mega forms with legacy/exclusive moves the median trainer doesn't have.
-- **Pokémon GO Hub Database** (`db.pokemongohub.net/pokemon/[N]/counters`) — community-curated "Best Counters Highlights" + per-tier annotations. Best for: accessibility flags, non-exclusive-move alternatives, and what a real trainer roster will field. Risk: less precise on raw DPS ranking; their order doesn't always match Pokebattler's estimator.
+1. **Pokémon GO Hub Database FIRST** (`db.pokemongohub.net/pokemon/[N]/counters`) — the primary source. Community-curated "Best Counters Highlights" with per-counter movesets and accessibility annotations. This is what a real trainer roster fields, and it flags non-exclusive-move alternatives directly. Its curated top-7 is your default Premium/Budget scaffold.
+2. **DialgaDex SECOND** (`dialgadex.com/?p=[dex]&f=[form]`) — confirm/tiebreaker. Its Baseline / Budget / ESpace tiers map cleanly to Spawn Point's Premium / Budget split; use it to resolve a Hub-DB pick you're unsure about or for challenging matchups (debuts, Super Mega, low-meta bosses).
+3. **Pokebattler TERTIARY** (`fight.pokebattler.com/raids/...`) — last-resort corroboration only. Simulation-driven ESTIMATOR/TTW math, precise but over-weights Mega forms with legacy/exclusive moves the median trainer lacks; its responses for popular legendaries run 5-12 MB and overflow the fetch_url cap (that is `[pokebattler: response oversized]`, NEVER a 404). Reach for it only when Hub-DB + DialgaDex leave a genuine gap.
 
-**How to balance:**
-1. Pull both lists. A counter appearing in BOTH = high-confidence recommendation; cite it without hedging.
-2. Where they DISAGREE, surface why: usually Pokebattler's pick has an exclusive move (Elite TM-only, Adventure Effect, Mega signature) that Hub-DB downranks for accessibility. Newsletter convention is to cite the Pokebattler pick AS the premium recommendation but always pair with the Hub-DB-friendly non-exclusive alternative (per `feedback_raid_premium_budget.md` and Category C accessibility-tier rule in recon).
-3. For the budget tier specifically, lean Hub-DB — it weights "what trainers actually have" more naturally than Pokebattler's pure-DPS estimator.
-
-This isn't a 50/50 averaging rule — it's a cross-check. If Pokebattler ranks Mega Beedrill #1 with Drill Run (Elite TM) and Hub-DB lists it #3 with standard Poison Jab/Sludge Bomb, the right Spawn Point write-up is: lead with Mega Beedrill (both agree it's premium), cite its standard non-exclusive moveset (Hub-DB's accessibility framing), and skip the Drill-Run-specific hedge unless the reader's whole bench requires it.
+**Premium + budget in every write-up:** whatever the source, always give a premium pick AND a non-exclusive budget alternative (per `feedback_raid_premium_budget.md` and the Category C accessibility-tier rule in recon). If a premium pick relies on an exclusive move (Elite TM, Adventure Effect, Mega signature), name the standard non-exclusive moveset alongside it. Example: lead with Mega Beedrill (Hub-DB premium), cite its standard Poison Jab / Sludge Bomb, and skip the Drill-Run (Elite TM) hedge unless the reader's whole bench requires it.
 
 #### What NOT to Mention (filler that pads without informing)
 
@@ -869,4 +865,4 @@ done
 - Trainer Tips should provide NEW strategic insights, not restate event info. Use `instructions/trainer-tips-framework.md` as a checklist for every tip.
 - Trainer Tips MUST be directly about the section's content. A Max Monday tip must be about the featured Dynamax Pokémon. A Raid Boss tip must be about that raid boss. Do NOT attach generic tips to a section just because they share a day of the week.
 - NO DUPLICATION across sections
-- Suggest 5 titles, 5 subtitles, and 5 opening paragraphs for Joe to choose from
+- Suggest 5 titles, 5 subject lines, and 5 opening paragraphs for Joe to choose from (the locked 5+5+5 format; the title's subtitle is a single line per Section 2, not a 5-option menu)

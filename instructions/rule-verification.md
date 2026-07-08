@@ -185,7 +185,7 @@ The repo's reference files are static snapshots. When pricing, mechanics, or eli
 
 The agent does a special pre-research pass:
 1. Spot-check 5 high-traffic values from `cost-reference.md` against the in-app shop or recent Niantic news. Examples: 100 PokéCoins → 0.99 USD, 600,000 Stardust to power up L40→50, 200 Mega Energy first-time Mega.
-2. Spot-check 5 high-traffic values from `niantic-help-reference.md` against current Niantic news/help center. Examples: friend cap (650), level cap (80), Mega Energy storage cap (10,000), Spotlight Hour status (retired).
+2. Spot-check 5 high-traffic values from `niantic-help-reference.md` against current Niantic news/help center. Examples: friend cap (650), level cap (80), Mega Energy storage cap (10,000), Spotlight Hour status (active again since June 18, 2026).
 3. For each value that has changed: flag `[REFERENCE DRIFT: instructions/X.md value Y should be Z per [source URL]]` in the email summary.
 4. The agent does NOT auto-update the reference files (that's a human review step). Joe sees the drift report and updates files as needed.
 
@@ -247,7 +247,7 @@ When a help center FAQ disagrees with an official Niantic news post (`pokemongo.
 Examples of stale help center values surfaced in May 2026:
 - Help center says friend cap is 550. Actual cap is **650** (raised late 2025).
 - Help center references levels 70-80 ambiguously. Actual cap is **80** (raised Oct 15, 2025).
-- Help center for Spotlight Hour still active. Spotlight Hours **retired March 3, 2026**.
+- Help center for Spotlight Hour is active — correct again. Spotlight Hours retired March 3, 2026 but **RETURNED June 18, 2026** with the Forever Forward season (now a required newsletter section).
 - Help center says Mega Energy storage 9,999. Actual cap **10,000** (raised Feb 20, 2026).
 - Help center lists 8 Adventure Effects. Actual count is **9** (Eternatus Dynamax Cannon added Aug 2025).
 

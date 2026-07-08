@@ -10,7 +10,7 @@
 Examples surfaced during research (May 2026):
 - Help center FAQ/2938 says friend cap is 550. **Actual cap is 650** (raised late 2025/early 2026).
 - Help center FAQ/101 references levels 70-80. **Actual cap is 80** (raised Oct 15, 2025; was 50 before).
-- Help center FAQ/4846 describes Spotlight Hour as active. **Spotlight Hours retired March 3, 2026.**
+- Help center FAQ/4846 describes Spotlight Hour as active. **Correct again as of June 18, 2026** — Spotlight Hour was retired March 3, 2026 but RETURNED with the Forever Forward season.
 - Help center FAQ for Mega Energy says 9,999. **Actual cap is 10,000** (raised Feb 20, 2026).
 
 When agent research finds an apparent conflict, default to the more recent authoritative source. The help center is **a starting point for mechanics, not the final word for current values.**
@@ -40,7 +40,7 @@ When agent research finds an apparent conflict, default to the more recent autho
 - **Storage cap:** ≥3 passes = can't acquire more
 
 ### Shadow Raids (faq/4054, faq/4055)
-- **In-person only** — no Remote Raid Pass
+- **Remote-raidable** — Remote Raid Passes work. NOT weekend-only and NOT in-person-only. Treat remote + any-day-during-the-window as the silent default in newsletter copy (see `feedback_shadow_raid_remote_default.md`). The FAQ's older "in-person only" phrasing is stale.
 - **Purified Gem button** appears bottom-left after boss enrages
 - **Purified Gems:** 4 Shadow Shards = 1 Purified Gem; max 10 in inventory; up to 5 per Shadow Raid
 - **Effect stacks** when multiple trainers use them
@@ -262,8 +262,8 @@ Quick reference (Niantic-confirmed):
 |---|---|---|---|---|---|
 | Good | 1 day / 1 pt | — | — | — | Special trades unlock |
 | Great | 7 days / 7 pt | +1 | Small | Small | — |
-| Ultra | 30 days / 30 pt | +2 | Medium | Medium | EX Raid invite share |
-| Best | 90 days / 90 pt | +4 | Large | Large | EX Raid invite share |
+| Ultra | 30 days / 30 pt | +2 | Medium | Medium | — (EX Raids deprecated) |
+| Best | 90 days / 90 pt | +4 | Large | Large | — (EX Raids deprecated) |
 
 **1 friendship point per day** (some features allow more).
 
@@ -363,13 +363,16 @@ Quick reference (Niantic-confirmed):
 - **Duration:** 1 hour, global
 - **Featured:** New, rare, Legendary, or Mythical raid bosses
 
-### Spotlight Hour — RETIRED March 3, 2026
-- The Niantic FAQ/4846 page is stale. Spotlight Hours retired with the Memories in Motion season launch (March 3, 2026)
-- Replaced by Daily Discoveries (Sunday Lure 2x duration, Monday Fast-Track + Max, Tuesday Showcase, Wednesday Raid Hour, Thursday GBL 4x Stardust, Friday Friendship Friday)
+### Spotlight Hour — ACTIVE (returned June 18, 2026)
+- Spotlight Hour was retired at the Memories in Motion launch (March 3, 2026) but RETURNED with the Forever Forward season (first featured in issue #19, week of June 18, 2026). FAQ/4846 describing it as active is correct again.
+- **It is a REQUIRED standalone section in every newsletter** (see `newsletter-creation.md` Section 7.5).
+- **Cadence:** Thursdays 6:00–7:00 PM local time. One featured species with a 2× bonus (Catch Candy / Catch Stardust / Catch XP / Evolution XP / Transfer Candy, varies weekly). Spotlight Hour boosts spawn VOLUME, not per-encounter shiny rate (see `feedback_no_unsourced_shiny_boost.md`).
+- Daily Discoveries still runs alongside it under the current Forever Forward rotation (Scenic Sunday, Max Monday, GO Battle Thursday + Spotlight Hour, Friendship Friday) — see `seasons-reference.md` for the authoritative schedule.
 
 ### Max Monday (faq/4883)
-- **Cadence:** Every Monday, 6:00–7:00 PM local time
+- **Cadence:** Every Monday. The event runs **6:00 AM to 9:00 PM local time**; the featured Dynamax "Max Hour" spike is **6:00–7:00 PM local**. Spawn Point headers use the 6 AM–9 PM window (see `dynamax-reference.md`).
 - **Effect:** A different featured Dynamax Pokémon takes over all Power Spot Max Battles
+- **Catch level: L20 only** (Max Battle catches are always L20 — there is NO weather-boosted L25 catch; see `feedback_max_battle_l20_only.md`).
 
 ### GO Pass (faq/4972)
 - **Tiers:** Basic (free) and Deluxe (in-app purchase)
@@ -583,7 +586,7 @@ Three official devices: **Pokémon GO Plus**, **Poké Ball Plus**, **Pokémon GO
 
 - Friend cap: **650** (help center says 550)
 - Trainer level cap: **80** (help center says 50; was raised Oct 2025)
-- Spotlight Hour: **retired March 2026** (help center page still active)
+- Spotlight Hour: **active again since June 18, 2026** (retired March 2026, returned with Forever Forward; help center page correct again)
 - Mega Energy storage cap: **10,000** (help center says 9,999; raised Feb 2026)
 
 ### Community-derived (NOT in Niantic articles):

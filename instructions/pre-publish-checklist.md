@@ -12,6 +12,7 @@ Sections to verify (each requires its own Sources line):
 - Section 5: Events
 - Section 6: Raid Bosses (each subsection — Mega, 5-Star, Shadow — gets its own Sources line)
 - Section 7: GO Battle League
+- Section 7.5: Spotlight Hour (required standalone section every issue — needs its own Sources line)
 - Section 8: Max Monday
 - Section 9: Daily Discoveries
 - Section 10: Trending Topic
@@ -121,10 +122,12 @@ Specifically check:
 
 ### 9. Hundo CP Provenance & Verification Audit (HARD FAIL)
 
-For every featured catchable Pokémon — every Five-Star raid boss, Mega raid boss, Shadow raid boss, the featured Max Monday Dynamax/Gigantamax Pokémon, the Community Day featured Pokémon (evolved form), AND any debut species reachable via raid/egg-hatch/wild during the newsletter window — the section MUST include:
+For every featured catchable Pokémon — every Five-Star raid boss, Mega raid boss, Shadow raid boss, the Community Day featured Pokémon (evolved form), AND any debut species reachable via raid/egg-hatch/wild during the newsletter window — the section MUST include:
 
 1. **L20 hundo catch CP** (15/15/15 IVs, normal weather / unboosted)
 2. **L25 hundo catch CP** (15/15/15 IVs, weather-boosted)
+
+**EXCEPTION — Max Monday / Max Battle bosses are L20 ONLY.** The featured Dynamax/Gigantamax Pokémon still needs a hundo CP line, but it is **L20 only** — Max Battle catches are always L20 and there is NO weather-boosted L25 catch. Do NOT require or add an L25 value for a Max Monday section (see `feedback_max_battle_l20_only.md` and `newsletter-creation.md` Section 8).
 
 **Provenance requirement (HARD FAIL):** every CP value in the draft must trace to a `## Hundo CP Provenance` list maintained in `output/research-brief-[YYYY-MM-DD].md`. For each species, the list records ONE of:
 
@@ -149,7 +152,7 @@ with cpm = 0.5974 (L20) or 0.6679 (L25). The recomputed value MUST equal the dra
 
 **Other failure modes to also fix (existing):**
 - Section names a raid boss but omits hundo CPs → ADD both L20 and L25 values.
-- Only L20 is listed → ADD L25 weather-boosted.
+- A **raid** section lists only L20 → ADD L25 weather-boosted. **Do NOT apply this to a Max Monday section** — Max Battle catches are L20 only, so an L20-only Max Monday CP line is CORRECT and must not be flagged.
 - Wrong form (e.g., Tapu Lele's hundo CP cited for the Mega Banette section) → FIX to the section's actual featured Pokémon.
 - Fetched value differs from computed value → trust the fetched value if Hub-DB is current; trust the computed value if Hub-DB hasn't added the species yet.
 
@@ -167,7 +170,7 @@ These are the claims most likely to be wrong because they bypass verification. I
 ### 11. Subject Line A/B Audit
 
 Verify the draft begins with the **Subject Line A/B Options** block per `newsletter-creation.md` Section 1. Check:
-- Exactly 5 alternatives, each from a different headline pattern (subject-led, action-led, theme-led, number-led, curiosity-gap)
+- Exactly 5 alternatives, each from a different headline pattern (subject-led, action-led, theme-led/hook, deadline-led, curiosity/cliffhanger — the canonical set in `newsletter-creation.md` Section 1 and `brand-voice.md`)
 - A "Selected for draft:" line naming one of the five
 - None of the five pattern-matches the banned headline list ("This Week in Pokémon GO" / "Weekly Roundup" / "Updates: [date range]")
 
@@ -233,11 +236,13 @@ Before publishing, verify every required section from `newsletter-creation.md` i
 4. Events (Section 5 — for special/limited-time events; can be omitted if no qualifying events)
 5. Raid Bosses (Section 6)
 6. GO Battle League (Section 7)
-7. Max Monday (Section 8)
-8. Daily Discoveries (Section 9)
-9. Trending Topic (Section 10)
-10. **Don't Miss (Section 11)** — exactly 3 callouts. Often forgotten.
-11. Sign-off
+7. **Spotlight Hour (Section 7.5)** — required standalone section every issue. High-frequency miss (#20, #21).
+8. Max Monday (Section 8)
+9. Daily Discoveries (Section 9)
+10. Trending Topic (Section 10)
+11. What's New This Month/Season (Section 11 — conditional; only when a month/season transition falls in the window)
+12. **Don't Miss (Section 12)** — 3 to 5 callouts. Often forgotten.
+13. Sign-off
 
 If a section is intentionally omitted (e.g., no Events for a slow week), note it in the research brief so it's a deliberate choice.
 

@@ -5,7 +5,7 @@ Comprehensive optimization reference for Pokémon GO Community Days. Use this wh
 ## Format Quick Facts
 
 - **Duration:** 3 hours (typically 2:00 PM - 5:00 PM local)
-- **Featured move bonus window:** Up to 4-5 hours after event ends (varies by event - always check the specific event page)
+- **Featured move bonus window:** 4 hours after event ends (the current 2026 standard for both Regular CD and CD Classic; Niantic's FAQ still says "up to 5 hours" but is stale — always check the specific event page). See `niantic-help-reference.md` and `reference_community_day_window`.
 - **Post-event raid bonus:** Often 2-hour Mega/Shadow raid window with bonus Mega Energy
 - **Shiny rate:** ~1/25 during core 3 hours. Drops back to standard ~1/512 during the post-event catch buffer
 - **Special Research:** Optional $1.99 ticket with 3 special-background encounters + items
@@ -47,7 +47,7 @@ Comprehensive optimization reference for Pokémon GO Community Days. Use this wh
 
 ## 3. Featured Move Evolution Window
 
-- Featured move applies if you evolve during the event OR up to 4-5 hours after (varies by event)
+- Featured move applies if you evolve during the event OR up to 4 hours after (the 2026 standard; verify per-event on the Niantic news page)
 - Always check the specific event page for the exact cutoff
 - All past CD moves are Elite TM-able. December CD weekend reruns ~24 previous CD Pokémon with their moves natively.
 - **Strategy:** Evolve during the 3-hour core when possible (you're already mass-evolving). The post-event buffer is your safety net, not your plan.

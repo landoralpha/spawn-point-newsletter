@@ -1,6 +1,6 @@
 # Social Media Copy Generation
 
-The Spawn Point newsletter ships every Monday for the upcoming week. Each week the agent also generates social-media copy adapted for four platforms so the same content can flow across the entire social pipeline. **This file covers the COPY ONLY.** Carousel slides, image rendering, and visual layout are handled by a separate Landoralpha project — the agent does not generate carousel JSON, slide content, or visual specs.
+The Spawn Point newsletter ships every Saturday for the week ahead (the research trigger runs Monday; publish day is Saturday). Each week the agent also generates social-media copy adapted for four platforms so the same content can flow across the entire social pipeline. **This file covers the COPY ONLY.** Carousel slides, image rendering, and visual layout are handled by a separate Landoralpha project — the agent does not generate carousel JSON, slide content, or visual specs.
 
 Each weekly run produces a "social pack" with four pieces:
 

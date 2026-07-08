@@ -332,15 +332,17 @@ Complete archive of every published issue of the Spawn Point Pokemon GO newslett
 - **Niantic corporate / industry news:** #7 Niantic Spatial robot delivery story
 - **Competitive / esports drama:** #10 Orlando Regional Controversy (initial), #12 Firestar73 DQ Aftermath (follow-up)
 - **Ecosystem / spawn mechanics:** #11 Silicobra Spawn Problem
-- **Franchise / shiny news:** #13 Shiny Volcanion Decade Lock
-- **GO Fest / major event previews:** #15 GO Fest 2026 Global Free + Raid List Reveal, #17 GO Fest 2026 Know Before You Go (Chicago + Universal)
-- **Raid boss meta deep-dives:** #16 Mega Medicham (title; body was a misfire — see entry note)
+- **Franchise / shiny news:** #13 Shiny Volcanion Decade Lock, #21 Pokémon GO Turns 10 (decade retrospective + 10th Anniversary Party)
+- **GO Fest / major event previews:** #15 GO Fest 2026 Global Free + Raid List Reveal, #17 GO Fest 2026 Know Before You Go (Chicago + Universal), #18 GO Fest 2026 Copenhagen (global raid pool reveal + Mega Lopunny)
+- **Raid boss meta deep-dives:** #16 Mega Medicham (title; body was a misfire — see entry note), #19 Shadow Dialga ML investment case, #20 Mega Skarmory Steel/Flying defensive case
 
 **Repeat-risk watchlist:**
 - Spotlight Hour saga covered THREE times (#4, #6, #8) — avoid a fourth angle.
 - Firestar73 covered TWICE (#10, #12) — next competitive story should NOT involve Firestar73 unless major new development.
-- **GO Fest content has anchored two of the last three issues (#15 raid-list reveal, #17 Know Before You Go) — avoid a third immediate GO Fest Trending Topic.** Save the next GO Fest piece for GO Fest Global recap (July 13+).
-- Shiny lock breaks (#13) recent — avoid for several more weeks.
+- **GO Fest content anchored THREE of the last several issues (#15 raid-list reveal, #17 Know Before You Go, #18 Copenhagen).** The GO Fest cycle is now closed for the season — avoid another GO Fest Trending Topic unless a genuinely new hook lands.
+- **Raid boss meta deep-dive ran back-to-back (#19 Shadow Dialga, #20 Mega Skarmory)** — vary the category before a third raid-meta piece.
+- Anniversary / franchise retrospective is recent (#21 Turns 10) — avoid for several weeks.
+- Shiny lock breaks (#13) — avoid for several more weeks.
 
 ### Trainer Tip Angle Rotation (most-used to least-used)
 Heavy rotation: XP/Stardust farming optimization, raid counter recommendations, Mega Evolution synergy, Lucky Egg/Star Piece/Pinap stacking, **Mega-Evolved attack boost coordination for full-lobby damage boost** (heavily used #14 Mega Lucario, #15 Mega Lucario, #16 Mega Gardevoir, #17 Mega Beedrill — consider rest). [Note: historical entries below use "aura" — that was prior terminology; current convention per Niantic FAQ #3334 is "Mega-Evolved attack boost".]

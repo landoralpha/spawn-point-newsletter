@@ -165,8 +165,8 @@ Free track + Deluxe paid version. The NEW feature is persistent rank-tier bonuse
 
 | Date | Event | Featured |
 |---|---|---|
-| June 20 | June Community Day | TBA |
-| July 4 | July Community Day | TBA |
+| June 20 | June Community Day | Frigibax → Baxcalibur (Glaive Rush) |
+| July 4 | July Community Day | Sobble → Inteleon (Hydro Cannon; shiny family debut) |
 | August 16 | August Community Day | TBA |
 
 ### Notable in-season events (announced)
@@ -179,7 +179,7 @@ Free track + Deluxe paid version. The NEW feature is persistent rank-tier bonuse
 ### Mega debut pipeline (during Forever Forward)
 
 - **Mega Mewtwo X and Mega Mewtwo Y** — debut at GO Fest Global (July 11-12). Psychic/Fighting and Psychic respectively.
-- **Mega Skarmory** — Super Mega Raid debut during the season (Steel/Flying — date TBA)
+- **Mega Skarmory** — Super Mega Raid debut Saturday June 27, 2026 (Steel/Flying; first Mega Level pre-unlocked)
 - **Mega Raichu X and Mega Raichu Y** — both debut for the first time as Super Mega Raids (date TBA)
 
 ### Dynamax debut pipeline (during Forever Forward)

@@ -192,7 +192,7 @@ Quick reference (Mega Level benefits):
 | Same-type catch XP | none | +50 | +100 | greater |
 | Same-type Candy XL chance | 0% | +10% | +25% | greater |
 | Rest period after 8-hr active | ~7 days | ~5 days | ~3 days | **24 hrs** |
-| Mega-Evolved attack boost (party bonus in raids) | +30% type-match / +10% other (does NOT scale by level) |||| 
+| Mega-Evolved attack boost (party bonus in raids) | +30% type-match / +10% other (does NOT scale by level) ||||
 
 - **Mega active duration:** 8 hours per use
 - **One Mega/Primal active** per trainer at a time
@@ -505,11 +505,11 @@ Mass evolve speedup: rename evolve candidates to `a` or `1` so they cluster at t
 - Bag capacity unlocks: L43/53/63/73 add +5 gift bag capacity each (max 40)
 
 Strategy:
-- Stockpile gifts on weekends, open 30/day during friendship XP boost events
+- Stockpile gifts on weekends, open the daily max of 20/day during friendship XP boost events (the open cap is 20/day, not 30)
 - Use international friends specifically for Vivillon postcard patterns
-- L31+ players (Memories in Motion 2026): in-person trades give 1 guaranteed XL Candy + 1 regular candy
+- L31+ players: in-person trades give 1 guaranteed XL Candy + 1 regular candy
 
-- Example: "Friendship Friday this week. Stockpile gifts now and open 30 Friday with a Lucky Egg active to compound the friendship XP boost."
+- Example: "Friendship Friday this week. Stockpile gifts now and open your 20 Friday with a Lucky Egg active to compound the friendship XP boost."
 
 ### 40. Daily Streak Bonuses
 **7-day PokéStop streak:** 2,500 XP + bonus items, day 7 guaranteed Evolution Item
@@ -567,7 +567,7 @@ Pokédex search `xxs&!shiny` finds every micro-form for size-XS Showcases.
 ### 44. Memories in Motion Season Changes (2026)
 The Spring 2026 season (Mar 3 - Jun 2) introduced major structural changes. Key shifts:
 
-- **Spotlight Hours retired** - replaced by Daily Discoveries day-of-week structure
+- **Spotlight Hours retired for the Spring 2026 season** - replaced by Daily Discoveries day-of-week structure. NOTE: Spotlight Hour RETURNED June 18, 2026 with the Forever Forward season and is now a required newsletter section; Daily Discoveries runs alongside it.
 - **Wild evolved Pokémon can be shiny** - new shiny pool to hunt for any species with shiny base form released
 - **L31+ in-person trades give 1 guaranteed XL Candy + 1 regular candy** - reframes trading from "lucky chase" to "candy guarantee"
 - **GO Battle Thursday: 4x Stardust win rewards, daily set cap raised from 5 to 10 (50 battles)** - the dust farming day

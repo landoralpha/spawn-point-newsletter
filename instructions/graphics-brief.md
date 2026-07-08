@@ -127,7 +127,7 @@ The card types below are documented so the format is ready when each pipeline co
 2. **Typing chips**
 3. **Weakness chips** with multipliers
 4. **Top Max Battle attackers** (top 5, Dynamax-capable only — Shadow Pokémon NEVER appear here)
-5. **Hundo CPs** (L20 + L25 + weather)
+5. **Hundo CP** (L20 ONLY — Max Battle catches are always L20, no weather-boosted L25; see `feedback_max_battle_l20_only.md`)
 6. **Window** (date + 6:00 AM – 9:00 PM local)
 7. **Rare Candy XL callout** for in-person Monday Max Battles
 
@@ -145,7 +145,7 @@ The card types below are documented so the format is ready when each pipeline co
 
 **Required datapoints on the strip:**
 1. Every featured raid / Max Battle / Community Day Pokémon for the week
-2. L20 hundo + L25 hundo with weather flag
+2. L20 hundo + L25 hundo with weather flag for RAID / CD species; **L20 only** for Max Battle species (no L25 catch; see `feedback_max_battle_l20_only.md`)
 3. Sprite per row
 
 **Layout**: horizontal scroll on mobile, full-width grid on desktop.

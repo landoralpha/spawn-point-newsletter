@@ -521,12 +521,12 @@ Write to `output/newsletter-draft-[YYYY-MM-DD].md` section by section, under 500
 ### CRITICAL: Subject Line A/B Options at Top
 
 ```
-**Subject Line A/B Options (5 required, each a different headline pattern):**
+**Subject Line A/B Options (5 required, each a different headline pattern — canonical set per newsletter-creation.md Section 1):**
 1. [Subject-led]: "..."
 2. [Action-led]: "..."
 3. [Theme-led or hook]: "..."
-4. [Number-led]: "..."
-5. [Curiosity-gap]: "..."
+4. [Deadline-led]: "..."
+5. [Curiosity / cliffhanger]: "..."
 
 **Selected for draft:** Option [N] — [reason]
 ```

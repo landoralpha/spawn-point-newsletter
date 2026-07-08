@@ -142,11 +142,12 @@ The newsletter closes with this consistent sign-off:
 
 ## Headline Patterns That Work
 
-**Title options the agent generates** should pull from these patterns:
+**Title and subject options the agent generates** pull from these five canonical patterns (same taxonomy used in `newsletter-creation.md` Section 1 and the pre-publish checklist — 5 options each, one per pattern):
 - **Subject-led:** "Lechonk's Big Day" (feature event named, possessive adds personality)
 - **Action-led:** "Three Raids Arrive Wednesday" (verb-forward, urgency)
-- **Theme-led:** "Shadow Week Returns" (thematic shorthand)
-- **Question or hook:** "Will You Catch the Shiny?" (engages but doesn't clickbait)
+- **Theme-led or hook:** "Shadow Week Returns" / "Will You Catch the Shiny?" (thematic shorthand or an engaging question that doesn't clickbait)
+- **Deadline-led:** "This Saturday Only: Mega Skarmory Debut" (time-boxed urgency)
+- **Curiosity / cliffhanger:** "The parrot. The steel bird. The Shadow Reshiram." (intrigue that pays off in the issue)
 
 Avoid:
 - ❌ "This Week in Pokémon GO" (generic, every Pokémon GO newsletter sounds like this)
@@ -202,7 +203,7 @@ Most paragraphs land cleanly across all three. When a tip is materially differen
 
 - ✓ "**[New:]** Skip the Mega for now if you don't have one — base Garchomp duos this fine."
 - ✓ "**[Veteran:]** XL Candy farm window — pop Pinap on every catch since the boost stacks with the event multiplier."
-- ✓ "**[Returning:]** If you haven't logged in since Spotlight Hours retired, Daily Discoveries replaced them — Tuesday is now Showcase Tuesday."
+- ✓ "**[Returning:]** Been away a while? Daily Discoveries now runs a themed bonus every day, and Spotlight Hour is back on Thursdays."
 
 **Rules:**
 - Use sparingly (1-2 per issue, not every section)

@@ -91,7 +91,7 @@ This file complements `instructions/trainer-tips-framework.md` and `instructions
 
 ### Gift hoarding strategy
 - Stockpile gifts on weekends
-- Open 30/day during friendship-XP-boost events for compounded effect
+- Open the daily max of 20/day during friendship-XP-boost events for compounded effect (the open cap is 20/day per FAQ/85, not 30)
 
 ### Postcard Book
 - Holds 350 postcards (expandable)
@@ -146,17 +146,16 @@ This file complements `instructions/trainer-tips-framework.md` and `instructions
 
 ## 7. Memories in Motion Season Changes (2026)
 
-### Spotlight Hours retired (Mar 3, 2026)
-- Last Spotlight Hour: Feb 24, 2026
-- Replaced by Daily Discoveries
+### Spotlight Hour (retired Mar 3, 2026; returned June 18, 2026)
+- Spotlight Hour was retired for the Spring 2026 (Memories in Motion) season, then RETURNED June 18, 2026 with Forever Forward. It now runs Thursdays 6-7 PM alongside Daily Discoveries and is a required newsletter section.
 
-### Daily Discoveries schedule
-- **Sunday:** Incense + Lure modules last 2x longer
-- **Monday:** 2x GO Points from Pass tasks (monthly + event passes), Max Monday 6 AM-9 PM
-- **Tuesday:** Showcase Tuesday
-- **Wednesday:** Raid rotation + Raid Hour 6-7 PM
-- **Thursday:** GO Battle Thursday - 4x Stardust win rewards, daily set cap raised from 5 to 10 (50 battles total)
-- **Friday:** Friendship Friday (trade bonuses)
+### Daily Discoveries schedule (Forever Forward season — current; see `seasons-reference.md`)
+- **Sunday:** Scenic Sunday (Routes, Buddy Candy, Mateo encounters)
+- **Monday:** Max Monday (in-person Max Battle Rare Candy XL; event 6 AM-9 PM, Max Hour 6-7 PM)
+- **Tuesday:** Showcase Tuesday (up to 5 entries)
+- **Wednesday:** Wednesday Raid Hour (in-person Raid Rare Candy XL; rotation flips 6 AM, Raid Hour 6-7 PM)
+- **Thursday:** GO Battle Thursday + Spotlight Hour (6-7 PM)
+- **Friday:** Friendship Friday (extra Special Trades, -20% Stardust on trades)
 
 ### Wild evolved Pokémon can now be shiny
 - If a species has had its shiny debut, evolved forms in the wild are eligible
