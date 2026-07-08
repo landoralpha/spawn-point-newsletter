@@ -167,9 +167,9 @@ These are the claims most likely to be wrong because they bypass verification. I
 ### 11. Subject Line A/B Audit
 
 Verify the draft begins with the **Subject Line A/B Options** block per `newsletter-creation.md` Section 1. Check:
-- Exactly 3 alternatives, each from a different headline pattern (subject-led, action-led, theme-led, hook)
-- A "Selected for draft:" line naming one of the three
-- None of the three pattern-matches the banned headline list ("This Week in Pokémon GO" / "Weekly Roundup" / "Updates: [date range]")
+- Exactly 5 alternatives, each from a different headline pattern (subject-led, action-led, theme-led, number-led, curiosity-gap)
+- A "Selected for draft:" line naming one of the five
+- None of the five pattern-matches the banned headline list ("This Week in Pokémon GO" / "Weekly Roundup" / "Updates: [date range]")
 
 ### 12. Notion Property Coverage Audit
 

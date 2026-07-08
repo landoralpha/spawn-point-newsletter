@@ -37,8 +37,9 @@ Email Joe with the result — green-light, FLAG list, or UNVERIFIABLE list. Joe 
 ## Notion Databases
 
 **Newsletter Issues** (FYI sidebar source — NEVER drives PASS/FAIL):
-- Data source ID: `34831ca4-d6d5-819d-83ae-cf31d3110551`
-- Read the most recent draft entry by Date Range Monday descending.
+- Database (wrapper) ID: `34831ca4-d6d5-819d-83ae-cf31d3110551`
+- Data source ID: `34831ca4-d6d5-815c-9420-000b81b2a9e6`
+- Read the most recent draft entry, sorted by Date Range start descending.
 
 **Spawn Point Run Log** (Step 7 destination):
 - Data source ID: `d808fb32-e641-480f-a90e-78f0685c78c9`
@@ -52,36 +53,16 @@ Check tool surface for:
 3. `fetch_url` from Spawn-Point-Fetcher MCP (must have — for Pokebattler / db.pokemongohub.net / LeekDuck verification)
 4. `send_email` from Spawn-Point-Fetcher MCP (must have — for result delivery)
 
-If (1), (2), or (3) is missing → email Joe (render per `instructions/email-format.md`, `body_format="html"`). Subject: `[Spawn Point Recon] DEGRADED RUN — <which> MCP unavailable`. Body:
-```html
-<h1>🚨 DEGRADED RUN — <which> MCP unavailable</h1>
+If (1), (2), or (3) is missing → email Joe. Subject: `[Spawn Point Recon] DEGRADED RUN — <which> MCP unavailable`.
 
-<p><strong>Agent:</strong> Recon Agent | <strong>Run date:</strong> [YYYY-MM-DD] | <strong>Status:</strong> Aborted — Run Status set to Failed</p>
+Content spec (render per `instructions/email-format.md` v3):
+- **Eyebrow:** `DEGRADED RUN` (triangle-alert.png). **No hero image.**
+- **Status line:** Agent = Recon · Run date = [YYYY-MM-DD] · Status = Aborted (Run Status set to Failed).
+- **Section "What's down"** — the MCP availability table, these exact rows: Beehiiv `[icon + available/missing]`, Notion `[icon + available/missing]`, Spawn-Point-Fetcher (fetch_url) `[icon + available/missing]`, Spawn-Point-Fetcher (send_email) `OK available (you're reading this email)`.
+- **Section "Recovery checklist"** — ordered: (1) open the Pre-Publish Recon trigger in claude.ai Connectors; (2) confirm the missing connector is listed AND toggled ON; (3) if on, toggle off, save, on, save (cache refresh); (4) if missing/stale URL, remove and re-add; (5) manually re-fire.
+- **Footer band:** Agent = Spawn Point Recon Agent, Run Log link, filter Trigger = Recon.
+- Run the pre-send checklist before sending.
 
-<p>The Pre-Publish Recon Agent could not start a normal run because <code>&lt;which&gt;</code> MCP was not in this run's tool surface. Recon cannot proceed without it.</p>
-
-<h2>What's down</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>MCP</th><th>Status</th></tr>
-  <tr><td>Beehiiv</td><td>[✅ available / ❌ missing]</td></tr>
-  <tr><td>Notion</td><td>[✅ available / ❌ missing]</td></tr>
-  <tr><td>Spawn-Point-Fetcher (fetch_url)</td><td>[✅ available / ❌ missing]</td></tr>
-  <tr><td>Spawn-Point-Fetcher (send_email)</td><td>✅ available (you're reading this email)</td></tr>
-</table>
-
-<h2>Recovery checklist</h2>
-<ol>
-  <li>Open the Pre-Publish Recon trigger in claude.ai → Connectors section.</li>
-  <li>Confirm the missing connector is listed AND toggled ON.</li>
-  <li>If toggled on: toggle off → save → toggle on → save (cache refresh).</li>
-  <li>If missing or stale URL: remove + re-add.</li>
-  <li>Manually re-fire the trigger after fixing.</li>
-</ol>
-
-<p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
-Spawn Point Recon Agent — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a> (filter Trigger = Monitor)
-</p>
-```
 Then set Run Status = Failed, write Run Log row, exit.
 
 If (4) is missing → write Run Log with Run Status = Failed and Notes = `DEGRADED: send_email unavailable — cannot email user. Recovery: verify Spawn-Point-Fetcher MCP is connected and redeployed with send_email tool.` Exit silently.
@@ -97,12 +78,15 @@ This step runs in under 10 seconds (one Notion query + one repo read). It catche
 
 **Escalation tiering (added 2026-06-22 after #18-#21 backfill gap):**
 
+(Gap is `notion_max - archive_max - 1`, per Step 0.6 point 3.)
+
 - **Gap = 0 (archive current):** silent PASS, no flag.
 - **Gap = 1 issue:** soft flag `[ARCHIVE 1 behind]` in email body only. Researcher trigger can still pull the latest archive snapshot for the next draft because the most recent issue's pattern is the editorial baseline.
-- **Gap = 2 issues:** hard flag `🚨 ARCHIVE GAP — backfill required` in email body, BOLD. Append the Notion Archive Diff URLs for the missing issues.
-- **Gap ≥ 3 issues:** elevate to the email SUBJECT: prepend `[🚨 ARCHIVE GAP: K issues behind]` to the existing subject line. This is the threshold above which drafting from the stale snapshot starts producing format drift (#18 incident was at gap=4). The subject elevation makes the alert impossible to miss in Joe's inbox.
-- **Gap ≥ 5 issues:** also include a one-line block at the TOP of the email body, before the Run Summary table:
+- **Gap = 2 issues:** hard flag `🚨 ARCHIVE GAP — backfill required` in email body, BOLD. Append the Notion Archive Diff URLs for the missing issues, AND elevate to the email SUBJECT: prepend `[🚨 ARCHIVE GAP: K issues behind]` to the existing subject line so the alert is impossible to miss in Joe's inbox.
+- **Gap ≥ 3 issues:** everything in the gap=2 tier, PLUS a one-line block at the TOP of the email body, before the Run Summary table:
   > **⚠️ STOP DRAFTING NEW ISSUES** until the archive is backfilled. The researcher trigger will produce non-canonical-format drafts (the #18 stale-snapshot failure mode) at this drift level.
+
+  Gap ≥ 3 is where drafting from the stale snapshot starts producing format drift: the #18 incident was at gap=3 (archive at #13, Notion at #17, `17 - 13 - 1 = 3`).
 
 **Local Claude Code session note:** when this recon runs inside a local Claude Code session (Bash tool available + repo bind mount), the agent CAN apply the backfill directly using Edit/Write on `instructions/newsletter-archive.md`. The agent must still NOT `git push` (Joe's credentials only) — apply the edit and surface the modified file as ready-to-commit in the email summary. Cron-mode cloud agent CANNOT apply the backfill (no repo write access) — it must fall back to the Notion-Diff-pages workflow above.
 
@@ -171,7 +155,9 @@ FLAG any required section that is missing a Trainer Tip block as: Category I edi
 
 **Hard structural check.** Spawn Point #20 shipped with NO Spotlight Hour section, and #21 shipped with the section present but in non-canonical format (`## SPOTLIGHT HOUR` all-caps, no emoji, no Trainer Tip, source link as URL not title). Two consecutive misses on a section that's been a locked editorial standard since 2026-06-20. This category enforces presence + format.
 
-**Required-section grep matrix.** Run against the assembled Beehiiv body:
+**Normalize FIRST (required).** The Beehiiv body extracted in Step 1 is HTML, but the patterns below are markdown line-anchored (`^## `). Before running ANY Category I.5 or anti-pattern grep matrix, convert the Beehiiv HTML body to markdown: each `<h2>` becomes a `## ` line preserving its emoji and text, each `<h3>` becomes `### `, and inline formatting is flattened to text. Run every matrix in this category against THAT markdown, never against the raw HTML (raw HTML would fail every `^## ` pattern and silently pass a broken newsletter).
+
+**Required-section grep matrix.** Run against the normalized markdown:
 
 | Required H2 section | Exact pattern (case-sensitive, line-anchored) |
 |---|---|
@@ -203,7 +189,7 @@ Each pattern must match ≥ 1 line in the body. Any miss → HARD FLAG `Category
 Each match → HARD FLAG `Category I.5 wrong section format — found "<actual>" should be "<canonical>". Auto-fix: rewrite the section header in-place.`
 
 **Spotlight Hour species cross-check.** When the section IS present, recon must:
-1. Extract the species name from the header (`## ✨ Spotlight Hour: ([A-Z][a-z]+)`).
+1. Extract the species name from the header with `## ✨ Spotlight Hour: ([A-Z][A-Za-z.' -]+)` and trim trailing whitespace before comparing, so multi-word / regional species like "Alolan Geodude" or "Mr. Mime" capture in full instead of truncating to the first word.
 2. Fetch LeekDuck Spotlight Hour schedule (`https://leekduck.com/spotlight-hour/`) via fetch_url MCP.
 3. Cross-check the species + Thursday date in the section header against the LeekDuck schedule for that week. Mismatch → FLAG `Category I.5 Spotlight Hour species mismatch — section says <X> on <date>, LeekDuck shows <Y> on <date>.`
 4. Cross-check the bonus type (2× Catch Stardust / 2× Catch Candy / 2× Catch XP / 2× Evolution XP / etc.) against LeekDuck. Mismatch → FLAG.
@@ -365,7 +351,7 @@ Verification recipes for A–H — use the Spawn-Point-Fetcher MCP `fetch_url` t
 |---|---|---|
 | A (PvP rankings) | PvPoke JSON: `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/{cup-slug}/overall/rankings-{cap}.json` (cap = 1500 / 2500 / 10000) | Match species by name. If `rank_claimed` is within ±3 of actual rank (1-indexed by rating descending), PASS. Else FLAG with actual rank + rating. **Truncated body is NEVER a reason to mark UNVERIFIABLE.** PvPoke ranking JSONs typically exceed the fetch_url 250 KB cap; the partial body still parses cleanly as a JSON array. ALWAYS attempt to parse the truncated body and search for the species by name. If the species sits past the truncated portion, fall to `jq` or `python` on the saved tool-output file (the harness preserves the full response). Only mark UNVERIFIABLE on real 4xx/5xx error or genuine parse failure. (Rule extended from Category C, 2026-05-19, after a recon run incorrectly flagged Tapu Bulu UL/GL ranks as unverifiable due to truncation.) |
 | B (PvP movesets + PvE move stats) | PvPoke per-species "moveset" array. If both charged moves appear in PvPoke's moveset array for that species AND are in the top 4 recommended, PASS. If 1 of 2 matches, FLAG as "partial — sub-optimal." If 0 of 2, FLAG as "wrong moves cited." Move learn-set sanity check: pokedex.json under each species' `quickMoves` / `cinematicMoves` / `eliteQuickMoves` / `eliteCinematicMoves` dicts. PvE move stats (power, energy, durationMs): also in pokedex.json — each move ID under any species' move dicts has `power` (PvE damage), `energy` (PvE energy generation/cost), `durationMs` (PvE animation time in milliseconds). To verify a PvE stat for move X, find any species that has X as a learnable move and read X's stats from that species' move dict — the stats are the same wherever the move appears. Exact match required for PvE stats (power, energy, durationMs in ms). Differ → FLAG with claimed value, actual value, and species used for lookup. |
-| C (Raid counters) | **EQUAL-WEIGHT tri-source verification (UPDATED 2026-06-15) — see "Category C tri-source recipe" below the table.** Pokebattler AND Hub-DB are BOTH primary sources (no longer "theoretical-optimum vs accessibility-weighted" framing — both get equal weight per Joe's manual-check standard). DialgaDex is the third-source tiebreaker for anomalies and challenging matchups. Counter appearing on BOTH primaries = high-confidence PASS. Appearing on only one = PASS with source-asymmetry note + DialgaDex consult. Appearing on NEITHER = FLAG with top-5 from each source. Accessibility-tier check still required for all cited exclusive moves. |
+| C (Raid counters) | **Hub-DB-first tri-source verification (UPDATED 2026-06-22) — see "Category C tri-source recipe" below the table.** Order is Hub-DB FIRST (curated top-7 + movesets, the primary PASS gate), DialgaDex SECOND (confirm/tiebreaker for anomalies and challenging matchups), Pokebattler TERTIARY (last-resort corroboration only; its 5–12 MB responses for popular legendaries exceed the fetch_url cap and look like failures). Counter in Hub-DB top-7 = high-confidence PASS. Not in Hub-DB but confirmed by DialgaDex = PASS with note. In neither Hub-DB nor DialgaDex = Pokebattler tertiary check, then FLAG with top-5 from each source if still unconfirmed. Accessibility-tier check still required for all cited exclusive moves. |
 | D (Hundo CPs) | PRIMARY: db.pokemongohub.net/pokemon/{N} via fetch_url MCP. **Use `mode="grep"` to keep token cost down (added 2026-05-25):** `fetch_url(url="https://db.pokemongohub.net/pokemon/{N}", mode="grep", pattern="Lvl (20|25)\|Stats and Max CP", context_chars=200)`. This returns just the Notable CPs section (~1 KB) instead of the full 250 KB raw page. The grep snippets include both the page title and the L20/L25 hundo CPs, which gives the title-verification check below everything it needs. If grep returns zero matches OR the title doesn't appear in the snippets, fall back to `mode="raw"` to inspect the full page. **MANDATORY species-title verification (added 2026-05-18 after a Tapu Bulu cross-species incident):** before parsing ANY CP values, extract the species-name string from the fetched response (either the `<title>` if mode=raw, or the "<Species> Stats and Max CP" header captured by the grep pattern) and confirm it matches the expected species. If the title doesn't match, ABORT the parse — do NOT use those CP values for the species you intended to verify, and do NOT propose those values for Step 5.7 auto-patch. Mark the claim UNVERIFIABLE with reason `Hub-DB species-title mismatch: fetched #{N} returned <actual_species>, expected <expected_species>`. This guards against dex-number lookup errors (e.g., #787 Tapu Bulu vs #788 Tapu Fini), against Hub-DB redirects, and against form-suffix typos. **MANDATORY parallel formula sanity check (added 2026-05-19, defense-in-depth alongside title verification):** for every Hub-DB CP value used in a Category D PASS or FLAG, ALSO compute the same level's CP from pokedex.json base stats using the formula below, and compare the two. At integer levels L20 and L25 the formula and Hub-DB should agree to ±1 CP. If they DIVERGE BY >50 CP, ABORT — something is structurally wrong (wrong species, wrong stats, wrong form pulled from pokedex.json). Mark UNVERIFIABLE with reason `Hub-DB / formula divergence: Hub-DB reports <X> CP at L<N>, formula computes <Y> CP from <species> base stats — gap of <Z> CP indicates likely species mismatch or stat lookup error.` This catches title-verification false negatives (e.g., if the Hub-DB page loads correctly but the parser pulled values from the wrong table) and pokedex.json form-key mismatches. Known acceptable divergences: ±1-10 CP at L35-L36 boundary per [[reference-hub-db-per-level-table]] — formula uses public CPMs while Hub-DB uses Niantic authoritative half-level CPMs. That tolerance only applies AT L35-L36; L20 / L25 / L50 should match exactly. After title verification passes, parse the per-level CP table: find each `<tr>` that starts with `<th>{LEVEL}</th>`, then within that row extract the 3 `<strong>(\d+)<!-- --> <!-- -->CP</strong>` matches → those are the hundo CPs for levels {LEVEL}, {LEVEL}+1, {LEVEL}+2. Build a level→CP map covering all L1–L50. The page also has a "Notable CPs" section at the top covering L15 (Research) / L20 (Raids/Eggs) / L25 (Weather Boost) / L40 / L50 — those values agree with the per-level table and serve as a redundancy sanity check. FALLBACK (only if Hub-DB unreachable AFTER title-verification passes): compute via `floor((Atk+15) * sqrt(Def+15) * sqrt(Sta+15) * cpm^2 / 10)` from pokedex.json base stats with full-precision CPMs: L15=0.51739395, L20=0.59740001, L25=0.66798449, L30=0.73177063, L35=0.76601638, L40=0.79030001, L50=0.84029999. The formula may disagree with Hub-DB by 1–10 CP at L35 (Hub-DB uses Niantic's authoritative half-level CPMs). Exact match required against Hub-DB. Off by 1+ → FLAG with Beehiiv value, Hub-DB value, and computed value. If only formula is available, note "Hub-DB unreachable — formula-only" in the FLAG. **Step 5.7 auto-patch guardrail:** when proposing a Category D auto-patch into Notion, the patch must include both the species name AND the dex# in the surrounding ±30 chars of `old_str` context. If the same wrong value could exist on multiple species sections in the same newsletter (rare but possible during multi-Tapu / multi-Regi weeks), require manual handling instead of auto-patch. |
 | E (Raid schedule) | **ScrapedDuck `raids.json`** (PRIMARY — `https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/raids.min.json`; structured JSON, sandbox-reliable, updated every ~12h). Cross-check: LeekDuck event pages via fetch_url MCP. Fallback: pokemongo.com/news. | Match drafted boss name against ScrapedDuck `raids.json[*].name` for current rotation. For the rotation transition (mid-newsletter Wednesday swap), ScrapedDuck shows ONLY current week — cross-check the incoming boss against the LeekDuck event page for the announced rotation. Off by ≥1 day → FLAG. Wrong tier → FLAG. ScrapedDuck `tier` field uses verbatim strings ("5-Star Raids", "Mega Raids", "Shadow Raids", "3-Star Raids", "1-Star Raids"); confirm Beehiiv tier copy matches. **Date-format convention (FINAL — confirmed empirically by Joe 2026-05-27, see `feedback_raid_rotation_date_convention.md`):** Mega Raid and 5-Star Raid rotations run **Wednesday 6:00 AM local → Tuesday 10:00 PM local** the following week. There is an ~8-hour overnight gap (Tue 10 PM → Wed 6 AM) when neither the outgoing nor incoming boss is raidable. Spawn Point copy: end-date is `Tuesday, [Date] at 10:00 PM local`, NOT the next-rotation Wednesday start. Do NOT auto-patch a Tuesday 10 PM end-date to Wednesday 6 AM under any circumstance — that's reading the NEXT rotation's start as the CURRENT rotation's end, which is wrong. LeekDuck's published transition timestamp may show the next rotation's start (Wed 6 AM) as the visible boundary; do NOT trust that surface text as the current boss's end-time. FLAG only if the Beehiiv draft's Tuesday end-date is off by ≥1 day OR uses a non-Tuesday end-date. (This rule has flipped twice — 2026-05-11 established Wed-Tue, 2026-05-19 reversed wrongly to LeekDuck-verbatim. 2026-05-27 confirmed final empirical rule. Do not reverse again without empirical verification.) |
 | F (Featured Pokémon + debut-claim verification) | LeekDuck event pages, pokemongo.com/news, @PokemonGoApp via WebSearch. **For "debuts" / "new to PoGO" / "GO debut" framing: `tools/mgrann03_check.py debut "<Species>"` (added 2026-06-15).** | Match featured species against the announcement. Mismatch → FLAG. **Debut-claim verification (NEW):** for every Beehiiv claim of "debuts in Pokémon GO" / "Pokémon GO debut" / "new to PoGO" / "first time in PoGO" / "makes its PoGO debut", run `mgrann03_check.py debut`. If the tool returns `✗ NOT A DEBUT` (species already in `pogo_pkm.min.json` as released): **HARD FLAG** `Category F debut-claim error — <Species> is already released in PoGO (form=<X>, raid_tier=<N>). Strip "debut" framing; use "returns" / "rotates back in" / "continues" instead.` Auto-patchable (string replace "debuts" → "returns", "Pokémon GO debut" → "rotation", etc.). Cross-references `feedback_not_a_debut.md` memory and would have caught the #15/#16/#17 Tapu Bulu / Mega Medicham / Tapu Fini incidents. If the tool returns `? UNKNOWN`: surface as a soft FLAG asking Joe to verify against the newsletter archive (mgrann03's announced file may lag fresh Niantic announcements by a few days). |
@@ -383,7 +369,7 @@ Verification recipes for A–H — use the Spawn-Point-Fetcher MCP `fetch_url` t
 3. **Pokebattler is now tertiary.** Use ONLY when (a) Hub-DB returns a non-200 with the URL pattern verified correct, OR (b) cross-check confirmation is editorially valuable (debut Megas, Super Mega Raid Day, low-meta bosses). When Pokebattler IS hit, the response can be 5–12 MB for popular legendaries; expect the fetch_url cap to truncate. If truncated, log as `[pokebattler: response oversized]` and proceed with Hub-DB alone — do NOT report this as 404.
 4. **Status-code discipline.** Any reported "404" must quote the actual HTTP status. If the response was 200 with oversized body, 200 with parse fail, 403 (Cloudflare TLS-fingerprint), or 500/timeout, report THAT — never collapse to "404." 404 means the URL is wrong; the escalation path is to recheck the URL construction, not to fall back to another tool.
 
-#### Pokebattler lookup (theoretical-optimum)
+#### Pokebattler lookup (tertiary corroboration only)
 
 **URL template** (use Spawn-Point-Fetcher `fetch_url`, NOT WebFetch — Pokebattler gates on UA):
 ```
@@ -408,7 +394,7 @@ https://fight.pokebattler.com/raids/defenders/{POKEBATTLER_ID}/levels/{TIER}/att
 - Truncated body is NEVER a reason to mark UNVERIFIABLE. Only mark UNVERIFIABLE on real 4xx/5xx or connection failure.
 - Real 404 → species has never been a raid defender (rare; only brand-new debut species). All established Pokémon including every Ultra Beast have historical Pokebattler data.
 
-#### Hub-DB counters lookup (accessibility-weighted)
+#### Hub-DB counters lookup (PRIMARY — the pass gate)
 
 **URL template:**
 ```
@@ -452,22 +438,22 @@ Examples: `https://www.dialgadex.com/?p=483&f=S` (Shadow Dialga), `https://www.d
 - Super Mega Raid Day bosses (proactive).
 - A counter appears in one primary but not the other and the draft positions it ambiguously between Premium and Budget.
 
-#### Cross-source verification logic (equal-weight + tiebreaker)
+#### Cross-source verification logic (Hub-DB primary → DialgaDex second → Pokebattler tertiary)
 
-For each Beehiiv-claimed counter:
+For each Beehiiv-claimed counter, walk the sources in the locked 2026-06-22 order and stop as soon as it confirms:
 
-1. **Both primaries confirm** (cited counter appears in Pokebattler top-10 AND Hub-DB top-7) → **PASS, high confidence.** No DialgaDex consult needed.
-2. **One primary confirms, the other does not** → **PASS with note** + DialgaDex consult:
-   - If DialgaDex confirms → upgrade to high-confidence PASS with note: `[tiebreaker: dialgadex sided with <source>]`.
-   - If DialgaDex does NOT confirm → PASS with note: `[source asymmetry: <source> only; dialgadex did not corroborate]`. Cross-check whether the draft positions this counter as Premium vs Budget — flag if it's positioned in the tier where the missing source typically anchors (e.g., Pokebattler-only Premium-tier counter without a non-exclusive Budget alternative is a FLAG; Hub-DB-only Budget-tier counter is acceptable).
-3. **Neither primary confirms** → DialgaDex consult is mandatory:
-   - If DialgaDex confirms → **PASS** with note: `[verification: dialgadex-only — Pokebattler + Hub-DB both miss; check whether boss is a challenging matchup or has draft positioning issues]`.
-   - If DialgaDex does NOT confirm → **FLAG** with the actual top-5 from each:
+1. **Hub-DB confirms** (cited counter appears in Hub-DB top-7) → **PASS, high confidence.** No further consult needed. This is the primary gate.
+2. **Hub-DB does NOT confirm** → DialgaDex consult (second source):
+   - If DialgaDex confirms → **PASS with note**: `[dialgadex corroborates; not in Hub-DB top-7 — likely a challenging matchup or a tier-positioning nuance]`. Cross-check whether the draft positions this counter as Premium vs Budget and flag if it's mis-tiered.
+   - If DialgaDex does NOT confirm → drop to Pokebattler (tertiary) below.
+3. **Neither Hub-DB nor DialgaDex confirms** → Pokebattler tertiary check:
+   - If Pokebattler top-10 has it → **PASS with note**: `[source asymmetry: pokebattler-only — Hub-DB + DialgaDex both miss; verify draft tier positioning]`.
+   - If Pokebattler also misses (or its response is oversized/unusable) → **FLAG** with the actual top-5 from each available source:
      ```
-     Category C counter mismatch — "<cited counter>" not in Pokebattler top-10, Hub-DB top-7, or DialgaDex Baseline.
-     Pokebattler top 5: <list>
+     Category C counter mismatch — "<cited counter>" not in Hub-DB top-7, DialgaDex Baseline, or Pokebattler top-10.
      Hub-DB top 5: <list>
      DialgaDex Baseline top 5: <list>
+     Pokebattler top 5: <list or "[oversized — unusable this run]">
      Replacement candidates appearing in 2+ sources: <intersection>
      ```
 
@@ -482,12 +468,13 @@ Verdict handling:
 
 This catches the historic Mega Latios Aura Sphere / Mega Latias Aura Sphere case (mgrann03 confirms both moves ARE learnable by both Mega forms — so no INVALID flag — but classifies Aura Sphere appropriately).
 
-**Source-failure handling (any single source 404 or fetch failure):**
-- If Pokebattler returns a genuine 404 (brand-new debut, or form ID format error) → re-check ID format BEFORE concluding the species isn't indexed. If genuinely not indexed: Hub-DB + DialgaDex become the dual-source pair, with DialgaDex weighted equally. Note `[verification: hub-db + dialgadex; pokebattler not indexed]`.
-- If Hub-DB returns "form not indexed" → Pokebattler + DialgaDex pair, equal weight. Note `[verification: pokebattler + dialgadex; hub-db form not indexed]`.
-- If DialgaDex is unavailable → fall back to Pokebattler + Hub-DB original dual-source check (no tiebreaker, fewer high-confidence PASSes available).
-- If TWO sources fail → run with the single remaining source, mark UNVERIFIABLE for any anomaly.
+**Source-failure handling (respecting the Hub-DB-first order):**
+- If Hub-DB returns "form not indexed" (rare) → DialgaDex becomes the primary gate, Pokebattler the tertiary corroborator. Note `[verification: dialgadex primary; hub-db form not indexed]`.
+- If Pokebattler returns a genuine 404 (brand-new debut, or form ID format error) → re-check ID format BEFORE concluding the species isn't indexed. Since Pokebattler is only tertiary, a genuine miss here rarely matters: Hub-DB + DialgaDex still carry the verification. Note `[pokebattler not indexed; hub-db + dialgadex used]`.
+- If DialgaDex is unavailable → Hub-DB alone is the gate, with Pokebattler tertiary corroboration where reachable. Fewer high-confidence tiebreaks available.
+- If Hub-DB AND DialgaDex both fail → run with Pokebattler alone if reachable, and mark UNVERIFIABLE for any anomaly.
 - If ALL THREE fail → UNVERIFIABLE for all Category C claims this run.
+- **Status-code discipline (per the recipe above):** never collapse a 200-with-oversized-body, 403 (Cloudflare), or 500/timeout into "404." A real 404 means the URL is wrong; recheck the URL construction, do not silently fall through sources.
 
 #### Accessibility-tier check (REQUIRED — runs in addition to the cross-source check above)
 
@@ -544,7 +531,7 @@ This step matches the Beehiiv draft to its Notion entry AND runs a material diff
    - **Primary match — by Issue Number:** filter rows where `Issue Number = issue_number_from_beehiiv`. Expected: exactly one match.
    - **If zero matches:** Notion entry doesn't exist or its `Issue Number` is wrong. Flag `[NOTION ENTRY MISSING]` in the Step 6 email so Joe can create/correct the entry.
    - **If multiple matches:** duplicate Notion entries with the same Issue Number (the May 17 duplication bug). Pick the most-recently-updated row to proceed. Flag `[NOTION DUPLICATE ENTRIES]` in the Step 6 email.
-   - **Fallback if `issue_number_from_beehiiv = null`** (Beehiiv title didn't match the `Spawn Point #N` format): query Notion by `Issue Date Range` overlapping today's date, pick the most-recently-updated row. Note `Matched Notion entry by date fallback — Beehiiv title was missing #N.`
+   - **Fallback if `issue_number_from_beehiiv = null`** (Beehiiv title didn't match the `Spawn Point #N` format): query Notion by `Date Range` overlapping today's date, pick the most-recently-updated row. Note `Matched Notion entry by date fallback — Beehiiv title was missing #N.`
 2. Set `matched_notion_page_id` and `matched_notion_issue_number`. These are the canonical keys Step 5.5 uses for write-back. If no match, skip to Step 5 (this step's diff can't run without a Notion entry).
 
 ### Material diff (FLAG-generating)
@@ -718,9 +705,9 @@ Record in Run Log Notes:
 
 ## Step 6: Send result email (HTML — master format)
 
-Render per the master email format in `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject` per mode, `body` rendered per the locked template below.
+Render per the master email format in `instructions/email-format.md` v3. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject` per mode, `body` assembled from the v3 skeleton with the sections specified below.
 
-**Why the unified format**: Spawn Point's editorial floor includes consistent reader experience. Every Spawn Point email (researcher / recon / monitor) shares the same banner + table style + footer skeleton. Do not invent alternate styles, color callouts, or card layouts — those drift across runs.
+**Why the unified format**: Spawn Point's editorial floor includes consistent reader experience. Every Spawn Point email (researcher / recon / monitor) uses the v3 skeleton (wordmark header, eyebrow icon+label, section blocks, crimson footer band) and the pre-send checklist in email-format.md. Do not invent alternate styles, color callouts, or card layouts — those drift across runs.
 
 **Language compliance (added 2026-05-19):** all output text — flag descriptions, PASSES rows, UNVERIFIABLE reasons, top-line callouts, Notion FYI sidebar — MUST use Niantic in-game terminology per [[feedback-niantic-language]]. Specifically: write "Mega-Evolved attack boost" not "Mega aura"; "type-matched attack boost" not "type aura"; "the trainer who brought the Mega" not "the bringer." Community jargon is for personal chat, not Spawn Point's reader-facing copy or recon's verification text. If the reference docs you're consulting still use "aura" anywhere, treat it as legacy language and translate at render time.
 
@@ -731,105 +718,26 @@ Render per the master email format in `instructions/email-format.md`. Send via S
 - **Post-publish FLAGGED:** `[Spawn Point Recon] POST-PUBLISH issues — Spawn Point #N already shipped (N FLAGS)`
 - **Post-publish PASS:** NO email sent. Silent. Run Log row only.
 
-### HTML body template
+### Body content spec (render per email-format.md v3)
 
-```html
-<h1>🔍 Spawn Point #N — Pre-Publish Fact-Check Report</h1>
+- **Eyebrow:** `FACT-CHECK REPORT · ISSUE #N` (search.png). **Hero image** per v3 rules (theme = `magnifying lens` or the issue's flagship).
+- **Headline:** the human-form outcome, e.g. `Spawn Point #N is cleared to publish` (PASS) or `Spawn Point #N needs N fixes before publish` (FLAGGED). No emoji in the headline.
+- **Status line:** Issue = #N · Week = [Mon Date]–[Sun Date], 2026 · Mode = [Pre-publish / Post-publish] · Status = [SUCCESS / PARTIAL / FAILED] (N FLAGS, N UNVERIFIABLE, N PASSES).
 
-<p><strong>Issue:</strong> #N | <strong>Week:</strong> [Mon Date]–[Sun Date], 2026 | <strong>Mode:</strong> [Pre-publish / Post-publish] | <strong>Status:</strong> [SUCCESS / PARTIAL / FAILED] — N FLAGS, N UNVERIFIABLE, N PASSES</p>
+Then these SECTION blocks, in order (each a v3 `<h2>` section; tables use the v3 locked table style with Deep Space header rows and `border:1px solid #24365A` cells; status glyphs use the flat status icons):
 
-<h2>Top-line callout</h2>
-<p>[One-sentence summary of the run outcome. Examples:<br>
-  • Pre-publish PASS: "✅ All N claims verified across [categories]. Cleared to publish. Notion Status auto-set to 'Ready to Publish.'"<br>
-  • Pre-publish FLAGGED: "⚠️ N flags need fixing before publish. Notion Status held at 'In Review.'"<br>
-  • Post-publish FLAGGED: "⚠️ N flags found post-publish. Issue #N already shipped — fix forward via archive notes or next-issue corrigenda if reader-affecting."]</p>
+1. **Top-line callout** — one sentence. PASS: "All N claims verified across [categories]. Cleared to publish. Notion Status auto-set to Ready to Publish." FLAGGED: "N flags need fixing before publish. Notion Status held at In Review." Post-publish FLAGGED: "N flags found post-publish. Issue #N already shipped, fix forward via archive notes or next-issue corrigenda if reader-affecting."
+2. **FLAGS — Fix Before Publishing (N)** — omit entirely if zero. Table columns: `# · Category · Section · Beehiiv verbatim quote · Source says · Fetch URL · Discrepancy`. **Render rule (Tapu-Bulu guardrail, May 18 2026):** every FLAG row MUST include (a) the exact verbatim Beehiiv snippet that triggered it and (b) the EXACT URL fetched (as a titled link, never a bare URL). If either is missing the flag is invalid, discard it before render.
+3. **Auto-Fixed in Notion — Paste to Beehiiv (N)** — omit if Step 5.7 skipped or auto-patched zero. Lead sentence links the Notion draft; note Beehiiv MCP is read-only so Beehiiv edits stay manual. Columns: `# · Category · Section · Old value · New value (now in Notion)`.
+4. **Manual Fix Required — Rewrite Needed (N)** — omit if zero. Columns: `# · Category · Section · Why manual · What to change`. Auto-patch failures appear here with the error in the "Why manual" cell.
+5. **UNVERIFIABLE — Source Unavailable (N)** — omit if zero. Columns: `# · Category · Beehiiv verbatim quote · URL(s) attempted · Reason`. **Discipline:** every row needs a verbatim Beehiiv quote (no quote = fabricated, discard). Do NOT mark UNVERIFIABLE just because the public source is silent; check the repo reference docs (`shiny-odds-reference.md`, `mega-evolution-reference.md`, etc.) FIRST.
+6. **PASSES — Verified Correct (N)** — always include unless zero. Columns: `Claim · Verified Value · Source (titled link)`. Cap at 40 rows; if more, show the first 40 then a summary row `[remaining N PASSES omitted — see Run Log Notes]`.
+7. **Notion FYI Sidebar (Informational only)** — Notion-vs-Beehiiv discrepancies; does NOT affect run status. Columns: `Field · Notion · Beehiiv draft`. If none: one row `No discrepancies — Notion and Beehiiv aligned.`
+8. **Quick-Fix Checklist (Beehiiv — manual)** — only if manual FLAGS present (omit on PASS or if every FLAG auto-patched). Ordered list, one actionable line per manual fix.
+9. **Links** — a section with buttons/inline links: Notion draft, Beehiiv post, Run log entry (all titled links, max two buttons per v3).
 
-<!-- FLAGS SECTION — omit entirely if zero flags -->
-<h2>🚩 FLAGS — Fix Before Publishing (N)</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>#</th><th>Category</th><th>Section</th><th>Beehiiv verbatim quote</th><th>Source says</th><th>Fetch URL</th><th>Discrepancy</th></tr>
-  <tr>
-    <td>1</td>
-    <td>[X — Category Name]</td>
-    <td>[section_id]</td>
-    <td>[EXACT Beehiiv snippet that triggered the flag — REQUIRED. No quote → claim is invalid, discard before render]</td>
-    <td>[Authoritative value]</td>
-    <td><a href="[EXACT_URL_FETCHED]">[exact URL fetched]</a></td>
-    <td>[Discrepancy summary]</td>
-  </tr>
-  <!-- one row per flag -->
-</table>
-<p style="font-size:0.85em;color:#666;"><strong>Render rules:</strong> Every FLAG row MUST include (a) the exact verbatim Beehiiv text snippet that triggered the flag and (b) the EXACT URL fetched by the verification logic. If either is missing, the flag is invalid and must be discarded. This is the Tapu-Bulu-incident guardrail (May 18, 2026): showing the specific URL fetched would have made the cross-species lookup error immediately visible to the reader.</p>
-
-<!-- AUTO-FIXED IN NOTION — omit if Step 5.7 was skipped or auto-patched zero FLAGs -->
-<h2>🔧 Auto-Fixed in Notion — Paste to Beehiiv (N)</h2>
-<p>These FLAGs were mechanically patched in the matched Notion entry (<a href="[NOTION_DRAFT_URL]">open</a>). Copy each corrected snippet from Notion into the Beehiiv draft. Beehiiv MCP is read-only, so Beehiiv updates are still manual — but the corrected text is ready in Notion.</p>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>#</th><th>Category</th><th>Section</th><th>Old value</th><th>New value (now in Notion)</th></tr>
-  <tr><td>AF-1</td><td>[X — Category]</td><td>[section_id]</td><td><code>[old_value]</code></td><td><code>[new_value]</code> ✓</td></tr>
-  <!-- one row per auto-patched FLAG -->
-</table>
-
-<!-- MANUAL FIX REQUIRED — omit if zero manual-only FLAGs -->
-<h2>⚠️ Manual Fix Required — Rewrite Needed (N)</h2>
-<p>These FLAGs cascade into surrounding context (counter recommendations, paragraph reasoning, cup analysis) or require editorial voice — they need your judgment, not a substitution. Fix in both Notion and Beehiiv.</p>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>#</th><th>Category</th><th>Section</th><th>Why manual</th><th>What to change</th></tr>
-  <tr><td>M-1</td><td>[X — Category]</td><td>[section_id]</td><td>[Cascade reason / editorial reason]</td><td>[Suggested fix]</td></tr>
-  <!-- one row per manual FLAG (includes auto-patch failures with their error noted in the "Why manual" cell) -->
-</table>
-
-<!-- UNVERIFIABLE SECTION — omit if zero -->
-<h2>⚠️ UNVERIFIABLE — Source Unavailable (N)</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>#</th><th>Category</th><th>Beehiiv verbatim quote</th><th>URL(s) attempted</th><th>Reason</th></tr>
-  <tr>
-    <td>UV-1</td>
-    <td>[X]</td>
-    <td>[EXACT Beehiiv snippet — REQUIRED. No quote means the claim was fabricated; discard before render]</td>
-    <td>[URLs the agent actually tried, comma-separated]</td>
-    <td>[Reason source unavailable, what couldn't be verified]</td>
-  </tr>
-  <!-- one row per UV -->
-</table>
-<p style="font-size:0.85em;color:#666;"><strong>UNVERIFIABLE discipline:</strong> every row requires a verbatim Beehiiv quote. Without one, the claim doesn't exist in the draft and must be discarded — agents have historically fabricated UNVERIFIABLE entries (e.g., the May 18 Shadow Cresselia hundo CP entry referencing values that weren't in the draft). Also: do NOT mark a claim UNVERIFIABLE just because the primary public source doesn't document it. Check the repo reference docs (`shiny-odds-reference.md`, `mega-evolution-reference.md`, etc.) FIRST — Spawn Point's editorial floor often has the answer.</p>
-
-<!-- PASSES SECTION — always include unless zero (unlikely) -->
-<h2>✅ PASSES — Verified Correct (N)</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>Claim</th><th>Verified Value</th><th>Source</th></tr>
-  <tr><td>[Claim]</td><td>[Value] ✓</td><td><a href="[URL]">link text</a></td></tr>
-  <!-- repeat per pass; if 40+ rows, show first 40 then a summary row "[remaining N PASSES omitted — see Run Log Notes]" -->
-</table>
-
-<h2>📋 Notion FYI Sidebar (Informational only)</h2>
-<p>These discrepancies exist between the Notion planning doc and the Beehiiv draft. Informational only — they do NOT affect run status or PASS/FAIL determination.</p>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>Field</th><th>Notion</th><th>Beehiiv draft</th></tr>
-  <tr><td>[Field Name]</td><td>[X]</td><td>[Y]</td></tr>
-  <!-- one row per discrepancy; if none, render: <tr><td colspan="3">No discrepancies — Notion and Beehiiv aligned.</td></tr> -->
-</table>
-
-<!-- QUICK-FIX CHECKLIST — only if manual FLAGS present (omit entirely on PASS or if every FLAG was auto-patched) -->
-<h2>Quick-Fix Checklist (Beehiiv — manual)</h2>
-<p>One-line actionable steps for the Manual Fix Required FLAGs above. Auto-Fixed FLAGs are already corrected in Notion and not repeated here.</p>
-<ol>
-  <li>[Action description]: change <code>[old value]</code> → <code>[new value]</code> in <code>[section]</code></li>
-  <!-- repeat per manual fix -->
-</ol>
-
-<h2>Links</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>Resource</th><th>URL</th></tr>
-  <tr><td>Notion draft</td><td><a href="[NOTION_DRAFT_URL]">[URL]</a></td></tr>
-  <tr><td>Beehiiv post</td><td><a href="[BEEHIIV_POST_URL]">[URL]</a></td></tr>
-  <tr><td>Run log entry</td><td><a href="[RUN_LOG_URL]">[URL]</a></td></tr>
-</table>
-
-<p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
-Spawn Point Recon Agent — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a> (filter Trigger = Monitor)
-</p>
-```
+- **Footer band:** Agent = Spawn Point Recon Agent, Run date, Run Log link, filter Trigger = Recon.
+- Run the v3 pre-send checklist before sending.
 
 ### Per-mode adaptations
 
@@ -848,9 +756,9 @@ Spawn Point Recon Agent — Run date: [YYYY-MM-DD] | <a href="https://www.notion
 
 ### Important constraints
 
-- Inline styles ONLY on the footer + tables (per the master spec); no `<style>` blocks, no class selectors, no colored callouts/cards. Gmail strips most CSS.
-- Use real Unicode characters (✓, ✅, ⚠️, 🚩, 📋, —, →) directly.
-- Total HTML body should stay under 100 KB (Gmail truncates beyond that). Cap PASSES table at ~40 rows; if more, show first 40 then a summary row.
+- Follow `instructions/email-format.md` v3 exactly and run its pre-send checklist. No `<style>` blocks, no class selectors, no colored callouts/cards, no fonts/colors outside the brand token table. Status glyphs are the flat status icons, not emoji.
+- Zero em dashes in the body (use commas, periods, parens, or `·`). Arrows `→` are fine inside quick-fix steps.
+- Total HTML body should stay under 100 KB (Gmail truncates beyond that). Cap the PASSES table at ~40 rows; if more, show the first 40 then a summary row.
 - Always set `body_format="html"` in the send_email call.
 
 ## Step 7: Write Run Log row (ALWAYS — last step before exit)

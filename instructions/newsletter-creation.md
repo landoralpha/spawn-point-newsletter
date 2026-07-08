@@ -337,7 +337,7 @@ When pushing to Notion (Step 6), populate these database properties on the newsl
 - **5-Star Raid** (text) — featured Five-Star boss(es)
 - **Shadow Raid** (text) — monthly Shadow Legendary
 - **Max Monday** (text) — featured Dynamax/Gigantamax Pokémon
-- **Subject A/B Options** (text) — the 3 subject lines, semicolon-separated
+- **Subject A/B Options** (text) — the 5 subject lines, semicolon-separated
 - **Has Month/Season Transition** (checkbox) — true if Section 11 (What's New) is included
 
 If a property doesn't exist on the database yet, the Notion MCP will surface an error — note it in the email summary so Joe can add the property manually. Don't fail the whole run on missing properties.

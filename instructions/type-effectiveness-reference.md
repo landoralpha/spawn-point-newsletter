@@ -122,6 +122,6 @@ If `multiplier < 1.6`, the charged move is **not super-effective** on the boss. 
 
 ## Sources
 
-- [Pokémon GO Hub GamePress damage mechanics](https://pokemongo.gamepress.gg/damage-mechanics) (community-aggregated, derived from Niantic game data)
+- [Bulbapedia: Type effectiveness](https://bulbapedia.bulbagarden.net/wiki/Type) (type-matchup reference; note the main series uses 2× / 0.5× where Pokémon GO applies 1.6× / 0.625×)
 - [Pokémon GO Hub type chart](https://db.pokemongohub.net/) (per-species effectiveness display)
 - Niantic does not publish exact damage formulas in their help center; the 1.6× / 2.56× / 0.625× / 0.39× values are confirmed via in-game damage testing and APK datamine of the game's combat constants. These multipliers have been stable since Niantic's 2020 type-effectiveness adjustment.

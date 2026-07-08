@@ -162,39 +162,14 @@ Before Step 1, check whether `fetch_url` from the Spawn-Point-Fetcher MCP appear
 **If `fetch_url` is NOT available:**
 
 1. Mark the run as degraded.
-2. **Send the degraded-mode email IMMEDIATELY** (before continuing research) so Joe can fix the connector before Step 5.5 audit gates hard-fail. Render per the master email format in `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject="[Spawn Point Research] DEGRADED RUN — fetch_url MCP unavailable"`, `body`:
-     ```html
-     <h1>🚨 DEGRADED RUN — fetch_url MCP unavailable</h1>
-
-     <p><strong>Agent:</strong> Research Agent | <strong>Run date:</strong> [YYYY-MM-DD] | <strong>Status:</strong> Continuing best-effort</p>
-
-     <p>The Newsletter Research Agent is starting a DEGRADED RUN — <code>fetch_url</code> from Spawn-Point-Fetcher was not in this run's tool surface.</p>
-
-     <h2>Impact on this run</h2>
-     <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-       <tr><th>Source</th><th>Status</th></tr>
-       <tr><td>Pokebattler raid counters</td><td>❌ UNREACHABLE — counter sections will be snippet-only</td></tr>
-       <tr><td>db.pokemongohub.net hundo CPs</td><td>❌ UNREACHABLE — Hundo CPs fall to compute-only from pokedex.json</td></tr>
-       <tr><td>Hub WP REST API</td><td>❌ UNREACHABLE</td></tr>
-       <tr><td>LeekDuck event pages</td><td>❌ UNREACHABLE without MCP rescue</td></tr>
-       <tr><td>github.io JSONs (PvPoke, raidboss, pokedex)</td><td>✅ Still reachable via WebFetch</td></tr>
-     </table>
-
-     <p>Agent will continue best-effort. Step 5.5 audit gates may catch hard problems and convert this to a Failed run.</p>
-
-     <h2>Recovery checklist</h2>
-     <ol>
-       <li>Open the Newsletter Research Agent trigger in claude.ai → Connectors section.</li>
-       <li>Confirm <strong>Spawn-Point-Fetcher</strong> listed AND toggled ON. URL: <code>https://fetcher-mcp.vercel.app/mcp/&lt;token&gt;</code>.</li>
-       <li>If toggled on: toggle off → save → toggle on → save (cache refresh).</li>
-       <li>If missing or stale URL: remove + re-add.</li>
-       <li>To recover this issue: manually re-fire after fixing — this run's Notion draft (if produced) can be discarded.</li>
-     </ol>
-
-     <p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
-     Spawn Point Research Agent — Run date: [YYYY-MM-DD] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a> (filter Trigger = Research Agent)
-     </p>
-     ```
+2. **Send the degraded-mode email IMMEDIATELY** (before continuing research) so Joe can fix the connector before Step 5.5 audit gates hard-fail. Subject `[Spawn Point Research] DEGRADED RUN — fetch_url MCP unavailable`. Content spec (render per `instructions/email-format.md` v3):
+   - **Eyebrow:** `DEGRADED RUN` (triangle-alert.png). **No hero image.**
+   - **Headline:** e.g. `Research run degraded — fetch_url MCP unavailable`. No emoji.
+   - **Status line:** Agent = Research Agent · Run date = [YYYY-MM-DD] · Status = Continuing best-effort.
+   - **Section "Impact on this run"** — table (Source / Status, flat status icons): Pokebattler raid counters `FAIL unreachable, counter sections snippet-only`; db.pokemongohub.net hundo CPs `FAIL unreachable, Hundo CPs compute-only from pokedex.json`; Hub WP REST API `FAIL unreachable`; LeekDuck event pages `FAIL unreachable without MCP rescue`; github.io JSONs (PvPoke, raidboss, pokedex) `OK still reachable via WebFetch`. Follow with a line: agent continues best-effort; Step 5.5 gates may convert this to a Failed run.
+   - **Section "Recovery checklist"** — ordered: (1) open the Research trigger in claude.ai Connectors; (2) confirm Spawn-Point-Fetcher listed AND toggled ON, URL `https://fetcher-mcp.vercel.app/mcp/<token>`; (3) if on, toggle off, save, on, save (cache refresh); (4) if missing/stale URL, remove and re-add; (5) manually re-fire after fixing, this run's Notion draft (if any) can be discarded.
+   - **Footer band:** Agent = Spawn Point Research Agent, Run Log link, filter Trigger = Research Agent.
+   - Run the pre-send checklist before sending.
 3. Continue subsequent steps best-effort:
    - Hundo CPs: compute-only from pokedex.json. Provenance entries read `pokedex.json (computed)` — no fetched URLs.
    - Pokebattler counters: WebSearch snippet only with `[fallback: search-snippet]` flag.
@@ -313,7 +288,7 @@ Source is either `pokemon-go-api pokedex.json (computed)` (the seeded rows) OR `
 | Current raid lineup | **ScrapedDuck `raids.json`** (PRIMARY — includes name/tier/CP ranges/boosted weather/shiny flag in clean JSON; updated every 12h) → pokemon-go-api raidboss.json (additional fields like Pokémon ID/form for Pokebattler lookups) | LeekDuck "what's in raids now" (fetch_url MCP) |
 | Field Research tasks + rewards | **ScrapedDuck `research.json`** (39 current tasks with reward encounter list + shiny flags + CP ranges) | LeekDuck research page (HTML) for cite-able URL |
 | Egg hatch pools | **ScrapedDuck `eggs.json`** (76 entries with eggType / canBeShiny / combatPower range / isRegional / isGiftExchange / rarity) | LeekDuck egg pool page (HTML) for cite-able URL |
-| **Raid counters** | **Equal-weight tri-source (UPDATED 2026-06-15):** (1) **Pokebattler JSON** via WebFetch → fetch_url MCP on 403. See "Canonical Pokebattler ID and tier format" below — wrong ID format produces 404 on every boss. (2) **Hub-DB `/counters` page** via fetch_url MCP: `https://db.pokemongohub.net/pokemon/{KEY}/counters` where KEY is dex# (e.g., `870`) for base form, or form-suffixed with capital-first letters: `{N}-Mega`, `{N}-Mega_X` / `{N}-Mega_Y` (UNDERSCORE inside Mega X/Y), `{N}-Shadow`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`. Parse the `BestCountersHighlights_highlights__O4EAQ` section for the top 7 curated picks. Both sources queried EQUALLY for every boss — not a primary/fallback hierarchy. | **Tiebreaker:** **DialgaDex** when Pokebattler and Hub-DB diverge meaningfully OR for challenging matchups (debuts, Super Mega Raid Day, low-meta bosses). URL: `https://www.dialgadex.com/?p={dex_num}&f={form}` where `f=S` Shadow, `f=M` Mega, `f=P` Primal, no `f` for base. JS-rendered SPA — use fetch_url MCP `mode="text"`. DialgaDex's Baseline / Budget / ESpace tiers map cleanly to Spawn Point's Premium / Budget editorial standard. Mark divergence outcomes `[tiebreaker: dialgadex sided with <source>]`. **Tier 4 (last resort):** WebSearch snippet `[fallback: search-snippet]`. **Tier 5:** typing analysis `[fallback: typing-analysis]`. See "Tri-source counter recipe" below the table for the full procedure. |
+| **Raid counters** | **Hub-DB-first tri-source (UPDATED 2026-06-22):** (1) **Hub-DB `/counters` page FIRST** (the primary source, curated top-7 + movesets) via fetch_url MCP: `https://db.pokemongohub.net/pokemon/{KEY}/counters` where KEY is dex# (e.g., `870`) for base form, or form-suffixed with capital-first letters: `{N}-Mega`, `{N}-Mega_X` / `{N}-Mega_Y` (UNDERSCORE inside Mega X/Y), `{N}-Shadow`, `{N}-Primal`, `{N}-Gigantamax`, `{N}-Dynamax`. Parse the `BestCountersHighlights_highlights__O4EAQ` section for the top 7 curated picks. (2) **DialgaDex SECOND** (confirm / tiebreaker). URL: `https://www.dialgadex.com/?p={dex_num}&f={form}` where `f=S` Shadow, `f=M` Mega, `f=P` Primal, no `f` for base. JS-rendered SPA — use fetch_url MCP `mode="text"`. Baseline / Budget / ESpace tiers map cleanly to Spawn Point's Premium / Budget standard. | **Pokebattler TERTIARY:** JSON via WebFetch → fetch_url MCP on 403. See "Canonical Pokebattler ID and tier format" below — wrong ID format produces 404 on every boss. Consult ONLY when Hub-DB + DialgaDex leave an anomaly, or for editorially valuable cross-checks (debut Megas, Super Mega Raid Day, low-meta bosses). Its responses for popular legendaries run 5–12 MB and exceed the fetch_url cap; a truncated/oversized body is `[pokebattler: response oversized]`, NEVER a 404. **Tier 4 (last resort):** WebSearch snippet `[fallback: search-snippet]`. **Tier 5:** typing analysis `[fallback: typing-analysis]`. See "Tri-source counter recipe" below the table for the full procedure. |
 | **PvP rankings** | **PvPoke JSON via WebFetch** (raw.githubusercontent.com — always reachable from sandbox; if you ever see a 403, escalate to fetch_url MCP before falling further) | Articles via fetch_url MCP — flag `[fallback: search-snippet]` if snippet-only |
 | Cup ban list | @PokemonGoApp (search), LeekDuck, Hub Nifty or Thrifty (via WP REST API or fetch_url MCP) | Niantic blog post (WebFetch → fetch_url MCP on 403) |
 | Max Battle tier lists | pokemongohub.net via fetch_url MCP / WP REST API (reaches successfully as of May 7, 2026) | pokebase.app via fetch_url MCP |
@@ -332,7 +307,7 @@ Source is either `pokemon-go-api pokedex.json (computed)` (the seeded rows) OR `
 
 **For PvP rankings (themed cup):** fetch CURRENT ban list FIRST. Then PvPoke JSON: `https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/rankings/{cup}/overall/rankings-{cap}.json`. Filter against ban list. Cite specific rank/score/moveset. PvPoke JSON is on raw.githubusercontent.com so WebFetch should reach it directly; if it ever 403s (rare), escalate to fetch_url MCP.
 
-**For raid counters: tri-source equal-weight + tiebreaker (UPDATED 2026-06-15).** Pokebattler JSON AND Hub-DB `/counters` are BOTH primary sources — query both, compare results, and use DialgaDex as a third-source tiebreaker when they diverge. Joe's editorial standard: when manually checking counters, he checks both Pokebattler and Hub-DB; usually they agree; when they don't, the third opinion (DialgaDex) breaks the tie. For challenging matchups (debuts, Super Mega, low-meta bosses) DialgaDex gets pulled in proactively, not just as a tiebreaker.
+**For raid counters: Hub-DB-first tri-source (UPDATED 2026-06-22, Kanto bird incident).** Hub-DB `/counters` is the PRIMARY source (curated top-7 + explicit movesets), DialgaDex is SECOND (confirm / tiebreaker), Pokebattler is TERTIARY (last-resort corroboration only). This order replaced the earlier equal-weight framing after #21 falsely reported "Pokebattler 404 + Hub-DB 404" for the Kanto birds when both actually returned 200 (Pokebattler's 5–12 MB body overflowed the fetch_url cap and looked like a failure). Query Hub-DB first every time; pull DialgaDex to confirm anomalies and challenging matchups (debuts, Super Mega, low-meta bosses); reach for Pokebattler only when the first two leave a genuine gap. Never collapse an oversized-200 or 403 into "404."
 
 ### Canonical Pokebattler ID and tier format (CRITICAL — Pokebattler 404s the whole roster if either is wrong)
 
@@ -522,56 +497,20 @@ Write to `output/research-brief-[YYYY-MM-DD].md` section by section.
 
 ## Step 4.5: Send Pre-Research Plan Email
 
-Render per the master email format in `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` with `body_format="html"`, `to="joelandor@gmail.com"`, `subject="[Spawn Point Research] Pre-Research Plan — Issue #[N+1] ([Newsletter Monday] – [Newsletter Sunday])"`, `body`:
+Subject `[Spawn Point Research] Pre-Research Plan — Issue #[N+1] ([Newsletter Monday] – [Newsletter Sunday])`. Content spec (render per `instructions/email-format.md` v3):
+- **Eyebrow:** `PRE-RESEARCH PLAN · ISSUE #[N+1]` (clipboard-list.png). **Hero image** per v3 rules (theme = the issue's flagship).
+- **Headline:** e.g. `The plan for Issue #[N+1]`. No emoji.
+- **Status line:** Issue = #[N+1] · Week = [Mon Date]–[Sun Date], 2026 · Publish = Saturday [Publish Date] · Status = Plan confirmed, drafting in ~2 min.
 
-```html
-<h1>📋 Pre-Research Plan — Issue #[N+1]</h1>
+Section blocks, in order (v3 `<h2>` sections and tables):
+1. **Issue Overview** — table (Field / Value): Featured Community Day (name + date, or "None this week"); Headline raid swap (boss → boss with date); Max Monday (Dynamax Pokémon); GBL cup (name or "Open formats only"); Section 11 Month Transition (Included / Skipped, reason).
+2. **Trending Topic Candidates (4 — shortlist, category-rotated)** — lead with the category-rotation rule: the 4 candidates MUST span ≥ 3 of the 7 angle categories (Game-feature change · Event spotlight / new debut · Calendar/seasonal · Niantic corporate/industry · Competitive/esports · Ecosystem/spawn mechanics · Franchise/shiny news); read `instructions/newsletter-archive.md` "Repeat-risk watchlist" first (any category used in 2+ of the last 3 issues is BLOCKED from the SELECTED candidate, still allowed as a non-selected option); also read the freshest 5 entries in the News & Updates Notion DB (populated daily by the monitor trigger). Then Candidate 1 marked SELECTED with a 1-2 sentence angle + why it's strongest this week, and Candidates 2-4 with a 1-line angle each and their category. Close with a note: full 80–120 word mini-drafts of all 4 land in the `Trending Topic Drafts` Notion child page after drafting; to swap post-draft, edit the Notion Trending Topic section directly.
+3. **Trainer Tip Angle Candidates (4 — shortlist)** — Candidate 1 SELECTED with a 1-2 sentence frame + why it fits this week, Candidates 2-4 with a 1-line description each.
+4. **Flags Surfaced** — table (Flag / Detail) for [RULE CHANGE / ROTATION CONFLICT / PENDING / UNVERIFIED]; if none, one row `No flags surfaced this run.`
+5. Close with a heads-up line: the agent does not check inbox replies and proceeds to drafting in ~2 minutes; to swap defaults after the draft lands, edit the Notion draft directly or re-prompt the agent.
 
-<p><strong>Issue:</strong> #[N+1] | <strong>Week:</strong> [Mon Date]–[Sun Date], 2026 | <strong>Publish:</strong> Saturday, [Publish Date], 2026<br>
-<strong>Status:</strong> Plan confirmed — proceeding to draft in ~2 minutes</p>
-
-<h2>Issue Overview</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>Field</th><th>Value</th></tr>
-  <tr><td>Featured Community Day</td><td>[name + date, or "None this week"]</td></tr>
-  <tr><td>Headline raid swap</td><td>[boss → boss with date]</td></tr>
-  <tr><td>Max Monday</td><td>[Dynamax Pokémon]</td></tr>
-  <tr><td>GBL cup</td><td>[cup name or "Open formats only"]</td></tr>
-  <tr><td>Section 11 (Month Transition)</td><td>[Included / Skipped — reason]</td></tr>
-</table>
-
-<h2>Trending Topic Candidates (4 — shortlist, category-rotated)</h2>
-<p style="font-size:0.9em;color:#666;"><strong>Category rotation rule (MANDATORY):</strong> the 4 candidates MUST span at least 3 of these 7 angle categories: Game-feature change · Event spotlight / new debut · Calendar/seasonal · Niantic corporate/industry · Competitive/esports · Ecosystem/spawn mechanics · Franchise/shiny news. Read <code>instructions/newsletter-archive.md</code> "Repeat-risk watchlist" section BEFORE selecting — any category used in 2+ of the last 3 issues is BLOCKED from the SELECTED candidate (still allowed as a non-selected option). Also read the freshest 5 entries in the News & Updates Notion DB (populated daily by the monitor trigger) for trending news that may not be on the radar yet.</p>
-<p><strong>✅ CANDIDATE 1 (SELECTED): "[Title]"</strong> <em>[Category: ...]</em><br>
-[1-2 sentence angle + why this is strongest for THIS week.]</p>
-
-<p><strong>CANDIDATE 2: "[Title]"</strong> <em>[Category: ...]</em><br>[1-line angle.]</p>
-<p><strong>CANDIDATE 3: "[Title]"</strong> <em>[Category: ...]</em><br>[1-line angle.]</p>
-<p><strong>CANDIDATE 4: "[Title]"</strong> <em>[Category: ...]</em><br>[1-line angle.]</p>
-
-<p style="font-size:0.9em;color:#666;">Full 80–120 word mini-drafts of all 4 options will land in the <code>Trending Topic Drafts</code> Notion child page after drafting completes. To swap the SELECTED candidate post-draft: edit the Notion draft's Trending Topic section directly — no re-run needed.</p>
-
-<h2>Trainer Tip Angle Candidates (4 — shortlist)</h2>
-<p><strong>✅ CANDIDATE 1 (SELECTED): [Angle name]</strong><br>
-[1-2 sentence frame + why this is the strongest fit this week.]</p>
-
-<p><strong>CANDIDATE 2: [Angle name]</strong><br>[1-line description.]</p>
-<p><strong>CANDIDATE 3: [Angle name]</strong><br>[1-line description.]</p>
-<p><strong>CANDIDATE 4: [Angle name]</strong><br>[1-line description.]</p>
-
-<h2>Flags Surfaced</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>Flag</th><th>Detail</th></tr>
-  <tr><td>[RULE CHANGE / ROTATION CONFLICT / PENDING / UNVERIFIED]</td><td>[1-line detail]</td></tr>
-  <!-- One row per flag. If none, render: <tr><td colspan="2">No flags surfaced this run.</td></tr> -->
-</table>
-
-<p><em>Heads-up only — the agent does not check inbox replies. Agent will proceed to draft writing in ~2 minutes. To swap defaults after the draft lands: edit the Notion draft directly, or re-prompt the agent with the alternative.</em></p>
-
-<p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
-Spawn Point Research Agent — Run date: [YYYY-MM-DD] | Issue #[N+1] | Publish [Saturday date] | <a href="https://www.notion.so/e57321c855844e22b41285873853e26c">Run Log</a>
-</p>
-```
+- **Footer band:** Agent = Spawn Point Research Agent, Run date, Issue #[N+1], Publish [Saturday date], Run Log link.
+- Run the pre-send checklist before sending.
 
 ## Step 5: Write the Newsletter Draft (Section by Section)
 
@@ -582,10 +521,12 @@ Write to `output/newsletter-draft-[YYYY-MM-DD].md` section by section, under 500
 ### CRITICAL: Subject Line A/B Options at Top
 
 ```
-**Subject Line A/B Options:**
+**Subject Line A/B Options (5 required, each a different headline pattern):**
 1. [Subject-led]: "..."
 2. [Action-led]: "..."
 3. [Theme-led or hook]: "..."
+4. [Number-led]: "..."
+5. [Curiosity-gap]: "..."
 
 **Selected for draft:** Option [N] — [reason]
 ```
@@ -880,159 +821,44 @@ The Step 7 email includes a direct link to this child page so Joe sees it before
 
 Render per the master email format in `instructions/email-format.md`. Send via Spawn-Point-Fetcher MCP `send_email` tool with `body_format="html"`. Args: `to="joelandor@gmail.com"`, `body_format="html"`, `subject="[Spawn Point] Issue #[N+1] Pipeline Complete — [Title] ([Publish Date Saturday])"`, `body` rendered per the locked template below.
 
-**Why locked**: Joe approved this email layout — every research run uses the EXACT structure (header banner → Notion Pages → Subject Lines → Pre-Publish Audit → Hundo CP Provenance → Data Source Health → Trending Topic Candidates → Trainer Tip Angle Candidates → Archive Diff → Remaining Flags → footer). Do not invent alternate structures or reorder sections.
+**Why locked**: Joe approved this section list and order — every research run uses the EXACT sequence (eyebrow → hero → Notion Pages → Subject Lines → Pre-Publish Audit → Hundo CP Provenance → Data Source Health → Trending Topic Candidates → Trainer Tip Angle Candidates → Archive Entry → Remaining Flags → footer band). Rendering is locked by `instructions/email-format.md` v3. Do not invent alternate structures or reorder sections.
 
 ### Subject line
 ```
 [Spawn Point] Issue #[N+1] Pipeline Complete — [Title] ([Publish Date Saturday, e.g., May 30, 2026])
 ```
 
-### Body (HTML — render with this exact section order and table structure)
+### Body content spec (render per email-format.md v3 — this SECTION LIST and ORDER are locked)
 
-```html
-<h1>[event emoji per theme — 🌊 water / 🔥 fire / ⚡ electric / 🌳 grass etc.] Spawn Point #[N+1] — Pipeline Complete</h1>
+- **Eyebrow:** `PIPELINE COMPLETE · ISSUE #[N+1]` (badge-check.png). **Hero image** per v3 rules (theme = the issue's flagship Pokémon / event, e.g. `ocean wave`, `lightning storm`).
+- **Headline:** e.g. `Issue #[N+1] is drafted and fact-checked`. No emoji, no icon.
+- **Status line:** Issue = #[N+1] · Week = [Mon Date]–[Sun Date], 2026 · Publish = Saturday [Publish Date] · Status = [COMPLETE / PARTIAL / FAILED].
 
-<p><strong>Issue:</strong> #[N+1] | <strong>Week:</strong> [Mon Date]–[Sun Date], 2026 | <strong>Publish:</strong> Saturday, [Publish Date], 2026<br>
-<strong>Title:</strong> [Title]<br>
-<strong>Pipeline Status:</strong> [COMPLETE / PARTIAL / FAILED] — [brief one-line summary of state, e.g., "3 Notion pages created, pre-publish audit passed, social copy audited, run log pending (below)"]</p>
+Section blocks, in this LOCKED order (v3 `<h2>` sections; v3 tables with Deep Space header rows + `border:1px solid #24365A` cells; flat status icons; CP values with no thousands comma; titled links only):
 
-<h2>Notion Pages</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>Page</th><th>URL</th></tr>
-  <tr><td>Newsletter #[N+1]</td><td><a href="[newsletter URL]">[URL]</a></td></tr>
-  <tr><td>Social Pack (child)</td><td><a href="[social pack URL]">[URL]</a></td></tr>
-  <tr><td>Trending Topic Drafts (child)</td><td><a href="[trending topic drafts URL]">[URL]</a></td></tr>
-</table>
+1. **Notion Pages** — table (Page / URL, titled links, or buttons for the two primary ones): Newsletter #[N+1], Social Pack (child), Trending Topic Drafts (child).
+2. **Subject Lines (for Beehiiv)** — FIVE options, each a different headline pattern, bolded label + text: Subject-led (DEFAULT), Action-led, Theme-or-hook, Number-led, Curiosity-gap.
+3. **Pre-Publish Audit Results** — one-line "both HARD FAIL gates passed [after fixes / cleanly]" + table (Check / Finding / Result): #0 Source Presence, #9 Hundo CP Provenance, #14 Trainer Tip Per-Section, #15 Hundo CP Format, Brand Voice Em Dashes, Publish Date sanity, Section 11 (Month Transition). Add rows for any other checks that produced findings.
+4. **Hundo CP Provenance (Check #9)** — table (Species / Dex# / L20 Hundo / L25 WB / Source / Notes), one row per featured catchable Pokémon; CP values NO comma. Optional line for cross-check discrepancies and how resolved.
+5. **Data Source Health** — table (Source / Status, flat status icons). Rows (include ALL of these): LeekDuck events; pokemongo.com/news; Hub WP REST API (article count); db.pokemongohub.net (N Pokémon); **ScrapedDuck events/raids/research/eggs (report data-branch age — WARN if > 24h stale, not a healthy 200)**; **hundo-cp-master.json (Vercel)** (report reachability; WARN + note if a species was an ad-hoc miss for backfill); DialgaDex; Pokebattler (N defenders, tertiary); PvPoke GL/UL/ML JSON; Reddit RSS (r/TheSilphRoad, r/pokemongo); pokemon-go-api pokedex.json.
+6. **Trending Topic Candidates (4 options)** — Candidate 1 SELECTED with an 80–120 word mini-draft (Why this works baked in) + Sources; Candidates 2-4 with a mini-summary + Sources each.
+7. **Trainer Tip Angle Candidates (4 options)** — Candidate 1 SELECTED with a 2-sentence frame + why; Candidates 2-4 with a 2-sentence frame each.
+8. **Archive Entry — Apply Before Next Issue Drafts** — a normal v3 section (NO colored callout box). Lead: the full archive entry is drafted on the Notion child page `Archive Entry — Apply to instructions/newsletter-archive.md (Issue #[N+1])`; copy it into `instructions/newsletter-archive.md` and push to `main`; recon flags archive staleness (the #18 incident traced to a multi-issue lag). If archive is stale (Notion beyond archive max), call out the gap and which issues to backfill first. Then the inline backup copy as `<pre>` blocks styled per the v3 deviation rule (Space Mono, Deep Space background, bordered): Step 1 Quick Reference Table row, Step 2 Detailed Issue Record, Step 3 Pattern Analysis updates. (Keep the existing pre-formatted templates verbatim inside the `<pre>` blocks.)
+9. **Remaining Flags** — table (Flag / Status); if none, one row `No remaining flags.`
 
-<h2>Subject Lines (for Beehiiv)</h2>
-<ul>
-  <li><strong>[Subject-led / DEFAULT]:</strong> [Option A]</li>
-  <li><strong>[Action-led]:</strong> [Option B]</li>
-  <li><strong>[Hook]:</strong> [Option C]</li>
-</ul>
+- **Footer band:** Agent = Spawn Point Research Agent, Run date, Issue #[N+1], Publish [Saturday date], **Run Log link** (the v3 footer always includes it).
+- Run the v3 pre-send checklist before sending.
 
-<h2>Pre-Publish Audit Results</h2>
-<p>Both HARD FAIL gates passed [after fixes / cleanly]. [Brief context — what was caught and corrected before Notion push, if anything].</p>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>Check</th><th>Finding</th><th>Result</th></tr>
-  <tr><td>#0 Source Presence</td><td>[finding or "all sections cited cleanly"]</td><td>[PASSED / FIXED]</td></tr>
-  <tr><td>#9 Hundo CP Provenance</td><td>[all N CPs verified vs hub-db / formula]</td><td>[PASSED / FIXED]</td></tr>
-  <tr><td>#14 Trainer Tip Per-Section</td><td>[5/5 required sections have Trainer Tip blocks / list missing]</td><td>[PASSED / FIXED]</td></tr>
-  <tr><td>#15 Hundo CP Format</td><td>[all CP lines use locked format / list violations]</td><td>[PASSED / FIXED]</td></tr>
-  <tr><td>Brand Voice — Em Dashes</td><td>[N instances removed / 0 found]</td><td>[FIXED / PASSED]</td></tr>
-  <tr><td>Publish Date sanity</td><td>[Saturday confirmed / corrected from X to Y]</td><td>[PASSED / FIXED]</td></tr>
-  <tr><td>Section 11 (Month Transition)</td><td>[Included / Skipped — reason]</td><td>[N/A — CORRECT / INCLUDED]</td></tr>
-  <!-- Add additional rows for any other checks that produced findings or fixes -->
-</table>
+### Rules for the body
 
-<h2>Hundo CP Provenance (Check #9)</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>Species</th><th>Dex#</th><th>L20 Hundo</th><th>L25 WB</th><th>Source</th><th>Notes</th></tr>
-  <tr><td>[Species]</td><td>[N]</td><td>[value]</td><td>[value]</td><td>[fetched URL or "pokedex.json (computed)"]</td><td>[Clean match / cross-check flag with details]</td></tr>
-  <!-- One row per featured catchable Pokémon -->
-</table>
-<p>[Optional: any cross-check discrepancies + how resolved. E.g., "Tapu Bulu showed a small discrepancy between computed base-stat estimate and hub-db; hub-db re-fetched same-day and trusted."]</p>
-
-<h2>Data Source Health</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>Source</th><th>Status</th></tr>
-  <tr><td>LeekDuck events</td><td>[✅ 200 via fetch_url MCP / ❌ status]</td></tr>
-  <tr><td>pokemongo.com/news</td><td>[✅ / ⚠️ / ❌ with note]</td></tr>
-  <tr><td>Hub WP REST API</td><td>[status, count of articles fetched]</td></tr>
-  <tr><td>db.pokemongohub.net (N Pokémon)</td><td>[status]</td></tr>
-  <tr><td>Pokebattler (N defenders)</td><td>[status]</td></tr>
-  <tr><td>PvPoke GL/UL/ML JSON</td><td>[status, note if a league was not fetched]</td></tr>
-  <tr><td>Reddit r/pokemongo RSS</td><td>[status; if 5xx, retry per meta-data-sources.md guidance]</td></tr>
-  <tr><td>pokemon-go-api pokedex.json</td><td>[status]</td></tr>
-</table>
-
-<h2>Trending Topic Candidates (4 options)</h2>
-<p><strong>✅ CANDIDATE 1 (SELECTED): "[Title]"</strong><br>
-[80–120 word mini-draft summary from the brief, with the "Why this works" baked in.]<br>
-<em>Sources:</em> [URL list]</p>
-
-<p><strong>CANDIDATE 2: "[Title]"</strong><br>
-[Mini-summary.]<br>
-<em>Sources:</em> [URL list]</p>
-
-<p><strong>CANDIDATE 3: "[Title]"</strong><br>
-[Mini-summary.]<br>
-<em>Sources:</em> [URL list]</p>
-
-<p><strong>CANDIDATE 4: "[Title]"</strong><br>
-[Mini-summary.]<br>
-<em>Sources:</em> [URL list]</p>
-
-<h2>Trainer Tip Angle Candidates (4 options)</h2>
-<p><strong>✅ CANDIDATE 1 (SELECTED): [Angle name]</strong><br>
-[2-sentence frame + why this is the strongest fit for this week.]</p>
-
-<p><strong>CANDIDATE 2: [Angle name]</strong><br>[2-sentence frame.]</p>
-<p><strong>CANDIDATE 3: [Angle name]</strong><br>[2-sentence frame.]</p>
-<p><strong>CANDIDATE 4: [Angle name]</strong><br>[2-sentence frame.]</p>
-
-<h2>🗂️ Archive Entry — Apply Before Next Issue Drafts</h2>
-<p style="background:#fff8d6;padding:10px;border-left:4px solid #f4ba00;"><strong>Action required:</strong> the full archive entry is already drafted on a Notion child page on this issue's draft (<code>Archive Entry — Apply to instructions/newsletter-archive.md (Issue #[N+1])</code>). One-click-copy from there into <code>instructions/newsletter-archive.md</code> and push to <code>main</code>. The recon trigger checks archive freshness — leaving this unapplied for more than one issue cycle WILL trigger a recon flag (the broken-format #18 incident traced to a 4-issue archive lag).</p>
-<p>[If archive is stale (Notion has issues beyond archive max), call it out: "⚠️ ARCHIVE STALE: newsletter-archive.md shows max issue #X. Notion DB has #Y. Before applying #[N+1] entry below, backfill #X+1 through #Y first — or add #[N+1] now and note the gap."]</p>
-<p><em>Inline text copy below for backup — the Notion child page is the primary source.</em></p>
-
-<h3>Step 1 — Add to Quick Reference Table (after the #[N] row)</h3>
-<pre>| [N+1] | [Title] | [Date Range] | [CD or none] | [5-Star] | [Mega] | [Shadow] | [GBL Cup] | [Max Monday] | [Trending Topic title] |</pre>
-
-<h3>Step 2 — Add to Detailed Issue Records (after the #[N] record)</h3>
-<pre>### Spawn Point #[N+1]: [Title]
-- **Week:** [date range]
-- **URL:** [TBD until Beehiiv publish]
-- **Community Day:** [or none]
-- **Five-Star Raids:** [list with exit/debut dates]
-- **Mega Raids:** [list with exit/debut dates]
-- **Shadow Raids:** [list]
-- **GBL Cup:** [or "Open formats (GL/UL/ML)"]
-- **Max Monday:** [Dynamax Pokémon, including evolution gating if applicable]
-- **Trending Topic:** "[Title]" — [1-line description]
-- **Don't Miss:** [3 callouts; deadlines first]
-- **Trainer Tip Angles Used:** [default angle theme name + 1-line description]</pre>
-
-<h3>Step 3 — Update Pattern Analysis section</h3>
-<pre># In "Trending Topic categories used so far" — add:
-- **[Category name from this week's default]:** #[N+1] [topic]
-
-# In "Trainer Tip Angle Rotation" — update Recently Used line to add:
-[Angle name] (#[N+1])
-
-# In "Featured Pokémon Recurrence" — add to each list:
-- Five-Star: (add) [species]
-- Mega: (add) [Mega species]
-- Shadow Raid: [continues / new]
-- Max Monday: (add) [species]
-
-# Update top of file:
-**Last updated:** [today's date] (draft produced for #[N+1], publish [Saturday date])</pre>
-
-<h2>Remaining Flags</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-  <tr><th>Flag</th><th>Status</th></tr>
-  <tr><td>[Flag tag and short description]</td><td>[Status / non-blocking / needs action / etc.]</td></tr>
-  <!-- One row per remaining flag. If none, render: <tr><td colspan="2">No remaining flags.</td></tr> -->
-</table>
-
-<p style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
-Spawn Point Research Agent — Run date: [YYYY-MM-DD] | Issue #[N+1] | Publish [Saturday date]
-</p>
-```
-
-### Rules for the HTML body
-
-- **All `<` and `>` inside content must be HTML-escaped** (`&lt;` / `&gt;`) — they're rare in newsletter content but show up in code snippets / move regex patterns.
-- **All `&` inside content must be `&amp;`** unless it's already an entity.
-- **URLs in Notion Pages table cells must be wrapped in `<a href="...">`** so they're clickable.
-- **Use the green ✅ / red ❌ / yellow ⚠️ unicode icons** in the Data Source Health table — those scan visually.
-- **DO NOT include CSS classes or external stylesheets** — inline styles only (Gmail strips most CSS). The inline border/padding/style attributes shown above are safe.
-- **DO NOT use `<style>` blocks** — Gmail will strip them.
-- **Section order is locked.** Do not omit a section unless explicitly N/A (e.g., archive diff for a non-Notion-blocking run); if a section has no content, render a 1-line "None this run" instead of dropping the heading.
+- Follow `instructions/email-format.md` v3 exactly and run its pre-send checklist. All `<` / `>` inside content HTML-escaped (`&lt;` / `&gt;`), all bare `&` as `&amp;`.
+- Links are titled `<a>` tags (max two buttons per email); never a bare URL as link text.
+- Data Source Health status uses the flat status icons, not emoji.
+- **Section order is locked.** Do not omit a section unless explicitly N/A; if a section has no content, render a 1-line "None this run" instead of dropping the heading.
+- Zero em dashes in the body; CP values carry no thousands comma.
 
 ### Plain-text fallback
-Some clients render HTML poorly. The MCP `send_email` tool handles plain-text auto-conversion. Do not author a separate plain-text body — the HTML structure is the source of truth.
+The MCP `send_email` tool handles plain-text auto-conversion. Do not author a separate plain-text body — the HTML structure is the source of truth.
 
 ## Step 8: Write Run Log Entry (ALWAYS RUN — last step before exit)
 
@@ -1085,7 +911,7 @@ Properties to populate (set ALL of them — don't leave Tier Mix or Run Timestam
 - CRITICAL: Every featured catchable Pokémon requires L20 + L25 hundo CPs traced to the Hundo CP Provenance list.
 - CRITICAL: Cite costs from `instructions/cost-reference.md`.
 - CRITICAL: Consult `instructions/newsletter-archive.md` in Step 1.5 for Trending Topic dedup AND Trainer Tip angle drift tracking.
-- CRITICAL: Generate 3 Subject Line A/B Options at top of draft.
+- CRITICAL: Generate 5 Subject Line A/B Options at top of draft (each a different headline pattern), per newsletter-creation.md.
 - CRITICAL: Populate Notion database properties in Step 6 Phase 1.
 - CRITICAL (Step 4): Generate FOUR Trending Topic mini-drafts (80-120 words each) AND FOUR Trainer Tip angle themes, default flagged for each.
 - CRITICAL (Step 5 §Trending Topic): Write the default's full section, then append the "Alternative angles considered" callout.

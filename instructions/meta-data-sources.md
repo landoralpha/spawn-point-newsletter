@@ -9,7 +9,7 @@ For raid boss rotation and Pokémon base data (stats, types, movesets, form avai
 The cloud agent has three outbound network primitives:
 1. **WebFetch** — built-in. Cheap, but the sandbox's outbound IPs are flagged as datacenter traffic by many anti-bot services (Cloudflare, etc.), so it 403s on roughly half the sites we care about.
 2. **WebSearch** — built-in. Returns search-result snippets, never full bodies.
-3. **`fetch_url` from the Spawn Point Fetcher MCP** (custom connector) — a tiny FastMCP server hosted on Vercel that performs the GET with browser-like headers (Chrome UA + Google referer). Vercel's serverless IPs are datacenter-class like the sandbox, so the win comes from (a) the browser-style header set and (b) a different IP allocation than Anthropic's sandbox, which together get past header-based anti-bot rules. It does NOT defeat Cloudflare's interactive JS challenge ("Just a moment…" page), which gates `pokemongohub.net` and `db.pokemongohub.net`.
+3. **`fetch_url` from the Spawn Point Fetcher MCP** (custom connector) — a tiny FastMCP server hosted on Vercel that performs the GET with browser-like headers (Chrome UA + Google referer). Vercel's serverless IPs are datacenter-class like the sandbox, so the win comes from (a) the browser-style header set and (b) a different IP allocation than Anthropic's sandbox, which together get past header-based anti-bot rules. **As re-verified May 7, 2026, it DOES reach the Hub family** (`pokemongohub.net` and `db.pokemongohub.net` both return 200 via the Vercel IP, which is not on Hub's Cloudflare blocklist). The only failure mode is a genuine CF interactive-challenge body (`"Just a moment…"`); if that appears, fall to WebSearch snippet and note it for re-verification.
 
 **Curl/wget are blocked outright at the sandbox boundary.** Don't put curl recipes in agent instructions — they fail silently regardless of headers.
 
@@ -23,11 +23,11 @@ The cloud agent has three outbound network primitives:
   https://leekduck.com/events/gbl-forever-forward_{league}_{cup-slug}/
   ```
   Where `{league}` = `great-league` / `ultra-league` / `master-league` and `{cup-slug}` is the formatted cup name (e.g., `summer-cup-great-league-edition`, `fantasy-cup-ultra-league-edition`, `sunshine-cup-great-league-edition`). Open rotations (no cup) use the `gbl-forever-forward_{league}_{league}-split-1` pattern.
-  
+
   Confirmed examples reachable as of 2026-06-29 (HTTP 200):
   - `https://leekduck.com/events/gbl-forever-forward_great-league_summer-cup-great-league-edition/` (Summer Cup GL, June 30 – July 7)
   - `https://leekduck.com/events/gbl-forever-forward_ultra-league_fantasy-cup-ultra-league-edition/` (Fantasy Cup UL, July 7 – July 14)
-  
+
   **Anti-pattern (DO NOT report as a real URL):** `https://leekduck.com/events/gbl/` returns 404 because it doesn't exist. If a research agent reports "LeekDuck GBL page 404" without quoting the exact URL hit, treat as a wrong-URL error and re-probe with the cup-slug-specific pattern above. Real-world example: Spawn Point #22 run log marked LeekDuck GBL as 404 → direct probe of the Fantasy Cup-specific URL returned 200 with full event details (dates, CP cap, eligible types).
 - **Pokémon GO Hub** — `pokemongohub.net/*` (articles, tier lists, RSS feed). The earlier "Cloudflare wall" verdict was based on local-Mac IP tests; Vercel's IP space does NOT trigger Hub's anti-bot. Verified live with article URLs, the Max Attackers tier list, the Max Defenders tier list, and `pokemongohub.net/feed/`.
 - **`db.pokemongohub.net/pokemon/[N]`** — hundo CP pages reachable directly. No more need to compute from pokedex.json as a primary path (still useful as redundancy / for not-yet-listed Pokémon).
@@ -84,8 +84,8 @@ Effective hierarchy in order:
 | **0** | **News-aggregator RSS via fetch_url MCP** (preferred) or WebFetch (fallback) | Discovery layer. Try `news.google.com/rss/search?q=pokemon+go`, `bing.com/news/search?q=pokemon+go&format=rss`, `feeds.feedburner.com/PokemonGoHub` via the MCP — all three returned 200 against the local MCP. Add `&when=1d` to Google News URL for last-24h filter. |
 | 1 | **JSON/RSS endpoint via WebFetch** | PvPoke, Pokebattler, pokemon-go-api JSONs (always reachable — github.io). Site-specific RSS (`pokemongo.com/feed`, `pokemongohub.net/feed/`) — try via WebFetch first; on 403, retry via fetch_url MCP. |
 | 2 | **WebFetch HTML** | Default first attempt for direct article fetches. Cheap, no connector overhead. On 403, escalate to Tier 2.5. |
-| **2.5** | **`fetch_url` MCP** | When WebFetch returns 403 on a non-Hub site (Niantic, pokemongo.com, LeekDuck). Solves header-based 403s. Skip this tier entirely for any `pokemongohub.net` or `db.pokemongohub.net` URL — Cloudflare's JS challenge defeats it. |
-| 3 | **WebSearch snippets** | When both WebFetch AND fetch_url return 403, OR for Cloudflare-challenged sites (Hub, db.pokemongohub.net), OR Reddit (sandbox-blocked entirely). Mark `[fallback: search-snippet]`. |
+| **2.5** | **`fetch_url` MCP** | When WebFetch returns 403 on ANY site, INCLUDING the Hub family (`pokemongohub.net`, `db.pokemongohub.net`) — the Vercel IP reaches Hub with a 200 (verified May 7, 2026). Solves header-based 403s. |
+| 3 | **WebSearch snippets** | When both WebFetch AND fetch_url return 403, OR when fetch_url returns a genuine CF challenge body (`"Just a moment…"`), OR Reddit `.json` (sandbox-blocked; use `.rss` via fetch_url first). Mark `[fallback: search-snippet]`. |
 | 4 | **Compute / derive** | Hundo CPs from base stats (pokedex.json + GO CP formula) for Pokémon not yet listed in `db.pokemongohub.net`, OR as a sanity-check against the published values, OR if hub-db ever regresses. |
 
 ### Verified site-fetch behavior (re-tested May 7, 2026 against deployed Vercel MCP)
@@ -152,7 +152,7 @@ Effective hierarchy in order:
 }
 ```
 
-The `content.rendered` field is full article HTML — strip tags for plain text or pass through to Notion as-is. Field is typically 5–20 KB of HTML per article, well under the fetch_url 100 KB cap.
+The `content.rendered` field is full article HTML — strip tags for plain text or pass through to Notion as-is. Field is typically 5–20 KB of HTML per article, well under the fetch_url 250 KB cap.
 
 **When to use this vs the article URL directly:**
 - Need full body text (Trending Topic, datamine writeups, Nifty or Thrifty meta analysis): **WP REST API is primary** — gets the actual content payload, not the SPA shell.
