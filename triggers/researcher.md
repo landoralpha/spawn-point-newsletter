@@ -498,7 +498,7 @@ Write to `output/research-brief-[YYYY-MM-DD].md` section by section.
 ## Step 4.5: Send Pre-Research Plan Email
 
 Subject `[Spawn Point Research] Pre-Research Plan — Issue #[N+1] ([Newsletter Monday] – [Newsletter Sunday])`. Content spec (render per `instructions/email-format.md` v3):
-- **Eyebrow:** `PRE-RESEARCH PLAN · ISSUE #[N+1]` (clipboard-list.png). **Hero image** per v3 rules (theme = the issue's flagship).
+- **Eyebrow:** `PRE-RESEARCH PLAN · ISSUE #[N+1]` (clipboard-list.png). **Hero image** per v3 rules — pick the library hero matching the issue's flagship type, or `generic`.
 - **Headline:** e.g. `The plan for Issue #[N+1]`. No emoji.
 - **Status line:** Issue = #[N+1] · Week = [Mon Date]–[Sun Date], 2026 · Publish = Saturday [Publish Date] · Status = Plan confirmed, drafting in ~2 min.
 
@@ -830,7 +830,7 @@ Render per the master email format in `instructions/email-format.md`. Send via S
 
 ### Body content spec (render per email-format.md v3 — this SECTION LIST and ORDER are locked)
 
-- **Eyebrow:** `PIPELINE COMPLETE · ISSUE #[N+1]` (badge-check.png). **Hero image** per v3 rules (theme = the issue's flagship Pokémon / event, e.g. `ocean wave`, `lightning storm`).
+- **Eyebrow:** `PIPELINE COMPLETE · ISSUE #[N+1]` (badge-check.png). **Hero image** per v3 rules — pick the library hero matching the issue's flagship type (e.g. `water`, `electric`, `steel`), or `generic`.
 - **Headline:** e.g. `Issue #[N+1] is drafted and fact-checked`. No emoji, no icon.
 - **Status line:** Issue = #[N+1] · Week = [Mon Date]–[Sun Date], 2026 · Publish = Saturday [Publish Date] · Status = [COMPLETE / PARTIAL / FAILED].
 

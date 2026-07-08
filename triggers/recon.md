@@ -720,7 +720,7 @@ Render per the master email format in `instructions/email-format.md` v3. Send vi
 
 ### Body content spec (render per email-format.md v3)
 
-- **Eyebrow:** `FACT-CHECK REPORT · ISSUE #N` (search.png). **Hero image** per v3 rules (theme = `magnifying lens` or the issue's flagship).
+- **Eyebrow:** `FACT-CHECK REPORT · ISSUE #N` (search.png). **Hero image** per v3 rules — use the `recon` hero from the library table.
 - **Headline:** the human-form outcome, e.g. `Spawn Point #N is cleared to publish` (PASS) or `Spawn Point #N needs N fixes before publish` (FLAGGED). No emoji in the headline.
 - **Status line:** Issue = #N · Week = [Mon Date]–[Sun Date], 2026 · Mode = [Pre-publish / Post-publish] · Status = [SUCCESS / PARTIAL / FAILED] (N FLAGS, N UNVERIFIABLE, N PASSES).
 

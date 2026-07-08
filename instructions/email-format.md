@@ -171,25 +171,37 @@ All six eyebrow icons are crimson `#E30B5C`. The email THEME still varies per is
 
 Icon source of truth: the recolored PNGs live in `assets/brand-icons/` (generated from Lucide: `badge-check`, `clipboard-list`, `search`, `newspaper`, `trash-2`, `triangle-alert`, `circle-check`, `circle-x`). Regenerate with `stroke="[brand hex]"`, rasterize at 64×64, and re-upload via `scripts/upload-brand-icons.mjs` if the set is ever rebuilt.
 
-## Hero image (Flux via fal.ai)
+## Hero image (pre-generated theme library)
 
 **Report emails only:** researcher Step 7 (Pipeline Complete), researcher Step 4.5 (Research Plan), recon Step 6 (result), monitor Step 6b (major news). Degraded (Step 0.5) and cleanup (Step 6c) emails NEVER carry an image — alert paths stay fast and dependency-free.
 
-Generation (one MCP call, before assembling the body): call the Spawn-Point-Fetcher MCP `generate_image` tool with a short `theme` word:
+No runtime generation. The heroes are a fixed set of pre-generated abstract brand images hosted on `fal.media` (the same store as the icons), so the hero is just a static `<img src>` that Gmail loads directly — no MCP call, no POST, no dependency. Pick the row whose theme best matches the email:
 
-```
-generate_image(theme="ocean wave")   → {"success": true, "url": "https://...fal.media/...png"}
-```
+| Theme key | When to use | Hero URL |
+|---|---|---|
+| `water` | water-type flagship / ocean event | `https://v3b.fal.media/files/b/0aa1746c/8knJFd8oYcm85xAdWtegF.jpg` |
+| `fire` | fire-type flagship | `https://v3b.fal.media/files/b/0aa17462/cr9qQ9UTOl4PXqhzEZ1UU.jpg` |
+| `electric` | electric-type flagship | `https://v3b.fal.media/files/b/0aa1746d/IWv6P4MiOBCWTnC-SBB8E.jpg` |
+| `grass` | grass-type flagship | `https://v3b.fal.media/files/b/0aa17462/HKRFhhBQavpgATMt95iEq.jpg` |
+| `dark` | dark / ghost flagship | `https://v3b.fal.media/files/b/0aa1746d/bpovWN08w2YnN6187PBvp.jpg` |
+| `steel` | steel flagship (e.g. Mega Skarmory) | `https://v3b.fal.media/files/b/0aa17463/HUojarYEzbxenUf7Vt1cC.jpg` |
+| `dragon` | dragon flagship | `https://v3b.fal.media/files/b/0aa17463/ZZ4gMeJRdSJAdT9LnthX_.jpg` |
+| `psychic` | psychic / fairy flagship | `https://v3b.fal.media/files/b/0aa17463/dTrqJzia0PGv0aTcmeCKF.jpg` |
+| `ice` | ice flagship | `https://v3b.fal.media/files/b/0aa17463/iYRi1SfE17SafBh2s-u76.jpg` |
+| `news` | monitor Step 6b Major Niantic News | `https://v3b.fal.media/files/b/0aa17463/VA-3TzKpcMjBggYADXdfy.jpg` |
+| `recon` | recon Step 6 Fact-Check Report | `https://v3b.fal.media/files/b/0aa17464/INOuWgXak973FTsToqdfQ.jpg` |
+| `anniversary` | anniversary / milestone issue | `https://v3b.fal.media/files/b/0aa17464/BAw0vYVb8jKiydIFFcMJQ.jpg` |
+| `generic` | anything else / no clear type theme | `https://v3b.fal.media/files/b/0aa1746f/ndsFzrXKwJkcBnLdHHCaL.jpg` |
 
-The tool holds `FAL_KEY` server-side (never in the trigger), applies the locked brand prompt below, and returns a public `fal.media` URL. Put `result.url` straight into the hero `<img src>`. Optional args: `width` / `height` (default 1200×600), `prompt_override` (leave unset in normal use).
+Selection: for a Pipeline Complete / Research Plan email, match the theme to the issue's flagship Pokémon type or event; when nothing fits, use `generic`. Recon always uses `recon`; monitor major-news always uses `news`. Put the chosen URL straight into the hero `<img src>` (the master skeleton's hero `<tr>`).
 
-**Locked prompt formula** (baked into the MCP tool — shown here for reference; the tool fills the ONE theme slot):
+**Never block on it.** If a hero URL ever fails to load, the email still renders fully branded (the `<img>` alt text shows and the layout holds) — heroes are decorative, not load-bearing.
+
+Hero source of truth: `assets/brand-heroes/urls.json`. Regenerate the set with `scripts/gen-heroes.mjs` (Flux schnell, locked brand prompt below) only if the art is ever rebuilt; then update this table.
+
+**Locked prompt formula** (used to generate the library — one theme motif per row, everything else fixed):
 
 > Minimal abstract editorial graphic, [THEME] motif, flowing geometric shapes and soft gradient bars, deep midnight navy #0A1628 background, crimson #E30B5C and indigo #3D52A0 gradient accents, ice white highlights, premium dark tech aesthetic, generous negative space, no text, no letters, no logos, no characters
-
-`theme` examples: `ocean wave` (water-week issue), `lightning storm` (electric), `radio broadcast signal` (major news), `magnifying lens` (recon report). One or two words, drawn from the email's subject matter. Never Pokémon likenesses — abstract motifs only (IP safety).
-
-**Failure = omit.** If `generate_image` returns `success: false` (FAL_KEY not set on the server, fal error, timeout, missing URL) or the tool is absent: drop the hero `<tr>` entirely and note `[hero image skipped: <error>]` in the Run Log Notes. Never retry more than once, never block the email on the image. The email is fully branded without it.
 
 ## Required sections per email type
 
@@ -248,7 +260,7 @@ Examples:
 Verify the assembled body against ALL of these. Any failure = fix before sending, never send-then-note:
 
 1. Header wordmark is exactly `SPAWN POINT` at font-weight 600; footer band is the crimson table with navy text; both match the skeleton byte-for-byte apart from slot values.
-2. Zero `<style>` blocks; zero fonts/colors outside the brand token table; the only `<img>` tags are the hero (report emails only, fal.media URL) and the flat icons (eyebrow + status), each `src` an exact fal.media URL from the Icon system map, and every one carrying `width`, `height`, and `alt`.
+2. Zero `<style>` blocks; zero fonts/colors outside the brand token table; the only `<img>` tags are the hero (report emails only, a fal.media URL from the Hero image library table) and the flat icons (eyebrow + status, fal.media URLs from the Icon system map), and every one carries `width`, `height`, and `alt`.
 3. ZERO emoji anywhere in the body. Exactly one crimson eyebrow, ALL CAPS, led by the correct flat icon per the Icon system table. Headline has no icon and no emoji.
 4. Every table cell (`<th>`/`<td>`) carries `border:1px solid #24365A`; header cells are Deep Space.
 5. At most two buttons; every other link is inline crimson with a descriptive title, never a raw URL.

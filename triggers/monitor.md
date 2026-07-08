@@ -333,7 +333,7 @@ If any: set Newsletter Treatment to `Major (alerted)` AND send the email.
 ## Step 6b: Send email (only if major news)
 
 Subject `[Spawn Point Monitor] Major Niantic news: [brief headline]`. Content spec (render per `instructions/email-format.md` v3):
-- **Eyebrow:** `MAJOR NIANTIC NEWS` (newspaper.png). **Hero image** per v3 rules (theme = a word from the announcement, e.g. `radio broadcast signal`).
+- **Eyebrow:** `MAJOR NIANTIC NEWS` (newspaper.png). **Hero image** per v3 rules — use the `news` hero from the library table.
 - **Headline:** the brief human-form announcement. No emoji.
 - **Status line:** Agent = News Monitor · Run date = [YYYY-MM-DD] · Status = Major news flagged.
 
