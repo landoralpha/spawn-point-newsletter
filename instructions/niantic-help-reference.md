@@ -29,7 +29,7 @@ When agent research finds an apparent conflict, default to the more recent autho
 - **Super Mega Raids** (added Feb 2026): bosses become enraged and deploy Shields requiring Mega Pokémon Charged Attacks to break
 - **Ultra Beast Raids:** Award Beast Balls (Ultra Beasts only)
 - **Primal Raids:** Award Primal Energy
-- **Shadow Raids:** Remote-raidable (Remote Raid Passes work). Treat as silent default in newsletter copy — see `feedback_shadow_raid_remote_default.md`
+- **Shadow Raids:** Remote-raidable (Remote Raid Passes work). Treat as silent default in newsletter copy — see `spawn_point_copy_accuracy.md`
 - **Elite Raids:** Egg appears 24h before boss; only **30 minutes** to challenge once hatched; in-person only
 - **EX Raids: DEPRECATED.** Suspended March 14, 2020 (COVID); all EX Raid Battle data removed from the game in January 2024. Niantic help center FAQs still reference EX Raid Passes — these are stale. Old EX Raid–eligible gyms appear to have been functionally replaced by Elite Raid–eligible gyms (community-implied, not officially confirmed). Do NOT reference EX Raids as an active mechanic in newsletter content. Use "Elite Raid–eligible gym" as the modern term.
 
@@ -40,7 +40,7 @@ When agent research finds an apparent conflict, default to the more recent autho
 - **Storage cap:** ≥3 passes = can't acquire more
 
 ### Shadow Raids (faq/4054, faq/4055)
-- **Remote-raidable** — Remote Raid Passes work. NOT weekend-only and NOT in-person-only. Treat remote + any-day-during-the-window as the silent default in newsletter copy (see `feedback_shadow_raid_remote_default.md`). The FAQ's older "in-person only" phrasing is stale.
+- **Remote-raidable** — Remote Raid Passes work. NOT weekend-only and NOT in-person-only. Treat remote + any-day-during-the-window as the silent default in newsletter copy (see `spawn_point_copy_accuracy.md`). The FAQ's older "in-person only" phrasing is stale.
 - **Purified Gem button** appears bottom-left after boss enrages
 - **Purified Gems:** 4 Shadow Shards = 1 Purified Gem; max 10 in inventory; up to 5 per Shadow Raid
 - **Effect stacks** when multiple trainers use them
@@ -366,13 +366,13 @@ Quick reference (Niantic-confirmed):
 ### Spotlight Hour — ACTIVE (returned June 18, 2026)
 - Spotlight Hour was retired at the Memories in Motion launch (March 3, 2026) but RETURNED with the Forever Forward season (first featured in issue #19, week of June 18, 2026). FAQ/4846 describing it as active is correct again.
 - **It is a REQUIRED standalone section in every newsletter** (see `newsletter-creation.md` Section 7.5).
-- **Cadence:** Thursdays 6:00–7:00 PM local time. One featured species with a 2× bonus (Catch Candy / Catch Stardust / Catch XP / Evolution XP / Transfer Candy, varies weekly). Spotlight Hour boosts spawn VOLUME, not per-encounter shiny rate (see `feedback_no_unsourced_shiny_boost.md`).
+- **Cadence:** Thursdays 6:00–7:00 PM local time. One featured species with a 2× bonus (Catch Candy / Catch Stardust / Catch XP / Evolution XP / Transfer Candy, varies weekly). Spotlight Hour boosts spawn VOLUME, not per-encounter shiny rate (see `spawn_point_copy_accuracy.md`).
 - Daily Discoveries still runs alongside it under the current Forever Forward rotation (Scenic Sunday, Max Monday, GO Battle Thursday + Spotlight Hour, Friendship Friday) — see `seasons-reference.md` for the authoritative schedule.
 
 ### Max Monday (faq/4883)
 - **Cadence:** Every Monday. The event runs **6:00 AM to 9:00 PM local time**; the featured Dynamax "Max Hour" spike is **6:00–7:00 PM local**. Spawn Point headers use the 6 AM–9 PM window (see `dynamax-reference.md`).
 - **Effect:** A different featured Dynamax Pokémon takes over all Power Spot Max Battles
-- **Catch level: L20 only** (Max Battle catches are always L20 — there is NO weather-boosted L25 catch; see `feedback_max_battle_l20_only.md`).
+- **Catch level: L20 only** (Max Battle catches are always L20 — there is NO weather-boosted L25 catch; see `spawn_point_copy_accuracy.md`).
 
 ### GO Pass (faq/4972)
 - **Tiers:** Basic (free) and Deluxe (in-app purchase)

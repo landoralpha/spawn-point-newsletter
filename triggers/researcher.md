@@ -74,7 +74,7 @@ NEVER write any of these in a Shadow Raid section, Trending Topic, Trainer Tip, 
 - ❌ "weekend-only" / "only on weekends" / "Saturday and Sunday only"
 - ❌ "in-person only" / "no Remote Raid Passes" / "can't be done remotely"
 
-Also do NOT write the positive defaults ("available all week," "remote passes work") — that's default-filler. Just describe the boss, its window dates, and counters. The ONLY exception is a specific event Niantic explicitly schedules as weekend-only or in-person-only — in that rare case cite the Niantic source URL. Default assumption: all-week + remote-eligible. See `feedback_shadow_raid_remote_default.md` and `instructions/niantic-help-reference.md`.
+Also do NOT write the positive defaults ("available all week," "remote passes work") — that's default-filler. Just describe the boss, its window dates, and counters. The ONLY exception is a specific event Niantic explicitly schedules as weekend-only or in-person-only — in that rare case cite the Niantic source URL. Default assumption: all-week + remote-eligible. See `spawn_point_copy_accuracy.md` and `instructions/niantic-help-reference.md`.
 
 **Pre-push check:** before pushing any draft with a Shadow Raid section, grep the assembled text for `weekend`, `in-person`, `in person`, and `Remote Raid Pass` appearing near "Shadow." If found in a Shadow Raid context, strip the claim.
 
@@ -414,7 +414,7 @@ This catches cases like Mega Latios with Aura Sphere (Aura Sphere IS in Mega Lat
 Before writing any "debuts" / "new to Pokémon GO" / "GO debut" framing, run `tools/mgrann03_check.py debut "<Species>"`. Output:
 
 - **`✓ DEBUT`** — species is in `pogo_pkm_manual_announced.json` with an `eff_date`. Confirm the `eff_date` matches the newsletter window before using debut framing. (For #20's Mega Skarmory: tool returned `✓ DEBUT, eff_date 2026-06-27, raid_tier 8 (Super Mega Raid Day)`.)
-- **`✗ NOT A DEBUT`** — species is already released in `pogo_pkm.min.json`. **Strip "debuts" framing; use "returns" / "rotates back in" / "continues" instead.** Cross-references `feedback_not_a_debut.md` memory.
+- **`✗ NOT A DEBUT`** — species is already released in `pogo_pkm.min.json`. **Strip "debuts" framing; use "returns" / "rotates back in" / "continues" instead.** Cross-references `spawn_point_copy_accuracy.md` memory.
 - **`? UNKNOWN`** — not in either file. Verify against `instructions/newsletter-archive.md` BEFORE writing the claim. mgrann03's announced file lags Niantic announcements by a few days for fresh debuts; if the issue is the recent date of the announcement, that's expected — surface in the Pre-Research Plan email as a flag for Joe to confirm.
 
 This is a mechanical replacement for the editorial "remember to check if it's actually a debut" rule. The historic violations (#15's Tapu Bulu, #16's Mega Medicham, #17's Tapu Fini) all would have triggered `✗ NOT A DEBUT` with the tool.

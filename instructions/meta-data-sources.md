@@ -242,7 +242,7 @@ The PvPoke **website** (`pvpoke.com`) IS a JS-rendered SPA and is hard to scrape
 
 **Required behavior:**
 1. Before claiming "PvPoke is JS-rendered" or "PvPoke unavailable" or any similar source-failure label, hit the GitHub raw JSON URL for the relevant `{cup}` and `{cap}`.
-2. Quote the actual HTTP status returned. Per `feedback_counter_source_order` status-code discipline: never collapse 200/200-oversized/403/5xx into "404."
+2. Quote the actual HTTP status returned. Per `spawn_point_sourcing` status-code discipline: never collapse 200/200-oversized/403/5xx into "404."
 3. If the JSON returns 200 (parseable or oversized), the data exists. Parse it (using the recon Category A truncation-tolerant rule if oversized).
 4. If the JSON returns a **real 404**, the cup directory genuinely doesn't exist in PvPoke's published rankings. Report this honestly: `"PvPoke has not published [cup] rankings for this rotation"` (linked to GitHub URL), NOT `"PvPoke JS-rendered limitation"`.
 5. To enumerate which cups PvPoke currently has published, call `https://api.github.com/repos/pvpoke/pvpoke/contents/src/data/rankings` and grep for directory names.

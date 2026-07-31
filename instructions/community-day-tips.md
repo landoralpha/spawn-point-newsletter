@@ -5,7 +5,7 @@ Comprehensive optimization reference for Pokémon GO Community Days. Use this wh
 ## Format Quick Facts
 
 - **Duration:** 3 hours (typically 2:00 PM - 5:00 PM local)
-- **Featured move bonus window:** 4 hours after event ends (the current 2026 standard for both Regular CD and CD Classic; Niantic's FAQ still says "up to 5 hours" but is stale — always check the specific event page). See `niantic-help-reference.md` and `reference_community_day_window`.
+- **Featured move bonus window:** 4 hours after event ends (the current 2026 standard for both Regular CD and CD Classic; Niantic's FAQ still says "up to 5 hours" but is stale — always check the specific event page). See `niantic-help-reference.md` and `spawn_point_copy_accuracy`.
 - **Post-event raid bonus:** Often 2-hour Mega/Shadow raid window with bonus Mega Energy
 - **Shiny rate:** ~1/25 during core 3 hours. Drops back to standard ~1/512 during the post-event catch buffer
 - **Special Research:** Optional $1.99 ticket with 3 special-background encounters + items

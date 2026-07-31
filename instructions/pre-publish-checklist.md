@@ -127,7 +127,7 @@ For every featured catchable Pokémon — every Five-Star raid boss, Mega raid b
 1. **L20 hundo catch CP** (15/15/15 IVs, normal weather / unboosted)
 2. **L25 hundo catch CP** (15/15/15 IVs, weather-boosted)
 
-**EXCEPTION — Max Monday / Max Battle bosses are L20 ONLY.** The featured Dynamax/Gigantamax Pokémon still needs a hundo CP line, but it is **L20 only** — Max Battle catches are always L20 and there is NO weather-boosted L25 catch. Do NOT require or add an L25 value for a Max Monday section (see `feedback_max_battle_l20_only.md` and `newsletter-creation.md` Section 8).
+**EXCEPTION — Max Monday / Max Battle bosses are L20 ONLY.** The featured Dynamax/Gigantamax Pokémon still needs a hundo CP line, but it is **L20 only** — Max Battle catches are always L20 and there is NO weather-boosted L25 catch. Do NOT require or add an L25 value for a Max Monday section (see `spawn_point_copy_accuracy.md` and `newsletter-creation.md` Section 8).
 
 **Provenance requirement (HARD FAIL):** every CP value in the draft must trace to a `## Hundo CP Provenance` list maintained in `output/research-brief-[YYYY-MM-DD].md`. For each species, the list records ONE of:
 

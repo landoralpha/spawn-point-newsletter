@@ -136,7 +136,7 @@ Always cross-check against current Pokémon GO Hub Max Battle tier lists (Attack
 
 - **Free encounter** after winning (no Premier Balls limit)
 - IV floor: 10/10/10 (typical Max Battle floor)
-- Catch level: **L20 only** (Max Battle catches are always L20 — there is NO weather-boosted L25 catch; see `feedback_max_battle_l20_only.md`)
+- Catch level: **L20 only** (Max Battle catches are always L20 — there is NO weather-boosted L25 catch; see `spawn_point_copy_accuracy.md`)
 - **Shiny rates:**
   - Standard Max Battle: ~1/64 (raid-like)
   - Max Battle Day featured species: ~1/20 (boosted)
@@ -190,7 +190,7 @@ In GO, G-Max effects are **simplified vs. main games** — they primarily deal m
 
 - **6-Star Max Battle** — in-person only, 800 MP entry cost, deducted only on win
 - Practical group: 20–40 trainers
-- Free post-battle encounter; catch CP at **L20 only** (no weather-boosted L25 catch for Max Battles; see `feedback_max_battle_l20_only.md`)
+- Free post-battle encounter; catch CP at **L20 only** (no weather-boosted L25 catch for Max Battles; see `spawn_point_copy_accuracy.md`)
 - Shiny rate: ~1/20 on Max Battle Days, ~1/64 baseline, ~1/512 outside events for some species
 
 ---

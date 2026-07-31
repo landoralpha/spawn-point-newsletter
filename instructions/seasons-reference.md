@@ -51,7 +51,7 @@ For a newsletter spanning [Monday] – [Sunday]:
 
 - **Wild shiny rate flattened to 1/512** (March 3 onward). Raid/egg perma-boost removed from wild encounters. Raids/eggs standardized to 1/64 baseline (5-Star Legendary at 1/20). See `shiny-odds-reference.md`.
 - **GO Pass: Memories in Motion** — free track + Deluxe ($4.99 standard / $6.99 with +6 Ranks).
-- **Pressure Rising Special Research** — season-themed quest leading to Volcanion encounter. **Persistent** — stays in quest log after the season transitions (see `feedback_verify_research_expirations.md`).
+- **Pressure Rising Special Research** — season-themed quest leading to Volcanion encounter. **Persistent** — stays in quest log after the season transitions (see `spawn_point_copy_accuracy.md`).
 
 ### Notable in-season events (selected)
 

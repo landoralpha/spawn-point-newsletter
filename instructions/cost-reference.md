@@ -369,7 +369,7 @@ Translated to a decision table:
 | **Standard Mega Raid** | Free Raid Pass (auto-priority) → OR Link Charge → OR Premium Battle Pass (trainer's choice between the latter two) | Remote Raid Pass (Link Charge NOT required per FAQ wording — FAQ only specifies the AND requirement for **Super** Mega remote) |
 | **Super Mega Raid** | Free Raid Pass (auto-priority) → OR Link Charge → OR Premium Battle Pass | **BOTH** Link Charge AND Remote Raid Pass required |
 | 5-Star Legendary | Free Raid Pass or Premium / Remote | Remote Raid Pass |
-| Shadow Raid (any tier) | Free Raid Pass or Premium | Remote Raid Pass (Shadow Raids became remote-eligible — see `feedback_shadow_raid_remote_default.md`) |
+| Shadow Raid (any tier) | Free Raid Pass or Premium | Remote Raid Pass (Shadow Raids became remote-eligible — see `spawn_point_copy_accuracy.md`) |
 | Max Battle (any tier) | Max Particles (not a raid pass system) | In-person only |
 
 **Key reversal from earlier doc state:** Link Charges are **NOT** Super-Mega-exclusive. Per Niantic, in-person entry to ANY Mega Raid offers Link Charge as an option (with free Raid Pass auto-prioritized when available). The newsletter's "Standard Mega doesn't use Link Charges" framing is wrong — it's a player **choice** for in-person Standard Mega, and a **requirement** for remote Super Mega.

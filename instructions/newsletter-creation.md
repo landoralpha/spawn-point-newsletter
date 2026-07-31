@@ -300,7 +300,7 @@ Standard raid form (5-Star, 3-Star, 1-Star, Shadow):
 Mega/Super Mega raid variant (catch is base species, not Mega):
 > `**Hundo CPs** (base [Species] catch): **[L20 value]** (L20) / **[L25 value]** (L25, weather-boosted by [Weather Name])`
 
-**Max Monday / Max Battle form** (added 2026-06-23 after #20 Hoothoot incident — see `feedback_max_battle_l20_only.md`):
+**Max Monday / Max Battle form** (added 2026-06-23 after #20 Hoothoot incident — see `spawn_point_copy_accuracy.md`):
 > `**Hundo CPs:** **[L20 value]** (L20 Max Battle catch)`
 
 **CRITICAL Max Battle rule:** Max Battle encounters are **L20 only**. No weather-boost applies to Max Battle catches. Do NOT use the "/ L25 (L25, weather-boosted by ...)" segment for Max Monday sections. Hub-DB's per-species page shows an L25 weather-boost row but that's for raid/egg catches, not Max Battle catches.
@@ -314,7 +314,7 @@ Rules (all three forms):
 
 **Anti-pattern (wrong):** `**Hundo CPs:** 1,772 Celesteela (L20) / 2,216 (L25, Snow or Windy); 2,101 Kartana (L20) / 2,626 (L25, Sunny or Snow)` — never combine two species on one Hundo CP line; give each species its own block.
 
-**Source link titles (REQUIRED — reaffirmed from `feedback_source_link_titles.md`).** Every `[text](URL)` link in a Sources line must have a descriptive title. Never use the URL or URL fragment as the link text. See the convention table in the Source Attribution section below for per-source title patterns.
+**Source link titles (REQUIRED — reaffirmed from `spawn_point_structure_voice.md`).** Every `[text](URL)` link in a Sources line must have a descriptive title. Never use the URL or URL fragment as the link text. See the convention table in the Source Attribution section below for per-source title patterns.
 
 ### 2. Subtitle
 Write a fun, creative subtitle that expands on the title or highlights what makes this week special.
@@ -457,7 +457,7 @@ When raids rotate mid-week:
 
 #### REQUIRED: Hundo CPs
 
-For every featured **raid boss** (Five-Star, Mega base-form catch, Shadow), include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted). For every featured **Dynamax/Max Battle boss (Max Monday)**, include the **L20 hundo catch CP ONLY** — Max Battle catches are always L20, there is NO weather-boosted L25 catch (see `feedback_max_battle_l20_only.md` and Section 8). Players screen-check post-raid to identify hundos — these numbers are the deliverable.
+For every featured **raid boss** (Five-Star, Mega base-form catch, Shadow), include the **L20 hundo catch CP** (15/15/15 IVs, normal weather) and the **L25 hundo catch CP** (15/15/15 IVs, weather-boosted). For every featured **Dynamax/Max Battle boss (Max Monday)**, include the **L20 hundo catch CP ONLY** — Max Battle catches are always L20, there is NO weather-boosted L25 catch (see `spawn_point_copy_accuracy.md` and Section 8). Players screen-check post-raid to identify hundos — these numbers are the deliverable.
 
 **LOCKED FORMAT** (no per-section flexibility — every Hundo CP line in every issue uses this exact form):
 
@@ -507,14 +507,14 @@ Acknowledge gaps in plain language: *"Don't have Primal Groudon? Most trainers d
 2. **DialgaDex SECOND** (`dialgadex.com/?p=[dex]&f=[form]`) — confirm/tiebreaker. Its Baseline / Budget / ESpace tiers map cleanly to Spawn Point's Premium / Budget split; use it to resolve a Hub-DB pick you're unsure about or for challenging matchups (debuts, Super Mega, low-meta bosses).
 3. **Pokebattler TERTIARY** (`fight.pokebattler.com/raids/...`) — last-resort corroboration only. Simulation-driven ESTIMATOR/TTW math, precise but over-weights Mega forms with legacy/exclusive moves the median trainer lacks; its responses for popular legendaries run 5-12 MB and overflow the fetch_url cap (that is `[pokebattler: response oversized]`, NEVER a 404). Reach for it only when Hub-DB + DialgaDex leave a genuine gap.
 
-**Premium + budget in every write-up:** whatever the source, always give a premium pick AND a non-exclusive budget alternative (per `feedback_raid_premium_budget.md` and the Category C accessibility-tier rule in recon). If a premium pick relies on an exclusive move (Elite TM, Adventure Effect, Mega signature), name the standard non-exclusive moveset alongside it. Example: lead with Mega Beedrill (Hub-DB premium), cite its standard Poison Jab / Sludge Bomb, and skip the Drill-Run (Elite TM) hedge unless the reader's whole bench requires it.
+**Premium + budget in every write-up:** whatever the source, always give a premium pick AND a non-exclusive budget alternative (per `spawn_point_structure_voice.md` and the Category C accessibility-tier rule in recon). If a premium pick relies on an exclusive move (Elite TM, Adventure Effect, Mega signature), name the standard non-exclusive moveset alongside it. Example: lead with Mega Beedrill (Hub-DB premium), cite its standard Poison Jab / Sludge Bomb, and skip the Drill-Run (Elite TM) hedge unless the reader's whole bench requires it.
 
 #### What NOT to Mention (filler that pads without informing)
 
 These are widely understood defaults. **Do not write them into raid sections** — they take up space and read like AI-generated boilerplate:
 
 - ❌ "Remote Raid Passes work" / "can be done remotely" — that's the default. Only flag it as an EXCEPTION when the raid is **in-person only** (e.g., 6-Star Gigantamax raids, ticketed Raid Day events that override the default).
-- ❌ **"Shadow Raids are weekend-only" / "only on weekends" / "Saturday and Sunday only" — FACTUALLY WRONG and HIGH-FREQUENCY recurring error.** Shadow Raids (all tiers) run ANY day during their announced window. See `feedback_shadow_raid_remote_default.md`. Only cite a weekend restriction if Niantic explicitly schedules a specific event that way (rare) — with the source URL.
+- ❌ **"Shadow Raids are weekend-only" / "only on weekends" / "Saturday and Sunday only" — FACTUALLY WRONG and HIGH-FREQUENCY recurring error.** Shadow Raids (all tiers) run ANY day during their announced window. See `spawn_point_copy_accuracy.md`. Only cite a weekend restriction if Niantic explicitly schedules a specific event that way (rare) — with the source URL.
 - ❌ **"Shadow Raids are in-person only" / "Remote Raid Passes don't work for Shadow Raids" — FACTUALLY WRONG.** Shadow Raids ARE remote-raidable. Same recurring-error family as the weekend-only mistake.
 - ❌ "Shadow Raids are remote-raidable" / "Remote Raid Passes work for Shadow Raids" / "available every day, not just weekends" — also default-filler; readers know. Don't write the positive defaults either. Just give the boss, window, and counters.
 - ❌ "Don't forget your Remote Raid Pass" / "Bring friends!" — empty exhortation.
@@ -564,7 +564,7 @@ Max Monday runs 6:00 AM to 9:00 PM local time. Include featured Dynamax Pokémon
 
 > `**Hundo CPs:** **[L20 value]** (L20 Max Battle catch)`
 
-Do NOT include a "/ L25 weather-boosted" segment in any Max Monday section. See `feedback_max_battle_l20_only.md` for the rationale + anti-pattern examples.
+Do NOT include a "/ L25 weather-boosted" segment in any Max Monday section. See `spawn_point_copy_accuracy.md` for the rationale + anti-pattern examples.
 
 **CRITICAL — attacker eligibility:** When suggesting attackers, defenders, or healers for Max Battles, only recommend Dynamax-capable Pokémon. Not every Pokémon in the game can Dynamax. Shadow Pokémon CANNOT be brought into Max Battles at all (they cannot Dynamax and cannot fill any team slot). Verify each recommended Pokémon is actually Dynamax-eligible AND non-Shadow before including it.
 
@@ -746,7 +746,7 @@ Sources: [leekduck.com/events/tapu-fini-...](https://leekduck.com/events/...) | 
 ```
 
 **Rules:**
-- **NEVER use a URL or URL fragment as link text.** Every `[text](URL)` requires a descriptive title that names the source AND what's at the link (see `feedback_source_link_titles.md` for the per-source convention table).
+- **NEVER use a URL or URL fragment as link text.** Every `[text](URL)` requires a descriptive title that names the source AND what's at the link (see `spawn_point_structure_voice.md` for the per-source convention table).
 - List every source used for that section's data.
 - Separate sources with pipes (|).
 - If a specific article was referenced, link to that article, not just the homepage.
@@ -780,7 +780,7 @@ These claims have appeared in Spawn Point drafts without source backing. Each is
 | `Spotlight Hour.*shiny boost` | Same as above. | Same as above. |
 | `wild encounter rate.*boosted shiny` (anywhere outside of explicit Niantic-confirmed events: Community Day, special raid days, Hatch Day) | Most events do NOT boost the per-encounter shiny rate. Only Community Day, specific Raid Days, Hatch Days, GO Fest, and Niantic-confirmed special windows do. | Verify from Niantic's official event page; if no shiny boost is listed, do NOT claim one. Default framing: spawn volume increase only. |
 | `—` (em dash anywhere in body prose, added 2026-06-29) | 🔒 Joe-voice rule: ZERO em dashes per [[feedback_no_em_dashes]]. They were AI leftovers, not his voice. En dashes (–) for numeric ranges only. | Replace each em dash with a period, comma, or parentheses. Audit: `grep -c '—' <draft>` should return 0 in body prose. |
-| `[Mm]ega aura` (added 2026-06-24) | Niantic does NOT use "aura" in official copy. Per Niantic Help FAQ #3334 the mechanic is the "Mega-Evolved attack boost." See [[feedback-niantic-language]]. | "Mega-Evolved attack boost" / "the Mega's attack boost" / "type-matched attack boost" |
+| `[Mm]ega aura` (added 2026-06-24) | Niantic does NOT use "aura" in official copy. Per Niantic Help FAQ #3334 the mechanic is the "Mega-Evolved attack boost." See [[spawn-point-structure-voice]]. | "Mega-Evolved attack boost" / "the Mega's attack boost" / "type-matched attack boost" |
 | `[Pp]rimal aura` (added 2026-06-24) | Same — "aura" is community jargon, not Niantic terminology. | "Primal-Reverted attack boost" |
 | `[Tt]ype aura` / `[Rr]aid aura` (added 2026-06-24) | Same. | "type-matched attack boost" / "Mega-Evolved attack boost" / "Primal-Reverted attack boost" depending on context |
 | standalone `\baura\b` in a Mega/Primal/raid context | Same — covers cases the more-specific patterns above miss. | Reword to "attack boost" with the appropriate prefix |
