@@ -466,20 +466,6 @@ Form suffixes: `MEGA`, `MEGA_X`, `MEGA_Y`, `PRIMAL`, `DAWN_WINGS`, `DUSK_MANE`, 
 
 Flags: `[UNVERIFIED]`, `[RULE CHANGE]`, `[ROTATION CONFLICT]`, `[PENDING]`, `[fallback: fetch_url]`, `[fallback: search-snippet]`, `[fallback: computed]`, `[REFERENCE DRIFT]`, `[STALE REFERENCE]`, `[SPEC DRIFT]`.
 
-## Step 3.5: Review the Week's Daily Briefs
-
-Before starting fresh research, pull the past week's Daily Brief output — the news-shaped sections below draw from this pool first, not from a blank page.
-
-Query the News & Updates DB (`1b9db417-c801-4004-a687-e09fe2976e73`) for rows where `Daily Brief Status` starts with `Included` AND `Detected At` falls within the last 7 days (`today` back through `today - 6`, i.e. the week Daily Brief has actually already covered — NOT the upcoming Monday-Sunday newsletter week computed in Step 0, since that week hasn't happened yet). Pull Title, Type, Source, Source URL, Description, Pokémon Mentioned, Content Completeness for each.
-
-**If the query returns zero rows** (Daily Brief hasn't run yet, or nothing cleared verification that week): note `No Daily Brief pool this week — falling back to fresh research only` and proceed to Step 4 exactly as before this redesign.
-
-**Otherwise**, this pool becomes the first material for two specific places in Step 4:
-- **Trending Topic Candidates:** draw candidate angles from across the WHOLE pool (any category — a bug that won't die, a recurring datamine, an unusually engaged Community Buzz item), not from a pre-sorted "trending" bucket. Daily Brief does no pre-sorting for this purpose; treat every row as raw material. Still generate four distinct angles and still verify against `newsletter-archive.md`'s dedup rule — the pool supplements fresh research, it doesn't replace the angle-diversity requirement.
-- **Don't Miss candidates:** the pool's `Closing Soon` category rows (if any) are strong Don't Miss material almost by definition — pull them in alongside anything fresh research turns up.
-
-This step does not touch the schedule-shaped sections (Raid Bosses, GBL, Max Monday, Community Day, Spotlight Hour) — those stay freshly researched in Step 4 exactly as before, since Daily Brief explicitly never covers live-schedule state.
-
 ## Step 4: Write the Research Brief
 
 Write to `output/research-brief-[YYYY-MM-DD].md` section by section.
@@ -491,7 +477,7 @@ Write to `output/research-brief-[YYYY-MM-DD].md` section by section.
 - Headline raid swap
 - Max Monday Pokémon
 - GBL cup feature
-- **Trending Topic Candidates — generate FOUR distinct angles**, drawing first from Step 3.5's Daily Brief pool (if any) and supplementing with fresh research (the editorial frame for the Trending Topic newsletter section). For each, write:
+- **Trending Topic Candidates — generate FOUR distinct angles** (the editorial frame for the Trending Topic newsletter section). For each, write:
   - **Title** (5-10 words, in newsletter voice)
   - **Mini-draft (80-120 words)** showing how the section would actually read — hook, evidence, wrap. This is a real micro-version of the section, not a description of it.
   - **Sources:** 1-3 URLs/citations the angle leans on (PvPoke, Pokebattler, Niantic blog, Reddit thread via `.rss`, etc.)
@@ -499,7 +485,7 @@ Write to `output/research-brief-[YYYY-MM-DD].md` section by section.
   - The four angles should be meaningfully different (not four phrasings of the same idea). Examples of distinct categories: meta shift / counter rebalance / community sentiment / underused-Pokémon spotlight / event-strategy / season-arc payoff / cost-economy take. Mix categories.
   - Mark **ONE as DEFAULT** with a 1-line reason why it's the strongest pick for THIS week (e.g., "strongest because it ties directly to the headline raid swap—readers will be looking for guidance").
   - Verify against `newsletter-archive.md` Trending Topic dedup (avoid angles from the past 4-6 issues).
-- Don't Miss candidates (5-6, Joe picks 3) — pull in Step 3.5's `Closing Soon` pool rows first, then fill any remaining slots with fresh research
+- Don't Miss candidates (5-6, Joe picks 3)
 - **Trainer Tip Angle Candidates — generate FOUR issue-wide angle themes** that thread across the issue's tip slots (one tip lives in each major section). For each angle theme, write:
   - **Angle name** (e.g., "investment economy", "matchup-tactical", "underused-moveset spotlight", "time-window tactical", "build-team-around-X", "counter-the-counter")
   - **2-sentence description** of the angle's editorial frame
@@ -518,7 +504,7 @@ Subject `[Spawn Point Research] Pre-Research Plan — Issue #[N+1] ([Newsletter 
 
 Section blocks, in order (v3 `<h2>` sections and tables):
 1. **Issue Overview** — table (Field / Value): Featured Community Day (name + date, or "None this week"); Headline raid swap (boss → boss with date); Max Monday (Dynamax Pokémon); GBL cup (name or "Open formats only"); Section 11 Month Transition (Included / Skipped, reason).
-2. **Trending Topic Candidates (4 — shortlist, category-rotated)** — lead with the category-rotation rule: the 4 candidates MUST span ≥ 3 of the 7 angle categories (Game-feature change · Event spotlight / new debut · Calendar/seasonal · Niantic corporate/industry · Competitive/esports · Ecosystem/spawn mechanics · Franchise/shiny news); read `instructions/newsletter-archive.md` "Repeat-risk watchlist" first (any category used in 2+ of the last 3 issues is BLOCKED from the SELECTED candidate, still allowed as a non-selected option); also cross-check against Step 3.5's week-of-Daily-Brief pool, now the primary source for this week's candidates rather than just a freshness check. Then Candidate 1 marked SELECTED with a 1-2 sentence angle + why it's strongest this week, and Candidates 2-4 with a 1-line angle each and their category. Close with a note: full 80–120 word mini-drafts of all 4 land in the `Trending Topic Drafts` Notion child page after drafting; to swap post-draft, edit the Notion Trending Topic section directly.
+2. **Trending Topic Candidates (4 — shortlist, category-rotated)** — lead with the category-rotation rule: the 4 candidates MUST span ≥ 3 of the 7 angle categories (Game-feature change · Event spotlight / new debut · Calendar/seasonal · Niantic corporate/industry · Competitive/esports · Ecosystem/spawn mechanics · Franchise/shiny news); read `instructions/newsletter-archive.md` "Repeat-risk watchlist" first (any category used in 2+ of the last 3 issues is BLOCKED from the SELECTED candidate, still allowed as a non-selected option); also read the freshest 5 entries in the News & Updates Notion DB (populated daily by the monitor trigger). Then Candidate 1 marked SELECTED with a 1-2 sentence angle + why it's strongest this week, and Candidates 2-4 with a 1-line angle each and their category. Close with a note: full 80–120 word mini-drafts of all 4 land in the `Trending Topic Drafts` Notion child page after drafting; to swap post-draft, edit the Notion Trending Topic section directly.
 3. **Trainer Tip Angle Candidates (4 — shortlist)** — Candidate 1 SELECTED with a 1-2 sentence frame + why it fits this week, Candidates 2-4 with a 1-line description each.
 4. **Flags Surfaced** — table (Flag / Detail) for [RULE CHANGE / ROTATION CONFLICT / PENDING / UNVERIFIED]; if none, one row `No flags surfaced this run.`
 5. Close with a heads-up line: the agent does not check inbox replies and proceeds to drafting in ~2 minutes; to swap defaults after the draft lands, edit the Notion draft directly or re-prompt the agent.
