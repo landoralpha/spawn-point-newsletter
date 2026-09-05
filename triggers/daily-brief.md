@@ -66,11 +66,13 @@ At run start, check whether `fetch_url` from the Spawn-Point-Fetcher MCP appears
 
 **If `fetch_url` is NOT available:** mark the run degraded, skip the fetch_url escalation tier in Step 2 (WebFetch-only verification, more items will land as `[UNVERIFIED: fetch_url unavailable]` and get omitted per Step 2's ambiguous-item rule), and send the degraded-mode email at the end of the run regardless of content (subject `[Spawn Point Daily Brief] DEGRADED RUN: fetch_url MCP unavailable`, rendered per `instructions/email-format.md` v3, mirroring Monitor's Step 0.5 degraded email: eyebrow `DEGRADED RUN`, no hero image, a "What ran anyway" table, a "What was lost" table, footer band). In Step 7, set Run Status = `Partial` and prepend Notes with `DEGRADED RUN: fetch_url MCP unavailable.`
 
-## Step 1: Pull Today's Unprocessed Rows
+## Step 1: Pull Today's Unprocessed, Freshly-Detected Rows
 
-`notion-query-data-sources` against `1b9db417-c801-4004-a687-e09fe2976e73` for rows where `Daily Brief Status` is empty. Pull Title, Type, Source, Source URL, Published Date, Detected At, Description, Pokémon Mentioned, Content Completeness.
+`notion-query-data-sources` against `1b9db417-c801-4004-a687-e09fe2976e73` for rows where `Daily Brief Status` is empty AND `Detected At` falls on `today` or `today - 1 day` (UTC). Pull Title, Type, Source, Source URL, Published Date, Detected At, Description, Pokémon Mentioned, Content Completeness.
 
-**Zero-row case:** if the query returns zero rows, skip straight to Step 7. Write a Run Log row with Run Status = `Success`, New Entries Added = `0`, Notes = `Zero-content day: no unprocessed News & Updates rows, no Daily Brief published.` Do NOT send an email and do NOT create a Notion child page for the day (an empty digest is not worth Joe's attention). Exit.
+**Why the `Detected At` filter exists:** `Daily Brief Status` was added to this database's schema on 2026-09-04, after roughly 390 pre-existing rows (dating back to 2026-07-17) had already accumulated. Every one of those rows has a blank `Daily Brief Status` and would otherwise look "unprocessed" forever, causing this step to try to run a multi-month historical backlog through today's digest. Filtering on `Detected At` keeps the pool to genuinely fresh rows. The one-day trailing window (not same-day-only) exists so a row that failed Step 2's verification yesterday, and was therefore correctly left with a blank status, still gets one more day's retry before it ages out of scope; a row still unverified after that second day is dropped from future pulls by simply no longer matching the window (no additional bookkeeping needed).
+
+**Zero-row case:** if the query returns zero rows, skip straight to Step 7. Write a Run Log row with Run Status = `Success`, New Entries Added = `0`, Notes = `Zero-content day: no rows detected today/yesterday with unprocessed Daily Brief Status, no Daily Brief published.` Do NOT send an email and do NOT create a Notion child page for the day (an empty digest is not worth Joe's attention). Exit.
 
 ## Step 2: Light-Touch Verify Each Row
 
