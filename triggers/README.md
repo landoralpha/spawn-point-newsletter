@@ -20,6 +20,7 @@ pointer *does* require a `RemoteTrigger update` call. See
 | `monitor.md` | `trig_01VTWmmrrBWxioH8DUCw364q` | `0 23 * * *` (daily 23:00 UTC) | Pokémon GO News Monitor, populates the News & Updates Notion DB. |
 | `researcher.md` | `trig_01GYjXQqpCgDiFfzo3MKDH5E` | `0 21 * * 1` (Mondays 21:00 UTC) | Newsletter Research Agent, drafts the upcoming Spawn Point issue. |
 | `recon.md` | `trig_01WB5YXtpMZR8zgebrsPC7Ah` | `0 22 * * 5` (Fridays 22:00 UTC = 6 PM Eastern) | Pre-Publish Fact-Check Agent, verifies the Beehiiv draft before publish. |
+| `daily-brief.md` | `trig_01GcLo7vBWXV1CER6cBQNNkU` | `20 23 * * *` (daily 23:20 UTC) | Daily Brief Agent, drafts the daily digest from Monitor's News & Updates rows. |
 
 Each file starts with an HTML comment header block containing the trigger ID,
 the prompt message UUID as of the last confirmed check, and a note on how

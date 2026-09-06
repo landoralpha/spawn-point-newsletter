@@ -1,6 +1,6 @@
 <!--
-Trigger ID: PENDING, filled in after Task 6 (RemoteTrigger create) succeeds.
-Trigger UUID: PENDING, filled in after Task 6.
+Trigger ID: trig_01GcLo7vBWXV1CER6cBQNNkU
+Trigger UUID: trig_01GcLo7vBWXV1CER6cBQNNkU (no distinct UUID field exists in the current RemoteTrigger API; same value as Trigger ID, confirmed via `get`/`list` against this trigger and the three pre-existing ones, see Task 6/8 reports)
 File status: LIVE INSTRUCTIONS for the Spawn Point Daily Brief trigger.
 
 As of 2026-09-04, the live trigger prompt is a SHORT pointer that instructs
