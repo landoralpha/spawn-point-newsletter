@@ -27,3 +27,4 @@ After any kickoff edit:
 | `researcher-kickoff.md` | `trig_01GYjXQqpCgDiFfzo3MKDH5E` | `0 21 * * 1` (Mon 21:00 UTC) | Newsletter research agent |
 | `recon-kickoff.md` | `trig_01WB5YXtpMZR8zgebrsPC7Ah` | `0 22 * * 5` (Fri 22:00 UTC = 6 PM Eastern) | Pre-publish fact-check agent (moved from Sun 00:00 UTC 2026-06-12 for a longer pre-publish fix window) |
 | `monitor-kickoff.md` | `trig_01VTWmmrrBWxioH8DUCw364q` | `0 23 * * *` (daily 23:00 UTC) | Niantic announcement monitor |
+| `daily-brief-kickoff.md` | `trig_01GcLo7vBWXV1CER6cBQNNkU` | `20 23 * * *` (daily 23:20 UTC) | Daily Brief digest agent |
