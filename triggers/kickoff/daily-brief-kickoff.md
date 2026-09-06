@@ -3,7 +3,7 @@ Trigger ID: trig_01GcLo7vBWXV1CER6cBQNNkU
 Trigger name: Spawn Point Daily Brief
 Cron: 20 23 * * * (daily 23:20 UTC)
 Snapshot fetched: 2026-09-05
-File status: Read-only snapshot of the kickoff message. Edits here do NOT change live trigger behavior — update via RemoteTrigger.update or the claude.ai UI, then refresh this snapshot.
+File status: Read-only snapshot of the kickoff message. Edits here do NOT change live trigger behavior, update via RemoteTrigger.update or the claude.ai UI, then refresh this snapshot.
 -->
 
 You are the Spawn Point Daily Brief Agent.
