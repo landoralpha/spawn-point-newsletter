@@ -267,7 +267,19 @@ Before writing to Notion, **derive the candidate's event signature** and re-chec
 
 - **LeekDuck events** (`leekduck.com/events/`) — WebFetch first; on 403 fetch_url MCP.
 - **nianticlabs.com/news** — official first-party corporate/announcement page; fetch_url MCP.
-- **Reddit** — `r/pokemongo/.rss` and `r/TheSilphRoad/.rss` via fetch_url MCP.
+- **Reddit — latest-post snapshot.** `r/pokemongo/.rss` and `r/TheSilphRoad/.rss` via fetch_url MCP (unfiltered, most recent ~25 entries per subreddit).
+- **Reddit — sentiment/volume sweep (community complaint trends).** Reddit's `search.rss` endpoint via fetch_url MCP: `reddit.com/r/<sub>/search.rss?q=<query>&restrict_sr=on&sort=new`, against both r/pokemongo and r/TheSilphRoad. Two passes, both run every day:
+  1. **General sweep** — search each of: `shiny odds`, `not working`, `broken`, `bug`, `nerf`, `scam`, `rigged`, `worst event`.
+  2. **Event-triggered sweep** — for each News & Updates row with Type including `Event` and `Status = Active` today, additionally search that event's name combined with each of: `shiny`, `bug`, `broken`, `lag`.
+
+  For each search, skim the returned entries (titles + snippet text) and use judgment: does this read like a real pile-on (several distinct posts converging on the same complaint) or one grumpy post? No hard numeric threshold — this is the same discretion already applied elsewhere in this pipeline. If it reads like a real trend, carry it forward as a Step 3 candidate with these conventions:
+  - Type: include `Community Buzz`.
+  - Source URL: the human-readable Reddit search results page (`reddit.com/r/<sub>/search/?q=<query>&restrict_sr=on&sort=new`), NOT the `.rss` URL — this stays clickable and is what Daily Brief's Step 2 re-fetches to verify.
+  - Content Completeness: `Snippet only`.
+  - Start Date: today (date first detected). End Date: leave blank.
+  - Description: name the complaint theme and cite 2-3 example post titles as evidence.
+
+  Dedupe each candidate against all three keys per Step 1, same as any other discovery.
 - **@PokemonGoApp Twitter** — WebSearch snippet only.
 - **Datamine accounts** — try `pokeminers.com/` via fetch_url; fall back to WebSearch. **Staleness rule:** if pokeminers.com's newest post is older than 30 days, note `[pokeminers inactive since <date>]` ONCE in the run summary instead of treating its 200 as a healthy datamine signal, and supplement the datamine sweep with Pokémon GO Hub WP REST (`pokemongohub.net/wp-json/wp/v2/posts?search=datamine`). Keep the WebSearch fallback for an actual fetch failure (non-200).
 
@@ -275,7 +287,7 @@ Dedupe each result against all three keys per Step 1 (URL, Semantic Event Signat
 
 ## Step 3: Decide what's database-worthy
 
-**Include:** Niantic-confirmed news, LeekDuck event pages, Hub articles announcing changes, credible datamines (Status `Unconfirmed`), high-engagement Reddit threads about confirmed changes, marketing reminders for NEW content.
+**Include:** Niantic-confirmed news, LeekDuck event pages, Hub articles announcing changes, credible datamines (Status `Unconfirmed`), high-engagement Reddit threads about confirmed changes, marketing reminders for NEW content, community sentiment trends surfaced by Step 2c's Reddit sentiment/volume sweep (multiple distinct posts converging on the same complaint).
 
 **Skip:** marketing repeats, speculation without source, items already in database (per dedup keys), pure entertainment, generic tier lists.
 
