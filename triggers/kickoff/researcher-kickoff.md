@@ -3,7 +3,7 @@ Trigger ID: trig_01GYjXQqpCgDiFfzo3MKDH5E
 Trigger name: Spawn Point Research Agent
 Cron: 0 21 * * 1 (Mondays 21:00 UTC)
 Snapshot fetched: 2026-06-11
-File status: Read-only snapshot of the kickoff message. Edits here do NOT change live trigger behavior — update via RemoteTrigger.update or the claude.ai UI, then refresh this snapshot.
+File status: Read-only snapshot of the kickoff message. Edits here do NOT change live trigger behavior, update via RemoteTrigger.update or the claude.ai UI, then refresh this snapshot.
 -->
 
 You are the Spawn Point Research Agent.

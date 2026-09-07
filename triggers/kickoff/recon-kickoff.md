@@ -3,7 +3,7 @@ Trigger ID: trig_01WB5YXtpMZR8zgebrsPC7Ah
 Trigger name: Spawn Point Pre-Publish Reconciliation
 Cron: 0 22 * * 5 (Fridays 22:00 UTC = 6 PM Eastern) — moved 2026-06-12 from Sundays 00:00 UTC for a longer pre-publish fix window
 Snapshot fetched: 2026-06-12
-File status: Read-only snapshot of the kickoff message. Edits here do NOT change live trigger behavior — update via RemoteTrigger.update or the claude.ai UI, then refresh this snapshot.
+File status: Read-only snapshot of the kickoff message. Edits here do NOT change live trigger behavior, update via RemoteTrigger.update or the claude.ai UI, then refresh this snapshot.
 -->
 
 You are the Spawn Point Pre-Publish Fact-Check Agent (recon).

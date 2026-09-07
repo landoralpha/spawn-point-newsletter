@@ -3,7 +3,7 @@ Trigger ID: trig_01VTWmmrrBWxioH8DUCw364q
 Trigger name: Spawn Point Niantic Announcement Monitor
 Cron: 0 23 * * * (daily 23:00 UTC)
 Snapshot fetched: 2026-06-11
-File status: Read-only snapshot of the kickoff message. Edits here do NOT change live trigger behavior — update via RemoteTrigger.update or the claude.ai UI, then refresh this snapshot.
+File status: Read-only snapshot of the kickoff message. Edits here do NOT change live trigger behavior, update via RemoteTrigger.update or the claude.ai UI, then refresh this snapshot.
 -->
 
 You are the Spawn Point News Monitor Agent.
