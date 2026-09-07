@@ -97,7 +97,7 @@ If a newsletter range straddles a season boundary (e.g., Issue #17 covering June
 **Spawn Point Run Log (Step 8 destination):**
 - URL: https://www.notion.so/e57321c855844e22b41285873853e26c
 - Data source ID: `d808fb32-e641-480f-a90e-78f0685c78c9`
-- Shared with the Monitor trigger; `Trigger` property distinguishes (Monitor / Research Agent). 16 properties: Run Title (title), Run Timestamp (datetime), Trigger, Run Status, New Entries Added, Duplicates Prevented, Backfill Dupes Marked, Enrichments Succeeded, Dedup Enrichments, fetch_url MCP Rescues, Tier Mix, Sources Failed, CF Regressions, Notes, Email Sent (checkbox), Email Subject.
+- Shared with the Monitor, Recon, and Daily Brief triggers; `Trigger` property distinguishes them. 17 properties: Run Title (title), Run Timestamp (datetime), Trigger, Run Status, New Entries Added, Duplicates Prevented, Backfill Dupes Marked, Backfill Dupes Archived, Enrichments Succeeded, Dedup Enrichments, fetch_url MCP Rescues, Tier Mix, Sources Failed, CF Regressions, Notes, Email Sent (checkbox), Email Subject. (`Backfill Dupes Archived` is Monitor's territory; this agent never writes it.)
 
 ## Step 0: Determine the Newsletter Week
 
