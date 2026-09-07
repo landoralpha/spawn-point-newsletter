@@ -53,7 +53,7 @@ WebFetch from the cloud sandbox is more restricted than from a local Mac. URLs t
 
 | Tier | Tool | When to use |
 |---|---|---|
-| **0** | News-aggregator RSS via fetch_url MCP (preferred) — fall back to WebFetch | Try Google News + Bing News + Feedburner Hub each run. fetch_url turns previously-403'd aggregators into 200s. |
+| **0** | News-aggregator RSS via fetch_url MCP (preferred), fall back to WebFetch | Try Google News + Bing News + Feedburner Hub each run. fetch_url turns previously-403'd aggregators into 200s. Use `mode="selector", selector="item"` (see below) to avoid oversized-response errors on broad queries. |
 | 1 | JSON via WebFetch | PvPoke, pokemon-go-api JSONs (github.io / raw.githubusercontent.com — always reachable). NOT Pokebattler (fight.pokebattler.com is not github.io and 403s via WebFetch from the sandbox). |
 | 2 | WebFetch HTML | Direct article fetches, plus Pokebattler. On 403 (Pokebattler always does), escalate to Tier 2.5. |
 | **2.5** | fetch_url MCP | When WebFetch returns 403. Includes the Hub family. Only fall back to Tier 3 if fetch_url returns a CF challenge body. |
@@ -61,6 +61,8 @@ WebFetch from the cloud sandbox is more restricted than from a local Mac. URLs t
 | 4 | Compute/derive | Hundo CPs from pokedex.json base stats — redundancy / for unlisted Pokémon. |
 
 ### Tier 0 aggregator URLs (fetch in parallel via fetch_url MCP)
+
+**Response size (added 2026-09-06):** these are RSS 2.0 feeds. Broad queries (`when=30d`, `when=14d`) routinely exceed the raw-mode token cap and error with "exceeds maximum allowed tokens." Fetch every Tier 0 URL with `mode="selector", selector="item"`. This returns just the `<item>` elements (title, link, pubDate, description, image) and drops channel-level bloat, which is enough for everything Step 2 needs to extract. If a selector fetch on a given URL comes back empty or errors, retry that one URL with `mode="text"` before falling back further.
 
 **A. Google News RSS:**
 - `https://news.google.com/rss/search?q=pokemon+go&hl=en-US&when=7d`
@@ -243,7 +245,7 @@ Group existing entries by event signature (Type + Pokémon Mentioned + Start Dat
 
 ## Step 2: Comprehensive scan via aggregator RSS (PRIMARY)
 
-Fire all Tier 0 URLs in parallel via fetch_url MCP. Whichever returns 200 wins.
+Fire all Tier 0 URLs in parallel via fetch_url MCP using `mode="selector", selector="item"` (see Tier 0 aggregator URLs above, this avoids the oversized-response errors seen on broad queries). Whichever returns 200 wins. If a URL's selector fetch errors or returns no items, retry once with `mode="text"` before treating that URL as failed.
 
 For each item across successful feeds:
 - Extract title, source publisher, publish date, link URL, image URL (if present).
