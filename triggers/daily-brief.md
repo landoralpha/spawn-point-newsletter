@@ -1,6 +1,6 @@
 <!--
 Trigger ID: trig_01GcLo7vBWXV1CER6cBQNNkU
-Trigger UUID: trig_01GcLo7vBWXV1CER6cBQNNkU (no distinct UUID field exists in the current RemoteTrigger API; same value as Trigger ID, confirmed via `get`/`list` against this trigger and the three pre-existing ones, see Task 6/8 reports)
+Trigger UUID: not returned by the RemoteTrigger API for this trigger as of 2026-09-07 (the other three tracked triggers do return a distinct UUID via `get`; this trigger's UUID field is simply empty, confirmed via direct `get`)
 File status: LIVE INSTRUCTIONS for the Spawn Point Daily Brief trigger.
 
 As of 2026-09-04, the live trigger prompt is a SHORT pointer that instructs
@@ -28,12 +28,12 @@ Daily Brief covers discrete, dated things that were *detected or reported* that 
 - Name: Pokémon GO News & Updates
 - URL: https://www.notion.so/b173baf260c4473e9dd9111c8820c0d3
 - Data source ID: `1b9db417-c801-4004-a687-e09fe2976e73`
-- 16 properties (as of the 2026-09-04 Daily Brief redesign): Title, Type (multi-select), Status, Source, Source URL, Published Date, Detected At, Start Date, End Date, Description, Newsletter Treatment, Content Completeness, Last Enrichment Attempt, Pokémon Mentioned, Hero Image URL, **Daily Brief Status** (rich text: blank = not yet processed, `Included - <YYYY-MM-DD>` = covered by that day's Brief). This agent only ever WRITES to `Daily Brief Status`; every other property is Monitor's territory.
+- 16 properties (as of the 2026-09-04 Daily Brief redesign): Title, Type (multi-select), Status, Source, Source URL, Published Date, Detected At, Start Date, End Date, Description, Newsletter Treatment, Content Completeness, Last Enrichment Attempt, Pokémon Mentioned, Hero Image URL, **Daily Brief Status** (rich text: blank = not yet processed, `Included - <YYYY-MM-DD>` = covered by that day's Brief, `Not included - <YYYY-MM-DD> (unverified)` = failed light-touch verification twice and aged out, see Step 2). This agent only ever WRITES to `Daily Brief Status`; every other property is Monitor's territory. Property count here is Monitor's territory to keep current; treat it as a helpful estimate, not a load-bearing assertion.
 
 **Spawn Point Run Log (Step 7 destination):**
 - URL: https://www.notion.so/e57321c855844e22b41285873853e26c
 - Data source ID: `d808fb32-e641-480f-a90e-78f0685c78c9`
-- 16 properties: Run Title (title), Run Timestamp (datetime), Trigger (select, options Monitor / Research Agent / Recon / **Daily Brief**), Run Status (select Success/Partial/Failed), New Entries Added, Duplicates Prevented, Backfill Dupes Marked, Enrichments Succeeded, Dedup Enrichments, fetch_url MCP Rescues, Tier Mix, Sources Failed, CF Regressions, Notes, Email Sent (checkbox), Email Subject.
+- 17 properties: Run Title (title), Run Timestamp (datetime), Trigger (select, options Monitor / Research Agent / Recon / **Daily Brief**), Run Status (select Success/Partial/Failed), New Entries Added, Duplicates Prevented, Backfill Dupes Marked, Backfill Dupes Archived, Enrichments Succeeded, Dedup Enrichments, fetch_url MCP Rescues, Tier Mix, Sources Failed, CF Regressions, Notes, Email Sent (checkbox), Email Subject. (`Backfill Dupes Archived` is Monitor's territory; this agent never writes it.)
 
 **Spawn Point Daily Briefs (the digest archive, this agent owns it):**
 - A single persistent Notion page titled exactly `Spawn Point Daily Briefs`, holding one child page per day.
@@ -50,13 +50,14 @@ A row's Content Completeness is a helpful signal (a `Stub` row has less to verif
 ## Step 0: Determine Today + Confirm Monitor Ran
 
 ```python
-from datetime import date
-today = date.today()
+from datetime import datetime, timezone
+today = datetime.now(timezone.utc).date()
 ```
 
-Before doing anything else, query the Spawn Point Run Log (`d808fb32-e641-480f-a90e-78f0685c78c9`) for today's Monitor row: `Trigger = Monitor` AND `Run Timestamp` falls on `today`'s UTC date. This should be the run that fired at 23:00 UTC, 20 minutes before this trigger.
+Before doing anything else, query the Spawn Point Run Log (`d808fb32-e641-480f-a90e-78f0685c78c9`) for today's Monitor row: `Trigger = Monitor` AND `Run Timestamp` falls on `today`'s UTC date. This should be the run that fired at 23:00 UTC, 20 minutes before this trigger. Monitor writes its Run Log row only when its own run finishes, and on a heavy-news day Monitor can still be running past that 20-minute gap, so a missing row does not by itself mean Monitor failed.
 
-- **If no Monitor row exists for today, or the row's Run Status = `Failed`:** STOP. Do not proceed to Step 1. Send Joe an email (Subject `[Spawn Point Daily Brief] Skipped: Monitor run missing or failed for [YYYY-MM-DD]`, rendered per `instructions/email-format.md` v3: eyebrow `SKIPPED · NO MONITOR DATA`, no hero image, one section explaining what was checked and what was found, footer band with Run Log link). Write a Run Log row (Step 7) with Run Status = `Failed`, Notes = `Skipped: Monitor run for [date] missing or Failed; working from stale/partial data would risk publishing on bad input.` Exit.
+- **If no Monitor row exists for today yet:** wait 2 minutes and re-query, up to 3 attempts total. If a row appears, proceed per its Run Status below. If still no row after 3 attempts, treat it as missing and abort per the next bullet.
+- **If no Monitor row exists after the retries above, or the row's Run Status = `Failed`:** STOP. Do not proceed to Step 1. Send Joe an email (Subject `[Spawn Point Daily Brief] Skipped: Monitor run missing or failed for [YYYY-MM-DD]`, rendered per `instructions/email-format.md` v3: eyebrow `SKIPPED · NO MONITOR DATA`, no hero image, one section explaining what was checked and what was found, footer band with Run Log link). Write a Run Log row (Step 7) with Run Status = `Failed`, Notes = `Skipped: Monitor run for [date] missing or Failed; working from stale/partial data would risk publishing on bad input.` Exit.
 - **If Monitor's row shows Run Status = `Partial`:** proceed, but note `Monitor ran degraded today (Partial)` in this run's Notes (Step 7) and in the digest email's status line; a degraded Monitor run may mean a thinner-than-usual pool, not an error in this agent.
 - **Otherwise (Run Status = `Success`):** proceed normally to Step 0.5.
 
@@ -64,7 +65,7 @@ Before doing anything else, query the Spawn Point Run Log (`d808fb32-e641-480f-a
 
 At run start, check whether `fetch_url` from the Spawn-Point-Fetcher MCP appears in your tool surface (after deferred-tool loading).
 
-**If `fetch_url` is NOT available:** mark the run degraded, skip the fetch_url escalation tier in Step 2 (WebFetch-only verification, more items will land as `[UNVERIFIED: fetch_url unavailable]` and get omitted per Step 2's ambiguous-item rule), and send the degraded-mode email at the end of the run regardless of content (subject `[Spawn Point Daily Brief] DEGRADED RUN: fetch_url MCP unavailable`, rendered per `instructions/email-format.md` v3, mirroring Monitor's Step 0.5 degraded email: eyebrow `DEGRADED RUN`, no hero image, a "What ran anyway" table, a "What was lost" table, footer band). In Step 7, set Run Status = `Partial` and prepend Notes with `DEGRADED RUN: fetch_url MCP unavailable.`
+**If `fetch_url` is NOT available:** mark the run degraded, skip the fetch_url escalation tier in Step 2 (WebFetch-only verification, more items will land as `[UNVERIFIED: fetch_url unavailable]` and get omitted per Step 2's ambiguous-item rule), and send the degraded-mode email at the end of the run regardless of content (subject `[Spawn Point Daily Brief] DEGRADED RUN: fetch_url MCP unavailable`, rendered per `instructions/email-format.md` v3, mirroring Monitor's Step 0.5 degraded email: eyebrow `DEGRADED RUN`, no hero image, a "What ran anyway" table, a "What was lost" table, footer band). This degraded-mode email is sent even on a zero-row day (Step 1's zero-row suppression is a digest-content rule, not a reason to hide an MCP-availability outage from Joe). In Step 7, set Run Status = `Partial` and prepend Notes with `DEGRADED RUN: fetch_url MCP unavailable.`
 
 ## Step 1: Pull Today's Unprocessed, Freshly-Detected Rows
 
@@ -72,14 +73,14 @@ At run start, check whether `fetch_url` from the Spawn-Point-Fetcher MCP appears
 
 **Why the `Detected At` filter exists:** `Daily Brief Status` was added to this database's schema on 2026-09-04, after roughly 390 pre-existing rows (dating back to 2026-07-17) had already accumulated. Every one of those rows has a blank `Daily Brief Status` and would otherwise look "unprocessed" forever, causing this step to try to run a multi-month historical backlog through today's digest. Filtering on `Detected At` keeps the pool to genuinely fresh rows. The one-day trailing window (not same-day-only) exists so a row that failed Step 2's verification yesterday, and was therefore correctly left with a blank status, still gets one more day's retry before it ages out of scope; a row still unverified after that second day is dropped from future pulls by simply no longer matching the window (no additional bookkeeping needed).
 
-**Zero-row case:** if the query returns zero rows, skip straight to Step 7. Write a Run Log row with Run Status = `Success`, New Entries Added = `0`, Notes = `Zero-content day: no rows detected today/yesterday with unprocessed Daily Brief Status, no Daily Brief published.` Do NOT send an email and do NOT create a Notion child page for the day (an empty digest is not worth Joe's attention). Exit.
+**Zero-row case:** if the query returns zero rows, skip straight to Step 7. Write a Run Log row with Run Status = `Success` (or `Partial` if Step 0.5 flagged degraded mode), New Entries Added = `0`, Notes = `Zero-content day: no rows detected today/yesterday with unprocessed Daily Brief Status, no Daily Brief published.` Do NOT send the digest email and do NOT create a Notion child page for the day (an empty digest is not worth Joe's attention). Exception: if Step 0.5 already flagged this run as degraded (fetch_url unavailable), still send that degraded-mode email before exiting; the zero-row suppression applies only to the digest-ready email, not the degraded-mode alert. Exit.
 
 ## Step 2: Light-Touch Verify Each Row
 
 For each row, re-fetch its Source URL: WebFetch first; on 403, escalate to the Spawn-Point-Fetcher MCP `fetch_url` tool; on a CF-challenge body from `fetch_url`, treat as failed (no WebSearch snippet fallback here; light-touch verification needs the actual page, not a search snippet). Confirm the fetched content still supports the row's Title/Description (the primary-source check) and skim for anything that contradicts it (the sanity check).
 
 - **Clears both checks:** keep the row, carry its data into Step 3.
-- **Fails to fetch through both tiers, OR the content contradicts/doesn't support the row:** omit the row from today's Brief. Leave `Daily Brief Status` blank (do not mark it) so tomorrow's run retries it naturally as Monitor keeps enriching it. Do not publish on a guess; there is no disagreement-gate machinery at this verification weight.
+- **Fails to fetch through both tiers, OR the content contradicts/doesn't support the row:** omit the row from today's Brief. If this is the row's first appearance in the pull (its `Detected At` is `today`), leave `Daily Brief Status` blank so tomorrow's run retries it naturally. If this is the row's second appearance (its `Detected At` is `today - 1 day`, meaning it already failed verification once and is aging out of the pull window per Step 1), stamp `Daily Brief Status = Not included - [YYYY-MM-DD] (unverified)` instead of leaving it blank, so a permanently-unverifiable row stays queryable and distinguishable from a row nobody has looked at yet, and a systematic verification-source failure becomes visible rather than silent. Do not publish on a guess; there is no disagreement-gate machinery at this verification weight.
 
 This is a lighter pass than Recon's full tri-source cross-check (`triggers/recon.md`): one primary-source re-fetch plus a sanity read, not a three-way disagreement gate.
 
@@ -157,7 +158,7 @@ Then `notion-create-pages` with parent `data_source_id: "d808fb32-e641-480f-a90e
 - The user's name is **Joe Landor** (not "Joel").
 - This agent has NO Beehiiv access and NO git push credentials. Publishing is 100% manual, Joe copies from the email or the Notion child page into a new Beehiiv Web-only post.
 - The cloud sandbox blocks outbound curl/wget. WebFetch, WebSearch, and the Spawn-Point-Fetcher MCP `fetch_url` tool are the only outbound primitives.
-- **Notion MCP fallback:** if the Notion MCP is unavailable mid-run, use the sandbox's allowed Notion endpoint via curl with token `ntn_REDACTED_IN_SNAPSHOT` (redacted per GitHub push protection, live value in trigger config; see the live trigger via `RemoteTrigger get` once this trigger exists, or `RemoteTrigger get trig_01GYjXQqpCgDiFfzo3MKDH5E` for Researcher's copy of the same token, if you need the value). This is a Notion API token routed through the sandbox's allowed Notion endpoint, NOT general curl.
+- **Notion MCP fallback:** if the Notion MCP is unavailable mid-run, use the sandbox's allowed Notion endpoint via curl with the Notion API token given in this trigger's own kickoff prompt (the short pointer message that told you to read this file). This is a Notion API token routed through the sandbox's allowed Notion endpoint, NOT general curl.
 - This agent never creates, edits, or enriches News & Updates rows beyond writing `Daily Brief Status`, that's Monitor's job.
 - Once a row's `Daily Brief Status` is `Included - <date>`, it never resurfaces in a later Daily Brief, even if Monitor enriches it further afterward.
 - All outbound email goes through the Spawn-Point-Fetcher MCP `send_email` tool (Resend-backed). Gmail MCP is NOT used for sending.

@@ -16,8 +16,8 @@ The kickoff itself rarely changes; all editorial / workflow logic belongs in `tr
 After any kickoff edit:
 
 1. In a Claude Code session with RemoteTrigger access, ask:
-   > "Snapshot the kickoff messages for all three Spawn Point triggers into `triggers/kickoff/`."
-2. Claude will run `RemoteTrigger get` against each trigger ID and rewrite the three `*-kickoff.md` files.
+   > "Snapshot the kickoff messages for all four Spawn Point triggers into `triggers/kickoff/`."
+2. Claude will run `RemoteTrigger get` against each trigger ID and rewrite the four `*-kickoff.md` files.
 3. Commit the diff.
 
 ## Trigger IDs
