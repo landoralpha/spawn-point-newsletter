@@ -466,11 +466,13 @@ Form suffixes: `MEGA`, `MEGA_X`, `MEGA_Y`, `PRIMAL`, `DAWN_WINGS`, `DUSK_MANE`, 
 
 Flags: `[UNVERIFIED]`, `[RULE CHANGE]`, `[ROTATION CONFLICT]`, `[PENDING]`, `[fallback: fetch_url]`, `[fallback: search-snippet]`, `[fallback: computed]`, `[REFERENCE DRIFT]`, `[STALE REFERENCE]`, `[SPEC DRIFT]`.
 
-## Step 3.5: Review the Week's Daily Briefs
+## Step 3.5: Review the Week's Daily Briefs (MANDATORY, ALWAYS run the query below, do not skip)
 
 Before starting fresh research, pull the past week's Daily Brief output. The news-shaped sections below draw from this pool first, not from a blank page.
 
-Query the News & Updates DB (`1b9db417-c801-4004-a687-e09fe2976e73`) for rows where `Daily Brief Status` starts with `Included` AND `Detected At` falls within the last 7 days (`today` back through `today - 6`, i.e. the week Daily Brief has actually already covered, NOT the upcoming Monday-Sunday newsletter week computed in Step 0, since that week hasn't happened yet). Pull Title, Type, Source, Source URL, Description, Pokémon Mentioned, Content Completeness for each.
+**ALWAYS query the News & Updates DB (`1b9db417-c801-4004-a687-e09fe2976e73`) as an actual tool call, even if you expect zero rows.** Filter for rows where `Daily Brief Status` starts with `Included` AND `Detected At` falls within the last 7 days (`today` back through `today - 6`, i.e. the week Daily Brief has actually already covered, NOT the upcoming Monday-Sunday newsletter week computed in Step 0, since that week hasn't happened yet). Pull Title, Type, Source, Source URL, Description, Pokémon Mentioned, Content Completeness for each.
+
+**Failure mode this prevents:** without this query, Trending Topic and Don't Miss candidates get built from scratch every week even though Daily Brief already surfaced and verified real candidates during the week, duplicating work and silently dropping stories Daily Brief already flagged `Closing Soon`. This is a new step (added September 2026); don't fall back on the pre-redesign habit of skipping straight from Step 3 to Step 4.
 
 **If the query returns zero rows** (Daily Brief hasn't run yet, or nothing cleared verification that week): note `No Daily Brief pool this week: falling back to fresh research only` and proceed to Step 4 exactly as before this redesign.
 
@@ -481,6 +483,8 @@ Query the News & Updates DB (`1b9db417-c801-4004-a687-e09fe2976e73`) for rows wh
 This step does not touch the schedule-shaped sections (Raid Bosses, GBL, Max Monday, Community Day, Spotlight Hour). Those stay freshly researched in Step 4 exactly as before, since Daily Brief explicitly never covers live-schedule state.
 
 ## Step 4: Write the Research Brief
+
+**Before writing anything else, confirm Step 3.5 actually ran.** The brief must open with one line stating the result: `Daily Brief pool: N rows found` or `Daily Brief pool: none this week`. If you haven't queried the News & Updates DB yet, stop and run Step 3.5 now before continuing.
 
 Write to `output/research-brief-[YYYY-MM-DD].md` section by section.
 
