@@ -267,7 +267,7 @@ Before writing to Notion, **derive the candidate's event signature** and re-chec
 
 - **LeekDuck events** (`leekduck.com/events/`) — WebFetch first; on 403 fetch_url MCP.
 - **nianticlabs.com/news** — official first-party corporate/announcement page; fetch_url MCP.
-- **Reddit** — use `.rss` URLs via fetch_url MCP.
+- **Reddit** — `r/pokemongo/.rss` and `r/TheSilphRoad/.rss` via fetch_url MCP.
 - **@PokemonGoApp Twitter** — WebSearch snippet only.
 - **Datamine accounts** — try `pokeminers.com/` via fetch_url; fall back to WebSearch. **Staleness rule:** if pokeminers.com's newest post is older than 30 days, note `[pokeminers inactive since <date>]` ONCE in the run summary instead of treating its 200 as a healthy datamine signal, and supplement the datamine sweep with Pokémon GO Hub WP REST (`pokemongohub.net/wp-json/wp/v2/posts?search=datamine`). Keep the WebSearch fallback for an actual fetch failure (non-200).
 

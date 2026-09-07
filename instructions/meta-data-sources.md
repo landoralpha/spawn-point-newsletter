@@ -31,7 +31,7 @@ The cloud agent has three outbound network primitives:
   **Anti-pattern (DO NOT report as a real URL):** `https://leekduck.com/events/gbl/` returns 404 because it doesn't exist. If a research agent reports "LeekDuck GBL page 404" without quoting the exact URL hit, treat as a wrong-URL error and re-probe with the cup-slug-specific pattern above. Real-world example: Spawn Point #22 run log marked LeekDuck GBL as 404 → direct probe of the Fantasy Cup-specific URL returned 200 with full event details (dates, CP cap, eligible types).
 - **Pokémon GO Hub** — `pokemongohub.net/*` (articles, tier lists, RSS feed). The earlier "Cloudflare wall" verdict was based on local-Mac IP tests; Vercel's IP space does NOT trigger Hub's anti-bot. Verified live with article URLs, the Max Attackers tier list, the Max Defenders tier list, and `pokemongohub.net/feed/`.
 - **`db.pokemongohub.net/pokemon/[N]`** — hundo CP pages reachable directly. No more need to compute from pokedex.json as a primary path (still useful as redundancy / for not-yet-listed Pokémon).
-- Reddit subreddit `.rss` feeds (`/r/<sub>/.rss`) — Atom feeds, real entries.
+- Reddit subreddit `.rss` feeds — `r/pokemongo/.rss` and `r/TheSilphRoad/.rss` — Atom feeds, real entries.
 - `web.archive.org` Wayback Machine.
 - `pokebase.app` (raid guides, Dynamax rankings).
 - `pokeminers.com` (datamine Tumblr).
@@ -106,7 +106,7 @@ Effective hierarchy in order:
 | **`db.pokemongohub.net/pokemon-list/category/dynamax`** | 403 | ✅ **200** (truncated by the 250 KB cap; ~40 dex#s visible per fetch) | **Use as primary for "is this species Dynamax-eligible" verification.** Cross-reference `instructions/dynamax-reference.md`. |
 | `pokemon-go-api.github.io/api/...` | ✅ 200 | n/a | Tier 1 — WebFetch (github.io always reachable) |
 | `raw.githubusercontent.com/pvpoke/...` | ✅ 200 | n/a | Tier 1 — WebFetch |
-| **Reddit `/r/<sub>/.rss`** (Atom feed) | sandbox-blocked | ✅ 200 (25 entries, real titles) | **fetch_url — RSS is the way to read Reddit programmatically.** |
+| **Reddit `r/pokemongo/.rss`, `r/TheSilphRoad/.rss`** (Atom feed) | sandbox-blocked | ✅ 200 (25 entries, real titles) | **fetch_url — RSS is the way to read Reddit programmatically.** |
 | Reddit `*.json` (any subdomain) | sandbox-blocked | ❌ 403 (bot screen on `.json` specifically) | Use `.rss` instead — same content. |
 | `web.archive.org` Wayback | sandbox-blocked | ✅ 200 | fetch_url for historical recovery |
 | `pokebase.app` (raid guides, Dynamax rankings) | sandbox-blocked | ✅ 200 | fetch_url |
