@@ -520,7 +520,7 @@ cd /Users/joelandor/Documents/spawn-point
 grep -c "^## Step" triggers/daily-brief.md
 ```
 
-Expected: `8` (Step 0, 0.5, 1, 2, 3, 4, 5, 6, 7 — note Step 0.5 also matches `^## Step`, so expected count is actually 9; confirm the count matches the number of `## Step` headings you intended, then spot-check each heading text with `grep "^## Step" triggers/daily-brief.md`).
+Expected: `9` (Step 0, 0.5, 1, 2, 3, 4, 5, 6, 7; Step 0.5 also matches `^## Step` alongside Step 0, so the count is 9, not 8. Confirm the count matches the number of `## Step` headings you intended, then spot-check each heading text with `grep "^## Step" triggers/daily-brief.md`).
 
 - [ ] **Step 3: Commit and push**
 

@@ -47,7 +47,7 @@ WebFetch from the cloud sandbox is more restricted than from a local Mac. URLs t
 **Spawn Point Run Log (Step 7 destination):**
 - URL: https://www.notion.so/e57321c855844e22b41285873853e26c
 - Data source ID: `d808fb32-e641-480f-a90e-78f0685c78c9`
-- 16 properties: Run Title (title), Run Timestamp (datetime), Trigger (select Monitor/Research Agent), Run Status (select Success/Partial/Failed), New Entries Added, Duplicates Prevented, Backfill Dupes Marked, Enrichments Succeeded, Dedup Enrichments, fetch_url MCP Rescues, Tier Mix, Sources Failed, CF Regressions, Notes, Email Sent (checkbox), Email Subject.
+- 16 properties: Run Title (title), Run Timestamp (datetime), Trigger (select, options Monitor / Research Agent / Recon / Daily Brief), Run Status (select Success/Partial/Failed), New Entries Added, Duplicates Prevented, Backfill Dupes Marked, Enrichments Succeeded, Dedup Enrichments, fetch_url MCP Rescues, Tier Mix, Sources Failed, CF Regressions, Notes, Email Sent (checkbox), Email Subject.
 
 ## Fetcher Hierarchy (CRITICAL)
 
