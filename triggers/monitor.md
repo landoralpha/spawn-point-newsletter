@@ -47,7 +47,7 @@ WebFetch from the cloud sandbox is more restricted than from a local Mac. URLs t
 **Spawn Point Run Log (Step 7 destination):**
 - URL: https://www.notion.so/e57321c855844e22b41285873853e26c
 - Data source ID: `d808fb32-e641-480f-a90e-78f0685c78c9`
-- 17 properties: Run Title (title), Run Timestamp (datetime), Trigger (select, options Monitor / Research Agent / Recon / Daily Brief), Run Status (select Success/Partial/Failed), New Entries Added, Duplicates Prevented, Backfill Dupes Marked, Backfill Dupes Archived, Enrichments Succeeded, Dedup Enrichments, fetch_url MCP Rescues, Tier Mix, Sources Failed, CF Regressions, Notes, Email Sent (checkbox), Email Subject.
+- 17 properties: Run Title (title), Run Timestamp (datetime), Trigger (select, options Monitor / Research Agent / Recon / Daily Brief), Run Status (select Success/Partial/Failed/Started/Skipped (duplicate) — the last two added for Step 0.6's duplicate-run guard), New Entries Added, Duplicates Prevented, Backfill Dupes Marked, Backfill Dupes Archived, Enrichments Succeeded, Dedup Enrichments, fetch_url MCP Rescues, Tier Mix, Sources Failed, CF Regressions, Notes, Email Sent (checkbox), Email Subject.
 
 ## Fetcher Hierarchy (CRITICAL)
 
@@ -133,6 +133,20 @@ At run start, before Step 1, check whether `fetch_url` from the Spawn-Point-Fetc
    - **Footer band:** Agent = Spawn Point News Monitor, Run Log link, filter Trigger = Monitor.
    - Run the pre-send checklist before sending.
 5. In Step 7 (Run Log), set Run Status = `Partial` and prepend the Notes field with: `DEGRADED RUN: fetch_url MCP unavailable. WebSearch-only discovery.`
+
+## Step 0.6: Duplicate Run Guard (concurrency check)
+
+Two sessions have been spawned for the same trigger fire before (2026-09-06: two Monitor sessions started 38 seconds apart from the same 23:00 UTC cron slot, each independently ran the full pipeline, and one sent duplicate emails). This step catches that case cheaply. It is NOT a real distributed lock — see the residual race noted in step 4 — but it closes the gap that let 2026-09-06 run twice.
+
+1. Query the Spawn Point Run Log database (`data_source_id: "d808fb32-e641-480f-a90e-78f0685c78c9"`) for rows where Trigger = `Monitor` AND Run Timestamp is within the last 10 minutes of now.
+2. **If a matching row exists** (any Run Status, including `Started`): another Monitor session already claimed this run slot moments ago. This session is a probable duplicate dispatch.
+   - Skip Steps 1 through 6 entirely. No dedup index fetch, no RSS sweep, no writes to News & Updates, no email.
+   - Write ONE Run Log row (this replaces Step 7 for this run — do not also run Step 7's normal logic): Run Title `Monitor [YYYY-MM-DD HH:MM] UTC (duplicate, skipped)`, Run Timestamp = now, Trigger = `Monitor`, Run Status = `Skipped (duplicate)`, all numeric counters = 0, Email Sent = unchecked, Notes = `Duplicate run detected: an existing Monitor run was already logged at <found Run Timestamp>. Aborted before Step 1 to avoid a redundant pipeline pass and duplicate emails.`
+   - Exit the run here.
+3. **If no matching row exists:** immediately create a Run Log row to claim this run slot, BEFORE Step 1 starts: Run Title `Monitor [YYYY-MM-DD HH:MM] UTC`, Run Timestamp = now (UTC, ISO-8601), Trigger = `Monitor`, Run Status = `Started`. Record this page's ID/URL — Step 7 will UPDATE this same row at the end of the run (via `notion-update-page`) instead of creating a second row.
+4. Proceed to Step 1.
+
+**Residual race, accepted:** two sessions starting within the same few seconds could both pass the Step 2 check before either's Step 3 claim write lands, since the check and the claim write aren't atomic. This is a narrower window than the one that let 2026-09-06 double-run (a full pipeline pass, tens of seconds apart) — it has not reoccurred since. If it ever does, escalate to a real lock rather than tightening this check further.
 
 ## Step 1: Fetch existing database entries (dedup + enrichment targeting)
 
@@ -381,13 +395,13 @@ Don't send if both counters are 0 or low.
 
 ## Step 7: Write Run Log Entry (ALWAYS RUN — last step before exit)
 
-`notion-create-pages` with parent `data_source_id: "d808fb32-e641-480f-a90e-78f0685c78c9"` (the Spawn Point Run Log).
+**If Step 0.6 recorded a claim-row ID for this run:** use `notion-update-page` on that same page to fill in the final values below — do not create a second row. **If no claim-row ID was captured** (Step 0.6's claim write failed, or this file's version predates Step 0.6): fall back to `notion-create-pages` with parent `data_source_id: "d808fb32-e641-480f-a90e-78f0685c78c9"` (the Spawn Point Run Log), same as before.
 
 Properties to populate:
 - **Run Title** (title): `Monitor [YYYY-MM-DD HH:MM] UTC` (e.g., `Monitor 2026-05-08 23:04 UTC`)
 - **Run Timestamp** (datetime): the actual run start time in UTC, ISO-8601 (`date:Run Timestamp:start = 2026-05-08T23:04:00Z`, `date:Run Timestamp:is_datetime = 1`)
 - **Trigger** (select): `Monitor`
-- **Run Status** (select): `Success` if all steps completed; `Partial` if Step 5 / 5b / Step 1.5 ran into errors but the run still finished; `Failed` if exit-blocking error
+- **Run Status** (select): `Success` if all steps completed; `Partial` if Step 5 / 5b / Step 1.5 ran into errors but the run still finished; `Failed` if exit-blocking error; `Started` is the transient value Step 0.6 writes at claim time, always overwritten by one of the above before exit; `Skipped (duplicate)` if Step 0.6 detected and aborted a duplicate dispatch
 - **New Entries Added** (number): count of entries actually created in Step 4
 - **Duplicates Prevented** (number): semantic dedup hits where existing tier >= candidate tier (ignored or metadata-filled per the Subject Lock in Step 1, never appended)
 - **Backfill Dupes Marked** (number): cross-run duplicates marked in Step 1.5
@@ -419,7 +433,8 @@ The row goes at the top of the database when sorted by Run Timestamp desc (the d
 - **CRITICAL (Dedup-as-Enrichment, added May 8, 2026):** when a dedup hit arrives with Content Completeness HIGHER than the existing entry, MERGE — promote the existing entry's tier, replace body, fill empty metadata, append both URLs to Description. Track via `dedup_enrichments` counter.
 - **CRITICAL (Run Log, added May 8, 2026):** Step 7 writes one row per run to the Spawn Point Run Log database. NOT skippable, even on Failed runs.
 - All outbound email goes through the Spawn-Point-Fetcher MCP `send_email` tool (Resend-backed). Gmail MCP is NOT used for sending — it only creates drafts.
-- DO NOT skip Step 0.5 (MCP availability gate), Step 5 (status updates), Step 5b (enrichment), Step 1.5 (backfill duplicate scan), OR Step 7 (run log write).
+- DO NOT skip Step 0.5 (MCP availability gate), Step 0.6 (duplicate run guard), Step 5 (status updates), Step 5b (enrichment), Step 1.5 (backfill duplicate scan), OR Step 7 (run log write).
+- **CRITICAL (Duplicate Run Guard, added 2026-09-08):** Step 0.6 runs immediately after Step 0.5, before any dedup fetch or RSS sweep. It checks the Run Log for a Monitor row logged in the last 10 minutes; if found, this session aborts before Step 1 and logs `Skipped (duplicate)` instead of running the full pipeline a second time. Otherwise it claims the run slot with a `Started` row that Step 7 updates in place. Added after 2026-09-06, when two Monitor sessions fired 38 seconds apart and both ran to completion, one of them sending duplicate emails.
 - DO NOT email if nothing major — except the cleanup info email per Step 6c when backfill_dupes_marked > 0.
 - Don't double-alert. Dedupe by all three keys (URL + event signature + subject slug).
 - Datamines/leaks: Status = `Unconfirmed`.
