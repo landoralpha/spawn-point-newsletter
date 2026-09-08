@@ -281,14 +281,19 @@ Before writing to Notion, **derive the candidate's event signature** and re-chec
 
 - **LeekDuck events** (`leekduck.com/events/`) — WebFetch first; on 403 fetch_url MCP.
 - **nianticlabs.com/news** — official first-party corporate/announcement page; fetch_url MCP.
-- **Reddit — latest-post snapshot.** `r/pokemongo/.rss` and `r/TheSilphRoad/.rss` via fetch_url MCP (unfiltered, most recent ~25 entries per subreddit).
-- **Reddit — sentiment/volume sweep (community complaint trends).** Reddit's `search.rss` endpoint via fetch_url MCP: `reddit.com/r/<sub>/search.rss?q=<query>&restrict_sr=on&sort=new`, against both r/pokemongo and r/TheSilphRoad. Two passes, both run every day:
-  1. **General sweep** — search each of: `shiny odds`, `not working`, `broken`, `bug`, `nerf`, `scam`, `rigged`, `worst event`.
-  2. **Event-triggered sweep** — for each News & Updates row with Type including `Event` and `Status = Active` today, additionally search that event's name combined with each of: `shiny`, `bug`, `broken`, `lag`.
+- **Reddit — combined snapshot + sentiment/volume sweep.** All Reddit calls below share ONE per-IP rate limit, hard-enforced at roughly 1 request per 50-60 seconds regardless of which endpoint or subreddit is hit — confirmed via live `x-ratelimit-*` response headers and via a production run (2026-09-08 23:00 UTC) that got 429'd after just 2 back-to-back calls, skipping the sentiment sweep entirely that night. **Every Reddit fetch in this section MUST wait at least 60 seconds after the previous Reddit fetch completed before firing.** If any call returns 429, STOP the sweep immediately — don't retry or burn further calls — keep whatever was already gathered, and note `[Reddit sweep cut short at 429 after N/M calls]` ONCE in the run summary.
+
+  Use Reddit's multi-subreddit path (`/r/pokemongo+TheSilphRoad/...`) for every call below — confirmed live to return results from BOTH subreddits in a single request, halving the call count versus querying each subreddit separately. Do NOT combine multiple search *terms* into one query with boolean OR — tested live and confirmed to dilute results badly (only ~3-4 of 25 returned entries were topically relevant when 8 terms were OR'd together with `sort=new`); each term needs its own call.
+
+  1. **Front-page snapshot** (always runs first, 1 call, no pacing wait needed before it): `reddit.com/r/pokemongo+TheSilphRoad/.rss` via fetch_url MCP — unfiltered, most recent ~25 entries across both subreddits. This is the safety net: if the sweep below gets cut short by rate-limiting, this snapshot is what's already in hand.
+  2. **General sweep** (8 calls, every day): search each of `shiny odds`, `not working`, `broken`, `bug`, `nerf`, `scam`, `rigged`, `worst event` via `reddit.com/r/pokemongo+TheSilphRoad/search.rss?q=<query>&restrict_sr=on&sort=new`.
+  3. **Event-triggered sweep** (up to 4 calls): if any News & Updates row has Type including `Event` and `Status = Active` today, pick the single most prominent active event (skip this pass entirely if none is Active — don't run it per-event for multiple simultaneous events, to keep the budget bounded) and search that event's name combined with each of `shiny`, `bug`, `broken`, `lag`, same URL pattern.
+
+  Budget: up to 13 Reddit calls per run (1 snapshot + 8 general + 4 event), roughly 13 minutes end-to-end with the 60-second pacing above. This is a deliberate time cost given the confirmed rate limit, not an oversight.
 
   For each search, skim the returned entries (titles + snippet text) and use judgment: does this read like a real pile-on (several distinct posts converging on the same complaint) or one grumpy post? No hard numeric threshold — this is the same discretion already applied elsewhere in this pipeline. If it reads like a real trend, carry it forward as a Step 3 candidate with these conventions:
   - Type: include `Community Buzz`.
-  - Source URL: the human-readable Reddit search results page (`reddit.com/r/<sub>/search/?q=<query>&restrict_sr=on&sort=new`), NOT the `.rss` URL — this stays clickable and is what Daily Brief's Step 2 re-fetches to verify.
+  - Source URL: the human-readable Reddit search results page (`reddit.com/r/pokemongo+TheSilphRoad/search/?q=<query>&restrict_sr=on&sort=new`), NOT the `.rss` URL — this stays clickable and is what Daily Brief's Step 2 re-fetches to verify.
   - Content Completeness: `Snippet only`.
   - Start Date: today (date first detected). End Date: leave blank.
   - Description: name the complaint theme and cite 2-3 example post titles as evidence.
