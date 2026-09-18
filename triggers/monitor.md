@@ -299,8 +299,9 @@ Before writing to Notion, **derive the candidate's event signature** and re-chec
   - Description: name the complaint theme and cite 2-3 example post titles as evidence.
 
   Dedupe each candidate against all three keys per Step 1, same as any other discovery.
-- **@PokemonGoApp Twitter** — WebSearch snippet only.
+- **@PokemonGoApp Twitter** — WebSearch snippet only. (Firecrawl was tested against Twitter/X 2026-09-18 and fails outright — "all scraping engines failed" even with stealth proxy. Do not retry it here.)
 - **Datamine accounts** — try `pokeminers.com/` via fetch_url; fall back to WebSearch. **Staleness rule:** if pokeminers.com's newest post is older than 30 days, note `[pokeminers inactive since <date>]` ONCE in the run summary instead of treating its 200 as a healthy datamine signal, and supplement the datamine sweep with Pokémon GO Hub WP REST (`pokemongohub.net/wp-json/wp/v2/posts?search=datamine`). Keep the WebSearch fallback for an actual fetch failure (non-200).
+- **YouTube datamine/creator videos** (added 2026-09-18, via Firecrawl MCP — verified working, no login required): 1 call to `firecrawl_search(query="pokemon go datamine <current month/theme>", sources=[{"type":"web"}], includeDomains=["youtube.com"], limit=5)`. If any result looks substantive (dataminer/creator title, not a random clip), `firecrawl_scrape` the top 1-2 candidates with `formats=["markdown"]` to pull the full transcript — this is real, non-snippet content, unlike the Twitter path above. Budget: 1 search + up to 2 scrapes = 3 Firecrawl credits/run. Carry forward as a Step 3 candidate the same way as a datamine account hit (Type `Datamine`, Status `Unconfirmed`, Content Completeness `Full` when scraped). Dedupe against all three keys per Step 1 same as any other source — video leaks often restate a pokeminers.com post, so check Semantic Event Signature carefully before adding a second row for the same leak.
 
 Dedupe each result against all three keys per Step 1 (URL, Semantic Event Signature, Subject Slug).
 

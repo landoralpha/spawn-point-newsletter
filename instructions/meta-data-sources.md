@@ -6,10 +6,11 @@ For raid boss rotation and Pokémon base data (stats, types, movesets, form avai
 
 ## Fetcher Hierarchy (CRITICAL — cloud sandbox constraints)
 
-The cloud agent has three outbound network primitives:
+The cloud agent has four outbound network primitives:
 1. **WebFetch** — built-in. Cheap, but the sandbox's outbound IPs are flagged as datacenter traffic by many anti-bot services (Cloudflare, etc.), so it 403s on roughly half the sites we care about.
 2. **WebSearch** — built-in. Returns search-result snippets, never full bodies.
 3. **`fetch_url` from the Spawn Point Fetcher MCP** (custom connector) — a tiny FastMCP server hosted on Vercel that performs the GET with browser-like headers (Chrome UA + Google referer). Vercel's serverless IPs are datacenter-class like the sandbox, so the win comes from (a) the browser-style header set and (b) a different IP allocation than Anthropic's sandbox, which together get past header-based anti-bot rules. **As re-verified May 7, 2026, it DOES reach the Hub family** (`pokemongohub.net` and `db.pokemongohub.net` both return 200 via the Vercel IP, which is not on Hub's Cloudflare blocklist). The only failure mode is a genuine CF interactive-challenge body (`"Just a moment…"`); if that appears, fall to WebSearch snippet and note it for re-verification.
+4. **`firecrawl_scrape` / `firecrawl_search` from the Firecrawl MCP** — real browser-rendered fetch with a stealth proxy option. **Verified 2026-09-18: this is a YouTube-only win, NOT a general-purpose upgrade over `fetch_url`.** `firecrawl_scrape` on a `youtube.com/watch?v=...` URL returns full video metadata (title, channel, upload date, view/like counts) AND the complete auto-generated transcript as clean text, for 1 credit, no login — this is the pipeline's only source of YouTube content (there was none before). `firecrawl_search` restricted to `includeDomains: ["youtube.com"]` finds relevant dataminer/creator videos by keyword. Do NOT use Firecrawl for Twitter/X or Reddit: both were tested live 2026-09-18 and both fail outright — Twitter/X returns "all scraping engines failed" (even stealth proxy can't beat the login/JS wall), and Reddit is hard-denylisted ("we do not support this site"). For those two, the existing WebSearch-snippet (Twitter) and `.rss` (Reddit) paths remain the only working ones.
 
 **Curl/wget are blocked outright at the sandbox boundary.** Don't put curl recipes in agent instructions — they fail silently regardless of headers.
 
@@ -117,6 +118,9 @@ Effective hierarchy in order:
 | `pokebase.app` (raid guides, Dynamax rankings) | sandbox-blocked | ✅ 200 | fetch_url |
 | `pokeminers.com` (Tumblr datamine) | sandbox-blocked | ✅ 200 | fetch_url |
 | `www.ign.com/games/pokemon-go`, `/wikis/pokemon-go` | flaky | ✅ 200 | fetch_url |
+| **`youtube.com/watch?v=...`** (dataminer/creator videos) | n/a (not attempted — no YouTube path via WebFetch) | n/a | **`firecrawl_scrape` MCP (`formats: ["markdown"]`) — verified 2026-09-18, returns full transcript + metadata, no login, 1 credit.** Discover candidate videos first with `firecrawl_search(includeDomains: ["youtube.com"])`. |
+| `twitter.com` / `x.com` (via Firecrawl) | n/a | n/a | ❌ Tested 2026-09-18 — "all scraping engines failed" even with `proxy: "stealth"`. Does not improve on the existing WebSearch-snippet-only path. |
+| `reddit.com` (via Firecrawl) | n/a | n/a | ❌ Tested 2026-09-18 — Firecrawl explicitly refuses ("we do not support this site"). Does not improve on the existing `.rss` path. |
 | `rsshub.app` | sandbox-blocked | ❌ Cloudflare wall (even from Vercel) | **Skip — true wall.** Direct sources cover what we'd ask rsshub for. |
 | Twitter/X (`twitter.com`, `x.com`) | sandbox-blocked | ⚠️ 200 but JS-gate page only (no usable content) | **WebSearch snippet only**; mark `[from search snippet — incomplete]` |
 | `archive.ph` | sandbox-blocked | ⚠️ 429 rate limited | Use Wayback instead. |
