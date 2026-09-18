@@ -766,6 +766,7 @@ Sources: [leekduck.com/events/tapu-fini-...](https://leekduck.com/events/...) | 
 | PvPoke rankings | `PvPoke: [League] rankings` |
 | pokemon-go-api JSONs | `pokemon-go-api: [resource]` |
 | Reddit posts | `r/[subreddit]: [thread title]` |
+| YouTube videos (datamine/creator breakdowns) | `[Creator/channel name]: [Video topic]` — always credit the creator by name, never a generic "YouTube" label. Link to the video itself; never quote or closely paraphrase its transcript in the section body (see `meta-data-sources.md` ethical-use rule). |
 
 **Pre-push grep check:** search the assembled draft for `[https://`, `[http://`, `[www.`, `[db.poke`, `[pokemongohub.net`, `[leekduck.com`, `[fight.pokebattler` — any matches are URL-as-title and must be fixed before push.
 
